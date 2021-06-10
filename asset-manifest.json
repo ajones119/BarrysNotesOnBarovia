@@ -1,8 +1,8 @@
 {
   "files": {
     "main.css": "/BarrysNotesOnBarovia/static/css/main.e8c52f54.chunk.css",
-    "main.js": "/BarrysNotesOnBarovia/static/js/main.4d3851df.chunk.js",
-    "main.js.map": "/BarrysNotesOnBarovia/static/js/main.4d3851df.chunk.js.map",
+    "main.js": "/BarrysNotesOnBarovia/static/js/main.fa76584f.chunk.js",
+    "main.js.map": "/BarrysNotesOnBarovia/static/js/main.fa76584f.chunk.js.map",
     "runtime-main.js": "/BarrysNotesOnBarovia/static/js/runtime-main.3b9106fe.js",
     "runtime-main.js.map": "/BarrysNotesOnBarovia/static/js/runtime-main.3b9106fe.js.map",
     "static/css/2.4c97ca4f.chunk.css": "/BarrysNotesOnBarovia/static/css/2.4c97ca4f.chunk.css",
@@ -21,6 +21,6 @@
     "static/css/2.4c97ca4f.chunk.css",
     "static/js/2.7cc0e4ba.chunk.js",
     "static/css/main.e8c52f54.chunk.css",
-    "static/js/main.4d3851df.chunk.js"
+    "static/js/main.fa76584f.chunk.js"
   ]
 }
