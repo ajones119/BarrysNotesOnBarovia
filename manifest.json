@@ -1,19 +1,19 @@
 {
-  "short_name": "React App",
-  "name": "Create React App Sample",
+  "short_name": "BNoB",
+  "name": "Barry's Notes on Barovia",
   "icons": [
     {
-      "src": "favicon.ico",
+      "src": "barry-cartoon.png",
       "sizes": "64x64 32x32 24x24 16x16",
       "type": "image/x-icon"
     },
     {
-      "src": "logo192.png",
+      "src": "barry-cartoon.png",
       "type": "image/png",
       "sizes": "192x192"
     },
     {
-      "src": "logo512.png",
+      "src": "barry-cartoon.png",
       "type": "image/png",
       "sizes": "512x512"
     }
