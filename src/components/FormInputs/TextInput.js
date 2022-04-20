@@ -9,6 +9,7 @@ export const TextInput = ({
   isValidText,
   size = 50,
   defaultValue = "",
+  value = "",
 }) => {
   return (
     <Container>
@@ -22,6 +23,7 @@ export const TextInput = ({
           title={invalidInputText}
           onChange={(e) => setTextFromParent(e.target.value)}
           defaultValue={defaultValue}
+          value={value}
         ></input>
         <InvalidInput invalidInputText={isValidText ? "" : invalidInputText} />
       </Row>

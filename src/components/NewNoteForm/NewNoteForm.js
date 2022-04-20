@@ -53,8 +53,14 @@ export const NewNoteForm = ({
           isDungeonMasterNote
         );
       }
-      saveNewNote(newNote);
+      saveNewNote(newNote).then(() => {
+        resetData();
+      });
     }
+  };
+
+  const resetData = () => {
+    setContent("");
   };
 
   return (
@@ -67,6 +73,7 @@ export const NewNoteForm = ({
           cols="100"
           invalidInputText={INVALID_CONTENT_TEXT}
           isValidText={true}
+          value={content}
         />
         <Button variant="success" type="submit" style={style}>
           Save Note

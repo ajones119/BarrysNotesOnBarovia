@@ -11,6 +11,7 @@ import NewCharacter from "./views/CharacterViews/NewCharacter";
 import CharacterDetails from "./views/CharacterViews/CharacterDetails";
 import EditCampaign from "./views/CampaignViews/EditCampaign";
 import EditCharacter from "./views/CharacterViews/EditCharacter";
+import RulesHome from "./views/RulesViews/RulesHome";
 
 export const Routes = () => {
   return (
@@ -40,6 +41,7 @@ export const Routes = () => {
         ></Route>
         <Route path="/edit-character/:Id" component={EditCharacter}></Route>
         <Route path="/Characters/:Id" component={CharacterDetails}></Route>
+        <Route exact path="/Rules/" component={RulesHome}></Route>
       </Switch>
     </div>
   );
