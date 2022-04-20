@@ -123,9 +123,7 @@ export const CampaignDetails = () => {
                       </Collapse>
                       <NotesList notes={notes} characters={characters} />
                     </Tab.Pane>
-                    <Tab.Pane eventKey="initiativeTracker">
-                      <InitiativeTracker characters={characters} />
-                    </Tab.Pane>
+                    <Tab.Pane eventKey="initiativeTracker">INCOMPLETE</Tab.Pane>
                   </Tab.Content>
                 </Col>
               </Row>

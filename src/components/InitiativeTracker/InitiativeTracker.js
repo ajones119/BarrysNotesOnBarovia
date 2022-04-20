@@ -48,7 +48,7 @@ export const InitiativeTracker = ({ characters }) => {
           <thead>
             <tr>
               <th>
-                Initiative{" "}
+                Initiative
                 <Button
                   onClick={() => {
                     setInitiativeCharacters(
