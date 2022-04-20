@@ -1,18 +1,18 @@
 import React from "react";
 import { useParams } from "react-router-dom";
 import "../../App.css";
-import NewCharacterForm from "../../components/NewCharacterForm/NewCharacterForm";
+import NewCampaignForm from "../../components/NewCampaignForm/NewCampaignForm";
 
-export const EditCharacter = () => {
+export const EditCampaign = () => {
   const { Id: docId } = useParams();
 
   return (
     <div className="App">
       <div className="content">
-        <NewCharacterForm docId={docId} forEdit />
+        <NewCampaignForm docId={docId} forEdit />
       </div>
     </div>
   );
 };
 
-export default EditCharacter;
+export default EditCampaign;

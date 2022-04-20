@@ -9,9 +9,8 @@ import CampaignDetails from "./views/CampaignViews/CampaignDetails";
 import Characters from "./views/CharacterViews/Characters";
 import NewCharacter from "./views/CharacterViews/NewCharacter";
 import CharacterDetails from "./views/CharacterViews/CharacterDetails";
-import EditCampaign, {
-  EditCharacter,
-} from "./views/CampaignViews/EditCampaign";
+import EditCampaign from "./views/CampaignViews/EditCampaign";
+import EditCharacter from "./views/CharacterViews/EditCharacter";
 
 export const Routes = () => {
   return (
