@@ -2,8 +2,6 @@ import { ListGroup } from "react-bootstrap";
 import { Col, Container, Row } from "react-bootstrap";
 import NotesListEntry from "./NotesListEntry";
 
-const rowStyle = { paddingBottom: "10%" };
-
 const getCharacterNameForNote = (note, characters = []) => {
   let charName = "anonymous";
   characters.forEach((character) => {

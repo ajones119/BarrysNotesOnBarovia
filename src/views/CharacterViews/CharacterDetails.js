@@ -17,6 +17,7 @@ import {
 } from "../../service/NoteService";
 
 const cardStyle = { marginTop: "20px" };
+const buttonStyle = { marginTop: "5px", marginBottom: "5px" };
 
 export const CharacterDetails = () => {
   const [character, setCharacterDetails] = React.useState();
@@ -90,6 +91,7 @@ export const CharacterDetails = () => {
                         onClick={() => setNewNoteOpen(!newNoteOpen)}
                         aria-controls="example-collapse-text"
                         aria-expanded={newNoteOpen}
+                        style={buttonStyle}
                       >
                         {newNoteOpen ? "Close" : "Add a New Note"}
                       </Button>
@@ -108,6 +110,7 @@ export const CharacterDetails = () => {
                         onClick={() => setNewNoteOpen(!newNoteOpen)}
                         aria-controls="example-collapse-text"
                         aria-expanded={newNoteOpen}
+                        style={buttonStyle}
                       >
                         {newNoteOpen ? "Close" : "Add a New Note"}
                       </Button>

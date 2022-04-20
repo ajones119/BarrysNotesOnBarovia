@@ -14,6 +14,7 @@ import { getCharactersByCampaignDocId } from "../../service/CharacterService";
 import { getNotesByCampaignDocId } from "../../service/NoteService";
 
 const cardStyle = { marginTop: "20px" };
+const buttonStyle = { marginTop: "5px", marginBottom: "5px" };
 
 export const CampaignDetails = () => {
   const [campaign, setCampaignDetails] = React.useState();
@@ -95,6 +96,7 @@ export const CampaignDetails = () => {
                         }
                         aria-controls="example-collapse-text"
                         aria-expanded={newDungeonMasterNoteOpen}
+                        style={buttonStyle}
                       >
                         {newDungeonMasterNoteOpen ? "Close" : "Add a New Note"}
                       </Button>
@@ -113,6 +115,7 @@ export const CampaignDetails = () => {
                         onClick={() => setNewNoteOpen(!newNoteOpen)}
                         aria-controls="example-collapse-text"
                         aria-expanded={newNoteOpen}
+                        style={buttonStyle}
                       >
                         {newNoteOpen ? "Close" : "Add a New Note"}
                       </Button>

@@ -6,6 +6,8 @@ import { saveNewNote } from "../../service/NoteService";
 import TextArea from "../FormInputs/TextArea";
 import TextInput from "../FormInputs/TextInput";
 
+const style = { marginTop: "5px", marginBottom: "5px" };
+
 export const NewNoteForm = ({
   character,
   campaign,
@@ -67,7 +69,7 @@ export const NewNoteForm = ({
           invalidInputText={INVALID_CONTENT_TEXT}
           isValidText={true}
         />
-        <Button variant="success" type="submit">
+        <Button variant="success" type="submit" style={style}>
           Save Note
         </Button>
       </form>
