@@ -11,7 +11,6 @@ const style = { marginTop: "5px", marginBottom: "5px" };
 export const NewNoteForm = ({
   character,
   campaign,
-  collapse,
   isDungeonMaster,
   isPersonal,
   isCampaign,

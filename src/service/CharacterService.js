@@ -15,6 +15,18 @@ export async function saveNewCharacter(newCharacter) {
   });
 }
 
+export async function updateCharacter(character) {
+  await firestoreDatabase.doc(`${character.docId}`).set({
+    name: character.name,
+    characterImageURL: character.characterImageURL,
+    player: character.player,
+    backstory: character.backstory,
+    classNames: character.classNames,
+    campaignDocId: character.campaignDocId,
+    dndBeyondURL: character.dndBeyondURL,
+  });
+}
+
 export async function getCharacters(setCharacters) {
   firestoreDatabase.onSnapshot((querySnapshot) => {
     const characters = [];

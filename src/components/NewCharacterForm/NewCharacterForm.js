@@ -1,9 +1,14 @@
 import React, { useEffect } from "react";
 import { Button, Col, Container, Form, Row } from "react-bootstrap";
+import { useHistory } from "react-router-dom";
 import { Campaign } from "../../model/Campaign";
 import { Character } from "../../model/Character";
 import { getCampaigns, saveNewCampaign } from "../../service/CampaignService";
-import { saveNewCharacter } from "../../service/CharacterService";
+import {
+  getCharacterDetailsByDocId,
+  saveNewCharacter,
+  updateCharacter,
+} from "../../service/CharacterService";
 import TextArea from "../FormInputs/TextArea";
 import TextInput from "../FormInputs/TextInput";
 import { validateTextInputIsNotEmpty } from "../FormInputs/Validators";
@@ -15,7 +20,7 @@ export const getOptions = (campaigns) =>
     return <option value={campaign.docId}>{campaign.title}</option>;
   });
 
-export const NewCharacterForm = () => {
+export const NewCharacterForm = ({ forEdit = false, docId }) => {
   const INVALID_CHARACTER_NAME_TEXT = "Must be a valid Character Name";
   const INVALID_PLAYER_TEXT = "Must be a valid Player Name";
 
@@ -27,6 +32,24 @@ export const NewCharacterForm = () => {
   const [characterImageURL, setCharacterImageURL] = React.useState("");
   const [dndBeyondURL, setDndBeyondURL] = React.useState("");
   const [backstory, setBackstory] = React.useState("");
+  const [character, setCharacter] = React.useState("");
+
+  const history = useHistory();
+
+  useEffect(() => {
+    if (docId && forEdit) {
+      getCharacterDetailsByDocId(docId, setCharacter);
+    }
+  }, [docId]);
+
+  useEffect(() => {
+    if (character.docId && forEdit) {
+      setCharacterName(character.name);
+      setPlayer(character.player);
+      setCharacterImageURL(character.characterImageURL);
+      setBackstory(character.backstory);
+    }
+  }, [character]);
 
   const onSubmit = async (e) => {
     e.preventDefault();
@@ -35,7 +58,7 @@ export const NewCharacterForm = () => {
 
     if (true) {
       let newCharacter = new Character(
-        "",
+        docId ? docId : "",
         characterName,
         characterImageURL,
         player,
@@ -44,7 +67,15 @@ export const NewCharacterForm = () => {
         campaignDocId,
         dndBeyondURL
       );
-      saveNewCharacter(newCharacter);
+      if (docId && forEdit) {
+        updateCharacter(newCharacter).then(() => {
+          history.push("/Characters/");
+        });
+      } else {
+        saveNewCharacter(newCharacter).then(() => {
+          history.push("/Characters/");
+        });
+      }
     }
   };
 
@@ -62,6 +93,7 @@ export const NewCharacterForm = () => {
               title="Character Name"
               invalidInputText={INVALID_CHARACTER_NAME_TEXT}
               isValidText={ischaracterNameValid}
+              defaultValue={character ? character.name : ""}
             />
           </Col>
           <Col>
@@ -70,6 +102,7 @@ export const NewCharacterForm = () => {
               title="Character ImageURL"
               invalidInputText=""
               isValidText={true}
+              defaultValue={character ? character.characterImageURL : ""}
             />
           </Col>
           <Col>
@@ -78,6 +111,7 @@ export const NewCharacterForm = () => {
               title="Player"
               invalidInputText={INVALID_PLAYER_TEXT}
               isValidText={isPlayerValid}
+              defaultValue={character ? character.player : ""}
             />
           </Col>
           <Col>
@@ -86,6 +120,7 @@ export const NewCharacterForm = () => {
               title="DnD Beyond Link"
               invalidInputText={""}
               isValidText={true}
+              defaultValue={character ? character.dndBeyondURL : ""}
             />
           </Col>
         </Row>
@@ -105,6 +140,7 @@ export const NewCharacterForm = () => {
               cols="100"
               invalidInputText=""
               isValidText={true}
+              defaultValue={character ? character.backstory : ""}
             />
           </Col>
         </Row>

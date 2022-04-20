@@ -33,7 +33,7 @@ export const CharacterDetails = () => {
   }, []);
 
   useEffect(() => {
-    if (character) {
+    if (character && character.campaignDocId !== "") {
       getCampaignDetailsByDocId(character.campaignDocId, setCampaignDetails);
     }
   }, [character]);
@@ -111,6 +111,11 @@ export const CharacterDetails = () => {
                         aria-controls="example-collapse-text"
                         aria-expanded={newNoteOpen}
                         style={buttonStyle}
+                        disabled={
+                          character && character.campaignDocId !== ""
+                            ? false
+                            : true
+                        }
                       >
                         {newNoteOpen ? "Close" : "Add a New Note"}
                       </Button>

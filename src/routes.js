@@ -9,6 +9,9 @@ import CampaignDetails from "./views/CampaignViews/CampaignDetails";
 import Characters from "./views/CharacterViews/Characters";
 import NewCharacter from "./views/CharacterViews/NewCharacter";
 import CharacterDetails from "./views/CharacterViews/CharacterDetails";
+import EditCampaign, {
+  EditCharacter,
+} from "./views/CampaignViews/EditCampaign";
 
 export const Routes = () => {
   return (
@@ -29,12 +32,14 @@ export const Routes = () => {
           component={NewCampaign}
         ></Route>
         <Route path="/Campaigns/:Id" component={CampaignDetails}></Route>
+        <Route path="/edit-campaign/:Id" component={EditCampaign}></Route>
         <Route exact path="/Characters/" component={Characters}></Route>
         <Route
           exact
           path="/Characters/new-character"
           component={NewCharacter}
         ></Route>
+        <Route path="/edit-character/:Id" component={EditCharacter}></Route>
         <Route path="/Characters/:Id" component={CharacterDetails}></Route>
       </Switch>
     </div>

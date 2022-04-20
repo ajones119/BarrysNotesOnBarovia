@@ -1,12 +1,19 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Button, Col, Container, Row } from "react-bootstrap";
+import { useHistory } from "react-router-dom";
 import { Campaign } from "../../model/Campaign";
-import { saveNewCampaign } from "../../service/CampaignService";
+import {
+  getCampaignDetailsByDocId,
+  saveNewCampaign,
+  updateCampaign,
+} from "../../service/CampaignService";
 import TextArea from "../FormInputs/TextArea";
 import TextInput from "../FormInputs/TextInput";
 import { validateTextInputIsNotEmpty } from "../FormInputs/Validators";
 
-export const NewCampaignForm = () => {
+const style = { marginTop: "5px", marginBottom: "5px" };
+
+export const NewCampaignForm = ({ forEdit = false, docId }) => {
   const INVALID_CAMPAIGN_TITLE_TEXT = "Must be a valid Campaign Title";
   const INVALID_CAMPAIGN_IMAGE_URL_TEXT = "Must be a valid Campaign image URL";
   const INVALID_CAMPAIGN_DUNGEON_MASTER_TEXT = "Must be a valid Dungeon Master";
@@ -20,6 +27,24 @@ export const NewCampaignForm = () => {
   const [isCampaignDungeonMasterValid, setIsCampaignDungeonMasterValid] =
     React.useState(true);
   const [campaignDescription, setCampaignDescription] = React.useState("");
+  const [campaign, setCampaign] = React.useState({});
+
+  const history = useHistory();
+
+  useEffect(() => {
+    if (docId && forEdit) {
+      getCampaignDetailsByDocId(docId, setCampaign);
+    }
+  }, [docId]);
+
+  useEffect(() => {
+    if (campaign.docId && forEdit) {
+      setCampaignTitle(campaign.title);
+      setCampaignImageURL(campaign.campaignImageURL);
+      setCampaignDungeonMaster(campaign.dungeonMaster);
+      setCampaignDescription(campaign.description);
+    }
+  }, [campaign]);
 
   const onSubmit = async (e) => {
     e.preventDefault();
@@ -27,13 +52,21 @@ export const NewCampaignForm = () => {
 
     if (valid) {
       let newCampaign = new Campaign(
-        "",
+        docId ? docId : "",
         campaignTitle,
         campaignImageURL,
         campaignDungeonMaster,
         campaignDescription
       );
-      saveNewCampaign(newCampaign);
+      if (forEdit && docId) {
+        updateCampaign(newCampaign).then(() => {
+          history.push("/Campaigns/");
+        });
+      } else {
+        saveNewCampaign(newCampaign).then(() => {
+          history.push("/Campaigns/");
+        });
+      }
     }
   };
 
@@ -58,6 +91,7 @@ export const NewCampaignForm = () => {
               title="Campaign Title"
               invalidInputText={INVALID_CAMPAIGN_TITLE_TEXT}
               isValidText={isCampaignTitleValid}
+              defaultValue={campaign ? campaign.title : ""}
             />
           </Col>
           <Col>
@@ -66,6 +100,7 @@ export const NewCampaignForm = () => {
               title="Campaign Image URL"
               invalidInputText={INVALID_CAMPAIGN_IMAGE_URL_TEXT}
               isValidText={isCampaignImageURLValid}
+              defaultValue={campaign ? campaign.campaignImageURL : ""}
             />
           </Col>
           <Col>
@@ -74,6 +109,7 @@ export const NewCampaignForm = () => {
               title="Campaign Dungeon Master"
               invalidInputText={INVALID_CAMPAIGN_DUNGEON_MASTER_TEXT}
               isValidText={isCampaignDungeonMasterValid}
+              defaultValue={campaign ? campaign.dungeonMaster : ""}
             />
           </Col>
         </Row>
@@ -86,12 +122,13 @@ export const NewCampaignForm = () => {
               cols="100"
               invalidInputText=""
               isValidText={true}
+              defaultValue={campaign ? campaign.description : ""}
             />
           </Col>
         </Row>
         <Row>
           <Col>
-            <Button variant="success" type="submit">
+            <Button variant="success" type="submit" style={style}>
               Save Campaign
             </Button>
           </Col>

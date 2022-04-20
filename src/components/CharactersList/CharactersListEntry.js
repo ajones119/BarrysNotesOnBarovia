@@ -41,7 +41,13 @@ export const CharactersListEntry = ({ character }) => {
               <div>
                 <Card body style={textStyle}>
                   <ButtonGroup>
-                    <Button variant="warning" disabled>
+                    <Button
+                      variant="warning"
+                      href={
+                        "/BarrysNotesOnBarovia/#/edit-character/" +
+                        character.docId
+                      }
+                    >
                       Edit the Basics
                     </Button>
                     <Button

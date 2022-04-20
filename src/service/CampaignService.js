@@ -12,6 +12,15 @@ export async function saveNewCampaign(newCampaign) {
   });
 }
 
+export async function updateCampaign(campaign) {
+  await firestoreDatabase.doc(`${campaign.docId}`).set({
+    title: campaign.title,
+    campaignImageURL: campaign.campaignImageURL,
+    dungeonMaster: campaign.dungeonMaster,
+    description: campaign.description,
+  });
+}
+
 export async function getCampaigns(setCampaigns) {
   firestoreDatabase.onSnapshot((querySnapshot) => {
     const campaigns = [];

@@ -2,6 +2,8 @@ import React from "react";
 import { Container, Card, Button } from "react-bootstrap";
 import defaultBackground from "../images/stick1.png";
 
+const style = { marginTop: "5px", marginBottom: "15px" };
+
 export const CharacterDetailsOverview = ({ character }) => {
   return (
     <Container>
@@ -25,8 +27,20 @@ export const CharacterDetailsOverview = ({ character }) => {
         variant="danger"
         href={character ? character.dndBeyondURL : ""}
         disabled={!(character && character.dndBeyondURL)}
+        style={style}
       >
         DND BEYOND
+      </Button>
+      <Button
+        variant="primary"
+        href={
+          "/BarrysNotesOnBarovia/#/Campaigns/" +
+          (character ? character.campaignDocId : "")
+        }
+        disabled={character && character.campaignDocId !== "" ? false : true}
+        style={style}
+      >
+        View Campaign
       </Button>
     </Container>
   );

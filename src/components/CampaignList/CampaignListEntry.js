@@ -41,7 +41,13 @@ export const CampaignListEntry = ({ campaign }) => {
               <div>
                 <Card body style={textStyle}>
                   <ButtonGroup>
-                    <Button variant="warning" disabled>
+                    <Button
+                      variant="warning"
+                      href={
+                        "/BarrysNotesOnBarovia/#/edit-campaign/" +
+                        campaign.docId
+                      }
+                    >
                       Edit the Basics
                     </Button>
                     <Button
