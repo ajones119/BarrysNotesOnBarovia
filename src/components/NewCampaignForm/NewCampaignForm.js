@@ -92,6 +92,7 @@ export const NewCampaignForm = ({ forEdit = false, docId }) => {
               invalidInputText={INVALID_CAMPAIGN_TITLE_TEXT}
               isValidText={isCampaignTitleValid}
               defaultValue={campaign ? campaign.title : ""}
+              value={campaignTitle}
             />
           </Col>
           <Col>
@@ -101,6 +102,7 @@ export const NewCampaignForm = ({ forEdit = false, docId }) => {
               invalidInputText={INVALID_CAMPAIGN_IMAGE_URL_TEXT}
               isValidText={isCampaignImageURLValid}
               defaultValue={campaign ? campaign.campaignImageURL : ""}
+              value={campaignImageURL}
             />
           </Col>
           <Col>
@@ -110,6 +112,7 @@ export const NewCampaignForm = ({ forEdit = false, docId }) => {
               invalidInputText={INVALID_CAMPAIGN_DUNGEON_MASTER_TEXT}
               isValidText={isCampaignDungeonMasterValid}
               defaultValue={campaign ? campaign.dungeonMaster : ""}
+              value={campaignDungeonMaster}
             />
           </Col>
         </Row>
@@ -123,6 +126,7 @@ export const NewCampaignForm = ({ forEdit = false, docId }) => {
               invalidInputText=""
               isValidText={true}
               defaultValue={campaign ? campaign.description : ""}
+              value={campaignDescription}
             />
           </Col>
         </Row>

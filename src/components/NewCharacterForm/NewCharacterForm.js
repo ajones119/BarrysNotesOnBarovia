@@ -47,6 +47,7 @@ export const NewCharacterForm = ({ forEdit = false, docId }) => {
       setCharacterName(character.name);
       setPlayer(character.player);
       setCharacterImageURL(character.characterImageURL);
+      setDndBeyondURL(character.dndBeyondURL);
       setBackstory(character.backstory);
     }
   }, [character]);
@@ -94,6 +95,7 @@ export const NewCharacterForm = ({ forEdit = false, docId }) => {
               invalidInputText={INVALID_CHARACTER_NAME_TEXT}
               isValidText={ischaracterNameValid}
               defaultValue={character ? character.name : ""}
+              value={characterName}
             />
           </Col>
           <Col>
@@ -103,6 +105,7 @@ export const NewCharacterForm = ({ forEdit = false, docId }) => {
               invalidInputText=""
               isValidText={true}
               defaultValue={character ? character.characterImageURL : ""}
+              value={characterImageURL}
             />
           </Col>
           <Col>
@@ -112,6 +115,7 @@ export const NewCharacterForm = ({ forEdit = false, docId }) => {
               invalidInputText={INVALID_PLAYER_TEXT}
               isValidText={isPlayerValid}
               defaultValue={character ? character.player : ""}
+              value={player}
             />
           </Col>
           <Col>
@@ -121,6 +125,7 @@ export const NewCharacterForm = ({ forEdit = false, docId }) => {
               invalidInputText={""}
               isValidText={true}
               defaultValue={character ? character.dndBeyondURL : ""}
+              value={dndBeyondURL}
             />
           </Col>
         </Row>
@@ -141,6 +146,7 @@ export const NewCharacterForm = ({ forEdit = false, docId }) => {
               invalidInputText=""
               isValidText={true}
               defaultValue={character ? character.backstory : ""}
+              value={backstory}
             />
           </Col>
         </Row>
