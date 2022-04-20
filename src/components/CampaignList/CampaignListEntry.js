@@ -46,7 +46,9 @@ export const CampaignListEntry = ({ campaign }) => {
                     </Button>
                     <Button
                       variant="primary"
-                      href={"/Campaigns/" + campaign.docId}
+                      href={
+                        "/BarrysNotesOnBarovia/#/Campaigns/" + campaign.docId
+                      }
                     >
                       View Details
                     </Button>

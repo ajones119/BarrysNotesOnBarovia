@@ -46,7 +46,9 @@ export const CharactersListEntry = ({ character }) => {
                     </Button>
                     <Button
                       variant="primary"
-                      href={"/Characters/" + character.docId}
+                      href={
+                        "/BarrysNotesOnBarovia/#/Characters/" + character.docId
+                      }
                     >
                       View Details
                     </Button>
