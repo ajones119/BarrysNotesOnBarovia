@@ -1,5 +1,7 @@
+import React from "react";
 import { ListGroup } from "react-bootstrap";
 import { Col, Container, Row } from "react-bootstrap";
+import ReactSwitch from "react-switch";
 import NotesListEntry from "./NotesListEntry";
 
 const getCharacterNameForNote = (note, characters = []) => {
@@ -15,22 +17,46 @@ const getCharacterNameForNote = (note, characters = []) => {
 };
 
 export const NotesList = ({ notes = [], characters = [] }) => {
+  const [reverseOrder, setReverseOrder] = React.useState(false);
   return (
     <div>
       <Container>
+        Reverse Order
+        <ReactSwitch
+          checked={reverseOrder}
+          onChange={() => {
+            setReverseOrder(!reverseOrder);
+          }}
+        />
         <ListGroup variant="flush">
-          {notes.map((note) => (
-            <Col>
-              <NotesListEntry
-                note={note}
-                auxName={
-                  characters && notes
-                    ? getCharacterNameForNote(note, characters)
-                    : ""
-                }
-              />
-            </Col>
-          ))}
+          {reverseOrder
+            ? notes
+                .slice(0)
+                .reverse()
+                .map((note) => (
+                  <Col>
+                    <NotesListEntry
+                      note={note}
+                      auxName={
+                        characters && notes
+                          ? getCharacterNameForNote(note, characters)
+                          : ""
+                      }
+                    />
+                  </Col>
+                ))
+            : notes.map((note) => (
+                <Col>
+                  <NotesListEntry
+                    note={note}
+                    auxName={
+                      characters && notes
+                        ? getCharacterNameForNote(note, characters)
+                        : ""
+                    }
+                  />
+                </Col>
+              ))}
         </ListGroup>
       </Container>
     </div>

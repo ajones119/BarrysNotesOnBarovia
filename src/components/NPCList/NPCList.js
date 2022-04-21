@@ -8,11 +8,14 @@ export const NPCList = ({ npcs = [] }) => {
     <div>
       <Container style={containerStyle}>
         <Row xs={1} md={2} className="mt-40">
-          {npcs.map((npc) => (
-            <Col>
-              <NPCListEntry npc={npc} />
-            </Col>
-          ))}
+          {npcs
+            .slice(0)
+            .reverse()
+            .map((npc) => (
+              <Col>
+                <NPCListEntry npc={npc} />
+              </Col>
+            ))}
         </Row>
       </Container>
     </div>
