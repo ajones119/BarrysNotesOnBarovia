@@ -1,6 +1,7 @@
 import React from "react";
 import { Container, Card, Button } from "react-bootstrap";
 import defaultBackground from "../images/stick1.png";
+import { openNewTab } from "../service/SharedFunctions";
 
 const style = { marginTop: "5px", marginBottom: "15px" };
 
@@ -25,7 +26,7 @@ export const CharacterDetailsOverview = ({ character }) => {
       </Card.Text>
       <Button
         variant="danger"
-        href={character ? character.dndBeyondURL : ""}
+        onClick={() => openNewTab(character.dndBeyondURL)}
         disabled={!(character && character.dndBeyondURL)}
         style={style}
       >

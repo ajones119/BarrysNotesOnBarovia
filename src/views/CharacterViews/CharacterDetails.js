@@ -4,6 +4,7 @@ import { Button, Row, Col, Container, Collapse } from "react-bootstrap";
 import { useParams } from "react-router-dom";
 import "../../App.css";
 import CharacterDetailsOverview from "../../components/CharacterDetailsOverview";
+import { CreateModal } from "../../components/CreateModal/CreateModal";
 import NewNoteForm from "../../components/NewNoteForm/NewNoteForm";
 import NotesList from "../../components/NotesList/NotesList";
 import { getCampaignDetailsByDocId } from "../../service/CampaignService";
@@ -26,6 +27,7 @@ export const CharacterDetails = () => {
   const [personalNotes, setPersonalNotes] = React.useState();
   const [campaignNotes, setCampaignNotes] = React.useState();
   const [newNoteOpen, setNewNoteOpen] = React.useState(false);
+  const [newPersonalNoteOpen, setPersonalNewNoteOpen] = React.useState(false);
   const { Id: docId } = useParams();
 
   useEffect(() => {
@@ -88,18 +90,13 @@ export const CharacterDetails = () => {
                     </Tab.Pane>
                     <Tab.Pane eventKey="personalNotes">
                       <Button
-                        onClick={() => setNewNoteOpen(!newNoteOpen)}
+                        onClick={() => setPersonalNewNoteOpen(true)}
                         aria-controls="example-collapse-text"
                         aria-expanded={newNoteOpen}
                         style={buttonStyle}
                       >
                         {newNoteOpen ? "Close" : "Add a New Note"}
                       </Button>
-                      <Collapse in={newNoteOpen}>
-                        <div>
-                          <NewNoteForm character={character} isPersonal />
-                        </div>
-                      </Collapse>
                       <NotesList
                         notes={personalNotes}
                         characters={[character]}
@@ -119,11 +116,6 @@ export const CharacterDetails = () => {
                       >
                         {newNoteOpen ? "Close" : "Add a New Note"}
                       </Button>
-                      <Collapse in={newNoteOpen}>
-                        <div>
-                          <NewNoteForm character={character} isCampaign />
-                        </div>
-                      </Collapse>
                       <NotesList
                         notes={campaignNotes}
                         characters={characters}
@@ -135,6 +127,30 @@ export const CharacterDetails = () => {
             </Tab.Container>
           </Card>
         </Container>
+        <CreateModal
+          title="New Personal Note"
+          handleClose={() => setPersonalNewNoteOpen(false)}
+          show={newPersonalNoteOpen}
+          content={
+            <NewNoteForm
+              character={character}
+              isPersonal
+              handleModalSave={() => setPersonalNewNoteOpen(false)}
+            />
+          }
+        />
+        <CreateModal
+          title="New Party Note"
+          handleClose={() => setNewNoteOpen(false)}
+          show={newNoteOpen}
+          content={
+            <NewNoteForm
+              character={character}
+              isCampaign
+              handleModalSave={() => setNewNoteOpen(false)}
+            />
+          }
+        />
       </div>
     </div>
   );

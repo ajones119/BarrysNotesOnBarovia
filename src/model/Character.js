@@ -5,7 +5,7 @@ export class Character {
     characterImageURL,
     player,
     backstory,
-    classNames,
+    className,
     campaignDocId,
     dndBeyondURL
   ) {
@@ -14,7 +14,7 @@ export class Character {
     this.characterImageURL = characterImageURL;
     this.player = player;
     this.backstory = backstory;
-    this.classNames = classNames;
+    this.className = className;
     this.campaignDocId = campaignDocId;
     this.dndBeyondURL = dndBeyondURL;
   }

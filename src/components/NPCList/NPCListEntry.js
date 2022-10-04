@@ -7,6 +7,8 @@ import {
   ButtonGroup,
 } from "react-bootstrap";
 import defaultBackground from "../../images/stick1.png";
+import { deleteNPC } from "../../service/NPCService";
+import { openNewTab } from "../../service/SharedFunctions";
 
 const style = {
   paddingBottom: "20px",
@@ -41,8 +43,18 @@ export const NPCListEntry = ({ npc }) => {
               <div>
                 <Card body style={textStyle}>
                   <ButtonGroup>
-                    <Button variant="danger" href={npc.statBlockURL}>
+                    <Button
+                      variant="success"
+                      onClick={() => openNewTab(npc.statBlockURL)}
+                      disabled={!npc.statBlockURL || npc.statBlockURL === ""}
+                    >
                       Statblock
+                    </Button>
+                    <Button
+                      variant="danger"
+                      onClick={() => deleteNPC(npc.docId)}
+                    >
+                      Delete
                     </Button>
                   </ButtonGroup>
                   <Card.Body>

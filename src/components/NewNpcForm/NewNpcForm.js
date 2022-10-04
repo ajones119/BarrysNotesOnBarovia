@@ -10,7 +10,7 @@ import TextInput from "../FormInputs/TextInput";
 
 const style = { marginTop: "5px", marginBottom: "5px" };
 
-export const NewNpcForm = ({ campaign }) => {
+export const NewNpcForm = ({ campaign, handleModalSave }) => {
   const INVALID_CONTENT_TEXT = "Must be a valid Content";
 
   const [name, setName] = React.useState("");
@@ -31,6 +31,7 @@ export const NewNpcForm = ({ campaign }) => {
     );
 
     saveNewNPC(newNpc);
+    handleModalSave();
     resetData();
   };
 

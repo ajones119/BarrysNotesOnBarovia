@@ -1,11 +1,17 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { Button, Row, Col, Container } from "react-bootstrap";
 import "../../App.css";
 import CharactersList from "../../components/CharactersList/CharactersList";
+import { CreateModal } from "../../components/CreateModal/CreateModal";
+import NewCharacterForm from "../../components/NewCharacterForm/NewCharacterForm";
 import { getCharacters } from "../../service/CharacterService";
 
 export const Characters = () => {
-  const [characters, setCharacters] = React.useState();
+  const [characters, setCharacters] = useState();
+  const [show, setShow] = useState(false);
+
+  const handleClose = () => setShow(false);
+  const handleShow = () => setShow(true);
 
   useEffect(() => {
     getCharacters(setCharacters);
@@ -18,10 +24,7 @@ export const Characters = () => {
         <Container>
           <Row>
             <Col>
-              <Button
-                variant="success"
-                href="/BarrysNotesOnBarovia/#/Characters/new-character"
-              >
+              <Button variant="success" onClick={handleShow}>
                 Create a New Character
               </Button>
             </Col>
@@ -32,6 +35,12 @@ export const Characters = () => {
             </Row>
           </Row>
         </Container>
+        <CreateModal
+          title="Create Campaign"
+          handleClose={handleClose}
+          show={show}
+          content={<NewCharacterForm handleModalSave={handleClose} />}
+        />
       </div>
     </div>
   );

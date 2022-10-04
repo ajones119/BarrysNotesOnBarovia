@@ -9,7 +9,7 @@ export async function saveNewCharacter(newCharacter) {
     characterImageURL: newCharacter.characterImageURL,
     player: newCharacter.player,
     backstory: newCharacter.backstory,
-    classNames: newCharacter.classNames,
+    className: newCharacter.className,
     campaignDocId: newCharacter.campaignDocId,
     dndBeyondURL: newCharacter.dndBeyondURL,
   });
@@ -21,7 +21,7 @@ export async function updateCharacter(character) {
     characterImageURL: character.characterImageURL,
     player: character.player,
     backstory: character.backstory,
-    classNames: character.classNames,
+    className: character.className,
     campaignDocId: character.campaignDocId,
     dndBeyondURL: character.dndBeyondURL,
   });

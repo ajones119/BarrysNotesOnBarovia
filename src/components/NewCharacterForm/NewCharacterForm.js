@@ -12,6 +12,7 @@ import {
 import TextArea from "../FormInputs/TextArea";
 import TextInput from "../FormInputs/TextInput";
 import { validateTextInputIsNotEmpty } from "../FormInputs/Validators";
+import MainClassSelector from "./MainClassSelector";
 
 const selectStyle = { marginTop: "20px" };
 
@@ -20,7 +21,11 @@ export const getOptions = (campaigns) =>
     return <option value={campaign.docId}>{campaign.title}</option>;
   });
 
-export const NewCharacterForm = ({ forEdit = false, docId }) => {
+export const NewCharacterForm = ({
+  forEdit = false,
+  docId,
+  handleModalSave,
+}) => {
   const INVALID_CHARACTER_NAME_TEXT = "Must be a valid Character Name";
   const INVALID_PLAYER_TEXT = "Must be a valid Player Name";
 
@@ -55,6 +60,7 @@ export const NewCharacterForm = ({ forEdit = false, docId }) => {
   const onSubmit = async (e) => {
     e.preventDefault();
     const campaignDocId = document.getElementById("campaignDocId").value;
+    const mainClass = document.getElementById("mainClass").value;
     //const valid = validateNewCampaignForm();
 
     if (true) {
@@ -64,7 +70,7 @@ export const NewCharacterForm = ({ forEdit = false, docId }) => {
         characterImageURL,
         player,
         backstory,
-        ["class", "name"],
+        mainClass,
         campaignDocId,
         dndBeyondURL
       );
@@ -77,6 +83,7 @@ export const NewCharacterForm = ({ forEdit = false, docId }) => {
           history.push("/Characters/");
         });
       }
+      handleModalSave();
     }
   };
 
@@ -138,19 +145,21 @@ export const NewCharacterForm = ({ forEdit = false, docId }) => {
             </select>
           </Col>
           <Col>
-            <TextArea
-              setTextFromParent={setBackstory}
-              title="Backstory"
-              rows="5"
-              cols="100"
-              invalidInputText=""
-              isValidText={true}
-              defaultValue={character ? character.backstory : ""}
-              value={backstory}
-            />
+            <MainClassSelector />
           </Col>
         </Row>
-
+        <Row>
+          <TextArea
+            setTextFromParent={setBackstory}
+            title="Backstory"
+            rows="5"
+            cols="100"
+            invalidInputText=""
+            isValidText={true}
+            defaultValue={character ? character.backstory : ""}
+            value={backstory}
+          />
+        </Row>
         <Row>
           <Col>
             <Button variant="success" type="submit" style={selectStyle}>

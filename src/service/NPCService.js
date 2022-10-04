@@ -83,3 +83,8 @@ export async function getNPCsByCampaignDocId(campaignDocId, setNpcs) {
       setNpcs(npcs);
     });
 }
+
+export async function deleteNPC(docId) {
+  console.log("DOCID", docId);
+  firestoreDatabase.doc(docId).delete();
+}

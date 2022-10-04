@@ -7,6 +7,8 @@ import {
   ButtonGroup,
 } from "react-bootstrap";
 import defaultBackground from "../../images/homeBackground.jpg";
+import { CreateModal } from "../CreateModal/CreateModal";
+import NewCampaignForm from "../NewCampaignForm/NewCampaignForm";
 
 const style = {
   paddingBottom: "20px",
@@ -21,6 +23,10 @@ const textStyle = {
 
 export const CampaignListEntry = ({ campaign }) => {
   const [open, setOpen] = useState(false);
+  const [show, setShow] = useState(false);
+
+  const handleClose = () => setShow(false);
+  const handleShow = () => setShow(true);
   return (
     <div style={style}>
       <Container>
@@ -41,13 +47,7 @@ export const CampaignListEntry = ({ campaign }) => {
               <div>
                 <Card body style={textStyle}>
                   <ButtonGroup>
-                    <Button
-                      variant="warning"
-                      href={
-                        "/BarrysNotesOnBarovia/#/edit-campaign/" +
-                        campaign.docId
-                      }
-                    >
+                    <Button variant="warning" onClick={handleShow}>
                       Edit the Basics
                     </Button>
                     <Button
@@ -65,6 +65,18 @@ export const CampaignListEntry = ({ campaign }) => {
           </Card>
         </Button>
       </Container>
+      <CreateModal
+        title="Edit Campaign"
+        handleClose={handleClose}
+        show={show}
+        content={
+          <NewCampaignForm
+            docId={campaign.docId}
+            forEdit
+            handleModalSave={handleClose}
+          />
+        }
+      />
     </div>
   );
 };

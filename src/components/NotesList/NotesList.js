@@ -16,6 +16,16 @@ const getCharacterNameForNote = (note, characters = []) => {
   return charName;
 };
 
+const getClassNameForNote = (note, characters = []) => {
+  let className = "";
+  characters.forEach((character) => {
+    if (character.docId === note.characterDocId) {
+      className = character.className;
+    }
+  });
+  return className;
+};
+
 export const NotesList = ({ notes = [], characters = [] }) => {
   const [reverseOrder, setReverseOrder] = React.useState(false);
   return (
@@ -42,6 +52,7 @@ export const NotesList = ({ notes = [], characters = [] }) => {
                           ? getCharacterNameForNote(note, characters)
                           : ""
                       }
+                      charClassName={getClassNameForNote(note, characters)}
                     />
                   </Col>
                 ))
@@ -54,6 +65,7 @@ export const NotesList = ({ notes = [], characters = [] }) => {
                         ? getCharacterNameForNote(note, characters)
                         : ""
                     }
+                    charClassName={getClassNameForNote(note, characters)}
                   />
                 </Col>
               ))}

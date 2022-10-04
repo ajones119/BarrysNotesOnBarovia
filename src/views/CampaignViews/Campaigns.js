@@ -1,11 +1,18 @@
 import React, { useEffect } from "react";
-import { Button, Row, Col, Container } from "react-bootstrap";
+import { useState } from "react";
+import { Button, Row, Col, Container, Modal } from "react-bootstrap";
 import "../../App.css";
 import CampaignList from "../../components/CampaignList/CampaignList";
+import { CreateModal } from "../../components/CreateModal/CreateModal";
+import NewCampaignForm from "../../components/NewCampaignForm/NewCampaignForm";
 import { getCampaigns } from "../../service/CampaignService";
 
 export const Campaigns = () => {
-  const [campaigns, setCampaigns] = React.useState();
+  const [campaigns, setCampaigns] = useState();
+  const [show, setShow] = useState(false);
+
+  const handleClose = () => setShow(false);
+  const handleShow = () => setShow(true);
 
   useEffect(() => {
     getCampaigns(setCampaigns);
@@ -18,10 +25,7 @@ export const Campaigns = () => {
         <Container>
           <Row>
             <Col>
-              <Button
-                variant="success"
-                href="/BarrysNotesOnBarovia/#/Campaigns/new-campaign"
-              >
+              <Button variant="success" onClick={handleShow}>
                 Start a New Campaign
               </Button>
             </Col>
@@ -32,6 +36,12 @@ export const Campaigns = () => {
             </Col>
           </Row>
         </Container>
+        <CreateModal
+          title="Create Campaign"
+          handleClose={handleClose}
+          show={show}
+          content={<NewCampaignForm handleModalSave={handleClose} />}
+        />
       </div>
     </div>
   );

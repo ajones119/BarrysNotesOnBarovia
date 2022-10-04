@@ -5,11 +5,13 @@ import { useParams } from "react-router-dom";
 import "../../App.css";
 import CampaignDetailsOverview from "../../components/CampaignDetailsOverview";
 import CharactersList from "../../components/CharactersList/CharactersList";
+import { CreateModal } from "../../components/CreateModal/CreateModal";
 import InitiativeTracker from "../../components/InitiativeTracker/InitiativeTracker";
 import NewNoteForm from "../../components/NewNoteForm/NewNoteForm";
 import NewNpcForm from "../../components/NewNpcForm/NewNpcForm";
 import NotesList from "../../components/NotesList/NotesList.js";
 import NPCList from "../../components/NPCList/NPCList";
+import ToolsList from "../../components/ToolsList/ToolsList";
 
 import { getCampaignDetailsByDocId } from "../../service/CampaignService";
 import { getCharactersByCampaignDocId } from "../../service/CharacterService";
@@ -73,6 +75,9 @@ export const CampaignDetails = () => {
                       <Nav.Link eventKey="overview">Overview</Nav.Link>
                     </Nav.Item>
                     <Nav.Item>
+                      <Nav.Link eventKey="tools">Tools</Nav.Link>
+                    </Nav.Item>
+                    <Nav.Item>
                       <Nav.Link eventKey="character">Characters</Nav.Link>
                     </Nav.Item>
                     <Nav.Item>
@@ -107,11 +112,7 @@ export const CampaignDetails = () => {
                       >
                         {newNPCOpen ? "Close" : "Add a New NPC"}
                       </Button>
-                      <Collapse in={newNPCOpen}>
-                        <div>
-                          <NewNpcForm campaign={campaign} />
-                        </div>
-                      </Collapse>
+
                       <NPCList npcs={npcs} />
                     </Tab.Pane>
                     <Tab.Pane eventKey="notesFromDungeonMaster">
@@ -125,11 +126,6 @@ export const CampaignDetails = () => {
                       >
                         {newDungeonMasterNoteOpen ? "Close" : "Add a New Note"}
                       </Button>
-                      <Collapse in={newDungeonMasterNoteOpen}>
-                        <div>
-                          <NewNoteForm campaign={campaign} isDungeonMaster />
-                        </div>
-                      </Collapse>
                       <NotesList
                         notes={dungeonMasterNotes}
                         characters={characters}
@@ -144,20 +140,52 @@ export const CampaignDetails = () => {
                       >
                         {newNoteOpen ? "Close" : "Add a New Note"}
                       </Button>
-                      <Collapse in={newNoteOpen}>
-                        <div>
-                          <NewNoteForm campaign={campaign} isCampaign />
-                        </div>
-                      </Collapse>
                       <NotesList notes={notes} characters={characters} />
                     </Tab.Pane>
-                    <Tab.Pane eventKey="initiativeTracker">INCOMPLETE</Tab.Pane>
+                    <Tab.Pane eventKey="tools">
+                      <ToolsList />
+                    </Tab.Pane>
                   </Tab.Content>
                 </Col>
               </Row>
             </Tab.Container>
           </Card>
         </Container>
+        <CreateModal
+          title="Create Campaign"
+          handleClose={() => setNewNPCOpen(false)}
+          show={newNPCOpen}
+          content={
+            <NewNpcForm
+              campaign={campaign}
+              handleModalSave={() => setNewNPCOpen(false)}
+            />
+          }
+        />
+        <CreateModal
+          title="New Dungeon Master Note"
+          handleClose={() => setNewDungeonMasterNoteOpen(false)}
+          show={newDungeonMasterNoteOpen}
+          content={
+            <NewNoteForm
+              campaign={campaign}
+              isDungeonMaster
+              handleModalSave={() => setNewDungeonMasterNoteOpen(false)}
+            />
+          }
+        />
+        <CreateModal
+          title="New Party Note"
+          handleClose={() => setNewNoteOpen(false)}
+          show={newNoteOpen}
+          content={
+            <NewNoteForm
+              campaign={campaign}
+              isCampaign
+              handleModalSave={() => setNewNoteOpen(false)}
+            />
+          }
+        />
       </div>
     </div>
   );

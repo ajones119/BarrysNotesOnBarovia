@@ -14,6 +14,7 @@ export const NewNoteForm = ({
   isDungeonMaster,
   isPersonal,
   isCampaign,
+  handleModalSave,
 }) => {
   const INVALID_CONTENT_TEXT = "Must be a valid Content";
 
@@ -56,6 +57,7 @@ export const NewNoteForm = ({
       saveNewNote(newNote).then(() => {
         resetData();
       });
+      handleModalSave();
     }
   };
 

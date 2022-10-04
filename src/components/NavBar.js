@@ -35,3 +35,5 @@ class NavBar extends Component {
 }
 
 export default NavBar;
+
+//<Nav.Link href="/BarrysNotesOnBarovia/#/Rules/">Rules</Nav.Link>;

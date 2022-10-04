@@ -3,6 +3,8 @@ import { Container, Tabs, Tab } from "react-bootstrap";
 import "../../App.css";
 import Conditions from "../../components/Rules/Mechanics/Conditions";
 import Environment from "../../components/Rules/Mechanics/Environment";
+import Movement from "../../components/Rules/Mechanics/Movement";
+import Resting from "../../components/Rules/Mechanics/Resting";
 
 export const Mechanics = () => {
   const [key, setKey] = React.useState("home");
@@ -24,13 +26,13 @@ export const Mechanics = () => {
           <Environment />
         </Tab>
         <Tab eventKey="movement" title="Movement">
-          <p>Environment</p>
+          <Movement />
         </Tab>
-        <Tab eventKey="rest" title="Rest">
-          <p>Rest</p>
+        <Tab eventKey="rest" title="Resting">
+          <Resting />
         </Tab>
-        <Tab eventKey="savingThrows" title="Saving Throws">
-          <p>SavingThrows</p>
+        <Tab eventKey="savingThrows" title="Abilities">
+          <p>Abilities</p>
         </Tab>
         <Tab eventKey="time" title="Time">
           <p>Time</p>

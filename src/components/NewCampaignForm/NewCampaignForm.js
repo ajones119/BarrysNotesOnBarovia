@@ -13,7 +13,11 @@ import { validateTextInputIsNotEmpty } from "../FormInputs/Validators";
 
 const style = { marginTop: "5px", marginBottom: "5px" };
 
-export const NewCampaignForm = ({ forEdit = false, docId }) => {
+export const NewCampaignForm = ({
+  forEdit = false,
+  docId,
+  handleModalSave,
+}) => {
   const INVALID_CAMPAIGN_TITLE_TEXT = "Must be a valid Campaign Title";
   const INVALID_CAMPAIGN_IMAGE_URL_TEXT = "Must be a valid Campaign image URL";
   const INVALID_CAMPAIGN_DUNGEON_MASTER_TEXT = "Must be a valid Dungeon Master";
@@ -67,6 +71,7 @@ export const NewCampaignForm = ({ forEdit = false, docId }) => {
           history.push("/Campaigns/");
         });
       }
+      handleModalSave();
     }
   };
 
