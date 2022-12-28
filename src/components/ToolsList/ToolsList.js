@@ -23,7 +23,7 @@ const TOOLS = [
   },
   {
     name: "Initiative Tracker",
-    link: "https://www.dndbeyond.com/monsters",
+    link: "https://dm.tools/tracker",
   },
   {
     name: "Magic Items",
