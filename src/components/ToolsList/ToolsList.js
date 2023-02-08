@@ -1,7 +1,6 @@
 import React from "react";
 import { ListGroup } from "react-bootstrap";
 import { Col, Container, Row } from "react-bootstrap";
-import ReactSwitch from "react-switch";
 import ToolsListEntry from "./ToolsListEntry";
 
 const TOOLS = [

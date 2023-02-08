@@ -9,6 +9,7 @@ import {
 import defaultBackground from "../../images/stick1.png";
 import { CreateModal } from "../CreateModal/CreateModal";
 import NewCharacterForm from "../NewCharacterForm/NewCharacterForm";
+import { useNavigate } from "react-router-dom";
 
 const style = {
   paddingBottom: "20px",
@@ -21,7 +22,7 @@ const textStyle = {
   color: "black",
 };
 
-const getColor = (className) => {
+const getColor = (className: string) => {
   let returnString = "#ffffff";
   if (className === "Artificer") {
     returnString = "#05ffea";
@@ -58,9 +59,10 @@ const getColor = (className) => {
   return returnString;
 };
 
-export const CharactersListEntry = ({ character }) => {
+export const CharactersListEntry = ({ character }: any) => {
   const [open, setOpen] = useState(false);
   const [show, setShow] = useState(false);
+  const navigate = useNavigate();
 
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
@@ -94,8 +96,9 @@ export const CharactersListEntry = ({ character }) => {
                     </Button>
                     <Button
                       variant="primary"
-                      href={
-                        "/BarrysNotesOnBarovia/#/Characters/" + character.docId
+                      onClick={ () => navigate(
+                        "/Characters/" + character.docId
+                        )
                       }
                     >
                       View Details
@@ -108,7 +111,7 @@ export const CharactersListEntry = ({ character }) => {
         </Button>
       </Container>
       <CreateModal
-        title="Edit Campaign"
+        title="Edit Character"
         handleClose={handleClose}
         show={show}
         content={

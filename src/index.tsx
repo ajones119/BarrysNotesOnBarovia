@@ -2,14 +2,16 @@ import React from "react";
 import ReactDOM from "react-dom";
 import "./index.css";
 import reportWebVitals from "./reportWebVitals";
-import { Routes } from "./routes";
 import { HashRouter } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
+import App from "./App";
 
 ReactDOM.render(
-  <HashRouter>
-    <Routes />
-  </HashRouter>,
+  <div className="master">
+    <HashRouter>
+      { App() }
+    </HashRouter>
+  </div>,
   document.getElementById("root")
 );
 

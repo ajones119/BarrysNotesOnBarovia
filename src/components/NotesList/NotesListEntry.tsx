@@ -1,8 +1,11 @@
-import { Button, ListGroup } from "react-bootstrap";
+import { Avatar, Button, Divider, ListItem, ListItemAvatar, ListItemButton, ListItemText } from "@mui/material";
 import { MdDeleteForever } from "react-icons/md";
+import { Character } from "../../model/Character";
+import { Note } from "../../model/Note";
 import { deleteNote } from "../../service/NoteService";
+import DmSeal from "../../images/dm-seal.jpg"
 
-const getColor = (className) => {
+const getColor = (className: string) => {
   let returnString = "#000000";
   if (className === "Artificer") {
     returnString = "#05ffea";
@@ -39,32 +42,29 @@ const getColor = (className) => {
   return returnString;
 };
 
-export const NotesListEntry = ({ note, auxName, charClassName }) => {
+declare interface NotesListProps {
+  note: Note,
+  character: Character
+}
+
+export const NotesListEntry = ({ note, character }: NotesListProps) => {
   const handleDeleteNote = () => {
     deleteNote(note.docId);
   };
 
   return (
-    <div>
-      <ListGroup.Item
-        style={{
-          borderColor: "#110080",
-          borderWidth: "3px",
-          borderRadius: "5px",
-          marginBottom: "3px",
-          borderColor: `${getColor(charClassName)}`,
-        }}
-      >
-        <p>{note.content}</p>
-        <p>
-          {auxName + " - "}
-          {new Date(note.date.seconds * 1000).toDateString() + " "}
-          {new Date(note.date.seconds * 1000).toLocaleTimeString()}
-        </p>
-        <Button variant="outline-danger" onClick={handleDeleteNote}>
-          <MdDeleteForever />
-        </Button>
-      </ListGroup.Item>
+    <div id={note.docId}>
+      <ListItem>
+        <ListItemAvatar>
+          <Avatar src={character.characterImageURL || DmSeal} alt={character.name || "DM"}  sx={{ width: 56, height: 56 }}/>
+        </ListItemAvatar>
+        <ListItemText primary={note.content} secondary={character.name || ""} style={{paddingLeft: '10px'}}/>
+        <Button color="error" variant="contained" onClick={handleDeleteNote}>Delete</Button>
+      </ListItem>
+      <Divider variant="inset" component="li">
+        {new Date(note.date.seconds * 1000).toDateString() + " "}
+        {new Date(note.date.seconds * 1000).toLocaleTimeString()}
+      </Divider>
     </div>
   );
 };

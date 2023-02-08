@@ -1,11 +1,13 @@
 import React, { useEffect } from "react";
 import { useState } from "react";
-import { Button, Row, Col, Container, Modal } from "react-bootstrap";
-import "../../App.css";
+import { Button, Row, Col, Container } from "react-bootstrap";
 import CampaignList from "../../components/CampaignList/CampaignList";
 import { CreateModal } from "../../components/CreateModal/CreateModal";
 import NewCampaignForm from "../../components/NewCampaignForm/NewCampaignForm";
 import { getCampaigns } from "../../service/CampaignService";
+import { faPlusCircle } from "@fortawesome/free-solid-svg-icons";
+import "../baseViewsStyle.css"
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 export const Campaigns = () => {
   const [campaigns, setCampaigns] = useState();
@@ -19,30 +21,20 @@ export const Campaigns = () => {
   }, []);
 
   return (
-    <div className="App">
-      <div className="content">
-        <h1> Campaigns </h1>
-        <Container>
-          <Row>
-            <Col>
-              <Button variant="success" onClick={handleShow}>
-                Start a New Campaign
-              </Button>
-            </Col>
-          </Row>
-          <Row>
-            <Col>
-              <CampaignList campaigns={campaigns} />
-            </Col>
-          </Row>
-        </Container>
-        <CreateModal
-          title="Create Campaign"
-          handleClose={handleClose}
-          show={show}
-          content={<NewCampaignForm handleModalSave={handleClose} />}
-        />
-      </div>
+    <div className="no-scroll-bar">
+      <h1 style={{ color: "white" }}>
+        Campaigns{" "}
+        <Button variant="success" onClick={handleShow}>
+          <FontAwesomeIcon icon={faPlusCircle} />
+        </Button>
+      </h1>
+      <CampaignList campaigns={campaigns} />
+      <CreateModal
+        title="Create Campaign"
+        handleClose={handleClose}
+        show={show}
+        content={<NewCampaignForm handleModalSave={handleClose} />}
+      />
     </div>
   );
 };

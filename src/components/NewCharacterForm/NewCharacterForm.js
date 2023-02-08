@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import { Button, Col, Container, Form, Row } from "react-bootstrap";
-import { useHistory } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { Campaign } from "../../model/Campaign";
 import { Character } from "../../model/Character";
 import { getCampaigns, saveNewCampaign } from "../../service/CampaignService";
@@ -39,7 +39,7 @@ export const NewCharacterForm = ({
   const [backstory, setBackstory] = React.useState("");
   const [character, setCharacter] = React.useState("");
 
-  const history = useHistory();
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (docId && forEdit) {
@@ -76,11 +76,11 @@ export const NewCharacterForm = ({
       );
       if (docId && forEdit) {
         updateCharacter(newCharacter).then(() => {
-          history.push("/Characters/");
+          navigate("/Characters/");
         });
       } else {
         saveNewCharacter(newCharacter).then(() => {
-          history.push("/Characters/");
+          navigate("/Characters/");
         });
       }
       handleModalSave();

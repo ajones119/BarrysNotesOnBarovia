@@ -1,0 +1,37 @@
+.campaign-list-entry {
+    color: white;
+    margin-bottom: 15px;
+    overflow: hidden;
+
+}
+
+/* [2] Transition property for smooth transformation of images */
+.campaign-list-entry img {
+    transition: transform .7s ease;
+    opacity: 0.7;
+    overflow: hidden;
+    width: 600px;
+    height: 400px;
+}
+
+/* [3] Finally, transforming the image when container gets hovered */
+.campaign-list-entry:hover img {
+    transform: scale(1.5);
+    opacity: 1.0;
+}
+
+.campaign-list-entry h2 {
+    position: relative;
+    top: -200px;
+    background-color: rgba(35, 77, 90, 0.3);
+    transition: transform .7s ease;
+    width: 600px;
+    margin-left: 2.5%
+}
+
+.campaign-list-entry:hover h2 {
+    transform: translateY(25px) scale(1.5);
+    overflow: hidden;
+    width: 100%;
+    margin-left: 0%
+}

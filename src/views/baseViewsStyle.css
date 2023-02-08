@@ -1,0 +1,38 @@
+.no-scroll-bar {
+    overflow-y: hidden;
+    overflow-x: hidden;
+}
+
+.campaign-details {
+    max-width: 70%;
+    border-color: white; 
+    border-style: solid;
+    margin-left: auto;
+    margin-right: auto;
+    border-radius: 25px;
+    background-color: #0f1417;
+}
+
+.campaign-details h4{
+    color: whitesmoke;
+}
+
+.campaign-details h1 {
+    color: whitesmoke;
+}
+
+.campaign-details h2 {
+    color: whitesmoke;
+}
+
+.campaign-details p {
+    color: whitesmoke;
+}
+
+.background-image-setup {
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
+    background-color: white;
+}

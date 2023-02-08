@@ -1,3 +1,4 @@
+import { Grid } from "@mui/material";
 import { Col, Container, Row } from "react-bootstrap";
 import NPCListEntry from "./NPCListEntry";
 
@@ -6,18 +7,16 @@ const containerStyle = { marginTop: "20px" };
 export const NPCList = ({ npcs = [] }) => {
   return (
     <div>
-      <Container style={containerStyle}>
-        <Row xs={1} md={2} className="mt-40">
-          {npcs
-            .slice(0)
-            .reverse()
-            .map((npc) => (
-              <Col>
-                <NPCListEntry npc={npc} />
-              </Col>
-            ))}
-        </Row>
-      </Container>
+      <Grid container direction="row" justifyItems="center" alignItems="space-around" style={containerStyle}>
+        {npcs
+          .slice(0)
+          .reverse()
+          .map((npc) => (
+            <Grid item xs={12} md={4}>
+              <NPCListEntry npc={npc} />
+            </Grid>
+          ))}
+      </Grid>
     </div>
   );
 };
