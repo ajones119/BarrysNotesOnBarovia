@@ -1,0 +1,21 @@
+@import "src/sass_utils";
+
+.textArea {
+    width: 100%;
+    border-radius: 10px;
+    border-width: 1px;
+    border-color: $primary;
+    border-style: solid;
+
+    .area {
+        width: 100%;
+        border-radius: 10px;
+        border-width: 0px;
+        background-color: $dark;
+        color: $primary;
+        padding: 8px;
+        border: none;
+        outline: none;
+        box-shadow: none;
+    }
+}

@@ -5,12 +5,17 @@ import reportWebVitals from "./reportWebVitals";
 import { HashRouter } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
 import App from "./App";
+import { QueryClient, QueryClientProvider } from "react-query";
+
+const queryClient = new QueryClient()
 
 ReactDOM.render(
   <div className="master">
-    <HashRouter>
-      { App() }
-    </HashRouter>
+    <QueryClientProvider client={queryClient}>
+      <HashRouter>
+        { App() }
+      </HashRouter>
+    </QueryClientProvider>
   </div>,
   document.getElementById("root")
 );

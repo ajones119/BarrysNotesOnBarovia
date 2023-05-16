@@ -1,0 +1,35 @@
+@import "src/sass_utils";
+
+.Tabs {
+    width: 100%;
+    .headerContainer {
+        margin: 0 auto;
+        width: 100%;
+        .header {
+            display: flex;
+            width: 100%;
+            justify-content: center;
+            .tab {
+                padding-left: 8px;
+                padding-right: 8px;
+                border-style: solid;
+                border-width: 1px;
+                border-top: none;
+                border-right: none;
+                border-left: none;
+                margin: 0 4px;
+                border-color: $primary;
+                color: $primary;
+
+                &:hover {
+                    border-color: $light;
+                    cursor: pointer; 
+                }
+            }
+            .active {
+                border-color: $light;
+                color: $light;
+            }
+        }
+    }
+}

@@ -1,0 +1,21 @@
+@import "src/sass_utils";
+
+
+.typography {
+    &.light {
+        color: $light;
+    }
+    &.dark {
+        color: $dark;
+    }
+    &.error {
+        color: $error;
+    }
+    &.primary {
+        color: $primary;
+    }
+
+    &.caption {
+        font-size: x-small;
+    }
+}

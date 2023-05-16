@@ -1,0 +1,17 @@
+@import "src/sass_utils";
+
+.campaignPicker {
+    margin: 0 auto;
+    .picker {
+        background-color: $dark;
+        border-width: 1px;
+        border-style: solid;
+        border-radius: 5px;
+        color: $primary;
+        border-color: $primary;
+    }
+
+    .header {
+        text-align: left;
+    }
+}

@@ -1,0 +1,92 @@
+@import "src/sass_utils";
+
+.textInput {
+    border-top-style: hidden;
+    border-right-style: hidden;
+    border-left-style: hidden;
+    border-bottom-style: solid;
+    border-bottom-width: 1px;
+    border-color: $primary;
+    background: none;
+    outline: none;
+    font-size: medium;
+    color: $primary;
+    margin-top: -20px;
+
+    &.inactive {
+        margin-top: 0px;
+    }
+}
+
+@keyframes slidein {
+    0% {
+        margin-top: -20px;
+    }
+
+    25% {
+        margin-top: -10px
+    }
+
+    50% {
+        margin-top: -5px
+    }
+
+    75% {
+        margin-top: 0px
+    }
+}
+
+@keyframes slideout {
+    0% {
+        margin-top: 0px;
+        opacity: 100%;
+    }
+
+    25% {
+        margin-top: -5px;
+    }
+
+    50% {
+        margin-top: -10px;
+        opacity: 50%;
+    }
+
+    75% {
+        margin-top: -20px;
+    }
+    
+    100%{
+        visibility: hidden;
+    }
+}
+
+.placeholder {
+    position: absolute;
+    text-align: left;
+    font-size: small;
+    color: $neutral;
+    z-index: 10;
+    
+}
+
+.placeholderActive {
+    animation-duration: 0.25s;
+    animation-name: slidein;
+}
+
+.placeholderInactive {
+    animation-duration: 0.25s;
+    animation-name: slideout;
+    opacity: 0%;
+}
+
+
+
+.error {
+    color: red;
+}
+
+.errorTextInput {
+    color: red;
+    border-color: red;
+}

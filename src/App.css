@@ -9,3 +9,11 @@
   min-height: 100vh;
   width: 100%;
 }
+
+.nonHomePage {
+  margin-top: 75px;
+  min-height: 100vh;
+  padding-left: 16px;
+  padding-right: 16px;
+  overflow: hidden;
+}

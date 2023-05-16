@@ -1,10 +1,10 @@
 export class Note {
   constructor(
     docId,
-    content,
     characterDocId,
     campaignDocId,
     date,
+    content,
     isPersonal,
     isCampaign,
     isDungeonMaster
@@ -18,4 +18,13 @@ export class Note {
     this.isCampaign = isCampaign;
     this.isDungeonMaster = isDungeonMaster;
   }
+}
+
+export const validateNote = (note) => {
+  let validator = {};
+  if (!note?.content || note?.content.trim() === "") {
+    validator.content = "Empty Content"
+  }
+
+  return validator;
 }

@@ -1,0 +1,18 @@
+@import "src/sass_utils";
+
+.NPCPicker {
+    margin: 0 auto;
+    .picker {
+        background-color: $dark;
+        border-width: 1px;
+        border-style: solid;
+        border-radius: 5px;
+        color: $primary;
+        border-color: $primary;
+        box-shadow: none;
+    }
+
+    .header {
+        text-align: left;
+    }
+}

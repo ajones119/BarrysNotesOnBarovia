@@ -1,0 +1,44 @@
+@import "src/sass_utils";
+
+.CampaignThumbCard {
+    position: relative;
+    width: 600px;
+    margin: 0 auto;
+    border-width: 0px;
+    border-color: $light;
+    border-radius: 50px;
+    border-style: solid;
+    color: $success;
+    overflow: hidden;
+
+    :hover {
+        cursor: pointer;
+    }
+
+    &.CampaignThumbCard:hover .imageContainer {
+        transition: filter .5s ease-in-out;
+        transform-origin: center center;
+
+        &:hover {
+            filter: contrast(200%);
+            
+        }
+    }
+
+    .nameContainer {
+        position: absolute;
+        top: 50%;
+        opacity: 0.8;
+        align-items: center;
+        background-color: $dark;
+        width: 100%;
+        z-index: 1;
+        transition: all 0.5s linear;
+
+    }
+
+    &.CampaignThumbCard:hover .nameContainer {
+        top: 40%;
+        transition: all 0.5s linear;
+    }
+}

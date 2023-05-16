@@ -1,12 +1,13 @@
+
 export class Character {
   constructor(
     docId,
     name,
+    campaignDocId,
     characterImageURL,
     player,
     backstory,
     className,
-    campaignDocId,
     dndBeyondURL
   ) {
     this.docId = docId;
@@ -18,4 +19,14 @@ export class Character {
     this.campaignDocId = campaignDocId;
     this.dndBeyondURL = dndBeyondURL;
   }
+
+}
+
+export const validateCharacter = (character) => {
+  let validator = {};
+  if (!character?.name || character?.name.trim() === "") {
+    validator.name = "Empty Name"
+  }
+
+  return validator;
 }

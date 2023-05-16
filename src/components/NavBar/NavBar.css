@@ -1,6 +1,6 @@
 .navbar-container {
     width: 100vw;
-    height: 50px;
+    height: 60px;
     padding-left: 15px;
     padding-right: 15px;
     padding-top: 5px;
@@ -14,18 +14,20 @@
     position: fixed;
     top: 0;
     left: 0;
-    background-color: blueviolet;
+    background-color: black;
 }
 
 .navbar-grid {
     text-align: center;
     display: grid;
-    grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr;;
-    grid-gap: 10px;
-    padding: 10px;
+    grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
+    grid-gap: 4px;
+    padding: 8px;
 }
 
 .navbar-link {
+    grid-template-columns:20px, 100px;
+    grid-gap: 4px;
     margin: 0;
     position: relative;
     top: 50%;
@@ -38,7 +40,6 @@
 }
 
 .navbar-link:hover {
-    border-color: darkgrey;
-    border-radius: 10px;
-    border-style: solid;
+    color: darkgrey;
+    cursor: pointer;
 }

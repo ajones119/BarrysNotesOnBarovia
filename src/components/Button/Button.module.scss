@@ -1,0 +1,143 @@
+@import "src/sass_utils";
+
+@keyframes pulsate {
+    100% {
+
+        text-shadow:
+        0 0 4px #fff,
+        0 0 11px #fff,
+        0 0 19px #fff,
+        0 0 40px #bc13fe,
+        0 0 80px #bc13fe,
+        0 0 90px #bc13fe,
+        0 0 100px #bc13fe,
+        0 0 150px #bc13fe;
+    
+    }
+    
+    0% {
+  
+      text-shadow:
+      0 0 0px #fff,
+      0 0 0px #fff,
+      0 0 0px #fff,
+      0 0 0px #bc13fe,
+      0 0 0px #bc13fe,
+      0 0 0px #bc13fe,
+      0 0 0px #bc13fe,
+      0 0 0px #bc13fe;
+  
+  }
+}
+
+.button {
+    color: $dark;
+    background-color: $primary;
+    border-radius: 50px;
+    padding: 4px 8px;
+    min-height: fit-content;
+
+    &:hover {
+        opacity: 0.8;
+    }
+
+    &.neon:hover {
+        box-shadow: 0 0 4px #fff,0 0 4px #fff, 0 0 4px $light,0 0 8px $light,0 0 8px $light, inset 0 0 8px $light;
+        opacity: 1.0;
+    }
+
+    &.secondary {
+        background-color: $neutral;
+    }
+
+    &.success {
+        background-color: $success;
+    }
+
+    &.error {
+        background-color: $error;
+        color: $light;
+    }
+
+    &.light {
+        background-color: $light;
+    }
+
+    &.dark {
+        background-color: $dark;
+        color: $primary;
+        border-color: $primary;
+    }
+
+    &.large {
+        width: 100%;
+        font-size: larger;
+    }
+}
+
+@keyframes bounceAndSpin {
+    0% {
+        transform: rotate(0deg);
+
+    }
+
+    50% {
+        transform: rotate(-180deg) scale(1.5);
+
+    }
+
+    0% {
+        transform: rotate(-360deg);
+
+    }
+}
+
+@keyframes spinIn {
+    0% {
+        transform: rotateY(0deg);
+
+    }
+
+    50% {
+        transform: rotateY(-180deg);
+
+    }
+
+    0% {
+        transform: rotateY(-360deg) scale(2.0);
+
+    }
+}
+
+.loaderContainer {
+    width: 100%;
+    margin: 0 auto;
+    &.loader {
+        z-index: 1;
+        animation-name: bounceAndSpin;
+        animation-duration: 2s;
+        animation-iteration-count: infinite;
+        overflow: hidden;
+        width: fit-content;
+        
+    }
+
+    &.error {
+        z-index: 1;
+        animation-name: spinIn;
+        animation-duration: 1s;
+        animation-iteration-count: 1;
+        overflow: hidden;
+        width: fit-content;
+    }
+
+    &.success {
+        z-index: 1;
+        animation-name: spinIn;
+        animation-duration: 1s;
+        animation-iteration-count: 1;
+        overflow: hidden;
+        width: fit-content;
+    }
+}
+

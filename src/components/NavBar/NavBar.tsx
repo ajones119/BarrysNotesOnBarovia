@@ -4,6 +4,7 @@ import Barry from "../../images/barry-cartoon.png"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faDungeon, faHatWizard } from "@fortawesome/free-solid-svg-icons";
 import { useNavigate } from "react-router-dom";
+import { Typography } from "../Typography/Typography";
 
 export const NavBar = () => {
   const [scrolled, setScrolled] = React.useState(false);
@@ -31,11 +32,11 @@ export const NavBar = () => {
         </div>
         <div className="navbar-link" onClick={() => { navigate("/Campaigns/"); }}>
           <FontAwesomeIcon icon={faDungeon} />
-          {" "}Campaigns
+          <Typography>Campaigns</Typography>
         </div>
         <div className="navbar-link" onClick={() => { navigate("/Characters/"); }}>
           <FontAwesomeIcon icon={faHatWizard} />
-          {" "}Characters
+          <Typography>Characters</Typography>
         </div>
         <div className="navbar-link">
           Tools
