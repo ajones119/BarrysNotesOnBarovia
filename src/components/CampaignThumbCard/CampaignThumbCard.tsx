@@ -7,12 +7,13 @@ import { useNavigate } from 'react-router-dom';
 
 declare interface CampaignThumbCardProps {
     campaign: Campaign
+    width?: number
 };
 
-export const CampaignThumbCard = ({ campaign }: CampaignThumbCardProps) => {
+export const CampaignThumbCard = ({ campaign, width = 600 }: CampaignThumbCardProps) => {
     const navigate = useNavigate();
     return (
-        <div className={css.CampaignThumbCard} onClick={() => navigate(`/campaigns/${campaign.docId}`)}>
+        <div className={css.CampaignThumbCard} style={{width: `${width}px`}} onClick={() => navigate(`/campaigns/${campaign.docId}`)}>
             <div className={css.imageContainer}>
             <img
                 src={campaign.campaignImageURL}
@@ -20,7 +21,7 @@ export const CampaignThumbCard = ({ campaign }: CampaignThumbCardProps) => {
                     currentTarget.onerror = null; // prevents looping
                     currentTarget.src=STICK;
                 }}
-                width={600}
+                width={width}
                 alt="boo"
             /></div>
             <div className={css.nameContainer}>

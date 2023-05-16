@@ -38,12 +38,6 @@ export const NavBar = () => {
           <FontAwesomeIcon icon={faHatWizard} />
           <Typography>Characters</Typography>
         </div>
-        <div className="navbar-link">
-          Tools
-        </div>
-        <div className="navbar-link">
-          Rules
-        </div>
       </div>
     </div>
   );

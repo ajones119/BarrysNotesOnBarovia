@@ -15,7 +15,8 @@ import { useAddCharacterButton } from '../../../service/CharacterService';
 declare interface CreateCharacterModalProps {
     isOpen: boolean;
     onClose: () => void;
-    initialCampaignId?: string
+    initialCampaignId?: string,
+    
 };
 
 const CreateCharacterModal = ({isOpen, onClose, initialCampaignId}: CreateCharacterModalProps) => {
