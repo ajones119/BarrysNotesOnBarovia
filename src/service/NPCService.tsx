@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { collection, doc, query, where } from "firebase/firestore";
 import { firestore } from "./firebase";
-import { useFirestoreCollectionMutation, useFirestoreDocument, useFirestoreQuery } from "@react-query-firebase/firestore";
+import { useFirestoreCollectionMutation, useFirestoreDocument, useFirestoreDocumentDeletion, useFirestoreQuery } from "@react-query-firebase/firestore";
 import { Character } from "../model/Character";
 import { ButtonStatuses, LoadingButton } from "../components/Button/LoadingButton"
 import { NPC } from '../model/NPC';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faTrash } from '@fortawesome/free-solid-svg-icons';
 
 export function useCampaignNPCs(campaignDocId: string) {
   const ref = query(collection(firestore, "npcs"), where("campaignDocId", "==", campaignDocId));
@@ -67,5 +69,34 @@ export const useAddNPCButton = (newNPC: NPC, onClick: () => void, validate: () =
 
   return (
     <LoadingButton color="success" size="large" isLoading={mutation.isLoading} status={buttonStatus} onClick={handleClick}>Save NPC</LoadingButton>
+  );
+}
+
+export const useDeleteNPCButton = (npc: NPC, onClick = () => {}) => {
+  const col = collection(firestore, "npcs");
+  const ref = doc(col, npc.docId);
+  const mutation = useFirestoreDocumentDeletion(ref);
+  const [buttonStatus, setButtonStatus] = useState<ButtonStatuses>(ButtonStatuses.Idle);
+  
+  const handleClick = () => {
+    mutation.mutate();
+
+      if (!mutation.error){
+        console.log("onClick")
+        onClick();
+      }
+
+    setButtonStatus(mutation.status as ButtonStatuses)
+  }
+
+  useEffect(() => {
+    const timer = setTimeout(() => setButtonStatus(ButtonStatuses.Idle), 2000)
+    return () => {
+      clearTimeout(timer)
+    }
+  }, [buttonStatus])
+
+  return (
+    <LoadingButton color="error" isLoading={mutation.isLoading} status={buttonStatus} onClick={handleClick}><FontAwesomeIcon icon={faTrash} /></LoadingButton>
   );
 }

@@ -41,7 +41,7 @@ const CreateCampaignLocationModal = ({isOpen, onClose, campaignId, parentLocatio
     }
 
     const handleOnClose = () => {
-            setNewCampaignLocation(new CampaignLocation(null, "", parentLocationIdOverride))
+            setNewCampaignLocation(new CampaignLocation(null, campaignId, parentLocationIdOverride))
             onClose();
     }
 

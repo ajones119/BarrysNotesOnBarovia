@@ -6,6 +6,7 @@ import { HashRouter } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
 import App from "./App";
 import { QueryClient, QueryClientProvider } from "react-query";
+import ScrollToTop from "./components/ScrollToTop";
 
 const queryClient = new QueryClient()
 
@@ -13,6 +14,7 @@ ReactDOM.render(
   <div className="master">
     <QueryClientProvider client={queryClient}>
       <HashRouter>
+        <ScrollToTop />
         { App() }
       </HashRouter>
     </QueryClientProvider>
