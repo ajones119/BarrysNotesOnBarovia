@@ -2,6 +2,7 @@
 
 
 .typography {
+    font-size: medium;
     &.light {
         color: $light;
     }
@@ -17,5 +18,25 @@
 
     &.caption {
         font-size: x-small;
+    }
+
+    &.small {
+        font-size: small;
+    }
+
+    &.large {
+        font-size: large;
+    }
+
+    &.xtraLarge {
+        font-size: x-large;
+    }
+
+    &.bolder {
+        font-weight: bolder;
+    }
+
+    &.bold {
+        font-weight: bolder;
     }
 }

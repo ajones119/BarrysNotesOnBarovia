@@ -28,6 +28,16 @@ const CampaignLocations = ({
 
     const baseLocations = locations.filter(l => !l.parentLocationId)
 
+    npcs = npcs?.sort(function (a, b) {
+        if (a.name.toLowerCase() < b.name.toLowerCase()) {
+          return -1;
+        }
+        if (a.name.toLowerCase() > b.name.toLowerCase()) {
+          return 1;
+        }
+        return 0;
+      });
+
     return (
         <div style={{color: "white", textAlign: "left"}}>
             <Button color="dark" onClick={() => setIsModalOpen(true)}>Add Base Location</Button>

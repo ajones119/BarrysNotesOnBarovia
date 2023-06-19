@@ -9,7 +9,7 @@ import { Item } from '../../../../../model/Item';
 import BACKUP from "../../../../../images/hauntedCastleBackground.jpg"
 import { NPC } from '../../../../../model/NPC';
 import NPCPicker from '../../../../../components/NPCPicker/NPCPicker';
-import { SetCampaignLocation } from '../../../../../service/CampaignLocationService';
+import { SetCampaignLocation, useDeleteCampaignLocationButton } from '../../../../../service/CampaignLocationService';
 import NPCThumbCard from '../../../../../components/NPCThumbCard/NPCThumbCard';
 import css from "../../SingleCampaign.module.scss"
 
@@ -26,6 +26,7 @@ const CampaignTreeLocation = ({ campaignLocation, subLocationOptions = [], campa
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [currentNPC, setCurrentNPC] = useState("");
     const saveCampaignLocation = SetCampaignLocation(campaignLocation)
+    const deleteLocationButton = useDeleteCampaignLocationButton(campaignLocation, () => {}, !!subLocationOptions.find(location => campaignLocation.docId === location.parentLocationId))
 
     const subLocations = subLocationOptions.filter(option => option.parentLocationId == campaignLocation.docId)
     const campaignLocationsNPCs = npcs.filter(npc => campaignLocation.npcs.includes(npc.docId))
@@ -34,8 +35,8 @@ const CampaignTreeLocation = ({ campaignLocation, subLocationOptions = [], campa
         <TreeItem nodeId={campaignLocation.docId} label={campaignLocation.name}>
             <div>
                 <Grid container justifyContent="space-around" alignItems="center" rowSpacing={2}>
-                    <Grid item xs={12}>
-                        <Typography>{campaignLocation.name}</Typography>
+                    <Grid item xs={12} >
+                        <Typography className={css.center} size="xtraLarge">{campaignLocation.name}{" "}{(deleteLocationButton)}</Typography>
                     </Grid>
 
                     {
@@ -53,13 +54,11 @@ const CampaignTreeLocation = ({ campaignLocation, subLocationOptions = [], campa
                         </Grid>
                     }
                     <Grid item xs={12}>
-                        <Typography>{campaignLocation.description}</Typography>
+                        <Typography className={css.center}>{campaignLocation.description}</Typography>
                     </Grid>
 
-                    <Grid item xs={6}>
-                        <NPCPicker onChange={(npc) => setCurrentNPC(npc)} npcs={npcs} value={currentNPC} />
-                    </Grid>
-                    <Grid item xs={6}>
+                    <Grid item style={{display: "flex"}}>
+                        <NPCPicker onChange={(npc) => setCurrentNPC(npc)} npcs={npcs} value={currentNPC} /><div>{"  "}</div>
                         <Button
                             onClick={() => {
                                 const newNPCs = [...campaignLocation.npcs];
