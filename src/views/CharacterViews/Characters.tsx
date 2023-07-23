@@ -1,12 +1,11 @@
-import React, { useEffect, useState } from "react";
+import React, {useState } from "react";
 import "../../App.css";
 import css from "./Characters.module.scss"
 
 import { CharacterThumbCard } from "../../components/CharacterThumbCard/CharatcerThumbCard";
-import { Grid, TextField } from "@mui/material"
+import { Grid } from "@mui/material"
 import { Character } from "../../model/Character";
 import { useCharacters } from "../../service/CharacterService";
-import { Typography } from "../../components/Typography/Typography";
 import CampaignPicker from "../../components/CampaignPicker/CampaignPicker";
 import { Campaign } from "../../model/Campaign";
 import { Spacer } from "../../components/Spacer/Spacer";
@@ -22,7 +21,7 @@ export const Characters = () => {
   const [campaignFilter, setCampaignFilter] = useState<Campaign | null>(null);
   const [characterFilter, setCharacterFilter] = useState<string>("");
 
-  const {characters, isLoading } = useCharacters();
+  const {characters } = useCharacters();
  
   let filteredCharacters = characters;
 

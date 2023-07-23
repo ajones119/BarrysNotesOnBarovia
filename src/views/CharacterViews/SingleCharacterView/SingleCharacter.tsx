@@ -1,9 +1,8 @@
-import React, { useState, useEffect } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import React, { useState } from 'react';
+import { useParams } from 'react-router-dom';
 import { Typography } from '../../../components/Typography/Typography';
 import { useCharacter } from '../../../service/CharacterService';
 import Tabs from '../../../components/Tabs/Tabs';
-import { Note } from '../../../model/Note';
 import { Character } from '../../../model/Character';
 import Overview from './Tabs/Overview';
 
@@ -18,7 +17,6 @@ const getTabs = (
 ];
 
 const SingleCharacter = () => {
-    const navigate = useNavigate;
     const params = useParams();
     const { CharacterId } = params;
     const { character, isLoading } = useCharacter(CharacterId)

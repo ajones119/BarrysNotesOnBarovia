@@ -5,7 +5,6 @@ import { TextInput } from '../../TextInput/TextInput';
 import TextArea from '../../TextArea/TextArea';
 
 import css from "./CreateCampaignModal.module.scss"
-import { useAddCharacterButton } from '../../../service/CharacterService';
 import { Campaign, validateCampaign } from '../../../model/Campaign';
 import { useAddCampaignButton } from '../../../service/CampaignService';
 
