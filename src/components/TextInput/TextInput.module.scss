@@ -12,6 +12,19 @@
     font-size: medium;
     color: $primary;
     margin-top: -20px;
+    width: 100%;
+
+    /* Chrome, Safari, Edge, Opera */
+    &::-webkit-outer-spin-button,
+    &::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+    }
+
+    /* Firefox */
+    &[type=number] {
+    -moz-appearance: textfield;
+    }
 
     &.inactive {
         margin-top: 0px;

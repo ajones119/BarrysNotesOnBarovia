@@ -128,5 +128,5 @@ export function useCampaignCharacters(campaignDocId: string) {
     );
   });
 
-  return { characters: charactersData, isLoading, refetch };
+  return { characters: campaignDocId && charactersData, isLoading, refetch };
 }

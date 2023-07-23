@@ -1,0 +1,20 @@
+.playerInitiativeContainer {
+    color: white;
+    padding-top: 96px;
+
+    .characterContainer {
+
+        .imageContainer {
+            border-radius: 100px;
+        }
+
+        .turnIndicator {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding-top: 16px;
+            column-gap: 16px;
+            font-size: xx-large;
+        }
+    }
+}

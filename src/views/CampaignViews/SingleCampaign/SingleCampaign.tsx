@@ -17,6 +17,7 @@ import { useCampaignNotes } from '../../../service/NotesService';
 import CampaignLocations from './Tabs/CampaignLocations/CampaignLocations';
 import { useCampaignLocations } from '../../../service/CampaignLocationService';
 import { CampaignLocation } from '../../../model/Location';
+import InitiativeTracker from './Tabs/InitiativeTracker/InitiativeTracker';
 
 const getTabs = (
     campaign: Campaign,
@@ -44,6 +45,11 @@ const getTabs = (
         key: "locations",
         name: <Typography>Locations</Typography>,
         content: <CampaignLocations npcs={NPCs} locations={locations} />
+    },
+    {
+        key: "combat",
+        name: <Typography>Combat</Typography>,
+        content: <InitiativeTracker characters={characters} campaign={campaign} />
     }
 ];
 

@@ -93,8 +93,6 @@ export function useCampaignLocations(campaignId = "") {
       );
     });
   
-    console.log("LOCATION DATA", campaignsLocationsData)
-
     return { campaignLocations: campaignsLocationsData, isLoading };
 }
 

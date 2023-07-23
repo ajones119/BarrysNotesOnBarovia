@@ -35,7 +35,7 @@ const CreateCharacterModal = ({isOpen, onClose, initialCampaignId}: CreateCharac
     }
 
     const handleOnClose = () => {
-            setNewCharacter(new Character(null, ""))
+            setNewCharacter(new Character(null, "", initialCampaignId))
             onClose();
     }
 

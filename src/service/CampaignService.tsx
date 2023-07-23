@@ -34,18 +34,20 @@ export function useCampaigns() {
 export function useCampaign(campaignDocId: string) {
   const ref = doc(firestore, "campaigns", campaignDocId);
 
-  const campaignQuery = useFirestoreDocument(["singleCampaign", campaignDocId], ref);
+  const campaignQuery = useFirestoreDocument(["singleCampaign", campaignDocId], ref, {subscribe: true});
   
   const { data, isLoading } = campaignQuery;
 
   const campaignData = data?.data() || {};
 
   const campaign = new Campaign(
-    campaignData.docId,
+    campaignDocId,
     campaignData.title,
     campaignData.campaignImageURL,
     campaignData.dungeonMaster,
     campaignData.description,
+    campaignData?.currentDocId,
+    campaignData?.nextDocId,
   );
 
   return { campaign, isLoading };

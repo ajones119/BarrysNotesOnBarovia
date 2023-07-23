@@ -6,11 +6,12 @@ function isValueEmpty(value: any) {
 }
 
 declare interface TextInputProps {
-    value: string
+    value?: string | number | null,
     onChange?: (input: string) => void
     placeholder?: string
     error?: boolean,
-    className?: string
+    className?: string,
+    number?: boolean
 }
 
 export const TextInput = ({
@@ -18,13 +19,14 @@ export const TextInput = ({
     onChange,
     placeholder,
     error = false,
-    className
+    className,
+    number = false
 }: TextInputProps) => {
     return(
         <div className={`${error && css.error}`}>
             <input
-                type="text"
-                value={value}
+                type={number ? "number" : "text"}
+                value={value || ""}
                 onChange={onChange ? (e) => onChange(e.target.value) : undefined}
                 placeholder={placeholder}
                 className={`${css.textInput} ${className} ${error && css.errorTextInput} ${isValueEmpty(value) && css.inactive}`}

@@ -15,7 +15,7 @@ declare interface CharacterPickerProps {
 const CharacterPicker = ({ onChange, value, width = 300, characters }: CharacterPickerProps) => {
     return (
         <div className={css.CharacterPicker} style={{width: `${width}px`}}>
-            <Typography className={css.header} size="caption">NPCs</Typography>
+            <Typography className={css.header} size="caption">Character</Typography>
             <Select
                 value={value}
                 onChange={(event) => {
@@ -24,7 +24,7 @@ const CharacterPicker = ({ onChange, value, width = 300, characters }: Character
                 }}
                 className={css.picker}
                 style={{width: `${width}px`}}
-                label='NPCs'
+                label='Character'
                 defaultValue={"None"}
                 variant="standard"
             >
