@@ -1,13 +1,7 @@
 import React, {useState} from 'react';
 import { Modal } from '../Modal';
 import { Grid } from '@mui/material';
-import { TextInput } from '../../TextInput/TextInput';
-import CampaignPicker from '../../CampaignPicker/CampaignPicker';
-import ClassPicker from '../../ClassPicker/ClassPicker';
 import TextArea from '../../TextArea/TextArea';
-import { Button } from '../../Button/Button';
-import { ButtonStatuses, LoadingButton } from '../../Button/LoadingButton';
-
 import css from "./CreateNoteModal.module.scss"
 import { useAddNoteButton } from '../../../service/NotesService';
 import { Note, validateNote } from '../../../model/Note';
@@ -27,13 +21,7 @@ const CreateNoteModal = ({isOpen, onClose, campaignId, characters}: CreateNPCMod
     const saveNoteButton = useAddNoteButton(newNote, () => handleOnClose(), () => validate());
 
     const {
-        characterDocId,
-        campaignDocId,
-        date,
         content,
-        isPersonal,
-        isCampaign,
-        isDungeonMaster
     } = newNote;
 
     const validate = () => {

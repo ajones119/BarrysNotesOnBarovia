@@ -19,7 +19,7 @@ const getTabs = (
 const SingleCharacter = () => {
     const params = useParams();
     const { CharacterId } = params;
-    const { character, isLoading } = useCharacter(CharacterId)
+    const { character } = useCharacter(CharacterId)
     const [currentTab, setCurrentTab] = useState("overview")
 
     return (

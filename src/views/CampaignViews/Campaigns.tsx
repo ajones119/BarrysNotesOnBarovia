@@ -1,7 +1,6 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { useState } from "react";
 import { Grid } from "@mui/material"
-import { TextInput } from "../../components/TextInput/TextInput";
 import { useCampaigns } from "../../service/CampaignService";
 import { CampaignThumbCard } from "../../components/CampaignThumbCard/CampaignThumbCard";
 import css from "./Campaigns.module.scss"
@@ -24,7 +23,7 @@ const getCardWidth = (width: number) => {
 
 export const Campaigns = () => {
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
-  const {campaigns, isLoading} = useCampaigns();
+  const {campaigns} = useCampaigns();
   const width = useWindowWidth();
 
   const cardWidth = getCardWidth(width);

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Select, MenuItem } from "@mui/material"
 import css from "./CampaignPicker.module.scss"
 import { Campaign } from '../../model/Campaign';

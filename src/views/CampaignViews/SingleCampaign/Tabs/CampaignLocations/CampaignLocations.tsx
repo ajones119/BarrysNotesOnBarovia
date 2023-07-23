@@ -5,7 +5,7 @@ import { useParams } from "react-router-dom";
 import { CampaignLocation } from "../../../../../model/Location";
 import { Button } from "../../../../../components/Button/Button";
 import CreateCampaignLocationModal from "../../../../../components/Modal/CreateCampaignLocationModal/CreateCampaignLocationModal";
-import { TreeView, TreeItem } from "@mui/lab"; 
+import { TreeView } from "@mui/lab"; 
 import { Grid } from "@mui/material";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowAltCircleDown, faArrowAltCircleRight } from "@fortawesome/free-solid-svg-icons";

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Select, MenuItem } from "@mui/material"
 import css from "./NPCPicker.module.scss"
 import { Typography } from '../Typography/Typography';

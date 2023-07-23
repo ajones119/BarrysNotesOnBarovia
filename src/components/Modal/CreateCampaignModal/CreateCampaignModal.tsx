@@ -16,7 +16,6 @@ declare interface CreateCampaignModalProps {
 const CreateCampaignModal = ({isOpen, onClose}: CreateCampaignModalProps) => {
     const [newCampaign, setNewCampaign] = useState(new Campaign(null, ""));
     const [validator, setValidator] = useState<any>();
-    const [campaign, setCampaign] = useState();
     const saveCampaignButton = useAddCampaignButton(newCampaign, () => handleOnClose(), () => validate());
 
     const { title, campaignImageURL, dungeonMaster, description } = newCampaign;

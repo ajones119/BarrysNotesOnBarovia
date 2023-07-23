@@ -25,16 +25,6 @@ export const CharacterThumbCard = ({ character }: CharacterThumbCardProps) => {
             /></div>
             <div className={css.nameContainer}>
             <Typography color="primary"> {character.name} </Typography>
-            <div className={css.imageContainer}>
-            <img
-                src={character.characterImageURL}
-                onError={({ currentTarget }) => {
-                    currentTarget.onerror = null; // prevents looping
-                    currentTarget.src=STICK;
-                }}
-                width={300}
-                alt="boo"
-            /></div>
             </div>
         </div>
     );

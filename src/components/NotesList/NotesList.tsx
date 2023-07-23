@@ -2,10 +2,9 @@ import React, { useState } from 'react'
 import { Character } from '../../model/Character';
 import css from "./NotesList.module.scss";
 import { Note } from '../../model/Note';
-import { List, ListItem, ListItemText, Grid, ListItemAvatar, Avatar, ListItemIcon, Divider } from "@mui/material"
-import BACKUP from "../../images/dm-seal.jpg"
+import { List, Grid } from "@mui/material"
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faPlusCircle, faTrash } from '@fortawesome/free-solid-svg-icons';
+import { faPlusCircle } from '@fortawesome/free-solid-svg-icons';
 import { Button } from '../Button/Button';
 import CreateNoteModal from '../Modal/CreateNoteModal/CreateNoteModal';
 import { NotesListItem } from './NoteListItem';

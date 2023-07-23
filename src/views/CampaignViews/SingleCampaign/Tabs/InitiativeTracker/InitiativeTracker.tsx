@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import css from "./InitiativeTracker.module.scss"
 import { TableCell, TableContainer, TableHead, TableRow } from "@mui/material";
 

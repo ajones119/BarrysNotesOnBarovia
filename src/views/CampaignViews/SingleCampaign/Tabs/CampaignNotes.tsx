@@ -3,14 +3,9 @@ import css from "../SingleCampaign.module.scss"
 import { useParams } from 'react-router-dom';
 import { Note } from '../../../../model/Note';
 import { Character } from '../../../../model/Character';
-import { List, ListItem, ListItemText, Grid, ListItemAvatar, Avatar, ListItemIcon, ToggleButton, ToggleButtonGroup } from "@mui/material"
-import BACKUP from "../../../../images/dm-seal.jpg"
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faTrash } from '@fortawesome/free-solid-svg-icons';
+import { Grid, ToggleButton, ToggleButtonGroup } from "@mui/material"
 import NotesList from '../../../../components/NotesList/NotesList';
 import { Typography } from '../../../../components/Typography/Typography';
-
-
 
 declare interface CampaignNotesProps {
     notes: Note[]

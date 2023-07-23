@@ -2,15 +2,9 @@ import React, {useState} from 'react';
 import { Modal } from '../Modal';
 import { Grid } from '@mui/material';
 import { TextInput } from '../../TextInput/TextInput';
-import CampaignPicker from '../../CampaignPicker/CampaignPicker';
-import ClassPicker from '../../ClassPicker/ClassPicker';
 import TextArea from '../../TextArea/TextArea';
-import { Button } from '../../Button/Button';
-import { ButtonStatuses, LoadingButton } from '../../Button/LoadingButton';
-
 import css from "./CreateNPCModal.module.scss"
-import { Character, validateCharacter } from '../../../model/Character';
-import { useAddCharacterButton } from '../../../service/CharacterService';
+import { validateCharacter } from '../../../model/Character';
 import { NPC } from '../../../model/NPC';
 import { useAddNPCButton } from '../../../service/NPCService';
 
@@ -25,7 +19,7 @@ const CreateNPCModal = ({isOpen, onClose, campaignId}: CreateNPCModalProps) => {
     const [validator, setValidator] = useState<any>();
     const saveCharacterButton = useAddNPCButton(newNPC, () => handleOnClose(), () => validate(), campaignId);
 
-    const { name, characterImageURL, backstory, statBlockURL } = newNPC;
+    const { name, characterImageURL, backstory } = newNPC;
 
     const validate = () => {
         const valid = validateCharacter(newNPC)

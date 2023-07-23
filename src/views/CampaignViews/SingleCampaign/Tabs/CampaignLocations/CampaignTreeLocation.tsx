@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { CampaignLocation } from '../../../../../model/Location';
-import { TreeView, TreeItem } from "@mui/lab"; 
+import { TreeItem } from "@mui/lab"; 
 import { Grid } from "@mui/material";
 import CreateCampaignLocationModal from '../../../../../components/Modal/CreateCampaignLocationModal/CreateCampaignLocationModal';
 import { Button } from '../../../../../components/Button/Button';
@@ -12,7 +12,6 @@ import NPCPicker from '../../../../../components/NPCPicker/NPCPicker';
 import { SetCampaignLocation, useDeleteCampaignLocationButton } from '../../../../../service/CampaignLocationService';
 import NPCThumbCard from '../../../../../components/NPCThumbCard/NPCThumbCard';
 import css from "../../SingleCampaign.module.scss"
-
 
 declare interface CampaignTreeLocationProps {
     campaignLocation: CampaignLocation,
@@ -28,7 +27,7 @@ const CampaignTreeLocation = ({ campaignLocation, subLocationOptions = [], campa
     const saveCampaignLocation = SetCampaignLocation(campaignLocation)
     const deleteLocationButton = useDeleteCampaignLocationButton(campaignLocation, () => {}, !!subLocationOptions.find(location => campaignLocation.docId === location.parentLocationId))
 
-    const subLocations = subLocationOptions.filter(option => option.parentLocationId == campaignLocation.docId)
+    const subLocations = subLocationOptions.filter(option => option.parentLocationId === campaignLocation.docId)
     const campaignLocationsNPCs = npcs.filter(npc => campaignLocation.npcs.includes(npc.docId))
 
     return (
