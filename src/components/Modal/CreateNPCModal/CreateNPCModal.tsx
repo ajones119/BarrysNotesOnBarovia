@@ -6,19 +6,25 @@ import TextArea from '../../TextArea/TextArea';
 import css from "./CreateNPCModal.module.scss"
 import { validateCharacter } from '../../../model/Character';
 import { NPC } from '../../../model/NPC';
-import { useAddNPCButton } from '../../../service/NPCService';
+import { useAddNPCButton, useUpdateNPCButton } from '../../../service/NPCService';
+import isEqual from 'react-fast-compare';
+import useDeepCompareEffect from 'use-deep-compare-effect';
 
 declare interface CreateNPCModalProps {
     isOpen: boolean;
     onClose: () => void;
     campaignId: string
+    npc?: NPC
 };
 
-const CreateNPCModal = ({isOpen, onClose, campaignId}: CreateNPCModalProps) => {
-    const [newNPC, setNewNPC] = useState(new NPC(null, ""));
+const CreateNPCModal = ({isOpen, onClose, campaignId, npc = new NPC(null, "")}: CreateNPCModalProps) => {
+    const [newNPC, setNewNPC] = useState(npc);
     const [validator, setValidator] = useState<any>();
     const saveCharacterButton = useAddNPCButton(newNPC, () => handleOnClose(), () => validate(), campaignId);
-
+    const editButton = useUpdateNPCButton(
+        newNPC,
+        () => handleOnClose(), () => validate()
+    );
     const { name, characterImageURL, backstory } = newNPC;
 
     const validate = () => {
@@ -28,15 +34,18 @@ const CreateNPCModal = ({isOpen, onClose, campaignId}: CreateNPCModalProps) => {
         return !(Object.keys(valid).length > 0);
     }
 
+    useDeepCompareEffect(() => {
+        setNewNPC(npc)
+    }, [npc, isOpen])
+
     const handleOnClose = () => {
-            setNewNPC(new NPC(null, ""))
-            onClose();
+        onClose();
     }
 
     return (
-        <div>
+        <div key={`charModal-${npc?.docId || "new"}`}>
             <Modal isOpen={isOpen} onClose={handleOnClose} extraButtons={[
-                    saveCharacterButton
+                    newNPC.campaignDocId ? editButton : saveCharacterButton
                 ]}>
                 <Grid container spacing={2} rowSpacing={3} className={css.CreateNPCModal}>
                     <Grid item lg={6} sm={12}>

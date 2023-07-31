@@ -42,7 +42,7 @@
         top: 40%;
         transition: all 0.5s linear;
         &.isActive{
-            top: 10%
+            top: 10px;
         }
     }
 
@@ -54,7 +54,7 @@
     &.isActive .nameContainer{
         position: absolute;
         transition: all 0.5s linear;
-        top: 10%;
+        top: 10px;
 
     }
 

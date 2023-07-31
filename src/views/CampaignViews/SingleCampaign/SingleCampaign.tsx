@@ -18,6 +18,9 @@ import CampaignLocations from './Tabs/CampaignLocations/CampaignLocations';
 import { useCampaignLocations } from '../../../service/CampaignLocationService';
 import { CampaignLocation } from '../../../model/Location';
 import InitiativeTracker from './Tabs/InitiativeTracker/InitiativeTracker';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faBook, faEarthAmericas, faMagnifyingGlassLocation, faSkullCrossbones } from '@fortawesome/free-solid-svg-icons';
+import { faCircleUser } from '@fortawesome/free-regular-svg-icons';
 
 const getTabs = (
     campaign: Campaign,
@@ -28,27 +31,27 @@ const getTabs = (
     ) => [
     {
         key: "overview",
-        name: <Typography>Overview</Typography>,
+        name: <Typography><FontAwesomeIcon icon={faEarthAmericas} />{" "}Overview</Typography>,
         content: <Overview campaign={campaign} />
     },
     {
         key: "characters",
-        name: <Typography>Characters</Typography>,
+        name: <Typography><FontAwesomeIcon icon={faCircleUser} />{" "}Characters</Typography>,
         content: <CampaignCharacters characters={characters} npcs={NPCs} />
     },
     {
         key: "notes",
-        name: <Typography>Notes</Typography>,
+        name: <Typography><FontAwesomeIcon icon={faBook} />{" "}Notes</Typography>,
         content: <CampaignNotes characters={characters} notes={notes} />
     },
     {
         key: "locations",
-        name: <Typography>Locations</Typography>,
+        name: <Typography><FontAwesomeIcon icon={faMagnifyingGlassLocation} />{" "}Locations</Typography>,
         content: <CampaignLocations npcs={NPCs} locations={locations} />
     },
     {
         key: "combat",
-        name: <Typography>Combat</Typography>,
+        name: <Typography><FontAwesomeIcon icon={faSkullCrossbones} />{" "}Combat</Typography>,
         content: <InitiativeTracker characters={characters} campaign={campaign} />
     }
 ];

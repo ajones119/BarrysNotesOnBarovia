@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { collection, doc, query, where } from "firebase/firestore";
 import { firestore } from "./firebase";
-import { useFirestoreCollectionMutation, useFirestoreDocumentDeletion, useFirestoreQuery } from "@react-query-firebase/firestore";
+import { useFirestoreDocumentMutation, useFirestoreCollectionMutation, useFirestoreDocumentDeletion, useFirestoreQuery } from "@react-query-firebase/firestore";
 import { ButtonStatuses, LoadingButton } from "../components/Button/LoadingButton"
 import { NPC } from '../model/NPC';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -51,12 +51,14 @@ export const useAddNPCButton = (newNPC: NPC, onClick: () => void, validate: () =
       console.log("ERROR", mutation.error)
     }
 
-    if (!mutation.error){
-      console.log("onClick")
-      onClick();
-    }
+    if (!mutation.error && valid){
+      setButtonStatus(mutation.status as ButtonStatuses)
 
-    setButtonStatus(mutation.status as ButtonStatuses)
+      onClick();
+    } else {
+      setButtonStatus(ButtonStatuses.Error as ButtonStatuses)
+
+    }
   }
 
   useEffect(() => {
@@ -97,5 +99,43 @@ export const useDeleteNPCButton = (npc: NPC, onClick = () => {}) => {
 
   return (
     <LoadingButton color="error" isLoading={mutation.isLoading} status={buttonStatus} onClick={handleClick}><FontAwesomeIcon icon={faTrash} /></LoadingButton>
+  );
+}
+
+
+export const useUpdateNPCButton = (newNPC: NPC, onClick: () => void, validate: () => boolean) => {
+  const npcs = collection(firestore, "npcs");
+  const ref = newNPC.docId && doc(npcs, newNPC.docId);
+  const mutation = useFirestoreDocumentMutation(ref);
+
+  const [buttonStatus, setButtonStatus] = useState<ButtonStatuses>(ButtonStatuses.Idle);
+
+  const { name = "", characterImageURL = "", backstory = "", statBlockURL = "", campaignDocId, docId } = newNPC;
+
+  const handleClick = () => {
+    const valid = validate();
+    if (valid) {
+      mutation.mutate({ name, characterImageURL, backstory, statBlockURL, campaignDocId, docId })
+      console.log("ERROR", mutation.error)
+    }
+
+    if (!mutation.error && valid){
+      setButtonStatus(mutation.status as ButtonStatuses)
+
+      onClick();
+    } else {
+      setButtonStatus(ButtonStatuses.Error as ButtonStatuses)
+    }
+  }
+
+  useEffect(() => {
+    const timer = setTimeout(() => setButtonStatus(ButtonStatuses.Idle), 2000)
+    return () => {
+      clearTimeout(timer)
+    }
+  }, [buttonStatus])
+
+  return (
+    <LoadingButton color="success" size="large" isLoading={mutation.isLoading} status={buttonStatus} onClick={handleClick}>Update NPC</LoadingButton>
   );
 }

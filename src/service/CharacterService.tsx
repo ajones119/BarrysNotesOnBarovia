@@ -1,21 +1,21 @@
 import React, { useState, useEffect } from 'react';
 import { collection, doc, query, where } from "firebase/firestore";
 import { firestore } from "./firebase";
-import { useFirestoreCollectionMutation, useFirestoreDocument, useFirestoreQuery } from "@react-query-firebase/firestore";
+import { useFirestoreCollectionMutation, useFirestoreDocument, useFirestoreDocumentMutation, useFirestoreQuery } from "@react-query-firebase/firestore";
 import { Character } from "../model/Character";
 import { ButtonStatuses, LoadingButton } from "../components/Button/LoadingButton"
 
 export function useCharacter(characterDocId = "") {
   const ref = doc(firestore, "characters", characterDocId);
 
-  const campaignQuery = useFirestoreDocument(["singleCharacter", characterDocId], ref);
+  const campaignQuery = useFirestoreDocument(["singleCharacter", characterDocId], ref, {subscribe: true});
   
   const { data, isLoading } = campaignQuery;
 
   const characterData = data?.data() || {};
 
   const character = new Character(
-    characterData.docId,
+    characterDocId,
     characterData.name,
     characterData.campaignDocId,
     characterData.characterImageURL,
@@ -44,12 +44,13 @@ export const useAddCharacterButton = (newCharacter: Character, onClick: () => vo
       console.log("ERROR", mutation.error)
     }
 
-    if (!mutation.error){
-      console.log("onClick")
-      onClick();
-    }
+    if (!mutation.error && valid){
+      setButtonStatus(mutation.status as ButtonStatuses)
 
-    setButtonStatus(mutation.status as ButtonStatuses)
+      onClick();
+    } else {
+      setButtonStatus(ButtonStatuses.Error as ButtonStatuses)
+    }
   }
 
   useEffect(() => {
@@ -61,6 +62,46 @@ export const useAddCharacterButton = (newCharacter: Character, onClick: () => vo
 
   return (
     <LoadingButton color="success" size="large" isLoading={mutation.isLoading} status={buttonStatus} onClick={handleClick}>Save Character</LoadingButton>
+  );
+}
+
+export const useUpdateCharacterButton = (newCharacter: Character, onClick: () => void, validate: () => boolean) => {
+  const npcs = collection(firestore, "characters");
+  const ref = newCharacter.docId && doc(npcs, newCharacter.docId);
+  const mutation = useFirestoreDocumentMutation(ref);
+
+  const [buttonStatus, setButtonStatus] = useState<ButtonStatuses>(ButtonStatuses.Idle);
+
+  const { name = "", player = "", campaignDocId = "", characterImageURL = "", backstory = "", className = "", dndBeyondURL = "", docId } = newCharacter;
+  console.log(newCharacter)
+
+  const handleClick = () => {
+
+    const valid = validate();
+    console.log('VALID', valid)
+    if (valid) {
+      mutation.mutate({ docId, name, player, characterImageURL, backstory, className, dndBeyondURL, campaignDocId })
+      console.log("ERROR", mutation.error)
+    }
+
+    if (!mutation.error && valid){
+      setButtonStatus(mutation.status as ButtonStatuses)
+
+      onClick();
+    } else {
+      setButtonStatus(ButtonStatuses.Error as ButtonStatuses)
+    }
+  }
+
+  useEffect(() => {
+    const timer = setTimeout(() => setButtonStatus(ButtonStatuses.Idle), 2000)
+    return () => {
+      clearTimeout(timer)
+    }
+  }, [buttonStatus])
+
+  return (
+    <LoadingButton color="success" size="large" isLoading={mutation.isLoading} status={buttonStatus} onClick={handleClick}>Update Character</LoadingButton>
   );
 }
 

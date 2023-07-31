@@ -10,21 +10,23 @@ import { ButtonStatuses, LoadingButton } from '../../Button/LoadingButton';
 
 import css from "./CreateCharacterModal.module.scss"
 import { Character, validateCharacter } from '../../../model/Character';
-import { useAddCharacterButton } from '../../../service/CharacterService';
+import { useAddCharacterButton, useUpdateCharacterButton } from '../../../service/CharacterService';
+import useDeepCompareEffect from 'use-deep-compare-effect';
 
 declare interface CreateCharacterModalProps {
     isOpen: boolean;
     onClose: () => void;
     initialCampaignId?: string,
+    character?: Character
     
 };
 
-const CreateCharacterModal = ({isOpen, onClose, initialCampaignId}: CreateCharacterModalProps) => {
-    const [newCharacter, setNewCharacter] = useState(new Character(null, "", initialCampaignId));
+const CreateCharacterModal = ({isOpen, onClose, initialCampaignId, character = new Character(null, "", initialCampaignId)}: CreateCharacterModalProps) => {
+    const [newCharacter, setNewCharacter] = useState(character);
     const [validator, setValidator] = useState<any>();
     const [campaign, setCampaign] = useState();
     const saveCharacterButton = useAddCharacterButton(newCharacter, () => handleOnClose(), () => validate());
-
+    const updateCharacterButton = useUpdateCharacterButton(newCharacter, () => handleOnClose(), () => validate());
     const { name, player, characterImageURL, backstory, className, dndBeyondURL } = newCharacter;
 
     const validate = () => {
@@ -34,15 +36,18 @@ const CreateCharacterModal = ({isOpen, onClose, initialCampaignId}: CreateCharac
         return !(Object.keys(valid).length > 0);
     }
 
+    useDeepCompareEffect(() => {
+        setNewCharacter(character)
+    }, [character, isOpen])
+
     const handleOnClose = () => {
-            setNewCharacter(new Character(null, "", initialCampaignId))
             onClose();
     }
 
     return (
         <div>
             <Modal isOpen={isOpen} onClose={handleOnClose} extraButtons={[
-                saveCharacterButton
+                character.docId ? updateCharacterButton : saveCharacterButton
                 ]}>
                 <Grid container spacing={2} rowSpacing={3} className={css.CreateCharacterModal}>
                     <Grid item lg={6} sm={12}>
