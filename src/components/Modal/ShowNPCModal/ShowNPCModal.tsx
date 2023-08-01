@@ -93,19 +93,19 @@ const ShowNPCModal = ({isOpen, onClose, npc = new NPC(null, {})}: ShowNPCModalPr
                     <Grid item xs={12}>
                         <Typography weight="bold" size="xtraLarge" className={css.sectionHeader}>Actions</Typography>
                         <List>
-                            { actions.map((action: CharacterAction) => (<ListItem divider><Typography>{action.name}</Typography><Typography>{action.description}</Typography></ListItem>)) }
+                            { actions.map((action: CharacterAction) => (<ListItem divider><Typography>{action.name}</Typography><Typography>-{action.description}</Typography></ListItem>)) }
                         </List>
                     </Grid>
                     <Grid item xs={12}>
                         <Typography weight="bold" size="xtraLarge" className={css.sectionHeader}>Bonus Actions</Typography>
                         <List>
-                            { bonusActions.map((action: CharacterAction) => (<ListItem><Typography>{action.name}</Typography><Typography>{action.description}</Typography></ListItem>)) }
+                            { bonusActions.map((action: CharacterAction) => (<ListItem><Typography>{action.name}</Typography><Typography>-{action.description}</Typography></ListItem>)) }
                         </List>
                     </Grid>
                     <Grid item xs={12}>
                         <Typography weight="bold" size="xtraLarge" className={css.sectionHeader}>OtherActions</Typography>
                         <List>
-                            { otherActions.map((action: CharacterAction) => (<ListItem><Typography>{action.name}</Typography><Typography>{action.description}</Typography></ListItem>)) }
+                            { otherActions.map((action: CharacterAction) => (<ListItem><Typography>{action.name}</Typography><Typography>-{action.description}</Typography></ListItem>)) }
                         </List>
                     </Grid>
                 </Grid>
