@@ -1,18 +1,22 @@
+import { BASE_ABILITY_SCORES } from "./BaseCharacter";
+
 export class NPC {
-  constructor(
-    docId,
-    name,
-    characterImageURL = "",
-    backstory = "",
-    campaignDocId = "",
-    statBlockURL = ""
-  ) {
+  constructor(docId, npc) {
     this.docId = docId;
-    this.name = name;
-    this.characterImageURL = characterImageURL;
-    this.backstory = backstory;
-    this.campaignDocId = campaignDocId;
-    this.statBlockURL = statBlockURL;
+    this.name = npc.name || "";
+    this.characterImageURL = npc.characterImageURL || "";
+    this.backstory = npc.backstory || "";
+    this.campaignDocId = npc.campaignDocId;
+    this.statBlockURL = npc.statBlockURL || "";
+    this.abilityScores = npc?.abilityScores || BASE_ABILITY_SCORES;
+    this.skills = npc.skills || [];
+    this.actions = npc.actions || [];
+    this.bonusActions = npc.bonusActions || [];
+    this.otherActions = npc.otherActions || [];
+    this.speed = npc.speed || "";
+    this.passivePerception = npc.passivePerception || 0;
+    this.armorClass = npc.armorClass || 0;
+    this.health = npc.health || 0;
   }
 }
 

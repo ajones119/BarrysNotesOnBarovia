@@ -5,10 +5,13 @@ export class Character {
     name,
     campaignDocId,
     characterImageURL,
-    player,
-    backstory,
-    className,
-    dndBeyondURL
+    player = "",
+    backstory = "",
+    className = "",
+    dndBeyondURL = "",
+    passivePerception = 0,
+    initiativeBonus = 0,
+    armorClass = 0,
   ) {
     this.docId = docId;
     this.name = name;
@@ -18,6 +21,9 @@ export class Character {
     this.className = className;
     this.campaignDocId = campaignDocId;
     this.dndBeyondURL = dndBeyondURL;
+    this.passivePerception = passivePerception;
+    this.initiativeBonus = initiativeBonus;
+    this.armorClass = armorClass
   }
 
 }

@@ -6,13 +6,16 @@ import { faDiceD20, faMinus, faPlus } from "@fortawesome/free-solid-svg-icons";
 import { useFloating, useClick, useInteractions, offset, flip, shift, autoUpdate, useDismiss } from "@floating-ui/react";
 import { TextInput } from "../../../../../../components/TextInput/TextInput";
 import { Button } from "../../../../../../components/Button/Button";
+import { Typography } from "../../../../../../components/Typography/Typography";
 
 type InitiativeTrackerTableRowProps = {
     item: {
         initiative?: number,
+        initiativeBonus?: number,
         name?: string,
         ac?: number,
         health?: number,
+        passivePerception?: number,
         docId?: string
     }
     onChange: (newCopy: any) => void,
@@ -41,14 +44,18 @@ const InitiativeTrackerTableRow = ({active = false, item, onChange, onRemove, ta
 
     return (
             <TableRow className={active ? css.active : ""} key={`initiative-${tableKey}`}>
-                <TableCell style={{width: "10%"}}>
+                <TableCell style={{width: "15%"}}>
                     <div className={css.tableCell}>
-                        <div className={css.randomIcon}><FontAwesomeIcon icon={faDiceD20} onClick={() => onChange({...item, initiative: Math.floor(Math.random() * 20 + 1)})} /></div>
+                        <div className={css.randomIcon}><FontAwesomeIcon icon={faDiceD20} onClick={() => onChange({
+                            ...item,
+                            initiative: Math.floor(Math.random() * 20 + (1 + (item.initiativeBonus || 0)))
+                        })} /></div>
 
                         <TextInput number value={item?.initiative} onChange={(value) => onChange({...item, initiative: value})} />
+                        <Typography color="primary">+{item?.initiativeBonus || 0}</Typography>
                     </div>
                 </TableCell>
-                <TableCell style={{width: "70%"}}>
+                <TableCell style={{width: "65%"}}>
                         <TextInput  value={item?.name} onChange={(value) => onChange({...item, name: value})} />
                 </TableCell>
                 <TableCell style={{width: "10%"}}>
@@ -56,8 +63,11 @@ const InitiativeTrackerTableRow = ({active = false, item, onChange, onRemove, ta
                         <TextInput number value={item?.health} onChange={(value) => onChange({...item, health: value})} />
                     </div>
                 </TableCell>
-                <TableCell style={{width: "10%"}}>
+                <TableCell style={{width: "5%"}}>
                         <TextInput number value={item?.ac} onChange={(value) => onChange({...item, ac: value})} />
+                </TableCell>
+                <TableCell style={{width: "5%"}}>
+                        <TextInput number value={item?.passivePerception} onChange={(value) => onChange({...item, passivePerception: value})} />
                 </TableCell>
                 <TableCell style={{width: "10%"}}>
                         <Button onClick={onRemove} color="error">Delete</Button>

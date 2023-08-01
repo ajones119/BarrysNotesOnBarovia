@@ -23,6 +23,9 @@ export function useCharacter(characterDocId = "") {
     characterData.backstory,
     characterData.className,
     characterData.dndBeyondURL,
+    characterData.passivePerception,
+    characterData.initiativeBonus,
+    characterData.armorClass
   );
 
   return { character, isLoading };
@@ -33,14 +36,13 @@ export const useAddCharacterButton = (newCharacter: Character, onClick: () => vo
   const mutation = useFirestoreCollectionMutation(ref);
   const [buttonStatus, setButtonStatus] = useState<ButtonStatuses>(ButtonStatuses.Idle);
 
-  const { name = "", player = "", campaignDocId = "", characterImageURL = "", backstory = "", className = "", dndBeyondURL = "" } = newCharacter;
+  const { name = "", player = "", campaignDocId = "", characterImageURL = "", backstory = "", className = "", dndBeyondURL = "", passivePerception = 0, initiativeBonus = 0, armorClass = 0 } = newCharacter;
 
   const handleClick = () => {
 
     const valid = validate();
-    console.log('VALID', valid)
     if (valid) {
-      mutation.mutate({ name, player, characterImageURL, backstory, className, dndBeyondURL, campaignDocId })
+      mutation.mutate({ name, player, characterImageURL, backstory, className, dndBeyondURL, campaignDocId, passivePerception, initiativeBonus, armorClass })
       console.log("ERROR", mutation.error)
     }
 
@@ -72,15 +74,14 @@ export const useUpdateCharacterButton = (newCharacter: Character, onClick: () =>
 
   const [buttonStatus, setButtonStatus] = useState<ButtonStatuses>(ButtonStatuses.Idle);
 
-  const { name = "", player = "", campaignDocId = "", characterImageURL = "", backstory = "", className = "", dndBeyondURL = "", docId } = newCharacter;
+  const { name = "", player = "", campaignDocId = "", characterImageURL = "", backstory = "", className = "", dndBeyondURL = "", docId, passivePerception = 0, initiativeBonus = 0, armorClass = 0 } = newCharacter;
   console.log(newCharacter)
 
   const handleClick = () => {
 
     const valid = validate();
-    console.log('VALID', valid)
     if (valid) {
-      mutation.mutate({ docId, name, player, characterImageURL, backstory, className, dndBeyondURL, campaignDocId })
+      mutation.mutate({ docId, name, player, characterImageURL, backstory, className, dndBeyondURL, campaignDocId, passivePerception, initiativeBonus, armorClass })
       console.log("ERROR", mutation.error)
     }
 

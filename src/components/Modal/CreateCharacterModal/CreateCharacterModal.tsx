@@ -22,12 +22,12 @@ declare interface CreateCharacterModalProps {
 };
 
 const CreateCharacterModal = ({isOpen, onClose, initialCampaignId, character = new Character(null, "", initialCampaignId)}: CreateCharacterModalProps) => {
-    const [newCharacter, setNewCharacter] = useState(character);
+    const [newCharacter, setNewCharacter] = useState<Character>(character);
     const [validator, setValidator] = useState<any>();
     const [campaign, setCampaign] = useState();
     const saveCharacterButton = useAddCharacterButton(newCharacter, () => handleOnClose(), () => validate());
     const updateCharacterButton = useUpdateCharacterButton(newCharacter, () => handleOnClose(), () => validate());
-    const { name, player, characterImageURL, backstory, className, dndBeyondURL } = newCharacter;
+    const { name, player, characterImageURL, backstory, className, dndBeyondURL, passivePerception, initiativeBonus, armorClass } = newCharacter;
 
     const validate = () => {
         const valid = validateCharacter(newCharacter)
@@ -51,6 +51,7 @@ const CreateCharacterModal = ({isOpen, onClose, initialCampaignId, character = n
                 ]}>
                 <Grid container spacing={2} rowSpacing={3} className={css.CreateCharacterModal}>
                     <Grid item lg={6} sm={12}>
+                        {initialCampaignId}
                         <TextInput error={validator?.name} value={name} onChange={value => setNewCharacter({ ...newCharacter, name: value,})} placeholder='Name' />
                     </Grid>
                     <Grid item lg={6} sm={12}>
@@ -62,11 +63,20 @@ const CreateCharacterModal = ({isOpen, onClose, initialCampaignId, character = n
                     <Grid item lg={6} sm={12}>
                         <TextInput error={validator?.dndBeyondURL} value={dndBeyondURL} onChange={value => setNewCharacter({ ...newCharacter, dndBeyondURL: value,})} placeholder='DnD Beyond Url' />
                     </Grid>
-                    <Grid item lg={6} sm={12}>
+                    <Grid item lg={4} sm={12}>
                         <CampaignPicker initialCampaignId={initialCampaignId} value={campaign} onChange={(campaign) => { setNewCharacter({ ...newCharacter, campaignDocId: campaign.docId}); setCampaign(campaign)}} />
                     </Grid>
-                    <Grid item lg={6} sm={12}>
+                    <Grid item lg={4} sm={12}>
                         <ClassPicker value={className} onChange={(value) => setNewCharacter({ ...newCharacter, className: value,})} />
+                    </Grid>
+                    <Grid item lg={1} sm={6}>
+                        <TextInput number value={initiativeBonus} onChange={(value) => setNewCharacter({...newCharacter, initiativeBonus: Number(value)})} placeholder='Initiative Bonus' />
+                    </Grid>
+                    <Grid item lg={1} sm={6}>
+                        <TextInput number value={passivePerception} onChange={(value) => setNewCharacter({...newCharacter, passivePerception: Number(value || 0)})} placeholder='Passive Percep.' />
+                    </Grid>
+                    <Grid item lg={1} sm={6}>
+                        <TextInput number value={armorClass} onChange={(value) => setNewCharacter({...newCharacter, armorClass: Number(value || 0)})} placeholder='AC' />
                     </Grid>
                     <Grid item sm={12}>
                         <TextArea value={backstory} onChange={(value) => setNewCharacter({ ...newCharacter, backstory: value,})} rows={5} />

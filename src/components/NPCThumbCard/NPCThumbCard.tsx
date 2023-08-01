@@ -6,8 +6,9 @@ import STICK from "../../images/stick1.png";
 import { useDeleteNPCButton, useUpdateNPCButton } from "../../service/NPCService";
 import CreateNPCModal from "../Modal/CreateNPCModal/CreateNPCModal";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faPenFancy } from "@fortawesome/free-solid-svg-icons";
+import { faMagnifyingGlass, faPenFancy } from "@fortawesome/free-solid-svg-icons";
 import { Button } from "../Button/Button";
+import ShowNPCModal from "../Modal/ShowNPCModal/ShowNPCModal";
 
 declare interface NPCThumbCardProps {
     npc: NPC;
@@ -16,6 +17,8 @@ declare interface NPCThumbCardProps {
 const NPCThumbCard = ({ npc }: NPCThumbCardProps) => {
     const [isActive, setIsActive] = useState(false);
     const [isEditModalOpen, setIsEditModalOpen] = useState(false)
+    const [isDetailsModalOpen, setIsDetailsModalOpen] = useState(false)
+
     const deleteButton = useDeleteNPCButton(npc, () => {});
 
     return (
@@ -34,6 +37,7 @@ const NPCThumbCard = ({ npc }: NPCThumbCardProps) => {
                 <div className={`${css.nameContainer} ${isActive && css.isActive}`}>
                     <Typography color="primary">
                         {isActive && <Button color="secondary" onClick={() => setIsEditModalOpen(!isEditModalOpen)}><FontAwesomeIcon icon={faPenFancy} /></Button>}
+                        {isActive && <Button color="secondary" onClick={() => setIsDetailsModalOpen(!isDetailsModalOpen)}><FontAwesomeIcon icon={faMagnifyingGlass} /></Button>}
                         {" "}{npc.name}{" "}
                         {isActive && (deleteButton)}
                     </Typography>
@@ -48,6 +52,11 @@ const NPCThumbCard = ({ npc }: NPCThumbCardProps) => {
                 isOpen={isEditModalOpen}
                 onClose={() => setIsEditModalOpen(false)}
                 campaignId={npc.campaignDocId}
+                npc={npc}
+            />
+            <ShowNPCModal
+                isOpen={isDetailsModalOpen}
+                onClose={() => setIsDetailsModalOpen(false)}
                 npc={npc}
             />
         </div>

@@ -6,6 +6,7 @@ import { ButtonStatuses, LoadingButton } from "../components/Button/LoadingButto
 import { NPC } from '../model/NPC';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTrash } from '@fortawesome/free-solid-svg-icons';
+import { BASE_ABILITY_SCORES } from '../model/BaseCharacter';
 
 export function useCampaignNPCs(campaignDocId: string) {
   const ref = query(collection(firestore, "npcs"), where("campaignDocId", "==", campaignDocId));
@@ -16,20 +17,10 @@ export function useCampaignNPCs(campaignDocId: string) {
   const { data, isLoading, refetch } = NPCsQuery;
 
   const NPCsData = data?.docs.map(npc => {
-    const {
-      name,
-      characterImageURL,
-      backstory,
-      campaignDocId,
-      statBlockURL
-    } = npc.data()
+    
     return new NPC(
       npc.id,
-      name,
-      characterImageURL,
-      backstory,
-      campaignDocId,
-      statBlockURL
+      npc.data()
     );
   });
 
@@ -41,13 +32,10 @@ export const useAddNPCButton = (newNPC: NPC, onClick: () => void, validate: () =
   const mutation = useFirestoreCollectionMutation(ref);
   const [buttonStatus, setButtonStatus] = useState<ButtonStatuses>(ButtonStatuses.Idle);
 
-  const { name = "", characterImageURL = "", backstory = "", statBlockURL = "" } = newNPC;
-
   const handleClick = () => {
-
     const valid = validate();
     if (valid) {
-      mutation.mutate({ name, characterImageURL, backstory, statBlockURL, campaignDocId: campaignId })
+      mutation.mutate({ ...newNPC, campaignDocId: campaignId })
       console.log("ERROR", mutation.error)
     }
 
@@ -110,12 +98,10 @@ export const useUpdateNPCButton = (newNPC: NPC, onClick: () => void, validate: (
 
   const [buttonStatus, setButtonStatus] = useState<ButtonStatuses>(ButtonStatuses.Idle);
 
-  const { name = "", characterImageURL = "", backstory = "", statBlockURL = "", campaignDocId, docId } = newNPC;
-
   const handleClick = () => {
     const valid = validate();
     if (valid) {
-      mutation.mutate({ name, characterImageURL, backstory, statBlockURL, campaignDocId, docId })
+      mutation.mutate({ ...newNPC })
       console.log("ERROR", mutation.error)
     }
 

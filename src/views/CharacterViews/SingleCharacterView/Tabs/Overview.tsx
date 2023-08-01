@@ -44,7 +44,7 @@ const Overview = ({ character }: OverviewProps) => {
 
                 </Grid>
             </div>
-            <CreateCharacterModal isOpen={isEditModalOpen} onClose={() => setIsEditModalOpen(false)} character={character} />
+            <CreateCharacterModal isOpen={isEditModalOpen} onClose={() => setIsEditModalOpen(false)} character={character} initialCampaignId={character.campaignDocId} />
         </div>
     );
 }

@@ -91,9 +91,14 @@ const InitiativeTracker = ({ campaign, characters}: InitiativeTrackerProps) => {
                                 Health
                             </Typography>
                         </TableCell>
-                        <TableCell style={{width: "10%"}}>
+                        <TableCell style={{width: "5%"}}>
                             <Typography color="light" size="large" weight="bolder">
                                 AC
+                            </Typography>
+                        </TableCell>
+                        <TableCell style={{width: "5%"}}>
+                            <Typography color="light" size="large" weight="bolder">
+                                PP
                             </Typography>
                         </TableCell>
                         <TableCell style={{width: "10%"}}>
