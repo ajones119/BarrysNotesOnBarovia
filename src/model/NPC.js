@@ -17,6 +17,7 @@ export class NPC {
     this.passivePerception = npc.passivePerception || 0;
     this.armorClass = npc.armorClass || 0;
     this.health = npc.health || 0;
+    this.savingThrows = npc.savingThrows || [];
   }
 }
 

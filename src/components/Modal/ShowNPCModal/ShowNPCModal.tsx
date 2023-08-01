@@ -24,7 +24,7 @@ const ShowNPCModal = ({isOpen, onClose, npc = new NPC(null, {})}: ShowNPCModalPr
     const [newNPC, setNewNPC] = useState(npc);
     const [expandedOpen, setExpandedOpen] = useState(false);
     const [validator, setValidator] = useState<any>();
-    const { name, abilityScores, skills, actions, bonusActions, otherActions, passivePerception, armorClass, health } = newNPC;
+    const { name, abilityScores, skills, actions, bonusActions, otherActions, passivePerception, armorClass, health, savingThrows, speed } = newNPC;
 
     const validate = () => {
         const valid = validateCharacter(newNPC)
@@ -75,10 +75,19 @@ const ShowNPCModal = ({isOpen, onClose, npc = new NPC(null, {})}: ShowNPCModalPr
                     <Grid item xs={6} md={2}>
                         <Typography>Health: {health}</Typography>
                     </Grid>
-                    <Grid item xs={12}>
+                    <Grid item xs={6} md={2}>
+                        <Typography>Speed: {speed}</Typography>
+                    </Grid>
+                    <Grid item xs={12} md={6}>
                         <Typography weight="bold" size="xtraLarge" className={css.sectionHeader}>Skills</Typography>
                         <List>
-                            { actions.map((skill: SkillProficiency) => (<ListItem><Typography>{skill.name}: +{skill.bonus}</Typography></ListItem>)) }
+                            { skills.map((skill: SkillProficiency) => (<ListItem><Typography>{skill.name}: +{skill.bonus}</Typography></ListItem>)) }
+                        </List>
+                    </Grid>
+                    <Grid item xs={12} md={6}>
+                        <Typography weight="bold" size="xtraLarge" className={css.sectionHeader}>Saving Throws</Typography>
+                        <List>
+                            { savingThrows.map((savingThrow: SkillProficiency) => (<ListItem><Typography>{savingThrow.name}: +{savingThrow.bonus}</Typography></ListItem>)) }
                         </List>
                     </Grid>
                     <Grid item xs={12}>

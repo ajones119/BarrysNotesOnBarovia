@@ -11,11 +11,13 @@ import useDeepCompareEffect from "use-deep-compare-effect";
 declare interface SkillsInputProps {
     value: SkillProficiency[],
     onChange: (value: SkillProficiency[]) => void
+    title?: string
 }
 
 const SkillsInput = ({
     value,
-    onChange
+    onChange,
+    title = "Skills"
 }: SkillsInputProps) => {
 
     const {
@@ -36,7 +38,7 @@ const SkillsInput = ({
                 <TableHead>
                     <TableCell style={{width: "40%"}}>
                         <Typography color="light" size="large" weight="bolder">
-                            Skill
+                            {title}
                         </Typography>
                     </TableCell>
                     <TableCell style={{width: "20%"}}>

@@ -29,7 +29,7 @@ const CreateNPCModal = ({isOpen, onClose, campaignId, npc = new NPC(null, {})}: 
         newNPC,
         () => handleOnClose(), () => validate()
     );
-    const { name, characterImageURL, backstory, abilityScores, skills, actions, bonusActions, otherActions, passivePerception, armorClass, health } = newNPC;
+    const { name, characterImageURL, backstory, abilityScores, skills, actions, bonusActions, otherActions, passivePerception, armorClass, health, savingThrows, speed } = newNPC;
 
     const validate = () => {
         const valid = validateCharacter(newNPC)
@@ -93,8 +93,14 @@ const CreateNPCModal = ({isOpen, onClose, campaignId, npc = new NPC(null, {})}: 
                             <Grid item sm={2}>
                                 <TextInput number value={health} onChange={(health) => setNewNPC({...newNPC, health})} placeholder='Health' />
                             </Grid>
+                            <Grid item sm={2}>
+                                <TextInput value={speed} onChange={(speed) => setNewNPC({...newNPC, speed})} placeholder='Speed' />
+                            </Grid>
                             <Grid item sm={6}>
                                 <SkillsInput value={skills} onChange={skills => setNewNPC({...newNPC, skills})} />
+                            </Grid>
+                            <Grid item sm={6}>
+                                <SkillsInput title="Saving Throws" value={savingThrows} onChange={savingThrows => setNewNPC({...newNPC, savingThrows})} />
                             </Grid>
                             <Grid item sm={6}>
                                 <ActionsInput title="Action" value={actions} onChange={actions => setNewNPC({...newNPC, actions})} />
