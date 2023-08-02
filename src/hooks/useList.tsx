@@ -46,7 +46,7 @@ export const useList = (initialState: Array<any> = []) => {
 
     const sort = (key: string) => { 
         const emptyList = list.filter(item => !item.data[key])
-        const sortedList =  list.filter(item => item.data[key]).sort((a, b) => a.data[key] < b.data[key] ? 1 : -1);
+        const sortedList =  list.filter(item => item.data[key]).sort((a, b) => Number(a.data[key]) < Number(b.data[key]) ? 1 : -1);
         setList([...sortedList, ...emptyList]);
     }
 
