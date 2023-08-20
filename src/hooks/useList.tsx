@@ -36,12 +36,13 @@ export const useList = (initialState: Array<any> = []) => {
     }
 
     const removeAt = (index: number) => {
-        setList(
-            [
-                ...list.slice(0, index),
-                ...list.slice(index + 1, list.length)
-            ]
-        )
+        const tempList = [
+            ...list.slice(0, index),
+            ...list.slice(index + 1, list.length)
+        ]
+        setList(tempList)
+
+        return [ ...tempList.map(item => item.data) ]
     }
 
     const sort = (key: string) => { 

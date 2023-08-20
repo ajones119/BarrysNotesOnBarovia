@@ -17,10 +17,10 @@ import { useCampaignNotes } from '../../../service/NotesService';
 import CampaignLocations from './Tabs/CampaignLocations/CampaignLocations';
 import { useCampaignLocations } from '../../../service/CampaignLocationService';
 import { CampaignLocation } from '../../../model/Location';
-import InitiativeTracker from './Tabs/InitiativeTracker/InitiativeTracker';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBook, faEarthAmericas, faMagnifyingGlassLocation, faSkullCrossbones } from '@fortawesome/free-solid-svg-icons';
 import { faCircleUser } from '@fortawesome/free-regular-svg-icons';
+import Combats from './Tabs/InitiativeTracker/Combats';
 
 const getTabs = (
     campaign: Campaign,
@@ -52,12 +52,11 @@ const getTabs = (
     {
         key: "combat",
         name: <Typography><FontAwesomeIcon icon={faSkullCrossbones} />{" "}Combat</Typography>,
-        content: <InitiativeTracker characters={characters} campaign={campaign} />
+        content: <Combats campaign={campaign} characters={characters} />
     }
 ];
 
 const SingleCampaign = () => {
-    const navigate = useNavigate;
     const params = useParams();
     const { CampaignId } = params;
     const { campaign, isLoading } = useCampaign(CampaignId as string);

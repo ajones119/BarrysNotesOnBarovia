@@ -1,12 +1,12 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { TableCell, TableRow } from "@mui/material";
 import React, { useState } from "react"
-import css from "../InitiativeTracker.module.scss"
+import css from "../DMInitiative.module.scss"
 import { faDiceD20, faMinus, faPlus } from "@fortawesome/free-solid-svg-icons";
 import { useFloating, useClick, useInteractions, offset, flip, shift, autoUpdate, useDismiss } from "@floating-ui/react";
-import { TextInput } from "../../../../../../components/TextInput/TextInput";
-import { Button } from "../../../../../../components/Button/Button";
-import { Typography } from "../../../../../../components/Typography/Typography";
+import { TextInput } from "../../../components/TextInput/TextInput";
+import { Typography } from "../../../components/Typography/Typography";
+import { Button } from "../../../components/Button/Button";
 
 type InitiativeTrackerTableRowProps = {
     item: {
@@ -15,6 +15,7 @@ type InitiativeTrackerTableRowProps = {
         name?: string,
         ac?: number,
         health?: number,
+        maxHealth?: number,
         passivePerception?: number,
         docId?: string
     }
@@ -59,8 +60,13 @@ const InitiativeTrackerTableRow = ({active = false, item, onChange, onRemove, ta
                         <TextInput  value={item?.name} onChange={(value) => onChange({...item, name: value})} />
                 </TableCell>
                 <TableCell style={{width: "10%"}}>
-                    <div ref={refs.setReference}  {...getReferenceProps()}>
-                        <TextInput number value={item?.health} onChange={(value) => onChange({...item, health: value})} />
+                    <div className={css.healthCell}>
+                        <div ref={refs.setReference}  {...getReferenceProps()}>
+                            <TextInput number value={item?.health} onChange={(value) => onChange({...item, health: value})} />
+                        </div>
+                        <Typography>/</Typography>
+                        <TextInput number value={item?.maxHealth} onChange={(value) => onChange({...item, maxHealth: value})} />
+                       
                     </div>
                 </TableCell>
                 <TableCell style={{width: "5%"}}>

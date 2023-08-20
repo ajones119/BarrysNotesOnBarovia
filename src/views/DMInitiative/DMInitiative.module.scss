@@ -1,7 +1,8 @@
 
 .initiativeTrackerContainer {
     margin: 0 auto;
-    justify-self: center;
+    max-width: 1096px;
+    flex-shrink: 0;
 
     .bottonsContainer {
         position: fixed;
@@ -35,6 +36,10 @@
             cursor: pointer;
             opacity: 0.8;
         }
+    }
+
+    .healthCell {
+        display: flex;
     }
 
     .healthCounterContainer {

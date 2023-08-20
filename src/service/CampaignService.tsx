@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { collection, doc, query } from "firebase/firestore";
 import { firestore } from "./firebase";
-import { useFirestoreCollectionMutation, useFirestoreDocument, useFirestoreQuery } from "@react-query-firebase/firestore";
+import { useFirestoreCollectionMutation, useFirestoreDocument, useFirestoreDocumentMutation, useFirestoreQuery } from "@react-query-firebase/firestore";
 import { Campaign } from "../model/Campaign";
 import { ButtonStatuses, LoadingButton } from "../components/Button/LoadingButton";
 
@@ -31,7 +31,7 @@ export function useCampaigns() {
   return { campaigns: campaignsData, isLoading };
 }
 
-export function useCampaign(campaignDocId: string) {
+export function useCampaign(campaignDocId: string = "") {
   const ref = doc(firestore, "campaigns", campaignDocId);
 
   const campaignQuery = useFirestoreDocument(["singleCampaign", campaignDocId], ref, {subscribe: true});
@@ -46,8 +46,7 @@ export function useCampaign(campaignDocId: string) {
     campaignData.campaignImageURL,
     campaignData.dungeonMaster,
     campaignData.description,
-    campaignData?.currentDocId,
-    campaignData?.nextDocId,
+    campaignData?.currentCombatDocId
   );
 
   return { campaign, isLoading };
@@ -85,4 +84,19 @@ export const useAddCampaignButton = (newCampaign: Campaign, onClick: () => void,
   return (
     <LoadingButton color="success" size="large" isLoading={mutation.isLoading} status={buttonStatus} onClick={handleClick}>Save Campaign</LoadingButton>
   );
+}
+
+export const useUpdateCampaign = (campaign: Campaign) => {
+  const campaignCollection = collection(firestore, "campaigns");
+  const ref = doc(campaignCollection, campaign.docId)
+  const mutation = useFirestoreDocumentMutation(ref);
+
+  const update = (updatedCampaign: Campaign) => {
+    delete(updatedCampaign.docId)
+      mutation.mutate({
+          ...updatedCampaign
+      })
+    }
+
+  return update;
 }
