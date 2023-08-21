@@ -80,6 +80,7 @@ const PlayerInitiative = () => {
                 <div className={css.healthBars}>
                     {
                         combatCharacterArray?.map(character => {
+                            console.log(character)
                         const healthBarAmount = character?.shouldShowHealthBar ? (character.health/character.maxHealth)*100 : 1000
                         return(
                             <div className={css.healthBar}>

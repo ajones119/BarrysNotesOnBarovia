@@ -51,7 +51,6 @@ const CreateCharacterModal = ({isOpen, onClose, initialCampaignId, character = n
                 ]}>
                 <Grid container spacing={2} rowSpacing={3} className={css.CreateCharacterModal}>
                     <Grid item lg={6} sm={12}>
-                        {initialCampaignId}
                         <TextInput error={validator?.name} value={name} onChange={value => setNewCharacter({ ...newCharacter, name: value,})} placeholder='Name' />
                     </Grid>
                     <Grid item lg={6} sm={12}>
