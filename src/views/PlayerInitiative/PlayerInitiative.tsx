@@ -11,7 +11,9 @@ import STICK from "../../images/ismark-background.jpg"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faFaceMehBlank } from "@fortawesome/free-regular-svg-icons";
 import { faFaceAngry, faFaceMeh } from "@fortawesome/free-solid-svg-icons";
-import { useCombat } from "../../service/CombatService";
+import { useCombat, useUpdateInitiative } from "../../service/CombatService";
+import { LinearProgress } from "@mui/material"
+import { Button } from "../../components/Button/Button";
 
 const PlayerInitiative = () => {
     const [character, setCharacter] = useState<Character | null>()
@@ -19,8 +21,16 @@ const PlayerInitiative = () => {
     const {isLoading, characters} = useCampaignCharacters(CampaignId || "")
     const {campaign} = useCampaign(CampaignId || "")
     const {isLoading: isCombatLoading, combat} = useCombat(campaign?.currentCombatDocId || "1")
-    console.log("COMBAT")
-    console.log(combat)
+
+    const update = useUpdateInitiative(combat)
+
+    const endTurn = () => {
+        const {currentTurnIndex} = combat;
+
+        const nextTurn = currentTurnIndex >= combat.combatCharacterArray.length - 1 ? 0 : currentTurnIndex + 1
+
+        update({ ...combat, currentTurnIndex: nextTurn })
+    }
 
     let yourTurnDisplay = <><FontAwesomeIcon icon={faFaceMehBlank} /><Typography size="xtraLarge">Not Your Turn</Typography></>;
 
@@ -33,10 +43,17 @@ const PlayerInitiative = () => {
         yourTurnDisplay = <><FontAwesomeIcon icon={faFaceMeh} /><Typography size="xtraLarge">You're Next!</Typography></>;
     }
 
+    const getHealthBarColor = (percent: number) => {
+        if (percent > 100) return "secondary"
+        else if (percent > 50) return "success"
+        else if (percent <= 20) return "error"
+        else return "warning"
+    }
+
+    const combatCharacterArray = combat?.combatCharacterArray?.filter(character => !character?.shouldHide).sort(() => Math.random() - 0.5)
 
     return (
     <div className={css.playerInitiativeContainer}>
-        <Typography>{(combat.currentTurnIndex === combat.combatCharacterArray?.length - 1) ? "true" : "false"}</Typography>
         <CharacterPicker onChange={(value) => {
             const getCharacter = characters ? characters.find((char) => char.docId === value) : null;
             setCharacter(getCharacter)
@@ -57,6 +74,21 @@ const PlayerInitiative = () => {
                 <div>
                     <div className={css.turnIndicator}>{yourTurnDisplay}</div>
                 </div>
+                { character?.docId === combat.combatCharacterArray[combat.currentTurnIndex]?.playerDocId && <div>
+                    <Button onClick={endTurn}>End My Turn</Button>
+                </div>}
+                <div className={css.healthBars}>
+                    {
+                        combatCharacterArray?.map(character => {
+                        const healthBarAmount = character?.shouldShowHealthBar ? (character.health/character.maxHealth)*100 : 1000
+                        return(
+                            <div className={css.healthBar}>
+                                <Typography>{character?.name}</Typography>
+                                <LinearProgress variant={healthBarAmount < 101 ? "determinate" : "indeterminate"} value={healthBarAmount} color={getHealthBarColor(healthBarAmount)} />
+                            </div>
+                        )})
+                    }
+                </div>
             </div>
         }
 
@@ -64,9 +96,3 @@ const PlayerInitiative = () => {
 }
 
 export default PlayerInitiative;
-
-/*
- {character?.docId === campaign.currentDocId && <div className={css.turnIndicator}><FontAwesomeIcon icon={faFaceAngry} /><Typography size="xtraLarge">Your Turn</Typography></div>}
-                {character?.docId === campaign.nextDocId && <div className={css.turnIndicator}><FontAwesomeIcon icon={faFaceMeh} /><Typography size="xtraLarge">You're Next!</Typography></div>}
-                {character?.docId !== campaign.nextDocId && character?.docId !== campaign.currentDocId && <div className={css.turnIndicator}><FontAwesomeIcon icon={faFaceMehBlank} /><Typography size="xtraLarge">Not Your Turn</Typography></div>}
-*/

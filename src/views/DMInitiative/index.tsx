@@ -65,6 +65,11 @@ const DMInitiative = () => {
             <TableContainer>
                 <TableHead>
                     <TableRow>
+                    <TableCell style={{width: "5%"}}>
+                            <Typography color="light" size="large" weight="bolder">
+                                Hide
+                            </Typography>
+                        </TableCell>
                         <TableCell style={{width: "10%"}}>
                             <Typography color="light" size="large" weight="bolder">
                                 Initiative
@@ -88,6 +93,11 @@ const DMInitiative = () => {
                         <TableCell style={{width: "5%"}}>
                             <Typography color="light" size="large" weight="bolder">
                                 PP
+                            </Typography>
+                        </TableCell>
+                        <TableCell style={{width: "5%"}}>
+                            <Typography color="light" size="large" weight="bolder">
+                                Show HP
                             </Typography>
                         </TableCell>
                         <TableCell style={{width: "10%"}}>

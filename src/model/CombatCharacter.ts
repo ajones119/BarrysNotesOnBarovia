@@ -6,4 +6,7 @@ export type CombatCharacter = {
     health?: number;
     maxHealth?: number;
     playerDocId?: string;
+    passivePerception?: number;
+    shouldShowHealthBar?: boolean;
+    shouldHide?: boolean;
 }
