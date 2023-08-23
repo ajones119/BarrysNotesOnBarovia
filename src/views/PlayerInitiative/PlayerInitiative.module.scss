@@ -24,20 +24,45 @@
         padding-top: 24px;
         align-items: center;
         margin: 0 auto;
-        max-width: 400px;
-        width: 80%;
+        width: 300px;
 
         .healthBar {
             padding-top: 8px;
         }
 
-        .nameRow {
-            display: flex;
+        .nameRowContainer {
+            display: grid;
+            grid-template-columns: 16px 1fr;
             column-gap: 8px;
             align-items: center;
-            justify-content: center;
-            padding-bottom: 4px;
-            font-size: 20px;
+            .nameRow {
+                display: flex;
+                column-gap: 8px;
+                align-items: center;
+                padding-bottom: 4px;
+                font-size: 20px;
+
+            }
+            .nextRowIcon {
+                visibility: hidden;
+                &.show {
+                    animation-name: slideIn;
+                    animation-duration: 1s;
+                    visibility: visible;
+                }
+            }
         }
+    }
+}
+
+@keyframes slideIn {
+    from {
+        margin-left: -16px;
+        opacity: 0;
+    }
+
+    to {
+        margin-left: 0px;
+        opacity: 1;
     }
 }

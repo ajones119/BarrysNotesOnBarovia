@@ -9,7 +9,7 @@ import { Typography } from "../../components/Typography/Typography";
 import STICK from "../../images/ismark-background.jpg"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faFaceMehBlank } from "@fortawesome/free-regular-svg-icons";
-import { faArrowRight, faFaceAngry, faFaceDizzy, faFaceFrown, faFaceFrownOpen, faFaceGrimace, faFaceGrin, faFaceLaughBeam, faFaceMeh, faFaceSadCry, faSkull } from "@fortawesome/free-solid-svg-icons";
+import { faArrowRight, faFaceAngry, faFaceDizzy, faFaceFrown, faFaceFrownOpen, faFaceGrimace, faFaceGrin, faFaceLaughBeam, faFaceMeh, faFaceSadCry, faFaceSurprise, faSkull } from "@fortawesome/free-solid-svg-icons";
 import { useCombat, useUpdateInitiative } from "../../service/CombatService";
 import { LinearProgress } from "@mui/material"
 import { Button } from "../../components/Button/Button";
@@ -40,7 +40,7 @@ const PlayerInitiative = () => {
         character?.docId === combat.combatCharacterArray[combat.currentTurnIndex + 1]?.playerDocId
         || ((combat.currentTurnIndex === combat.combatCharacterArray?.length - 1) && character?.docId === combat.combatCharacterArray[0].playerDocId)
         ) {
-        yourTurnDisplay = <><FontAwesomeIcon icon={faFaceMeh} /><Typography size="xtraLarge">You're Next!</Typography></>;
+        yourTurnDisplay = <><FontAwesomeIcon icon={faFaceSurprise} /><Typography size="xtraLarge">You're Next!</Typography></>;
     }
 
     const getHealthBarColor = (percent: number) => {
@@ -62,8 +62,8 @@ const PlayerInitiative = () => {
     }
 
     const combatCharacterArray = combat?.combatCharacterArray?.filter(character => !character?.shouldHide).sort((a, b) => {
-        a = a.toLowerCase();
-        b = b.toLowerCase();
+        a = a?.name.toLowerCase();
+        b = b?.name.toLowerCase();
         return a > b ? 1 : -1;
     })
     const PCs = combatCharacterArray?.filter(character => character?.playerDocId);
@@ -108,10 +108,15 @@ const PlayerInitiative = () => {
                 const healthBarAmount = (character.health/character.maxHealth)*100;
                 return(
                     <div className={css.healthBar}>
-                        <div className={css.nameRow}>
-                            {combat?.combatCharacterArray[combat?.currentTurnIndex].playerDocId === character.playerDocId && <FontAwesomeIcon icon={faArrowRight} />}
-                            <FontAwesomeIcon icon={getHealthIcon(healthBarAmount)} />
-                            <Typography style={{color: character.color || "white"}}>{character?.name || "Unknown"}</Typography>
+                        <div className={css.nameRowContainer}>
+                            <FontAwesomeIcon className={`
+                            ${combat?.combatCharacterArray[combat?.currentTurnIndex].playerDocId === character.playerDocId && css.show}
+                            ${css.nextRowIcon}
+                            `} icon={faArrowRight} />
+                            <div className={css.nameRow}>
+                                <FontAwesomeIcon icon={getHealthIcon(healthBarAmount)} />
+                                <Typography style={{color: character.color || "white"}}>{character?.name || "Unknown"}</Typography>
+                            </div>
                         </div>
                         {character?.shouldShowHealthBar && <LinearProgress variant={healthBarAmount < 101 ? "determinate" : "indeterminate"} value={healthBarAmount} color={getHealthBarColor(healthBarAmount)} />}
                         <Spacer height={8} />
@@ -126,8 +131,12 @@ const PlayerInitiative = () => {
                 const healthBarAmount = (character.health/character.maxHealth)*100;
                 return(
                     <div className={css.healthBar}>
-                        <div className={css.nameRow}><FontAwesomeIcon icon={getHealthIcon(healthBarAmount)} /><Typography style={{color: character.color || "white"}}>{character?.name || "Unknown"}</Typography></div>
+                        <div className={css.nameRowContainer}>
+                            <div />
+                            <div className={css.nameRow}><FontAwesomeIcon icon={getHealthIcon(healthBarAmount)} /><Typography style={{color: character.color || "white"}}>{character?.name || "Unknown"}</Typography></div>
+                        </div>
                         {character?.shouldShowHealthBar && <LinearProgress variant={healthBarAmount < 101 ? "determinate" : "indeterminate"} value={healthBarAmount} color={getHealthBarColor(healthBarAmount)} />}
+                        
                         <Spacer height={8} />
                     </div>
                 )})

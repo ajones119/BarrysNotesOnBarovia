@@ -30,13 +30,14 @@ const InitiativeTrackerTableRow = ({active = false, item, onChange, onRemove, ta
     });
 
     const click = useClick(context);
+    const dismiss = useDismiss(context)
 
     const {getReferenceProps, getFloatingProps} = useInteractions([
         click, 
     ]);
 
     return (
-            <TableRow className={`${css.row} ${active ? css.active : ""}`} key={`initiative-${tableKey}`}>
+            <TableRow className={`${css.row} ${active ? css.active : ""}`} key={`initiative-${tableKey}-item-${item?.name}`}>
                 <TableCell style={{width: "5%"}}>
                         <Switch checked={item?.shouldHide} onChange={(e) => onChange({...item, shouldHide: !item?.shouldHide})}/>
                 </TableCell>
