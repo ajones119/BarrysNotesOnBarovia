@@ -14,6 +14,7 @@ import { faFaceAngry, faFaceMeh } from "@fortawesome/free-solid-svg-icons";
 import { useCombat, useUpdateInitiative } from "../../service/CombatService";
 import { LinearProgress } from "@mui/material"
 import { Button } from "../../components/Button/Button";
+import { Spacer } from "../../components/Spacer/Spacer";
 
 const PlayerInitiative = () => {
     const [character, setCharacter] = useState<Character | null>()
@@ -90,6 +91,7 @@ const PlayerInitiative = () => {
                         )})
                     }
                 </div>
+                <Spacer height={24} />
             </div>
         }
 

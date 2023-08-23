@@ -14,7 +14,7 @@
         cursor: pointer;
     }
 
-    &.CampaignThumbCard:hover .imageContainer {
+    &.CampaignThumbCard:hover {
         transition: filter .5s ease-in-out;
         transform-origin: center center;
 

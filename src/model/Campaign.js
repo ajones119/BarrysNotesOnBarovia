@@ -1,5 +1,3 @@
-import { BaseReactObject } from "./BaseReactObject";
-
 export class Campaign {
   constructor(docId, title, campaignImageURL = "", dungeonMaster = "", description = "", currentCombatDocId) {
     this.docId = docId;

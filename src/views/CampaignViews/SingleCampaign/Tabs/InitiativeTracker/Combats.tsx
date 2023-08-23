@@ -33,12 +33,12 @@ const Combats = ({ campaign, characters }: CombatsProps) => {
     return (
         <div className={css.initiativeTrackerContainer}>
             <Button onClick={() => {setCreateModalOpen(true)}}>Create Encounter</Button>
-            <TableContainer style={{width: "400px", margin: "0 auto"}}>
+            <TableContainer style={{width: "500px", margin: "0 auto"}}>
             <TableHead>
                 <TableRow>
-                    <TableCell></TableCell>
-                    <TableCell><Typography>Name</Typography></TableCell>
-                    <TableCell></TableCell>
+                    <TableCell width="20%"></TableCell>
+                    <TableCell width="80%"><Typography>Name</Typography></TableCell>
+                    <TableCell width="20%"></TableCell>
                 </TableRow>
             </TableHead>
             {

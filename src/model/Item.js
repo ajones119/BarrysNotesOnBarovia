@@ -1,5 +1,3 @@
-import { NPC } from "./NPC";
-
 export class Item {
     constructor(
       docId,
