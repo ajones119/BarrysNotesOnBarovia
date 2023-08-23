@@ -65,7 +65,7 @@ const InitiativeTrackerTableRow = ({active = false, item, onChange, onRemove, ta
                     </div>
                 </TableCell>
                 <TableCell style={{width: "5%"}}>
-                        <TextInput number value={item?.armorClass} onChange={(value) => onChange({...item, ac: value})} />
+                        <TextInput number value={item?.armorClass} onChange={(value) => onChange({...item, armorClass: value})} />
                 </TableCell>
                 <TableCell style={{width: "5%"}}>
                         <TextInput number value={item?.passivePerception} onChange={(value) => onChange({...item, passivePerception: value})} />
