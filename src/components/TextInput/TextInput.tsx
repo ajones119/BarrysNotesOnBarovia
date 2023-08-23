@@ -12,6 +12,7 @@ declare interface TextInputProps {
     error?: boolean,
     className?: string,
     number?: boolean
+    disabled?: boolean;
 }
 
 export const TextInput = ({
@@ -20,7 +21,8 @@ export const TextInput = ({
     placeholder,
     error = false,
     className,
-    number = false
+    number = false,
+    disabled = false,
 }: TextInputProps) => {
     return(
         <div className={`${error && css.error}`}>
@@ -31,6 +33,7 @@ export const TextInput = ({
                 placeholder={placeholder}
                 className={`${css.textInput} ${className} ${error && css.errorTextInput} ${isValueEmpty(value) && css.inactive}`}
                 style={{width: '100%'}}
+                disabled={disabled}
             />
             <div className={`${css.placeholder} ${isValueEmpty(value) ? css.placeholderInactive : css.placeholderActive}`}>
                 {placeholder}

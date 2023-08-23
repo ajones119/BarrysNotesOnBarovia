@@ -6,11 +6,10 @@ import css from "./PlayerInitiative.module.scss"
 import { Character } from "../../model/Character";
 import { useCampaign } from "../../service/CampaignService";
 import { Typography } from "../../components/Typography/Typography";
-import { CharacterThumbCard } from "../../components/CharacterThumbCard/CharatcerThumbCard";
 import STICK from "../../images/ismark-background.jpg"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faFaceMehBlank } from "@fortawesome/free-regular-svg-icons";
-import { faFaceAngry, faFaceMeh } from "@fortawesome/free-solid-svg-icons";
+import { faArrowRight, faFaceAngry, faFaceDizzy, faFaceFrown, faFaceFrownOpen, faFaceGrimace, faFaceGrin, faFaceLaughBeam, faFaceMeh, faFaceSadCry, faSkull } from "@fortawesome/free-solid-svg-icons";
 import { useCombat, useUpdateInitiative } from "../../service/CombatService";
 import { LinearProgress } from "@mui/material"
 import { Button } from "../../components/Button/Button";
@@ -51,15 +50,32 @@ const PlayerInitiative = () => {
         else return "warning"
     }
 
+    const getHealthIcon = (percent: number) => {
+        if (percent > 90) return faFaceLaughBeam
+        else if (percent > 80) return faFaceGrin
+        else if (percent > 40) return faFaceAngry
+        else if (percent > 30) return faFaceGrimace
+        else if (percent > 20) return faFaceFrownOpen
+        else if (percent > 10) return faFaceSadCry
+        else if (percent > 0) return faFaceDizzy
+        else return faSkull
+    }
+
     const combatCharacterArray = combat?.combatCharacterArray?.filter(character => !character?.shouldHide).sort(() => Math.random() - 0.5)
+    const PCs = combatCharacterArray?.filter(character => character?.playerDocId);
+    const others = combatCharacterArray?.filter(character => !character?.playerDocId);
 
     return (
     <div className={css.playerInitiativeContainer}>
         <CharacterPicker onChange={(value) => {
-            const getCharacter = characters ? characters.find((char) => char.docId === value) : null;
-            setCharacter(getCharacter)
+            if (value === "__none__") {
+                setCharacter(null)
+            } else {
+                const getCharacter = characters ? characters.find((char) => char.docId === value) : null;
+                setCharacter(getCharacter)
+            }
         }} characters={characters || []}/>
-        {character && 
+        {(character ) && 
             <div className={css.characterContainer}>
                 <Typography color="light" size="xtraLarge">{character.name}</Typography>
                     <img
@@ -78,22 +94,42 @@ const PlayerInitiative = () => {
                 { character?.docId === combat.combatCharacterArray[combat.currentTurnIndex]?.playerDocId && <div>
                     <Button onClick={endTurn}>End My Turn</Button>
                 </div>}
-                <div className={css.healthBars}>
-                    {
-                        combatCharacterArray?.map(character => {
-                            console.log(character)
-                        const healthBarAmount = character?.shouldShowHealthBar ? (character.health/character.maxHealth)*100 : 1000
-                        return(
-                            <div className={css.healthBar}>
-                                <Typography>{character?.name}</Typography>
-                                <LinearProgress variant={healthBarAmount < 101 ? "determinate" : "indeterminate"} value={healthBarAmount} color={getHealthBarColor(healthBarAmount)} />
-                            </div>
-                        )})
-                    }
-                </div>
-                <Spacer height={24} />
             </div>
         }
+        <Spacer height={24} />
+        <div className={css.healthBars}>
+            <Typography>Players</Typography>
+            {
+                PCs?.map(character => {
+                const healthBarAmount = (character.health/character.maxHealth)*100;
+                return(
+                    <div className={css.healthBar}>
+                        <div className={css.nameRow}>
+                            {combat?.combatCharacterArray[combat?.currentTurnIndex].playerDocId === character.playerDocId && <FontAwesomeIcon icon={faArrowRight} />}
+                            <FontAwesomeIcon icon={getHealthIcon(healthBarAmount)} />
+                            <Typography style={{color: character.color || "white"}}>{character?.name || "Unknown"}</Typography>
+                        </div>
+                        {character?.shouldShowHealthBar && <LinearProgress variant={healthBarAmount < 101 ? "determinate" : "indeterminate"} value={healthBarAmount} color={getHealthBarColor(healthBarAmount)} />}
+                        <Spacer height={8} />
+                    </div>
+                )})
+            }
+        </div>
+        <div className={css.healthBars}>
+        <Typography>Enemies</Typography>
+            {
+                others?.map(character => {
+                const healthBarAmount = (character.health/character.maxHealth)*100;
+                return(
+                    <div className={css.healthBar}>
+                        <div className={css.nameRow}><FontAwesomeIcon icon={getHealthIcon(healthBarAmount)} /><Typography style={{color: character.color || "white"}}>{character?.name || "Unknown"}</Typography></div>
+                        {character?.shouldShowHealthBar && <LinearProgress variant={healthBarAmount < 101 ? "determinate" : "indeterminate"} value={healthBarAmount} color={getHealthBarColor(healthBarAmount)} />}
+                        <Spacer height={8} />
+                    </div>
+                )})
+            }
+        </div>
+        <Spacer height={24} />
 
     </div>);
 }

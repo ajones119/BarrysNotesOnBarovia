@@ -12,6 +12,7 @@ export class Character {
     passivePerception = 0,
     initiativeBonus = 0,
     armorClass = 0,
+    maxHealth = 0,
   ) {
     this.docId = docId;
     this.name = name;
@@ -23,7 +24,8 @@ export class Character {
     this.dndBeyondURL = dndBeyondURL;
     this.passivePerception = passivePerception;
     this.initiativeBonus = initiativeBonus;
-    this.armorClass = armorClass
+    this.armorClass = armorClass;
+    this.maxHealth = maxHealth;
   }
 
 }

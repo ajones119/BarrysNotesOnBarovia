@@ -2,12 +2,13 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Switch, TableCell, TableRow } from "@mui/material";
 import React, { useState } from "react"
 import css from "../DMInitiative.module.scss"
-import { faDiceD20, faMinus, faPlus } from "@fortawesome/free-solid-svg-icons";
+import { faCircle, faDiceD20, faMinus, faPlus } from "@fortawesome/free-solid-svg-icons";
 import { useFloating, useClick, useInteractions, offset, flip, shift, autoUpdate, useDismiss } from "@floating-ui/react";
 import { TextInput } from "../../../components/TextInput/TextInput";
 import { Typography } from "../../../components/Typography/Typography";
 import { Button } from "../../../components/Button/Button";
 import { CombatCharacter } from "../../../model/CombatCharacter";
+import ColorPicker from "../../../components/ColorPicker/ColorPicker";
 
 type InitiativeTrackerTableRowProps = {
     item: CombatCharacter;
@@ -29,16 +30,18 @@ const InitiativeTrackerTableRow = ({active = false, item, onChange, onRemove, ta
     });
 
     const click = useClick(context);
-    const dismiss = useDismiss(context);
 
     const {getReferenceProps, getFloatingProps} = useInteractions([
         click, 
     ]);
 
     return (
-            <TableRow className={active ? css.active : ""} key={`initiative-${tableKey}`}>
+            <TableRow className={`${css.row} ${active ? css.active : ""}`} key={`initiative-${tableKey}`}>
                 <TableCell style={{width: "5%"}}>
                         <Switch checked={item?.shouldHide} onChange={(e) => onChange({...item, shouldHide: !item?.shouldHide})}/>
+                </TableCell>
+                <TableCell style={{width: "5%"}}>
+                        <ColorPicker width={80} value={item?.color} onChange={(value) => onChange({...item, color: value})}/>
                 </TableCell>
                 <TableCell style={{width: "15%"}}>
                     <div className={css.tableCell}>
@@ -52,7 +55,10 @@ const InitiativeTrackerTableRow = ({active = false, item, onChange, onRemove, ta
                     </div>
                 </TableCell>
                 <TableCell style={{width: "65%"}}>
-                        <TextInput  value={item?.name} onChange={(value) => onChange({...item, name: value})} />
+                    <div className={css.nameCell}>
+                        <FontAwesomeIcon icon={faCircle} style={{color: item?.color || "white"}} />
+                        <TextInput disabled={!!item?.playerDocId} value={item?.name} onChange={(value) => onChange({...item, name: value})} />
+                        </div>
                 </TableCell>
                 <TableCell style={{width: "10%"}}>
                     <div className={css.healthCell}>
@@ -74,7 +80,7 @@ const InitiativeTrackerTableRow = ({active = false, item, onChange, onRemove, ta
                         <Switch checked={item?.shouldShowHealthBar} onChange={(e) => onChange({...item, shouldShowHealthBar: !item?.shouldShowHealthBar})}/>
                 </TableCell>
                 <TableCell style={{width: "10%"}}>
-                        <Button onClick={onRemove} color="error">Delete</Button>
+                        { !item?.playerDocId && <Button onClick={onRemove} color="error">Delete</Button>}
                 </TableCell>
                 {isHealthCounterOpen && (
                 <div ref={refs.setFloating} style={floatingStyles} {...getFloatingProps()}>

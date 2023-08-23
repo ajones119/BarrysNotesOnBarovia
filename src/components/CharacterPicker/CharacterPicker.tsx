@@ -13,6 +13,20 @@ declare interface CharacterPickerProps {
 }
 
 const CharacterPicker = ({ onChange, value, width = 300, characters }: CharacterPickerProps) => {
+
+    characters?.sort(function (a, b) {
+        if (a.name < b.name) {
+          return -1;
+        }
+        if (a.name > b.name) {
+          return 1;
+        }
+        return 0;
+      });
+
+    characters?.push(new Character( "__none__", "None"))
+
+
     return (
         <div className={css.CharacterPicker} style={{width: `${width}px`}}>
             <Typography className={css.header} size="caption">Character</Typography>
@@ -25,7 +39,7 @@ const CharacterPicker = ({ onChange, value, width = 300, characters }: Character
                 className={css.picker}
                 style={{width: `${width}px`}}
                 label='Character'
-                defaultValue={"None"}
+                defaultValue={"__none__"}
                 variant="standard"
             >
                 { characters?.map((npc) => (

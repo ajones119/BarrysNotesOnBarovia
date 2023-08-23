@@ -17,18 +17,27 @@
             font-size: xx-large;
         }
 
-        .healthBars {
-            padding-top: 24px;
-            align-items: center;
-            margin: 0 auto;
-            max-width: 400px;
-            width: 80%;
-
-            .healthBar {
-                padding-top: 8px;
-            }
-        }
+       
     }
 
+    .healthBars {
+        padding-top: 24px;
+        align-items: center;
+        margin: 0 auto;
+        max-width: 400px;
+        width: 80%;
 
+        .healthBar {
+            padding-top: 8px;
+        }
+
+        .nameRow {
+            display: flex;
+            column-gap: 8px;
+            align-items: center;
+            justify-content: center;
+            padding-bottom: 4px;
+            font-size: 20px;
+        }
+    }
 }

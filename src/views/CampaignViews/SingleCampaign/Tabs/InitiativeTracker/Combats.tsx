@@ -27,7 +27,9 @@ const Combats = ({ campaign, characters }: CombatsProps) => {
         name: character.name,
         initiativeBonus: character?.initiativeBonus,
         armorClass: character?.armorClass,
-        playerDocId: character.docId
+        playerDocId: character.docId,
+        maxHealth: character?.maxHealth,
+        health: character?.maxHealth
     } as CombatCharacter))
 
     return (

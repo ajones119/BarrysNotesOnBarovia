@@ -21,7 +21,7 @@ declare interface CreateNPCModalProps {
 const CreateCombatModal = ({isOpen, onClose, campaignId, characters }: CreateNPCModalProps) => {
     const [combat, setCombat] = useState(new Combat(null, campaignId, characters));
     const [validator, setValidator] = useState<any>();
-    const saveNoteButton = useAddCombatButton(combat, () => handleOnClose(), () => validate());
+    const saveCombatButton = useAddCombatButton(combat, () => handleOnClose(), () => validate());
 
     const validate = () => {
         const valid = validateCombat(Combat)
@@ -38,7 +38,7 @@ const CreateCombatModal = ({isOpen, onClose, campaignId, characters }: CreateNPC
     return (
         <div>
             <Modal isOpen={isOpen} onClose={handleOnClose} extraButtons={[
-                    saveNoteButton
+                    saveCombatButton
                 ]}>
                 <Grid container spacing={2} rowSpacing={3} className={css.CreateCombatModal}>
                     <Grid item sm={12}>

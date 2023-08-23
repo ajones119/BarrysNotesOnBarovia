@@ -31,6 +31,14 @@
         width: 100%;
     }
 
+    .nameCell {
+        display: grid;
+        grid-template-columns: 8px 1fr;
+        column-gap: 8px;
+        width: 100%;
+        align-items: center;
+    }
+
     .randomIcon {
         &:hover {
             cursor: pointer;

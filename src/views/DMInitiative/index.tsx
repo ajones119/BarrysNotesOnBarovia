@@ -59,15 +59,20 @@ const DMInitiative = () => {
         <div className={css.initiativeTrackerContainer}>
             <div className={css.topButtonsRow}>
                 <Button color="dark" onClick={() =>  navigator.clipboard.writeText(`https://ajones119.github.io/BarrysNotesOnBarovia/#/Initiative/${combat.campaignDocId}`)}>Copy Player Link</Button>
-                <Typography>{combat.name}</Typography>
+                <Typography size={"xtraLarge"}>{combat.name}</Typography>
                 <Button color="dark" onClick={() =>  {}} disabled>Import (Not setup)</Button>
             </div>
             <TableContainer>
                 <TableHead>
                     <TableRow>
-                    <TableCell style={{width: "5%"}}>
+                        <TableCell style={{width: "5%"}}>
                             <Typography color="light" size="large" weight="bolder">
                                 Hide
+                            </Typography>
+                        </TableCell>
+                        <TableCell style={{width: "5%"}}>
+                            <Typography color="light" size="large" weight="bolder">
+                                Color
                             </Typography>
                         </TableCell>
                         <TableCell style={{width: "10%"}}>

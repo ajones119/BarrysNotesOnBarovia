@@ -25,7 +25,8 @@ export function useCharacter(characterDocId = "") {
     characterData.dndBeyondURL,
     characterData.passivePerception,
     characterData.initiativeBonus,
-    characterData.armorClass
+    characterData.armorClass,
+    characterData.maxHealth
   );
 
   return { character, isLoading };
@@ -36,13 +37,13 @@ export const useAddCharacterButton = (newCharacter: Character, onClick: () => vo
   const mutation = useFirestoreCollectionMutation(ref);
   const [buttonStatus, setButtonStatus] = useState<ButtonStatuses>(ButtonStatuses.Idle);
 
-  const { name = "", player = "", campaignDocId = "", characterImageURL = "", backstory = "", className = "", dndBeyondURL = "", passivePerception = 0, initiativeBonus = 0, armorClass = 0 } = newCharacter;
+  const { name = "", player = "", campaignDocId = "", characterImageURL = "", backstory = "", className = "", dndBeyondURL = "", passivePerception = 0, initiativeBonus = 0, armorClass = 0, maxHealth = 0 } = newCharacter;
 
   const handleClick = () => {
 
     const valid = validate();
     if (valid) {
-      mutation.mutate({ name, player, characterImageURL, backstory, className, dndBeyondURL, campaignDocId, passivePerception, initiativeBonus, armorClass })
+      mutation.mutate({ name, player, characterImageURL, backstory, className, dndBeyondURL, campaignDocId, passivePerception, initiativeBonus, armorClass, maxHealth })
       console.log("ERROR", mutation.error)
     }
 
@@ -74,14 +75,14 @@ export const useUpdateCharacterButton = (newCharacter: Character, onClick: () =>
 
   const [buttonStatus, setButtonStatus] = useState<ButtonStatuses>(ButtonStatuses.Idle);
 
-  const { name = "", player = "", campaignDocId = "", characterImageURL = "", backstory = "", className = "", dndBeyondURL = "", docId, passivePerception = 0, initiativeBonus = 0, armorClass = 0 } = newCharacter;
+  const { name = "", player = "", campaignDocId = "", characterImageURL = "", backstory = "", className = "", dndBeyondURL = "", docId, passivePerception = 0, initiativeBonus = 0, armorClass = 0, maxHealth = 0 } = newCharacter;
   console.log(newCharacter)
 
   const handleClick = () => {
 
     const valid = validate();
     if (valid) {
-      mutation.mutate({ docId, name, player, characterImageURL, backstory, className, dndBeyondURL, campaignDocId, passivePerception, initiativeBonus, armorClass })
+      mutation.mutate({ docId, name, player, characterImageURL, backstory, className, dndBeyondURL, campaignDocId, passivePerception, initiativeBonus, armorClass, maxHealth })
       console.log("ERROR", mutation.error)
     }
 
@@ -110,8 +111,6 @@ export function useCharacters() {
   const ref = query(collection(firestore, "characters"));
 
   const characterQuery = useFirestoreQuery(["charactersList"], ref, { subscribe: true });
-
-  console.log("characterQ", characterQuery)
   
   const { data, isLoading, refetch } = characterQuery;
 
@@ -123,9 +122,12 @@ export function useCharacters() {
       backstory,
       className,
       campaignDocId,
-      dndBeyondURL
+      dndBeyondURL,
+      passivePerception,
+      initiativeBonus,
+      armorClass,
+      maxHealth 
     } = character.data()
-    console.log("YA")
     return new Character(
       character.id,
       name,
@@ -134,7 +136,11 @@ export function useCharacters() {
       player,
       backstory,
       className,
-      dndBeyondURL
+      dndBeyondURL,
+      passivePerception,
+      initiativeBonus,
+      armorClass,
+      maxHealth 
     );
   });
 
@@ -156,7 +162,11 @@ export function useCampaignCharacters(campaignDocId: string) {
       backstory,
       className,
       campaignDocId,
-      dndBeyondURL
+      dndBeyondURL,
+      passivePerception,
+      initiativeBonus,
+      armorClass,
+      maxHealth 
     } = character.data()
     return new Character(
       character.id,
@@ -166,7 +176,11 @@ export function useCampaignCharacters(campaignDocId: string) {
       player,
       backstory,
       className,
-      dndBeyondURL
+      dndBeyondURL,
+      passivePerception,
+      initiativeBonus,
+      armorClass,
+      maxHealth 
     );
   });
 

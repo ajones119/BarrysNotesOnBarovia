@@ -9,4 +9,5 @@ export type CombatCharacter = {
     passivePerception?: number;
     shouldShowHealthBar?: boolean;
     shouldHide?: boolean;
+    color ?: string;
 }

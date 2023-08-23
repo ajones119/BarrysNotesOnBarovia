@@ -27,7 +27,7 @@ const CreateCharacterModal = ({isOpen, onClose, initialCampaignId, character = n
     const [campaign, setCampaign] = useState();
     const saveCharacterButton = useAddCharacterButton(newCharacter, () => handleOnClose(), () => validate());
     const updateCharacterButton = useUpdateCharacterButton(newCharacter, () => handleOnClose(), () => validate());
-    const { name, player, characterImageURL, backstory, className, dndBeyondURL, passivePerception, initiativeBonus, armorClass } = newCharacter;
+    const { name, player, characterImageURL, backstory, className, dndBeyondURL, passivePerception, initiativeBonus, armorClass, maxHealth } = newCharacter;
 
     const validate = () => {
         const valid = validateCharacter(newCharacter)
@@ -76,6 +76,9 @@ const CreateCharacterModal = ({isOpen, onClose, initialCampaignId, character = n
                     </Grid>
                     <Grid item lg={1} sm={6}>
                         <TextInput number value={armorClass} onChange={(value) => setNewCharacter({...newCharacter, armorClass: Number(value || 0)})} placeholder='AC' />
+                    </Grid>
+                    <Grid item lg={1} sm={6}>
+                        <TextInput number value={maxHealth} onChange={(value) => setNewCharacter({...newCharacter, maxHealth: Number(value || 0)})} placeholder='Max Health' />
                     </Grid>
                     <Grid item sm={12}>
                         <TextArea value={backstory} onChange={(value) => setNewCharacter({ ...newCharacter, backstory: value,})} rows={5} />
