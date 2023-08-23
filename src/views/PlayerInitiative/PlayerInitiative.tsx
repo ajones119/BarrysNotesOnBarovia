@@ -9,7 +9,7 @@ import { Typography } from "../../components/Typography/Typography";
 import STICK from "../../images/ismark-background.jpg"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faFaceMehBlank } from "@fortawesome/free-regular-svg-icons";
-import { faArrowRight, faFaceAngry, faFaceDizzy, faFaceFrown, faFaceFrownOpen, faFaceGrimace, faFaceGrin, faFaceLaughBeam, faFaceMeh, faFaceSadCry, faFaceSurprise, faSkull } from "@fortawesome/free-solid-svg-icons";
+import { faArrowRight, faExclamationCircle, faFaceAngry, faFaceDizzy, faFaceFrown, faFaceFrownOpen, faFaceGrimace, faFaceGrin, faFaceLaughBeam, faFaceMeh, faFaceSadCry, faFaceSurprise, faSkull } from "@fortawesome/free-solid-svg-icons";
 import { useCombat, useUpdateInitiative } from "../../service/CombatService";
 import { LinearProgress } from "@mui/material"
 import { Button } from "../../components/Button/Button";
@@ -61,6 +61,13 @@ const PlayerInitiative = () => {
         else return faSkull
     }
 
+    let nextPlayerDocId: string | null = null;
+
+
+    nextPlayerDocId = combat.combatCharacterArray.find((char, index) => char?.playerDocId && index > combat.currentTurnIndex)?.playerDocId || null;
+    nextPlayerDocId = nextPlayerDocId || combat.combatCharacterArray.find((char) => char?.playerDocId)?.playerDocId || null;
+
+
     const combatCharacterArray = combat?.combatCharacterArray?.filter(character => !character?.shouldHide).sort((a, b) => {
         a = a?.name.toLowerCase();
         b = b?.name.toLowerCase();
@@ -110,9 +117,13 @@ const PlayerInitiative = () => {
                     <div className={css.healthBar}>
                         <div className={css.nameRowContainer}>
                             <FontAwesomeIcon className={`
-                            ${combat?.combatCharacterArray[combat?.currentTurnIndex].playerDocId === character.playerDocId && css.show}
-                            ${css.nextRowIcon}
-                            `} icon={faArrowRight} />
+                                ${combat?.combatCharacterArray[combat?.currentTurnIndex].playerDocId === character.playerDocId
+                                    && css.show}
+                                ${character.playerDocId === nextPlayerDocId && css.showWarning}
+                                ${css.nextRowIcon}
+                                `}
+                                icon={nextPlayerDocId === character.playerDocId ? faExclamationCircle : faArrowRight} 
+                            />
                             <div className={css.nameRow}>
                                 <FontAwesomeIcon icon={getHealthIcon(healthBarAmount)} />
                                 <Typography style={{color: character.color || "white"}}>{character?.name || "Unknown"}</Typography>

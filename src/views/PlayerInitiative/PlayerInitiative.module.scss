@@ -50,6 +50,13 @@
                     animation-duration: 1s;
                     visibility: visible;
                 }
+
+                &.showWarning{
+                    visibility: visible;
+                    animation-name: fadeIn;
+                    animation-duration: 1s;
+                    color: orange;
+                }
             }
         }
     }
@@ -63,6 +70,16 @@
 
     to {
         margin-left: 0px;
+        opacity: 1;
+    }
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+
+    to {
         opacity: 1;
     }
 }

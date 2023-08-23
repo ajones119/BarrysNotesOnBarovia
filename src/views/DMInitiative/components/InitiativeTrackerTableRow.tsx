@@ -37,7 +37,7 @@ const InitiativeTrackerTableRow = ({active = false, item, onChange, onRemove, ta
     ]);
 
     return (
-            <TableRow className={`${css.row} ${active ? css.active : ""}`} key={`initiative-${tableKey}-item-${item?.name}`}>
+            <TableRow className={`${css.row} ${active ? css.active : ""}`} key={`initiative-${tableKey}-item-${item?.color}`}>
                 <TableCell style={{width: "5%"}}>
                         <Switch checked={item?.shouldHide} onChange={(e) => onChange({...item, shouldHide: !item?.shouldHide})}/>
                 </TableCell>
