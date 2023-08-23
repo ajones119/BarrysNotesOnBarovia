@@ -61,7 +61,11 @@ const PlayerInitiative = () => {
         else return faSkull
     }
 
-    const combatCharacterArray = combat?.combatCharacterArray?.filter(character => !character?.shouldHide).sort(() => Math.random() - 0.5)
+    const combatCharacterArray = combat?.combatCharacterArray?.filter(character => !character?.shouldHide).sort((a, b) => {
+        a = a.toLowerCase();
+        b = b.toLowerCase();
+        return a > b ? 1 : -1;
+    })
     const PCs = combatCharacterArray?.filter(character => character?.playerDocId);
     const others = combatCharacterArray?.filter(character => !character?.playerDocId);
 
