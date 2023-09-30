@@ -57,8 +57,8 @@ const getTabs = (
 ];
 
 const SingleCampaign = () => {
-    const params = useParams();
-    const { CampaignId } = params;
+    const { CampaignId, tabKey = "overview" } = useParams();
+    const navigate = useNavigate();
     const { campaign, isLoading } = useCampaign(CampaignId as string);
     const {characters, isLoading: isCharactersLoading} = useCampaignCharacters(CampaignId || "");
     const {NPCs, isLoading: isNPCsLoading} = useCampaignNPCs(CampaignId || "");
@@ -69,7 +69,7 @@ const SingleCampaign = () => {
 
     return (
         <div className={css.singleCampaign}>
-            <Tabs currentTab={currentTab} tabs={getTabs(campaign, characters || [], NPCs || [], notes || [], campaignLocations || [])} onChange={(tabKey) => setCurrentTab(tabKey)} />
+            <Tabs currentTab={tabKey} tabs={getTabs(campaign, characters || [], NPCs || [], notes || [], campaignLocations || [])} onChange={(tabKey) => navigate(`/Campaigns/${CampaignId}/${tabKey}`)} />
         </div>
     );
 };

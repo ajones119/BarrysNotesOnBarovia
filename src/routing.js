@@ -13,7 +13,7 @@ export const Routing = () => {
       <Routes>
         <Route path="/" element={<Home />} /> 
         <Route path="/Campaigns/" element={<NonHomePageContainer page={<Campaigns />} />} />
-        <Route path="/Campaigns/:CampaignId" element={<NonHomePageContainer page={<SingleCampaign />} />} />
+        <Route path="/Campaigns/:CampaignId/:tabKey?" element={<NonHomePageContainer page={<SingleCampaign />} />} />
         <Route path="/Initiative/:CampaignId" element={<PlayerInitiative />} />
         <Route path="/Initiative/DM/:campaignId/:combatId" element={<NonHomePageContainer page={<DMInitiative />} />} />
         <Route path="/Characters/" element={<NonHomePageContainer page={<Characters />} />} />

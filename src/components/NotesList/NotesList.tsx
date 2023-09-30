@@ -29,23 +29,23 @@ const NotesList = ({characters, notes, campaignId}: NotesListProps) => {
             <Button size='large' color="secondary" onClick={() => setIsCreatemodalOpen(true)}>Add Note{" "}<FontAwesomeIcon icon={faPlusCircle} /></Button>
         </div>
         <Grid container justifyContent="space-around" alignItems="center">
-                <Grid item xs={12}>
-                
-                <List sx={{ width: '100%', bgcolor: 'background.paper' }}>
-                    {
-                        notes?.map((note: Note) => { 
+            <Grid item xs={12}>
+            
+            <div className={css.notesList}>
+                {
+                    notes?.map((note: Note) => { 
 
-                            const character = getCharacterFromNote(note, characters);
-                            
-                            return(
-                            <NotesListItem characterImageURL={character?.characterImageURL} characterName={character?.name} note={note} />
-                        )})
-                    }
-                </List>
-                </Grid>
+                        const character = getCharacterFromNote(note, characters);
+                        
+                        return(
+                        <NotesListItem characterImageURL={character?.characterImageURL} characterName={character?.name} note={note} />
+                    )})
+                }
+            </div>
             </Grid>
-            <CreateNoteModal characters={characters} campaignId={campaignId} isOpen={isCreateModalOpen} onClose={() => setIsCreatemodalOpen(false)} />
-            </>
+        </Grid>
+        <CreateNoteModal characters={characters} campaignId={campaignId} isOpen={isCreateModalOpen} onClose={() => setIsCreatemodalOpen(false)} />
+        </>
     );
 }
 

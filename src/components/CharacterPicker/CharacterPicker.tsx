@@ -14,6 +14,8 @@ declare interface CharacterPickerProps {
 
 const CharacterPicker = ({ onChange, value, width = 300, characters }: CharacterPickerProps) => {
 
+    characters = characters?.filter((character) => character.docId !== "__none__")
+
     characters?.sort(function (a, b) {
         if (a.name < b.name) {
           return -1;
@@ -22,7 +24,7 @@ const CharacterPicker = ({ onChange, value, width = 300, characters }: Character
           return 1;
         }
         return 0;
-      });
+    });
 
     characters?.push(new Character( "__none__", "None"))
 

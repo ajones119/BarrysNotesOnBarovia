@@ -12,6 +12,7 @@ import NPCPicker from '../../../../../components/NPCPicker/NPCPicker';
 import { SetCampaignLocation, useDeleteCampaignLocationButton } from '../../../../../service/CampaignLocationService';
 import NPCThumbCard from '../../../../../components/NPCThumbCard/NPCThumbCard';
 import css from "../../SingleCampaign.module.scss"
+import TextEditorDisplay from '../../../../../components/TextEditor/TextEditDisplay';
 
 declare interface CampaignTreeLocationProps {
     campaignLocation: CampaignLocation,
@@ -53,7 +54,7 @@ const CampaignTreeLocation = ({ campaignLocation, subLocationOptions = [], campa
                         </Grid>
                     }
                     <Grid item xs={12}>
-                        <Typography className={css.center}>{campaignLocation.description}</Typography>
+                        <TextEditorDisplay value={campaignLocation.description} />
                     </Grid>
 
                     <Grid item style={{display: "flex"}}>

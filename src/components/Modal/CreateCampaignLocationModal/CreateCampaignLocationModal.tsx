@@ -10,6 +10,7 @@ import { Campaign, validateCampaign } from '../../../model/Campaign';
 import { useAddCampaignButton } from '../../../service/CampaignService';
 import { useAddCampaignLocationButton } from '../../../service/CampaignLocationService';
 import { CampaignLocation, validateLocation } from '../../../model/Location';
+import TextEditor from '../../TextEditor';
 
 declare interface CreateCampaignLocationModalProps {
     isOpen: boolean;
@@ -45,6 +46,10 @@ const CreateCampaignLocationModal = ({isOpen, onClose, campaignId, parentLocatio
             onClose();
     }
 
+    if (!isOpen) {
+        return null;
+    }
+
     return (
         <div>
             <Modal isOpen={isOpen} onClose={handleOnClose} extraButtons={[
@@ -58,7 +63,7 @@ const CreateCampaignLocationModal = ({isOpen, onClose, campaignId, parentLocatio
                         <TextInput error={validator?.player} value={locationImageURL} onChange={value => setNewCampaignLocation({ ...newCampaignLocation, locationImageURL: value,})} placeholder='Image URL' />
                     </Grid>
                     <Grid item sm={12}>
-                        <TextArea value={description} onChange={(value) => setNewCampaignLocation({ ...newCampaignLocation, description: value,})} rows={5} />
+                        <TextEditor value={description} onChange={(value) => setNewCampaignLocation({ ...newCampaignLocation, description: value,})} preview="edit" height={250} />
                     </Grid>
                 </Grid>
             </Modal>
