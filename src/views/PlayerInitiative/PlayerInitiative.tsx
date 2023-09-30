@@ -1,4 +1,4 @@
-import React, {useState} from "react"
+import React, {useEffect, useState} from "react"
 import CharacterPicker from "../../components/CharacterPicker/CharacterPicker";
 import { useCampaignCharacters } from "../../service/CharacterService";
 import { useParams } from "react-router-dom";
@@ -14,13 +14,25 @@ import { useCombat, useUpdateInitiative } from "../../service/CombatService";
 import { LinearProgress } from "@mui/material"
 import { Button } from "../../components/Button/Button";
 import { Spacer } from "../../components/Spacer/Spacer";
+import { TextInput } from "../../components/TextInput/TextInput";
 
 const PlayerInitiative = () => {
     const [character, setCharacter] = useState<Character | null>()
+    const [currentHealth, setCurrentHealth] = useState<number | null>()
     const {CampaignId} = useParams();
     const {isLoading, characters} = useCampaignCharacters(CampaignId || "")
     const {campaign} = useCampaign(CampaignId || "")
     const {isLoading: isCombatLoading, combat} = useCombat(campaign?.currentCombatDocId || "1")
+
+    useEffect(() => {
+        if (character) {
+            const health = combatCharacterArray.find(combatCharacter => combatCharacter.playerDocId === character.docId)?.health;
+            console.log("HEALTH", health)
+            setCurrentHealth(health);
+        } else {
+            setCurrentHealth(null);
+        }
+    }, [character?.docId])
 
     const update = useUpdateInitiative(combat)
 
@@ -31,6 +43,17 @@ const PlayerInitiative = () => {
 
         update({ ...combat, currentTurnIndex: nextTurn })
     }
+
+    const updateHealth = () => {
+        const newCombat = { ...combat }
+        const index = combat.combatCharacterArray.findIndex(combatCharacter => combatCharacter.playerDocId === character?.docId)
+
+        if (index !== null) {
+            newCombat.combatCharacterArray[index].health = currentHealth;
+        }
+
+        update(newCombat)
+    };
 
     let yourTurnDisplay = <><FontAwesomeIcon icon={faFaceMehBlank} /><Typography size="xtraLarge">Not Your Turn</Typography></>;
 
@@ -101,6 +124,10 @@ const PlayerInitiative = () => {
                     />
                 <div>
                     <div className={css.turnIndicator}>{yourTurnDisplay}</div>
+                </div>
+                <div className={css.healthInput}>
+                    <TextInput value={currentHealth} onChange={value => setCurrentHealth(Number(value))} number />
+                    <Button onClick={updateHealth}>Save</Button>
                 </div>
                 { character?.docId === combat.combatCharacterArray[combat.currentTurnIndex]?.playerDocId && <div>
                     <Button onClick={endTurn}>End My Turn</Button>

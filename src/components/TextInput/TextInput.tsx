@@ -34,6 +34,7 @@ export const TextInput = ({
                 className={`${css.textInput} ${className} ${error && css.errorTextInput} ${isValueEmpty(value) && css.inactive}`}
                 style={{width: '100%'}}
                 disabled={disabled}
+                onScroll={(e) => e.preventDefault()}
             />
             <div className={`${css.placeholder} ${isValueEmpty(value) ? css.placeholderInactive : css.placeholderActive}`}>
                 {placeholder}
