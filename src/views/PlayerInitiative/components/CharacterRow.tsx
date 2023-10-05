@@ -1,0 +1,65 @@
+import React from "react";
+import { CombatCharacter } from "../../../model/CombatCharacter";
+import { Avatar, LinearProgress, Tooltip, TooltipProps, styled, tooltipClasses } from "@mui/material";
+import css from "../PlayerInitiative.module.scss";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faArrowRight, faExclamationCircle } from "@fortawesome/free-solid-svg-icons";
+import BACKUP from "../../../images/barry-cartoon.png"
+import { Typography } from "../../../components/Typography/Typography";
+import { getHealthBarColor, getHealthIcon, getIconList } from "../utils";
+import { Spacer } from "../../../components/Spacer/Spacer";
+
+const BootstrapTooltip = styled(({ className, ...props }: TooltipProps) => (
+    <Tooltip {...props} arrow classes={{ popper: className }} />
+  ))(({ theme }) => ({
+    [`& .${tooltipClasses.arrow}`]: {
+      color: theme.palette.common.black,
+    },
+    [`& .${tooltipClasses.tooltip}`]: {
+      backgroundColor: theme.palette.common.black,
+    },
+  }));
+
+type CharacterRowProps = {
+    healthBarAmount?: number;
+    playerCharacterImageUrl?: string;
+    combatCharacter: CombatCharacter;
+    isCurrentTurn?: boolean;
+    isNextTurn?: boolean;
+};
+
+const CharacterRow = ({
+    healthBarAmount,
+    playerCharacterImageUrl,
+    combatCharacter,
+    isCurrentTurn = false,
+    isNextTurn = false,
+}: CharacterRowProps) => {
+    return (
+        <div className={css.healthBar}>
+            <div className={css.nameRowContainer}>
+                <FontAwesomeIcon className={`
+                    ${isCurrentTurn && css.show}
+                    ${isNextTurn && css.showWarning}
+                    ${css.nextRowIcon}
+                    `}
+                    icon={isNextTurn ? faExclamationCircle : faArrowRight} 
+                />
+                <div className={css.nameRow}>
+                    { playerCharacterImageUrl && <Avatar
+                        src={playerCharacterImageUrl || BACKUP}
+                        alt="boo"
+                        sx={{width: 32, height: 32}}
+                    />}
+                    <Typography style={{color: combatCharacter.color || "white"}}>{combatCharacter?.name || "Unknown"}</Typography>
+                    <FontAwesomeIcon icon={getHealthIcon(healthBarAmount || 0)} />
+                    { getIconList(combatCharacter).map(value => <BootstrapTooltip placement="top" arrow title={value?.label}><FontAwesomeIcon icon={value?.icon} /></BootstrapTooltip>) }
+                </div>
+            </div>
+        {combatCharacter?.shouldShowHealthBar && <LinearProgress variant={healthBarAmount || 0 < 101 ? "determinate" : "indeterminate"} value={healthBarAmount} color={getHealthBarColor(healthBarAmount || 0)} />}
+        <Spacer height={8} />
+    </div>
+    )
+}
+
+export default CharacterRow;

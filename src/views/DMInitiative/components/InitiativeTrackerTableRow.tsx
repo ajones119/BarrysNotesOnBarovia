@@ -12,7 +12,7 @@ import ColorPicker from "../../../components/ColorPicker/ColorPicker";
 import { Character } from "../../../model/Character";
 import BACKUP from "../../../images/stick1.png"
 import ShowSelector from "./ShowSelector";
-import ConditionSelect from "./ConditionSelect";
+import ConditionSelect from "../../../components/ConditionsSelect/ConditionsSelect";
 
 type InitiativeTrackerTableRowProps = {
     item: CombatCharacter;
@@ -107,28 +107,25 @@ const InitiativeTrackerTableRow = ({active = false, item, onChange, onRemove, ta
                 <TableCell style={{width: "5%"}}>
                         <TextInput number value={item?.armorClass} onChange={(value) => onChange({...item, armorClass: value})} />
                 </TableCell>
-                <TableCell style={{width: "7%"}}>
-                        <ConditionSelect selectedValue={item?.conditions} onChange={(value) => onChange({...item, conditions: value})}/>
-                </TableCell>
-                <TableCell style={{width: "3%"}}>
-                        <Switch checked={item?.isConcentrating} onChange={(e) => onChange({...item, isConcentrating: !item?.isConcentrating})}/>
-                </TableCell>
                 <TableCell style={{width: "10%"}}>
+                        <ConditionSelect width="100%" selectedValue={item?.conditions} onChange={(value) => onChange({...item, conditions: value})}/>
+                </TableCell>
+                <TableCell style={{width: "2%"}}>
                         { !item?.playerDocId && <Button onClick={onRemove} color="error">Delete</Button>}
                 </TableCell>
                 {isHealthCounterOpen && (
-                <div ref={refs.setFloating} style={floatingStyles} {...getFloatingProps()}>
-                    <div className={css.healthCounterContainer}>
-                        <div>
-                            <TextInput number value={healthIncrement} onChange={(value) => setHealthIncrement(Number(value))} />
-                            <div className={css.counterButtons}>
-                                <div className={css.minus} onClick={() => onChange({...item, health: Number(item?.health || 0) - Number(healthIncrement || 0)})}> <FontAwesomeIcon icon={faMinus} /></div>
-                                <div className={css.plus} onClick={() => onChange({...item, health: Number(item?.health || 0) + Number(healthIncrement || 0)})}><FontAwesomeIcon icon={faPlus} /></div>
+                    <div ref={refs.setFloating} style={floatingStyles} {...getFloatingProps()}>
+                        <div className={css.healthCounterContainer}>
+                            <div>
+                                <TextInput number value={healthIncrement} onChange={(value) => setHealthIncrement(Number(value))} />
+                                <div className={css.counterButtons}>
+                                    <div className={css.minus} onClick={() => onChange({...item, health: Number(item?.health || 0) - Number(healthIncrement || 0)})}> <FontAwesomeIcon icon={faMinus} /></div>
+                                    <div className={css.plus} onClick={() => onChange({...item, health: Number(item?.health || 0) + Number(healthIncrement || 0)})}><FontAwesomeIcon icon={faPlus} /></div>
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
-            )}
+                )}
             </TableRow>
     );
 }

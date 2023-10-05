@@ -3,7 +3,7 @@
     padding-top: 96px;
 
     .characterContainer {
-
+        padding-top: 16px;
         .imageContainer {
             border-radius: 100px;
         }
@@ -18,17 +18,20 @@
         }
     }
 
-    .healthInput {
-        padding: 16px 0;
-        max-width: 250px;
-        margin: 0 auto;
+    .editCharacter {
+        .healthInput {
+            padding: 16px 0;
+            max-width: 250px;
+            margin: 0 auto;
+        }
     }
 
     .healthBars {
         padding-top: 24px;
         align-items: center;
         margin: 0 auto;
-        width: 300px;
+        min-width: 300px;
+        width: 70%;
 
         .healthBar {
             padding-top: 8px;
@@ -39,12 +42,15 @@
             grid-template-columns: 16px 1fr;
             column-gap: 8px;
             align-items: center;
+            
             .nameRow {
                 display: flex;
+                flex-wrap: wrap;
                 column-gap: 8px;
                 align-items: center;
                 padding-bottom: 4px;
                 font-size: 20px;
+                width: 100%;
 
             }
             .nextRowIcon {
@@ -65,6 +71,48 @@
         }
     }
 }
+
+.conditionsSelector {
+    width: 70%;
+    min-width: 375px;
+    margin: 0 auto;
+}
+
+.healthCounterContainer {
+    background-color: black;
+    opacity: 0.9;
+    border-radius: 16px;
+    text-align: center;
+    padding: 16px;
+    margin: 0 auto;
+
+    .counterButtons {
+        display: flex;
+        justify-content: space-around;
+        align-items: center;
+        padding-top: 8px;
+
+        .incrementInput{
+            width: 50px;
+        }
+        
+        .plus {
+            color: green;
+            &:hover {
+                opacity: 0.8;
+                cursor: pointer;
+            }
+        }
+        .minus {
+            color: red;
+            &:hover {
+                opacity: 0.8;
+                cursor: pointer;
+            }
+        }
+    }
+}
+
 
 @keyframes slideIn {
     from {

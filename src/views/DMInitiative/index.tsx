@@ -97,17 +97,12 @@ const DMInitiative = () => {
                                 AC
                             </Typography>
                         </TableCell>
-                        <TableCell style={{width: "8%"}}>
+                        <TableCell style={{width: "50px"}}>
                             <Typography color="light" size="large" weight="bolder">
                                 Conditions
                             </Typography>
                         </TableCell>
-                        <TableCell style={{width: "3%"}}>
-                            <Typography color="light" size="large" weight="bolder">
-                                Conc.
-                            </Typography>
-                        </TableCell>
-                        <TableCell style={{width: "10%"}}>
+                        <TableCell style={{width: "2%"}}>
                             <Typography color="light" size="large" weight="bolder">
                                 Remove
                             </Typography>

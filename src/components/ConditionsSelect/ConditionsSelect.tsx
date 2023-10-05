@@ -1,13 +1,22 @@
 import { Chip, MenuItem, Select, Stack, styled } from "@mui/material";
 import React from "react";
-import css from "../DMInitiative.module.scss"
+import css from "./ConditionsSelect.module.scss"
 import CancelIcon from "@mui/icons-material/Cancel";
-import { faBed, faChildCombatant, faEarDeaf, faFaceFlushed, faFaceGrinHearts, faFaceTired, faFire, faGem, faHandsHoldingChild, faMoon, faPersonFallingBurst, faPersonShelter, faPersonWalkingWithCane, faSkullCrossbones, faUserAstronaut, faUserSecret, faWheelchair } from "@fortawesome/free-solid-svg-icons";
+import CheckIcon from "@mui/icons-material/Check";
+import { faBed, faBrain, faChildCombatant, faEarDeaf, faFaceFlushed, faFaceGrinHearts, faFaceTired, faFire, faGem, faHandsHoldingChild, faMoon, faPersonFallingBurst, faPersonShelter, faPersonWalkingWithCane, faSkullCrossbones, faUserAstronaut, faUserSecret, faWheelchair } from "@fortawesome/free-solid-svg-icons";
+import { Icon, IconDefinition } from "@fortawesome/fontawesome-svg-core";
+import { faFaceAngry } from "@fortawesome/free-regular-svg-icons";
 
 type ConditionSelectProps = {
     onChange: (value: string[] | null) => void,
     selectedValue?: string[] | null,
-    width?: number,
+    width?: string,
+}
+
+export type Condition = {
+    label: string,
+    value: string,
+    icon: IconDefinition
 }
 
 const CustomizedSelect = styled(Select)`
@@ -18,7 +27,7 @@ const CustomizedSelect = styled(Select)`
   }
 `;
 
-export const CONDITION_OPTIONS = [
+export const CONDITION_OPTIONS: Condition[] = [
     {
         label: "Blinded",
         value: "blinded",
@@ -33,6 +42,11 @@ export const CONDITION_OPTIONS = [
         label: "Charmed",
         value: "charmed",
         icon: faFaceGrinHearts
+    },
+    {
+        label: "Concentration",
+        value: "concentration",
+        icon: faBrain
     },
     {
         label: "Deafened",
@@ -80,6 +94,11 @@ export const CONDITION_OPTIONS = [
         icon: faPersonFallingBurst
     },
     {
+        label: "Rage",
+        value: "rage",
+        icon: faFaceAngry
+    },
+    {
         label: "Restrained",
         value: "restrained",
         icon: faPersonShelter
@@ -101,8 +120,9 @@ export const CONDITION_OPTIONS = [
     },
 ]
 
-const ConditionSelect = ({onChange, selectedValue, width = 100}: ConditionSelectProps) => {
+const ConditionSelect = ({onChange, selectedValue, width = "200px"}: ConditionSelectProps) => {
     return (<CustomizedSelect
+        label="Conditions"
         multiple
         multiline
         value={selectedValue || []}
@@ -113,7 +133,7 @@ const ConditionSelect = ({onChange, selectedValue, width = 100}: ConditionSelect
             onChange(chosen as any)
         }}
         className={css.picker}
-        style={{width: `${width}px`}}
+        style={{width: `${width}`}}
         variant="standard"
         renderValue={(selected: any) => (
             <Stack gap={1} direction="row" flexWrap="wrap">
@@ -140,8 +160,11 @@ const ConditionSelect = ({onChange, selectedValue, width = 100}: ConditionSelect
             </Stack>
           )}
         >
-        { CONDITION_OPTIONS?.map((options) => (
-            <MenuItem key={`picker-${options.label}`} value={options.value}>{options.label}</MenuItem>
+        { CONDITION_OPTIONS?.map((option) => (
+            <MenuItem key={`picker-${option.label}`} value={option.value}>
+                {option.label}
+                {selectedValue?.includes(option.value) ? <CheckIcon color="info" /> : null}
+            </MenuItem>
             ))
         }
     </CustomizedSelect>);
