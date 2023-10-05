@@ -10,12 +10,14 @@ import InitiativeTrackerTableRow from "./components/InitiativeTrackerTableRow";
 import { Combat } from "../../model/Combat";
 import { useCampaign, useUpdateCampaign } from "../../service/CampaignService";
 import { Button } from "../../components/Button/Button";
+import { useCampaignCharacters } from "../../service/CharacterService";
 
 const DMInitiative = () => {
-    const { combatId, campaignId } = useParams()
+    const { combatId, campaignId = "" } = useParams()
 
     const { combat, isLoading, isRefetching } = useCombat(combatId)
     const { campaign } = useCampaign(campaignId)
+    const { characters = [] } = useCampaignCharacters(campaignId);
     const {
         insert,
         removeAt,
@@ -67,12 +69,12 @@ const DMInitiative = () => {
                     <TableRow>
                         <TableCell style={{width: "5%"}}>
                             <Typography color="light" size="large" weight="bolder">
-                                Hide
+                                Show
                             </Typography>
                         </TableCell>
                         <TableCell style={{width: "5%"}}>
                             <Typography color="light" size="large" weight="bolder">
-                                Color
+                                
                             </Typography>
                         </TableCell>
                         <TableCell style={{width: "10%"}}>
@@ -95,14 +97,14 @@ const DMInitiative = () => {
                                 AC
                             </Typography>
                         </TableCell>
-                        <TableCell style={{width: "5%"}}>
+                        <TableCell style={{width: "8%"}}>
                             <Typography color="light" size="large" weight="bolder">
-                                PP
+                                Conditions
                             </Typography>
                         </TableCell>
-                        <TableCell style={{width: "5%"}}>
+                        <TableCell style={{width: "3%"}}>
                             <Typography color="light" size="large" weight="bolder">
-                                Show HP
+                                Conc.
                             </Typography>
                         </TableCell>
                         <TableCell style={{width: "10%"}}>
@@ -114,12 +116,19 @@ const DMInitiative = () => {
                 </TableHead>
                 {
                     listWithIds.map((item, index) => (
-                        <InitiativeTrackerTableRow tableKey={item._id} active={index === combat.currentTurnIndex} item={item.data} onChange={(value) => replaceAt(index, {...value})} onRemove={() => handleDelete(index)} />
+                        <InitiativeTrackerTableRow
+                            tableKey={item._id}
+                            active={index === combat.currentTurnIndex}
+                            item={item.data}
+                            onChange={(value) => replaceAt(index, {...value})}
+                            onRemove={() => handleDelete(index)}
+                            characters={characters}
+                        />
                     ))
                 }
             </TableContainer>
             <div className={css.bottonsContainer}>
-                <Button onClick={() => insert({})}>ADD </Button>
+                <Button onClick={() => insert({shouldShow: true, shouldShowHealthBar: true})}>ADD</Button>
                 <Button onClick={() => {
                     const tempList = [ ...list ];
                     const sortedList =  tempList.sort((a, b) => Number(a["initiative"]) < Number(b["initiative"]) ? 1 : -1);

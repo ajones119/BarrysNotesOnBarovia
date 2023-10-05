@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
-import { Select, MenuItem } from "@mui/material"
+import { Select, MenuItem, makeStyles, styled } from "@mui/material"
 import css from "./ColorPicker.module.scss"
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faCircle } from '@fortawesome/free-solid-svg-icons';
 
 const colors = [
     {
@@ -48,11 +50,18 @@ declare interface ColorPickerProps {
     label?: string,
 }
 
-const ColorPicker = ({ onChange, value, width = 300, label }: ColorPickerProps) => {
+const CustomizedSelect = styled(Select)`
+  color: #20b2aa;
 
+  :hover {
+    color: #2e8b57;
+  }
+`;
+
+const ColorPicker = ({ onChange, value, width = 150, label }: ColorPickerProps) => {
     return (
         <div className={css.colorPicker} style={{width: `${width}px`}}>
-            <Select
+            <CustomizedSelect
                 value={value}
                 onChange={(event) => {
                     const chosenColor = event.target.value;
@@ -63,12 +72,17 @@ const ColorPicker = ({ onChange, value, width = 300, label }: ColorPickerProps) 
                 label='color'
                 defaultValue={"#ffffff"}
                 variant="standard"
+                inputProps={{
+                    classes: {
+                        icon: css.icon,
+                    },
+                }}
             >
                 { colors?.map((color) => (
-                    <MenuItem key={`picker-${color.label}`} value={color.value}>{color.label}</MenuItem>
+                    <MenuItem key={`picker-${color.label}`} value={color.value}><FontAwesomeIcon icon={faCircle} style={{color: color.value || "white"}} /></MenuItem>
                     ))
                 }
-            </Select>
+            </CustomizedSelect>
         </div>
     );
 }

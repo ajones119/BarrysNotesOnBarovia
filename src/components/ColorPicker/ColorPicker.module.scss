@@ -5,11 +5,15 @@
     .picker {
         background-color: $dark;
         border-width: 1px;
-        border-style: solid;
+        //border-style: solid;
         border-radius: 5px;
         color: $primary;
         border-color: $primary;
         box-shadow: none;
         text-align: center;
     }
+}
+
+.icon {
+    color: whitesmoke;
 }

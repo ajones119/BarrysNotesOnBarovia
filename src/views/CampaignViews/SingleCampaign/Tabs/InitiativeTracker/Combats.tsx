@@ -29,7 +29,9 @@ const Combats = ({ campaign, characters }: CombatsProps) => {
         armorClass: character?.armorClass,
         playerDocId: character.docId,
         maxHealth: character?.maxHealth,
-        health: character?.maxHealth
+        health: character?.maxHealth,
+        shouldShow: true,
+        shouldShowHealthBar: true,
     } as CombatCharacter))
 
     return (

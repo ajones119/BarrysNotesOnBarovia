@@ -1,3 +1,4 @@
+@import "src/sass_utils";
 
 .initiativeTrackerContainer {
     margin: 0 auto;
@@ -33,7 +34,7 @@
 
     .nameCell {
         display: grid;
-        grid-template-columns: 8px 1fr;
+        grid-template-columns: 1fr;
         column-gap: 8px;
         width: 100%;
         align-items: center;
@@ -84,4 +85,15 @@
             }
         }
     }
+}
+
+.picker {
+    background-color: $dark;
+    border-width: 1px;
+    //border-style: solid;
+    border-radius: 5px;
+    color: $primary;
+    border-color: $primary;
+    box-shadow: none;
+    text-align: center;
 }

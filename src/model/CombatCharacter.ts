@@ -8,6 +8,8 @@ export type CombatCharacter = {
     playerDocId?: string;
     passivePerception?: number;
     shouldShowHealthBar?: boolean;
-    shouldHide?: boolean;
+    shouldShow?: boolean;
+    isConcentrating?: boolean;
+    conditions?: string[];
     color ?: string;
 }

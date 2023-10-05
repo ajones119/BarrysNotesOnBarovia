@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import { Modal } from '../Modal';
 import { Grid } from '@mui/material';
 import TextArea from '../../TextArea/TextArea';
@@ -10,6 +10,7 @@ import { Character } from '../../../model/Character';
 import { Combat, validateCombat } from '../../../model/Combat';
 import { useAddCombatButton } from '../../../service/CombatService';
 import { TextInput } from '../../TextInput/TextInput';
+import useDeepCompareEffect from 'use-deep-compare-effect';
 
 declare interface CreateNPCModalProps {
     isOpen: boolean;
@@ -22,6 +23,10 @@ const CreateCombatModal = ({isOpen, onClose, campaignId, characters }: CreateNPC
     const [combat, setCombat] = useState(new Combat(null, campaignId, characters));
     const [validator, setValidator] = useState<any>();
     const saveCombatButton = useAddCombatButton(combat, () => handleOnClose(), () => validate());
+
+    useDeepCompareEffect(() => {
+        setCombat(new Combat(null, campaignId, characters))
+    }, [characters])
 
     const validate = () => {
         const valid = validateCombat(Combat)

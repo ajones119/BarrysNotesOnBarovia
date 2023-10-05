@@ -1,5 +1,5 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { Switch, TableCell, TableRow } from "@mui/material";
+import { Avatar, Select, Switch, TableCell, TableRow } from "@mui/material";
 import React, { useState } from "react"
 import css from "../DMInitiative.module.scss"
 import { faCircle, faDiceD20, faMinus, faPlus } from "@fortawesome/free-solid-svg-icons";
@@ -9,6 +9,10 @@ import { Typography } from "../../../components/Typography/Typography";
 import { Button } from "../../../components/Button/Button";
 import { CombatCharacter } from "../../../model/CombatCharacter";
 import ColorPicker from "../../../components/ColorPicker/ColorPicker";
+import { Character } from "../../../model/Character";
+import BACKUP from "../../../images/stick1.png"
+import ShowSelector from "./ShowSelector";
+import ConditionSelect from "./ConditionSelect";
 
 type InitiativeTrackerTableRowProps = {
     item: CombatCharacter;
@@ -16,9 +20,10 @@ type InitiativeTrackerTableRowProps = {
     onRemove: () => void,
     active?: boolean;
     tableKey: number;
+    characters: Character[];
 }
 
-const InitiativeTrackerTableRow = ({active = false, item, onChange, onRemove, tableKey}: InitiativeTrackerTableRowProps) => {
+const InitiativeTrackerTableRow = ({active = false, item, onChange, onRemove, tableKey, characters}: InitiativeTrackerTableRowProps) => {
     const [isHealthCounterOpen, setIsHealthCounterOpen] = useState(false);
     const [healthIncrement, setHealthIncrement] = useState<null | number>(1);
 
@@ -36,13 +41,42 @@ const InitiativeTrackerTableRow = ({active = false, item, onChange, onRemove, ta
         click, 
     ]);
 
+    const handleShowChange  = (value: string) => {
+        if (value === "all") {
+            onChange({...item, shouldShowHealthBar: true, shouldShow: true})
+        } else if (value === "hideHP") {
+            onChange({...item, shouldShowHealthBar: false, shouldShow: true})
+        } else {
+            onChange({...item, shouldShowHealthBar: false, shouldShow: false})
+        }
+    }
+
+    const getShowValue = () => {
+        if (item?.shouldShowHealthBar && item?.shouldShow) {
+            return "all"
+        } else if (!item?.shouldShowHealthBar && item?.shouldShow) {
+            return "hideHP"
+        } else {
+            return "hide"
+        }
+    }
+
+    const playerCharacterImageUrl = item?.playerDocId  && characters.find(character => character.docId === item?.playerDocId)?.characterImageURL;
+    const identifier = playerCharacterImageUrl
+    ? (<Avatar
+        src={playerCharacterImageUrl || BACKUP}
+        alt="boo"
+        sx={{width: 32, height: 32}}
+    />) 
+    : (<ColorPicker width={0} value={item?.color} onChange={(value) => onChange({...item, color: value})}/>);
+
     return (
             <TableRow className={`${css.row} ${active ? css.active : ""}`} key={`initiative-${tableKey}-item-${item?.color}`}>
                 <TableCell style={{width: "5%"}}>
-                        <Switch checked={item?.shouldHide} onChange={(e) => onChange({...item, shouldHide: !item?.shouldHide})}/>
+                    <ShowSelector value={getShowValue()} onChange={(value) => handleShowChange(value)} />
                 </TableCell>
                 <TableCell style={{width: "5%"}}>
-                        <ColorPicker width={80} value={item?.color} onChange={(value) => onChange({...item, color: value})}/>
+                        {identifier}
                 </TableCell>
                 <TableCell style={{width: "15%"}}>
                     <div className={css.tableCell}>
@@ -57,7 +91,6 @@ const InitiativeTrackerTableRow = ({active = false, item, onChange, onRemove, ta
                 </TableCell>
                 <TableCell style={{width: "65%"}}>
                     <div className={css.nameCell}>
-                        <FontAwesomeIcon icon={faCircle} style={{color: item?.color || "white"}} />
                         <TextInput disabled={!!item?.playerDocId} value={item?.name} onChange={(value) => onChange({...item, name: value})} />
                         </div>
                 </TableCell>
@@ -74,11 +107,11 @@ const InitiativeTrackerTableRow = ({active = false, item, onChange, onRemove, ta
                 <TableCell style={{width: "5%"}}>
                         <TextInput number value={item?.armorClass} onChange={(value) => onChange({...item, armorClass: value})} />
                 </TableCell>
-                <TableCell style={{width: "5%"}}>
-                        <TextInput number value={item?.passivePerception} onChange={(value) => onChange({...item, passivePerception: value})} />
+                <TableCell style={{width: "7%"}}>
+                        <ConditionSelect selectedValue={item?.conditions} onChange={(value) => onChange({...item, conditions: value})}/>
                 </TableCell>
-                <TableCell style={{width: "5%"}}>
-                        <Switch checked={item?.shouldShowHealthBar} onChange={(e) => onChange({...item, shouldShowHealthBar: !item?.shouldShowHealthBar})}/>
+                <TableCell style={{width: "3%"}}>
+                        <Switch checked={item?.isConcentrating} onChange={(e) => onChange({...item, isConcentrating: !item?.isConcentrating})}/>
                 </TableCell>
                 <TableCell style={{width: "10%"}}>
                         { !item?.playerDocId && <Button onClick={onRemove} color="error">Delete</Button>}

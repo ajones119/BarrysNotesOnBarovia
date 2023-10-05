@@ -11,10 +11,23 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faFaceMehBlank } from "@fortawesome/free-regular-svg-icons";
 import { faArrowRight, faExclamationCircle, faFaceAngry, faFaceDizzy, faFaceFrown, faFaceFrownOpen, faFaceGrimace, faFaceGrin, faFaceLaughBeam, faFaceMeh, faFaceSadCry, faFaceSurprise, faSkull } from "@fortawesome/free-solid-svg-icons";
 import { useCombat, useUpdateInitiative } from "../../service/CombatService";
-import { LinearProgress } from "@mui/material"
+import { Avatar, LinearProgress, Tooltip, TooltipProps, styled, tooltipClasses } from "@mui/material"
 import { Button } from "../../components/Button/Button";
 import { Spacer } from "../../components/Spacer/Spacer";
 import { TextInput } from "../../components/TextInput/TextInput";
+import { getIconList } from "./utils";
+import BACKUP from "../../images/barry-cartoon.png"
+
+const BootstrapTooltip = styled(({ className, ...props }: TooltipProps) => (
+    <Tooltip {...props} arrow classes={{ popper: className }} />
+  ))(({ theme }) => ({
+    [`& .${tooltipClasses.arrow}`]: {
+      color: theme.palette.common.black,
+    },
+    [`& .${tooltipClasses.tooltip}`]: {
+      backgroundColor: theme.palette.common.black,
+    },
+  }));
 
 const PlayerInitiative = () => {
     const [character, setCharacter] = useState<Character | null>()
@@ -90,8 +103,7 @@ const PlayerInitiative = () => {
     nextPlayerDocId = combat.combatCharacterArray.find((char, index) => char?.playerDocId && index > combat.currentTurnIndex)?.playerDocId || null;
     nextPlayerDocId = nextPlayerDocId || combat.combatCharacterArray.find((char) => char?.playerDocId)?.playerDocId || null;
 
-
-    const combatCharacterArray = combat?.combatCharacterArray?.filter(character => !character?.shouldHide).sort((a, b) => {
+    const combatCharacterArray = combat?.combatCharacterArray?.filter(character => character?.shouldShow).sort((a, b) => {
         a = a?.name.toLowerCase();
         b = b?.name.toLowerCase();
         return a > b ? 1 : -1;
@@ -140,6 +152,7 @@ const PlayerInitiative = () => {
             {
                 PCs?.map(character => {
                 const healthBarAmount = (character.health/character.maxHealth)*100;
+                const playerCharacterImageUrl = characters.find(campaignCharacter => campaignCharacter.docId === character.playerDocId)?.characterImageURL;
                 return(
                     <div className={css.healthBar}>
                         <div className={css.nameRowContainer}>
@@ -152,8 +165,14 @@ const PlayerInitiative = () => {
                                 icon={nextPlayerDocId === character.playerDocId ? faExclamationCircle : faArrowRight} 
                             />
                             <div className={css.nameRow}>
-                                <FontAwesomeIcon icon={getHealthIcon(healthBarAmount)} />
+                            <Avatar
+                                src={playerCharacterImageUrl || BACKUP}
+                                alt="boo"
+                                sx={{width: 32, height: 32}}
+                            />
                                 <Typography style={{color: character.color || "white"}}>{character?.name || "Unknown"}</Typography>
+                                <FontAwesomeIcon icon={getHealthIcon(healthBarAmount)} />
+                                { getIconList(character).map(value => <BootstrapTooltip placement="top" arrow title={value?.label}><FontAwesomeIcon icon={value?.icon} /></BootstrapTooltip>) }
                             </div>
                         </div>
                         {character?.shouldShowHealthBar && <LinearProgress variant={healthBarAmount < 101 ? "determinate" : "indeterminate"} value={healthBarAmount} color={getHealthBarColor(healthBarAmount)} />}
@@ -171,7 +190,11 @@ const PlayerInitiative = () => {
                     <div className={css.healthBar}>
                         <div className={css.nameRowContainer}>
                             <div />
-                            <div className={css.nameRow}><FontAwesomeIcon icon={getHealthIcon(healthBarAmount)} /><Typography style={{color: character.color || "white"}}>{character?.name || "Unknown"}</Typography></div>
+                            <div className={css.nameRow}>
+                                <FontAwesomeIcon icon={getHealthIcon(healthBarAmount)} />
+                                <Typography style={{color: character.color || "white"}}>{character?.name || "Unknown"}</Typography>
+                                { getIconList(character).map(value => <BootstrapTooltip placement="top" arrow title={value?.label}><FontAwesomeIcon icon={value?.icon} /></BootstrapTooltip>) }
+                            </div>
                         </div>
                         {character?.shouldShowHealthBar && <LinearProgress variant={healthBarAmount < 101 ? "determinate" : "indeterminate"} value={healthBarAmount} color={getHealthBarColor(healthBarAmount)} />}
                         

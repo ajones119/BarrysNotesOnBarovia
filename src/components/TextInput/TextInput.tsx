@@ -28,7 +28,7 @@ export const TextInput = ({
         <div className={`${error && css.error}`}>
             <input
                 type={number ? "number" : "text"}
-                value={value === null ? "" : value}
+                value={value || ""}
                 onChange={onChange ? (e) => onChange(e.target.value) : undefined}
                 placeholder={placeholder}
                 className={`${css.textInput} ${className} ${error && css.errorTextInput} ${isValueEmpty(value) && css.inactive}`}
