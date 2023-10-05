@@ -104,8 +104,8 @@ const PlayerInitiative = () => {
     nextPlayerDocId = nextPlayerDocId || combat.combatCharacterArray.find((char) => char?.playerDocId)?.playerDocId || null;
 
     const combatCharacterArray = combat?.combatCharacterArray?.filter(character => character?.shouldShow).sort((a, b) => {
-        a = a?.name.toLowerCase();
-        b = b?.name.toLowerCase();
+        a = a?.name?.toLowerCase() || "";
+        b = b?.name?.toLowerCase() || "";
         return a > b ? 1 : -1;
     })
     const PCs = combatCharacterArray?.filter(character => character?.playerDocId);
