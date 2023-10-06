@@ -1,8 +1,7 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Select, MenuItem } from "@mui/material"
 import css from "./CharacterPicker.module.scss"
 import { Typography } from '../Typography/Typography';
-import { NPC } from '../../model/NPC';
 import { Character } from '../../model/Character';
 
 declare interface CharacterPickerProps {

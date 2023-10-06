@@ -4,7 +4,7 @@ import css from "./ConditionsSelect.module.scss"
 import CancelIcon from "@mui/icons-material/Cancel";
 import CheckIcon from "@mui/icons-material/Check";
 import { faBed, faBrain, faChildCombatant, faEarDeaf, faFaceFlushed, faFaceGrinHearts, faFaceTired, faFire, faGem, faHandsHoldingChild, faMoon, faPersonFallingBurst, faPersonShelter, faPersonWalkingWithCane, faSkullCrossbones, faUserAstronaut, faUserSecret, faWheelchair } from "@fortawesome/free-solid-svg-icons";
-import { Icon, IconDefinition } from "@fortawesome/fontawesome-svg-core";
+import { IconDefinition } from "@fortawesome/fontawesome-svg-core";
 import { faFaceAngry } from "@fortawesome/free-regular-svg-icons";
 
 type ConditionSelectProps = {

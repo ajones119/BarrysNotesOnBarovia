@@ -6,7 +6,6 @@ import { ButtonStatuses, LoadingButton } from "../components/Button/LoadingButto
 import { NPC } from '../model/NPC';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTrash } from '@fortawesome/free-solid-svg-icons';
-import { BASE_ABILITY_SCORES } from '../model/BaseCharacter';
 
 export function useCampaignNPCs(campaignDocId: string) {
   const ref = query(collection(firestore, "npcs"), where("campaignDocId", "==", campaignDocId));

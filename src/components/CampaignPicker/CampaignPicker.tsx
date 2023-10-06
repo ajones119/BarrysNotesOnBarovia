@@ -1,10 +1,9 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { Select, MenuItem } from "@mui/material"
 import css from "./CampaignPicker.module.scss"
 import { Campaign } from '../../model/Campaign';
 import { Typography } from '../Typography/Typography';
 import { useCampaigns } from '../../service/CampaignService';
-import useDeepCompareEffect from 'use-deep-compare-effect';
 
 declare interface CampaignPickerProps {
     onChange: (value: any) => void,

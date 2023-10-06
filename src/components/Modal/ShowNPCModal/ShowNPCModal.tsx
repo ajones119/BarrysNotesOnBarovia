@@ -1,16 +1,10 @@
 import React, {useState} from 'react';
 import { Modal } from '../Modal';
 import { Grid, List, ListItem } from '@mui/material';
-import { TextInput } from '../../TextInput/TextInput';
-import TextArea from '../../TextArea/TextArea';
 import css from "./ShowNPCModal.module.scss"
 import { validateCharacter } from '../../../model/Character';
 import { NPC } from '../../../model/NPC';
-import { useAddNPCButton, useUpdateNPCButton } from '../../../service/NPCService';
 import useDeepCompareEffect from 'use-deep-compare-effect';
-import { Button } from '../../Button/Button';
-import SkillsInput from '../../SkillsInput';
-import ActionsInput from '../../ActionsInput';
 import { Typography } from '../../Typography/Typography';
 import { CharacterAction, SkillProficiency } from '../../../model/BaseCharacter';
 

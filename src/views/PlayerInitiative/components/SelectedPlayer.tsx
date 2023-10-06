@@ -1,7 +1,6 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import css from "../PlayerInitiative.module.scss"
 import { Typography } from "../../../components/Typography/Typography";
-import { CombatCharacter } from "../../../model/CombatCharacter";
 import { Character } from "../../../model/Character";
 import STICK from "../../../images/stick1.png"
 import { TextInput } from "../../../components/TextInput/TextInput";
@@ -9,7 +8,6 @@ import { Button } from "../../../components/Button/Button";
 import { Combat } from "../../../model/Combat";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faFaceAngry, faFaceMehBlank, faFaceSurprise, faMinus, faMugHot, faPlus, faSkullCrossbones } from "@fortawesome/free-solid-svg-icons";
-import { autoUpdate, flip, offset, shift, useClick, useDismiss, useFloating, useInteractions } from "@floating-ui/react";
 import ConditionSelect from "../../../components/ConditionsSelect/ConditionsSelect";
 import { Spacer } from "../../../components/Spacer/Spacer";
 

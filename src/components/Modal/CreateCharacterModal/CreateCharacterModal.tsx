@@ -5,8 +5,6 @@ import { TextInput } from '../../TextInput/TextInput';
 import CampaignPicker from '../../CampaignPicker/CampaignPicker';
 import ClassPicker from '../../ClassPicker/ClassPicker';
 import TextArea from '../../TextArea/TextArea';
-import { Button } from '../../Button/Button';
-import { ButtonStatuses, LoadingButton } from '../../Button/LoadingButton';
 
 import css from "./CreateCharacterModal.module.scss"
 import { Character, validateCharacter } from '../../../model/Character';

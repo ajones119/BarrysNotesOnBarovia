@@ -1,12 +1,7 @@
-import React, {useEffect, useState} from 'react';
+import React, {useState} from 'react';
 import { Modal } from '../Modal';
 import { Grid } from '@mui/material';
-import TextArea from '../../TextArea/TextArea';
 import css from "./CreateCombatModal.module.scss"
-import { useAddNoteButton } from '../../../service/NotesService';
-import { Note, validateNote } from '../../../model/Note';
-import CharacterPicker from '../../CharacterPicker/CharacterPicker';
-import { Character } from '../../../model/Character';
 import { Combat, validateCombat } from '../../../model/Combat';
 import { useAddCombatButton } from '../../../service/CombatService';
 import { TextInput } from '../../TextInput/TextInput';

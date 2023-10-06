@@ -7,7 +7,6 @@ import css from "./CreateNPCModal.module.scss"
 import { validateCharacter } from '../../../model/Character';
 import { NPC } from '../../../model/NPC';
 import { useAddNPCButton, useUpdateNPCButton } from '../../../service/NPCService';
-import isEqual from 'react-fast-compare';
 import useDeepCompareEffect from 'use-deep-compare-effect';
 import { Button } from '../../Button/Button';
 import SkillsInput from '../../SkillsInput';

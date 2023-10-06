@@ -1,10 +1,10 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Select, MenuItem, makeStyles, styled } from "@mui/material"
 import css from "./ColorPicker.module.scss"
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCircle } from '@fortawesome/free-solid-svg-icons';
 
-const colors = [
+const COLORS = [
     {
         label: "Blue",
         value: "#190dfc"
@@ -78,7 +78,7 @@ const ColorPicker = ({ onChange, value, width = 150, label }: ColorPickerProps) 
                     },
                 }}
             >
-                { colors?.map((color) => (
+                { COLORS?.map((color) => (
                     <MenuItem key={`picker-${color.label}`} value={color.value}><FontAwesomeIcon icon={faCircle} style={{color: color.value || "white"}} /></MenuItem>
                     ))
                 }

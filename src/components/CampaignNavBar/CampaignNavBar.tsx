@@ -1,4 +1,4 @@
-import { faBook, faC, faDragon, faJedi, faMapLocationDot, faPeopleLine, faScroll, faUsers } from '@fortawesome/free-solid-svg-icons';
+import { faBook, faDragon, faJedi, faMapLocationDot, faPeopleLine, faScroll, faUsers } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import React from 'react';
 import './CampaignNavBar.css';

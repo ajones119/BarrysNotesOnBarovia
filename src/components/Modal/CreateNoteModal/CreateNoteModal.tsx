@@ -1,7 +1,6 @@
 import React, {useState} from 'react';
 import { Modal } from '../Modal';
 import { Grid } from '@mui/material';
-import TextArea from '../../TextArea/TextArea';
 import css from "./CreateNoteModal.module.scss"
 import { useAddNoteButton } from '../../../service/NotesService';
 import { Note, validateNote } from '../../../model/Note';

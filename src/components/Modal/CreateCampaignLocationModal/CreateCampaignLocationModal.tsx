@@ -2,12 +2,8 @@ import React, {useState} from 'react';
 import { Modal } from '../Modal';
 import { Grid } from '@mui/material';
 import { TextInput } from '../../TextInput/TextInput';
-import TextArea from '../../TextArea/TextArea';
 
 import css from "./CreateCampaignLocationModal.module.scss"
-import { useAddCharacterButton } from '../../../service/CharacterService';
-import { Campaign, validateCampaign } from '../../../model/Campaign';
-import { useAddCampaignButton } from '../../../service/CampaignService';
 import { useAddCampaignLocationButton } from '../../../service/CampaignLocationService';
 import { CampaignLocation, validateLocation } from '../../../model/Location';
 import TextEditor from '../../TextEditor';

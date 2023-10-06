@@ -1,9 +1,9 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Select, MenuItem } from "@mui/material"
 import css from "./ClassPicker.module.scss"
 import { Typography } from '../Typography/Typography';
 
-const classes = [
+const CLASSES = [
     "Artificer",
     "Barbarian",
     "Bard",
@@ -45,7 +45,7 @@ const ClassPicker = ({ onChange, value, width = 300, label }: ClassPickerProps) 
                 defaultValue={"None"}
                 variant="standard"
             >
-                { classes?.map((className) => (
+                { CLASSES?.map((className) => (
                     <MenuItem key={`picker-${className}`} value={className}>{className}</MenuItem>
                     ))
                 }

@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import { NPC } from "../../../../../model/NPC";
-import { Item } from "../../../../../model/Item";
 import { useParams } from "react-router-dom";
 import { CampaignLocation } from "../../../../../model/Location";
 import { Button } from "../../../../../components/Button/Button";
@@ -14,13 +13,11 @@ import CampaignTreeLocation from "./CampaignTreeLocation";
 declare interface CampaignLocationsProps {
     locations?: CampaignLocation[],
     npcs?: NPC[],
-    items?: Item[],
 }
 //eventually try to make search more performant
 const CampaignLocations = ({
     locations = [],
     npcs = [],
-    items = [],
 }: CampaignLocationsProps) => {
     const params = useParams();
     const { CampaignId } = params;
