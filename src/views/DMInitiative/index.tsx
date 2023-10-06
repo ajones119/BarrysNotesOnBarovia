@@ -11,6 +11,7 @@ import { Combat } from "../../model/Combat";
 import { useCampaign, useUpdateCampaign } from "../../service/CampaignService";
 import { Button } from "../../components/Button/Button";
 import { useCampaignCharacters } from "../../service/CharacterService";
+import { getCombatURL } from "./utils";
 
 const DMInitiative = () => {
     const { combatId, campaignId = "" } = useParams()
@@ -60,7 +61,7 @@ const DMInitiative = () => {
     return (
         <div className={css.initiativeTrackerContainer}>
             <div className={css.topButtonsRow}>
-                <Button color="dark" onClick={() =>  navigator.clipboard.writeText(`https://ajones119.github.io/BarrysNotesOnBarovia/#/Initiative/${combat.campaignDocId}`)}>Copy Player Link</Button>
+                <Button color="dark" onClick={() =>  navigator.clipboard.writeText(getCombatURL(combat.campaignDocId))}>Copy Player Link</Button>
                 <Typography size={"xtraLarge"}>{combat.name}</Typography>
                 <Button color="dark" onClick={() =>  {}} disabled>Import (Not setup)</Button>
             </div>
