@@ -36,10 +36,6 @@ const CreateNoteModal = ({isOpen, onClose, campaignId, characters}: CreateNPCMod
             onClose();
     }
 
-    if (!isOpen) {
-        return null;
-    }
-
     return (
         <div>
             <Modal isOpen={isOpen} onClose={handleOnClose} extraButtons={[

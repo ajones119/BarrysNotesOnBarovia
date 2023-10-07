@@ -1,5 +1,5 @@
 import React from 'react';
-import { Select, MenuItem, makeStyles, styled } from "@mui/material"
+import { Select, MenuItem, styled } from "@mui/material"
 import css from "./ColorPicker.module.scss"
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCircle } from '@fortawesome/free-solid-svg-icons';
