@@ -16,8 +16,7 @@ declare interface ShowNPCModalProps {
 
 const ShowNPCModal = ({isOpen, onClose, npc = new NPC(null, {})}: ShowNPCModalProps) => {
     const [newNPC, setNewNPC] = useState(npc);
-    const [expandedOpen, setExpandedOpen] = useState(false);
-    const [validator, setValidator] = useState<any>();
+    const [, setValidator] = useState<any>();
     const { name, abilityScores, skills, actions, bonusActions, otherActions, passivePerception, armorClass, health, savingThrows, speed } = newNPC;
 
     const validate = () => {

@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import { useRef, useState } from "react";
 
 export const useList = (initialState: Array<any> = []) => {
     const lastUniqueId = useRef(0);

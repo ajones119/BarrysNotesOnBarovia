@@ -1,4 +1,3 @@
-import { NPC } from "./NPC";
 
 export class CampaignLocation {
     constructor(

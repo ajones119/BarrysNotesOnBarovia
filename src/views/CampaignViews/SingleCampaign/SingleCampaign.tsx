@@ -1,9 +1,9 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { Typography } from '../../../components/Typography/Typography';
 import { useCampaign } from '../../../service/CampaignService';
 import css from "./SingleCampaign.module.scss"
-import Tabs, { Tab } from '../../../components/Tabs/Tabs';
+import Tabs from '../../../components/Tabs/Tabs';
 import { Campaign } from '../../../model/Campaign';
 import Overview from './Tabs/Overview';
 import CampaignCharacters from './Tabs/CampaignCharacters';
@@ -59,13 +59,11 @@ const getTabs = (
 const SingleCampaign = () => {
     const { CampaignId, tabKey = "overview" } = useParams();
     const navigate = useNavigate();
-    const { campaign, isLoading } = useCampaign(CampaignId as string);
-    const {characters, isLoading: isCharactersLoading} = useCampaignCharacters(CampaignId || "");
-    const {NPCs, isLoading: isNPCsLoading} = useCampaignNPCs(CampaignId || "");
-    const {notes, isLoading: isNotesLoading} = useCampaignNotes(CampaignId || "");
-    const {campaignLocations, isLoading: isLocationsLoading} = useCampaignLocations(CampaignId || "");
-
-    const [currentTab, setCurrentTab] = useState("overview")
+    const { campaign } = useCampaign(CampaignId as string);
+    const {characters} = useCampaignCharacters(CampaignId || "");
+    const {NPCs} = useCampaignNPCs(CampaignId || "");
+    const {notes} = useCampaignNotes(CampaignId || "");
+    const {campaignLocations} = useCampaignLocations(CampaignId || "");
 
     return (
         <div className={css.singleCampaign}>

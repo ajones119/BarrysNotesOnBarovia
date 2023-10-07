@@ -23,7 +23,6 @@ const DMInitiative = () => {
         insert,
         removeAt,
         replaceAt,
-        sort,
         replaceList,
         listWithIds,
         list
@@ -75,7 +74,7 @@ const DMInitiative = () => {
                         </TableCell>
                         <TableCell style={{width: "5%"}}>
                             <Typography color="light" size="large" weight="bolder">
-                                
+                                {" "}
                             </Typography>
                         </TableCell>
                         <TableCell style={{width: "10%"}}>

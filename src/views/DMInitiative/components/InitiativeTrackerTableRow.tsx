@@ -1,8 +1,8 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { Avatar, Select, Switch, TableCell, TableRow } from "@mui/material";
+import { Avatar, TableCell, TableRow } from "@mui/material";
 import React, { useState } from "react"
 import css from "../DMInitiative.module.scss"
-import { faCircle, faDiceD20, faMinus, faPlus } from "@fortawesome/free-solid-svg-icons";
+import { faDiceD20, faMinus, faPlus } from "@fortawesome/free-solid-svg-icons";
 import { useFloating, useClick, useInteractions, offset, flip, shift, autoUpdate, useDismiss } from "@floating-ui/react";
 import { TextInput } from "../../../components/TextInput/TextInput";
 import { Typography } from "../../../components/Typography/Typography";

@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from "react"
+import React, {useState} from "react"
 import CharacterPicker from "../../components/CharacterPicker/CharacterPicker";
 import { useCampaignCharacters } from "../../service/CharacterService";
 import { useParams } from "react-router-dom";
@@ -6,26 +6,17 @@ import css from "./PlayerInitiative.module.scss"
 import { Character } from "../../model/Character";
 import { useCampaign } from "../../service/CampaignService";
 import { Typography } from "../../components/Typography/Typography";
-import STICK from "../../images/ismark-background.jpg"
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faFaceMehBlank } from "@fortawesome/free-regular-svg-icons";
-import { faArrowRight, faExclamationCircle, faFaceAngry, faFaceDizzy, faFaceFrown, faFaceFrownOpen, faFaceGrimace, faFaceGrin, faFaceLaughBeam, faFaceMeh, faFaceSadCry, faFaceSurprise, faSkull } from "@fortawesome/free-solid-svg-icons";
 import { useCombat, useUpdateInitiative } from "../../service/CombatService";
-import { Avatar, LinearProgress, Tooltip, TooltipProps, styled, tooltipClasses } from "@mui/material"
-import { Button } from "../../components/Button/Button";
 import { Spacer } from "../../components/Spacer/Spacer";
-import { TextInput } from "../../components/TextInput/TextInput";
-import { getHealthBarColor, getHealthIcon, getIconList } from "./utils";
-import BACKUP from "../../images/barry-cartoon.png"
 import SelectedPlayer from "./components/SelectedPlayer";
 import CharacterRow from "./components/CharacterRow";
 
 const PlayerInitiative = () => {
     const [character, setCharacter] = useState<Character | null>()
     const {CampaignId} = useParams();
-    const {isLoading, characters} = useCampaignCharacters(CampaignId || "")
+    const {characters} = useCampaignCharacters(CampaignId || "")
     const {campaign} = useCampaign(CampaignId || "")
-    const {isLoading: isCombatLoading, combat} = useCombat(campaign?.currentCombatDocId || "1")
+    const {combat} = useCombat(campaign?.currentCombatDocId || "1")
 
     const update = useUpdateInitiative(combat)
 

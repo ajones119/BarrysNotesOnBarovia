@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { collection, doc, query, where } from "firebase/firestore";
 import { firestore } from "./firebase";
-import { useFirestoreCollectionMutation, useFirestoreDocument, useFirestoreDocumentDeletion, useFirestoreQuery } from "@react-query-firebase/firestore";
+import { useFirestoreCollectionMutation, useFirestoreDocumentDeletion, useFirestoreQuery } from "@react-query-firebase/firestore";
 import { ButtonStatuses, LoadingButton } from "../components/Button/LoadingButton"
 import { Note } from '../model/Note';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
