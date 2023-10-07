@@ -8,6 +8,7 @@ import BACKUP from "../../../images/barry-cartoon.png"
 import { Typography } from "../../../components/Typography/Typography";
 import { getHealthBarColor, getHealthIcon, getIconList } from "../utils";
 import { Spacer } from "../../../components/Spacer/Spacer";
+import { useSpring, animated } from "@react-spring/web";
 
 const BootstrapTooltip = styled(({ className, ...props }: TooltipProps) => (
     <Tooltip {...props} arrow classes={{ popper: className }} />
@@ -35,16 +36,38 @@ const CharacterRow = ({
     isCurrentTurn = false,
     isNextTurn = false,
 }: CharacterRowProps) => {
+
+    const rotate = useSpring({ 
+        loop: true, 
+        from: { rotateZ: -360 }, 
+        to: { rotateZ: 0 }, 
+        duration: 2000,
+        delay: 5000,
+    });
+
+    const point = useSpring({ 
+        loop: { reverse: true}, 
+        from: { x: -10 }, 
+        to: { x: 0 }, 
+        duration: 5000,
+    });
+
+
     return (
         <div className={css.healthBar}>
             <div className={css.nameRowContainer}>
-                <FontAwesomeIcon className={`
-                    ${isCurrentTurn && css.show}
+                { isNextTurn ? <animated.div style={{...rotate}}><FontAwesomeIcon className={`
                     ${isNextTurn && css.showWarning}
                     ${css.nextRowIcon}
                     `}
-                    icon={isNextTurn ? faExclamationCircle : faArrowRight} 
-                />
+                    icon={faExclamationCircle} 
+                /></animated.div>
+                : <animated.div><FontAwesomeIcon className={`
+                    ${isCurrentTurn && css.show}
+                    ${css.nextRowIcon}
+                    `}
+                    icon={faArrowRight} 
+                /></animated.div>}
                 <div className={css.nameRow}>
                     { playerCharacterImageUrl && <Avatar
                         src={playerCharacterImageUrl || BACKUP}

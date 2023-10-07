@@ -13,8 +13,7 @@ declare interface ModalProps {
     extraButtons?: Array<any>
 }
 
-const ModalComponent = ({isOpen, children, onClose, onOpen=() => {}, extraButtons = []}: ModalProps) => {
-
+const ModalComponent = ({children, onClose, extraButtons = []}: ModalProps) => {
 
     return <div className='modal-content'>
                 <div className="modal-content-inner">{children}</div>
@@ -37,15 +36,15 @@ export const Modal = ({isOpen, children, onClose, onOpen=() => {}, extraButtons 
 
     const transitions = useTransition(isOpen, {
         from: {
-            scale: 0,
+            y: 0,
             opacity: 0,
           },
           enter: {
-            scale: 1,
+            y: 20,
             opacity: 1,
           },
           leave: {
-            scale: 0,
+            y: 0,
             opacity: 0,
           },
         config: {
