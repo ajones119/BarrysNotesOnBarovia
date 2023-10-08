@@ -45,12 +45,12 @@ const CharacterRow = ({
         delay: 5000,
     });
 
-    const point = useSpring({ 
+    /*const point = useSpring({ 
         loop: { reverse: true}, 
         from: { x: -10 }, 
         to: { x: 0 }, 
         duration: 5000,
-    });
+    });*/
 
 
     return (

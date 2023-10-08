@@ -1,12 +1,9 @@
 import React, {useState} from 'react';
 import css from "../SingleCampaign.module.scss"
-import { Campaign } from '../../../../model/Campaign';
-import { useCampaignCharacters } from '../../../../service/CharacterService';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import { Grid } from "@mui/material";
 import { Character } from '../../../../model/Character';
 import { CharacterThumbCard } from '../../../../components/CharacterThumbCard/CharatcerThumbCard';
-import { useCampaignNPCs } from '../../../../service/NPCService';
 import { Spacer } from '../../../../components/Spacer/Spacer';
 import { NPC } from '../../../../model/NPC';
 import NPCThumbCard from '../../../../components/NPCThumbCard/NPCThumbCard';

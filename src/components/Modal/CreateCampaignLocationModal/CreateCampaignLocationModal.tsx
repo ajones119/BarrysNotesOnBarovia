@@ -21,12 +21,8 @@ const CreateCampaignLocationModal = ({isOpen, onClose, campaignId, parentLocatio
     const saveCampaignLocationButton = useAddCampaignLocationButton(newCampaignLocation, () => handleOnClose(), () => validate());
 
     const {
-        campaignDocId = "",
         name = "",
         description = "",
-        npcs = [],
-        parentLocationId = parentLocationIdOverride,
-        childItemIds = [],
         locationImageURL = ""
     } = newCampaignLocation;
 

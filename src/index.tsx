@@ -1,5 +1,5 @@
 import React from "react";
-import ReactDOM from "react-dom";
+import ReactDOM from "react-dom/client";
 import "./index.css";
 import reportWebVitals from "./reportWebVitals";
 import { HashRouter } from "react-router-dom";
@@ -10,7 +10,8 @@ import ScrollToTop from "./components/ScrollToTop";
 
 const queryClient = new QueryClient()
 
-ReactDOM.render(
+const root = ReactDOM.createRoot(document.getElementById('root')!);
+root.render(
   <div className="master">
     <QueryClientProvider client={queryClient}>
       <HashRouter>
@@ -18,9 +19,7 @@ ReactDOM.render(
         { App() }
       </HashRouter>
     </QueryClientProvider>
-  </div>,
-  document.getElementById("root")
-);
+  </div>);
 
 // If you want to start measuring performance in your app, pass a function
 // to log results (for example: reportWebVitals(console.log))
