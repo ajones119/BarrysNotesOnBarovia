@@ -1,5 +1,5 @@
 import { useReducer } from "react";
-
+// old thing, dont use, will probably remove once I copy this to a local file to mess around with
 const blacklistedKeys = [
   "buildActionFunctionsFromActionList",
   "generateActions",

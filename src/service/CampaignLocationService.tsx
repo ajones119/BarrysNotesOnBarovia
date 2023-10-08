@@ -7,12 +7,10 @@ import { CampaignLocation } from '../model/Location';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTrash } from '@fortawesome/free-solid-svg-icons';
 
-
 export const useAddCampaignLocationButton = (newCampaignLocation: CampaignLocation, onClick: () => void, validate: () => boolean) => {
     const ref = collection(firestore, "campaignLocations");
     const mutation = useFirestoreCollectionMutation(ref);
     const [buttonStatus, setButtonStatus] = useState<ButtonStatuses>(ButtonStatuses.Idle);
-    console.log("SAVE LOCATION", newCampaignLocation)
     const {
         campaignDocId = "",
         name = "",
@@ -36,8 +34,7 @@ export const useAddCampaignLocationButton = (newCampaignLocation: CampaignLocati
             childItemIds,
             locationImageURL
         })
-        console.log("name", name)
-        console.log("ERROR", mutation.error)
+
         }
 
         if (!mutation.error){
