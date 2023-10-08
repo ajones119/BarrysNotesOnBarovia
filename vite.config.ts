@@ -6,17 +6,6 @@ export default defineConfig({
     // depending on your application, base can also be "/"
     base: '',
     plugins: [react(), viteTsconfigPaths()],
-    build: {
-        rollupOptions: {
-            output:{
-                manualChunks(id) {
-                    if (id.includes('node_modules')) {
-                        return id.toString().split('node_modules/')[1].split('/')[0].toString();
-                    }
-                }
-            }
-        }
-    },
     server: {    
         // this ensures that the browser opens upon server start
         open: true,
