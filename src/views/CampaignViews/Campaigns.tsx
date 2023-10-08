@@ -33,7 +33,7 @@ export const Campaigns = () => {
       <Grid container justifyContent="center" alignItems="center">
         <Grid item xs={12}>
           <div className={css.addButton} style={{width: `${cardWidth-24}px`}}>
-            <Button size="large" color="dark" onClick={() => setIsCreateModalOpen(true)}>Add Campaignssssssss</Button>
+            <Button size="large" color="dark" onClick={() => setIsCreateModalOpen(true)}>Add Campaignssssss</Button>
           </div>
         </Grid>
       </Grid>
