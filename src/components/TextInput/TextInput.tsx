@@ -7,7 +7,7 @@ function isValueEmpty(value: any) {
 }
 
 declare interface TextInputProps {
-    value?: string | number | null,
+    value?: string | number,
     onChange?: (input: string | number | null) => void
     placeholder?: string
     error?: boolean,
