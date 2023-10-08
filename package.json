@@ -49,6 +49,7 @@
   },
   "scripts": {
     "start": "vite",
+    "dev-lint": "tsc --noEmit --watch",
     "build": "tsc && vite build",
     "preview": "vite preview",
     "eject": "react-scripts eject",
