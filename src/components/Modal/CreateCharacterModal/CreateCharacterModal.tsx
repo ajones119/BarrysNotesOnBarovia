@@ -52,13 +52,13 @@ const CreateCharacterModal = ({isOpen, onClose, initialCampaignId, character = n
                         <TextInput error={validator?.name} value={name} onChange={value => setNewCharacter({ ...newCharacter, name: value,})} placeholder='Name' />
                     </Grid>
                     <Grid item lg={6} sm={12}>
-                        <TextInput error={validator?.player} value={player} onChange={value => setNewCharacter({ ...newCharacter, player: value,})} placeholder='Player' />
+                        <TextInput error={validator?.player} value={player} onChange={value => setNewCharacter({ ...newCharacter, player: String(value),})} placeholder='Player' />
                     </Grid>
                     <Grid item lg={6} sm={12}>
                         <TextInput error={validator?.characterImageURL} value={characterImageURL} onChange={value => setNewCharacter({ ...newCharacter, characterImageURL: value,})} placeholder='Character Image Url' />
                     </Grid>
                     <Grid item lg={6} sm={12}>
-                        <TextInput error={validator?.dndBeyondURL} value={dndBeyondURL} onChange={value => setNewCharacter({ ...newCharacter, dndBeyondURL: value,})} placeholder='DnD Beyond Url' />
+                        <TextInput error={validator?.dndBeyondURL} value={dndBeyondURL} onChange={value => setNewCharacter({ ...newCharacter, dndBeyondURL: String(value),})} placeholder='DnD Beyond Url' />
                     </Grid>
                     <Grid item lg={4} sm={12}>
                         <CampaignPicker initialCampaignId={initialCampaignId} value={campaign} onChange={(campaign) => { setNewCharacter({ ...newCharacter, campaignDocId: campaign.docId}); setCampaign(campaign)}} />

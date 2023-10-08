@@ -85,7 +85,7 @@ const SelectedPlayer = ({character, combat, update}: SelectedPlayerProps) => {
                                             updateCharacter("health", newHealth);
                                         }}> <FontAwesomeIcon icon={faMinus} /></div>
                                         <div className={css.incrementInput}>
-                                        <TextInput number value={currentHealthIncrement} onChange={(value) => setCurrentHealthIncrement(Number(value))} />
+                                        <TextInput number value={currentHealthIncrement || 0} onChange={(value) => setCurrentHealthIncrement(Number(value))} />
                                         </div>
                                         <div className={css.plus} onClick={() => {
                                             const newHealth = Number(health || 0) + Number(currentHealthIncrement || 0);

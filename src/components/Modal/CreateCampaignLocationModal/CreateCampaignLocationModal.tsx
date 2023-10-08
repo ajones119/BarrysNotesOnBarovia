@@ -52,7 +52,7 @@ const CreateCampaignLocationModal = ({isOpen, onClose, campaignId, parentLocatio
                         <TextInput error={validator?.name} value={name} onChange={value => setNewCampaignLocation({ ...newCampaignLocation, name: value,})} placeholder='Name' />
                     </Grid>
                     <Grid item lg={6} sm={12}>
-                        <TextInput error={validator?.player} value={locationImageURL} onChange={value => setNewCampaignLocation({ ...newCampaignLocation, locationImageURL: value,})} placeholder='Image URL' />
+                        <TextInput error={validator?.player} value={locationImageURL} onChange={value => setNewCampaignLocation({ ...newCampaignLocation, locationImageURL: String(value),})} placeholder='Image URL' />
                     </Grid>
                     <Grid item sm={12}>
                         <TextEditor value={description} onChange={(value) => setNewCampaignLocation({ ...newCampaignLocation, description: value,})} preview="edit" height={250} />

@@ -8,7 +8,7 @@ function isValueEmpty(value: any) {
 
 declare interface TextInputProps {
     value?: string | number,
-    onChange?: (input: string | number | null) => void
+    onChange?: (input: string | number) => void
     placeholder?: string
     error?: boolean,
     className?: string,
@@ -40,7 +40,7 @@ export const TextInput = ({
         leave: {}
     }))
 
-    const handleChange = (value: string | number | null) => {
+    const handleChange = (value: string | number) => {
         onChange && onChange(value);
         api.start({
             y: hasNoValue(value) ? -24 : 0,
@@ -54,7 +54,7 @@ export const TextInput = ({
                 ref={inputRef}
                 type={number ? "number" : "text"}
                 value={value || ""}
-                onChange={e => handleChange(e.target.value)}
+                onChange={e => handleChange(e.target.value || "")}
                 className={`${css.textInput} ${className} ${error && css.errorTextInput} ${isValueEmpty(value) && css.inactive}`}
                 style={{width: '100%'}}
                 disabled={disabled}

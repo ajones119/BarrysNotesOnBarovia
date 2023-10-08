@@ -42,10 +42,10 @@ const CreateCampaignModal = ({isOpen, onClose}: CreateCampaignModalProps) => {
                         <TextInput error={validator?.name} value={title} onChange={value => setNewCampaign({ ...newCampaign, title: value,})} placeholder='Title' />
                     </Grid>
                     <Grid item lg={6} sm={12}>
-                        <TextInput error={validator?.player} value={campaignImageURL} onChange={value => setNewCampaign({ ...newCampaign, campaignImageURL: value,})} placeholder='Campaign Image URL' />
+                        <TextInput error={validator?.player} value={campaignImageURL} onChange={value => setNewCampaign({ ...newCampaign, campaignImageURL: String(value),})} placeholder='Campaign Image URL' />
                     </Grid>
                     <Grid item lg={6} sm={12}>
-                        <TextInput error={validator?.dungeonMaster} value={dungeonMaster} onChange={value => setNewCampaign({ ...newCampaign, dungeonMaster: value,})} placeholder='Dungeon Master' />
+                        <TextInput error={validator?.dungeonMaster} value={dungeonMaster} onChange={value => setNewCampaign({ ...newCampaign, dungeonMaster: String(value),})} placeholder='Dungeon Master' />
                     </Grid>
                     <Grid item sm={12}>
                         <TextArea value={description} onChange={(value) => setNewCampaign({ ...newCampaign, description: value,})} rows={5} />

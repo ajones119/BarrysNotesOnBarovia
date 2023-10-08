@@ -57,7 +57,7 @@ export const Characters = () => {
           </Grid>
           <Grid item xs={12} md={4}>
             <div className={css.characterSearch}>
-              <TextInput placeholder="Search Character..." value={characterFilter} onChange={(value) => setCharacterFilter(value.trimStart())}/>
+              <TextInput placeholder="Search Character..." value={characterFilter} onChange={(value) => setCharacterFilter(String(value).trimStart())}/>
             </div>
           </Grid>
         <Grid item xs={12} md={4}>

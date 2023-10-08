@@ -25,7 +25,7 @@ type InitiativeTrackerTableRowProps = {
 
 const InitiativeTrackerTableRow = ({active = false, item, onChange, onRemove, tableKey, characters}: InitiativeTrackerTableRowProps) => {
     const [isHealthCounterOpen, setIsHealthCounterOpen] = useState(false);
-    const [healthIncrement, setHealthIncrement] = useState<null | number>(1);
+    const [healthIncrement, setHealthIncrement] = useState<number>(1);
 
     const {refs, floatingStyles, context} = useFloating({
         open: isHealthCounterOpen,
@@ -117,7 +117,7 @@ const InitiativeTrackerTableRow = ({active = false, item, onChange, onRemove, ta
                     <div ref={refs.setFloating} style={floatingStyles} {...getFloatingProps()}>
                         <div className={css.healthCounterContainer}>
                             <div>
-                                <TextInput number value={healthIncrement} onChange={(value) => setHealthIncrement(Number(value))} />
+                                <TextInput number value={healthIncrement || 0} onChange={(value) => setHealthIncrement(Number(value))} />
                                 <div className={css.counterButtons}>
                                     <div className={css.minus} onClick={() => onChange({...item, health: Number(item?.health || 0) - Number(healthIncrement || 0)})}> <FontAwesomeIcon icon={faMinus} /></div>
                                     <div className={css.plus} onClick={() => onChange({...item, health: Number(item?.health || 0) + Number(healthIncrement || 0)})}><FontAwesomeIcon icon={faPlus} /></div>

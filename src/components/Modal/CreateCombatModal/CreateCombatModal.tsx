@@ -42,7 +42,7 @@ const CreateCombatModal = ({isOpen, onClose, campaignId, characters }: CreateNPC
                 ]}>
                 <Grid container spacing={2} rowSpacing={3} className={css.CreateCombatModal}>
                     <Grid item sm={12}>
-                        <TextInput error={validator?.name} placeholder="Name" value={combat.name} onChange={(value) => setCombat({ ...combat, name: value,})} />
+                        <TextInput error={validator?.name} placeholder="Name" value={combat.name} onChange={(value) => setCombat({ ...combat, name: String(value),})} />
                     </Grid>
                 </Grid>
             </Modal>

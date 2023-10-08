@@ -32,7 +32,7 @@
 
 .button {
     color: $dark;
-    background-color: $primary;
+    background: linear-gradient(to bottom right, $primary, #FF9A5A);
     border-radius: 50px;
     padding: 4px 8px;
     min-height: fit-content;
@@ -47,24 +47,24 @@
     }
 
     &.secondary {
-        background-color: $neutral;
+        background: linear-gradient(to bottom right, $neutral, #FF9A5A);
     }
 
     &.success {
-        background-color: $success;
+        background: linear-gradient(to bottom right, $success, #FF9A5A);
     }
 
     &.error {
-        background-color: $error;
+        background: linear-gradient(to bottom right, $error, #FF9A5A);
         color: $light;
     }
 
     &.light {
-        background-color: $light;
+        background: linear-gradient(to bottom right, $light, #FF9A5A);
     }
 
     &.dark {
-        background-color: $dark;
+        background: linear-gradient(to bottom right, $dark, #FF9A5A);
         color: $primary;
         border-color: $primary;
     }
@@ -140,4 +140,6 @@
         width: fit-content;
     }
 }
+
+//  box-shadow: 0 0 .25rem rgba(0, 0, 0, 0.5), -.125rem -.125rem 1rem rgba(239, 71, 101, 0.5), .125rem .125rem 1rem rgba(255, 154, 90, 0.5);
 
