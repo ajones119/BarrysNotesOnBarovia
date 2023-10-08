@@ -37,18 +37,18 @@ export const Modal = ({isOpen, children, onClose, onOpen=() => {}, extraButtons 
     const transitions = useTransition(isOpen, {
         from: {
             y: 0,
-            opacity: 0,
-          },
-          enter: {
-            y: 20,
+            opacity: 0.3,
+        },
+        enter: {
+            y: -10,
             opacity: 1,
-          },
-          leave: {
+        },
+        leave: {
             y: 0,
             opacity: 0,
-          },
+        },
         config: {
-            duration: 300
+            duration: 180
         }
       })
 
