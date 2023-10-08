@@ -31,69 +31,13 @@
     }
 }
 
-@keyframes slidein {
-    0% {
-        margin-top: -20px;
-    }
-
-    25% {
-        margin-top: -10px
-    }
-
-    50% {
-        margin-top: -5px
-    }
-
-    75% {
-        margin-top: 0px
-    }
-}
-
-@keyframes slideout {
-    0% {
-        margin-top: 0px;
-        opacity: 100%;
-    }
-
-    25% {
-        margin-top: -5px;
-    }
-
-    50% {
-        margin-top: -10px;
-        opacity: 50%;
-    }
-
-    75% {
-        margin-top: -20px;
-    }
-    
-    100%{
-        visibility: hidden;
-    }
-}
-
 .placeholder {
     position: absolute;
     text-align: left;
-    font-size: small;
+    font-size: medium;
     color: $neutral;
     z-index: 10;
-    
 }
-
-.placeholderActive {
-    animation-duration: 0.25s;
-    animation-name: slidein;
-}
-
-.placeholderInactive {
-    animation-duration: 0.25s;
-    animation-name: slideout;
-    opacity: 0%;
-}
-
-
 
 .error {
     color: red;
