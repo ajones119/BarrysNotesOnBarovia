@@ -67,7 +67,7 @@ export const Modal = ({isOpen, children, onClose, onOpen=() => {}, extraButtons 
     return transitions((style, isOpen) => isOpen && createPortal(
             <animated.div style={{opacity: style.opacity}} className={`modal`}>
                 <animated.div style={{...style}}>
-                    <ModalComponent
+                    <ModalComponent 
                         isOpen={isOpen}
                         children={children}
                         onClose={onClose}

@@ -1,50 +1,11 @@
 @import "src/sass_utils";
 
-@keyframes pulsate {
-    100% {
-
-        text-shadow:
-        0 0 4px #fff,
-        0 0 11px #fff,
-        0 0 19px #fff,
-        0 0 40px #bc13fe,
-        0 0 80px #bc13fe,
-        0 0 90px #bc13fe,
-        0 0 100px #bc13fe,
-        0 0 150px #bc13fe;
-    
-    }
-    
-    0% {
-  
-      text-shadow:
-      0 0 0px #fff,
-      0 0 0px #fff,
-      0 0 0px #fff,
-      0 0 0px #bc13fe,
-      0 0 0px #bc13fe,
-      0 0 0px #bc13fe,
-      0 0 0px #bc13fe,
-      0 0 0px #bc13fe;
-  
-  }
-}
-
 .button {
     color: $dark;
     background-color: $primary;
     border-radius: 50px;
     padding: 4px 8px;
     min-height: fit-content;
-
-    &:hover {
-        opacity: 0.8;
-    }
-
-    &.neon:hover {
-        box-shadow: 0 0 4px #fff,0 0 4px #fff, 0 0 4px $light,0 0 8px $light,0 0 8px $light, inset 0 0 8px $light;
-        opacity: 1.0;
-    }
 
     &.secondary {
         background-color: $neutral;
@@ -66,7 +27,31 @@
     &.dark {
         background-color: $dark;
         color: $primary;
+    }
+
+    &.borderColor-primary {
         border-color: $primary;
+    }
+
+    &.borderColor-secondary {
+        border-color: $neutral;
+    }
+
+    &.borderColor-success {
+        border-color: $success;
+    }
+
+    &.borderColor-error {
+        border-color: $error;
+        color: $light;
+    }
+
+    &.borderColor-light {
+        border-color: $light;
+    }
+
+    &.borderColor-dark {
+        border-color: $dark;
     }
 
     &.large {
@@ -142,4 +127,5 @@
 }
 
 //  box-shadow: 0 0 .25rem rgba(0, 0, 0, 0.5), -.125rem -.125rem 1rem rgba(239, 71, 101, 0.5), .125rem .125rem 1rem rgba(255, 154, 90, 0.5);
+// background: linear-gradient(to bottom right, #EF4765, #FF9A5A);
 
