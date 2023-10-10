@@ -37,7 +37,7 @@ const CampaignLocations = ({
 
     return (
         <div style={{color: "white", textAlign: "left"}}>
-            <Button color="dark" onClick={() => setIsModalOpen(true)}>Add Base Location</Button>
+            <Button animatedHover={false} color="dark" borderColor="primary" onClick={() => setIsModalOpen(true)}>Add Base Location</Button>
             <CreateCampaignLocationModal campaignId={CampaignId as string} isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />
             <Grid container>
                 <Grid item xs={12}>
