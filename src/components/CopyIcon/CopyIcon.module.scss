@@ -1,0 +1,23 @@
+@import "src/sass_utils";
+
+.angledRectangle {
+    height: 24px;
+    width: 16px;
+    border-color: $primary;
+    border-width: 2px;
+    border-radius: 4px;
+    border-style: solid;
+
+    &.bottom {
+        position: relative;
+        z-index: 3;
+        bottom: 20px;
+        left: 8px;
+        background-color: $dark
+    }
+}
+
+.copyIconContainer {
+    position: relative;
+    top: 8px;
+}

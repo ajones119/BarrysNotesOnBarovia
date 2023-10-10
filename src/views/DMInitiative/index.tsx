@@ -12,6 +12,8 @@ import { useCampaign, useUpdateCampaign } from "../../service/CampaignService";
 import { Button } from "../../components/Button/Button";
 import { useCampaignCharacters } from "../../service/CharacterService";
 import { getCombatURL } from "./utils";
+import CopyIcon from "../../components/CopyIcon";
+import CopyButton from "../../components/Button/ReusableButtons/CopyButton";
 
 const DMInitiative = () => {
     const { combatId, campaignId = "" } = useParams()
@@ -60,9 +62,12 @@ const DMInitiative = () => {
     return (
         <div className={css.initiativeTrackerContainer}>
             <div className={css.topButtonsRow}>
-                <Button color="dark" onClick={() =>  navigator.clipboard.writeText(getCombatURL(combat.campaignDocId))}>Copy Player Link</Button>
+                <CopyButton animatedHover={false} borderColor="primary" color="dark" copiedText={getCombatURL(combat.campaignDocId)}>
+                    <Typography size="default" color="primary" >Copy Player Link</Typography>
+                </CopyButton>
                 <Typography size={"xtraLarge"}>{combat.name}</Typography>
-                <Button color="dark" onClick={() =>  {}} disabled>Import (Not setup)</Button>
+                <div />
+                
             </div>
             <TableContainer>
                 <TableHead>

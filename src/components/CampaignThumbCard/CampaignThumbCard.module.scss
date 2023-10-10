@@ -12,14 +12,17 @@
 
     :hover {
         cursor: pointer;
+        z-index: 100;
     }
 
     &.CampaignThumbCard:hover {
         transition: filter .5s ease-in-out;
         transform-origin: center center;
+        z-index: 100;
 
         &:hover {
             filter: contrast(200%);
+            z-index: 100;
             
         }
     }
@@ -34,10 +37,5 @@
         z-index: 1;
         transition: all 0.5s linear;
 
-    }
-
-    &.CampaignThumbCard:hover .nameContainer {
-        top: 40%;
-        transition: all 0.5s linear;
     }
 }

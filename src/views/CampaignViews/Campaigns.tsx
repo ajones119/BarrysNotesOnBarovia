@@ -8,6 +8,8 @@ import { Button } from "../../components/Button/Button";
 import { Spacer } from "../../components/Spacer/Spacer";
 import CreateCampaignModal from "../../components/Modal/CreateCampaignModal/CreateCampaignModal";
 import { useWindowWidth } from "@react-hook/window-size";
+import Boop from "../../components/AnimationComponentWrappers/Boop";
+import { Typography } from "../../components/Typography/Typography";
 
 const getCardWidth = (width: number) => {
   if (width > 1300) {
@@ -33,7 +35,7 @@ export const Campaigns = () => {
       <Grid container justifyContent="center" alignItems="center">
         <Grid item xs={12}>
           <div className={css.addButton} style={{width: `${cardWidth-24}px`}}>
-            <Button size="large" color="dark" onClick={() => setIsCreateModalOpen(true)}>Add Campaigns</Button>
+            <Button size="large" color="dark" borderColor="primary" onClick={() => setIsCreateModalOpen(true)} animatedHover>Add Campaigns</Button>
           </div>
         </Grid>
       </Grid>
