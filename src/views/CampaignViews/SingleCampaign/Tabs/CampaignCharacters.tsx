@@ -52,7 +52,7 @@ const CampaignCharacters = ({ characters, npcs }: CampaignCharactersProps) => {
             <Grid container justifyContent="space-around" alignItems="center">
                 <Grid item xs={12}><Typography>Non-player Characters{" "} <Button color="dark" onClick={() => setIsAddNPCOpen(true)}><FontAwesomeIcon icon={faPlus} /></Button></Typography></Grid>
                 { npcs?.map((npc: NPC) => (
-                    <Grid item xs={12} md={4} lg={3} padding={1}>
+                    <Grid item xs={12} md={4} lg={3}>
                         <NPCThumbCard npc={npc} />
                     </Grid>
                 ))}

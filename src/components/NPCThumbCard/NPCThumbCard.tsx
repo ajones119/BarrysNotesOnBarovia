@@ -9,8 +9,8 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faMagnifyingGlass, faPenFancy } from "@fortawesome/free-solid-svg-icons";
 import { Button } from "../Button/Button";
 import ShowNPCModal from "../Modal/ShowNPCModal/ShowNPCModal";
-import CopyButton from "@components/Button/ReusableButtons/CopyButton";
 import Flip from "@components/AnimationComponentWrappers/Flip";
+import CopyButton from "@components/Button/ReusableButtons/CopyButton";
 
 declare interface NPCThumbCardProps {
     npc: NPC;
@@ -19,6 +19,7 @@ declare interface NPCThumbCardProps {
 const NPCThumbCard = ({ npc }: NPCThumbCardProps) => {
     const [isEditModalOpen, setIsEditModalOpen] = useState(false)
     const [isDetailsModalOpen, setIsDetailsModalOpen] = useState(false)
+
     const deleteButton = useDeleteNPCButton(npc, () => {});
 
     return (
