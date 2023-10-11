@@ -22,7 +22,7 @@ const SelectedPlayer = ({character, combat, update}: SelectedPlayerProps) => {
 
     const {combatCharacterArray} = combat;
     const index = combat.combatCharacterArray.findIndex(combatCharacter => combatCharacter.playerDocId === character?.docId)
-    const {health = 0, maxHealth = 0, conditions = []} = combatCharacterArray[index]
+    const {health, maxHealth, conditions} = combatCharacterArray[index]
 
     const updateCharacter = (key: string, value: any) => {
         const newCombat = { ...combat }

@@ -34,54 +34,53 @@ const PlayerInitiative = () => {
     const others = combatCharacterArray?.filter(character => !character?.playerDocId);
 
     return (
-        <div className={css.playerInitiativeContainer}>
-            <CharacterPicker onChange={(value) => {
-                if (value === "__none__") {
-                    setCharacter(null)
-                } else {
-                    const getCharacter = characters ? characters.find((char) => char.docId === value) : null;
-                    setCharacter(getCharacter)
-                }
-            }} characters={characters || []}/>
-            {(character) && 
-                <SelectedPlayer update={update} combat={combat} character={character} />
+    <div className={css.playerInitiativeContainer}>
+        <CharacterPicker onChange={(value) => {
+            if (value === "__none__") {
+                setCharacter(null)
+            } else {
+                const getCharacter = characters ? characters.find((char) => char.docId === value) : null;
+                setCharacter(getCharacter)
             }
-            <Spacer height={24} />
-            <div className={css.healthBars}>
-                <Typography>Players</Typography>
-                {
-                    PCs?.map(character => {
-                    const healthBarAmount = (character.health/character.maxHealth)*100;
-                    const playerCharacterImageUrl = characters.find(campaignCharacter => campaignCharacter.docId === character.playerDocId)?.characterImageURL;
-                    return(
-                        <CharacterRow
-                            healthBarAmount={healthBarAmount}
-                            playerCharacterImageUrl={playerCharacterImageUrl}
-                            combatCharacter={character}
-                            isCurrentTurn={combat?.combatCharacterArray[combat?.currentTurnIndex].playerDocId === character.playerDocId}
-                            isNextTurn={character.playerDocId === nextPlayerDocId}
+        }} characters={characters || []}/>
+        {(character) && 
+            <SelectedPlayer update={update} combat={combat} character={character} />
+        }
+        <Spacer height={24} />
+        <div className={css.healthBars}>
+            <Typography>Players</Typography>
+            {
+                PCs?.map(character => {
+                const healthBarAmount = (character.health/character.maxHealth)*100;
+                const playerCharacterImageUrl = characters.find(campaignCharacter => campaignCharacter.docId === character.playerDocId)?.characterImageURL;
+                return(
+                    <CharacterRow
+                        healthBarAmount={healthBarAmount}
+                        playerCharacterImageUrl={playerCharacterImageUrl}
+                        combatCharacter={character}
+                        isCurrentTurn={combat?.combatCharacterArray[combat?.currentTurnIndex].playerDocId === character.playerDocId}
+                        isNextTurn={character.playerDocId === nextPlayerDocId}
 
-                        />
-                    )})
-                }
-            </div>
-            <div className={css.healthBars}>
-            <Typography>Enemies</Typography>
-                {
-                    others?.map(character => {
-                    const healthBarAmount = (character.health/character.maxHealth)*100;
-                    return(
-                        <CharacterRow
-                            healthBarAmount={healthBarAmount}
-                            combatCharacter={character}
-                        />
-                    )})
-                }
-            </div>
-            <Spacer height={24} />
-
+                    />
+                )})
+            }
         </div>
-    );
+        <div className={css.healthBars}>
+        <Typography>Enemies</Typography>
+            {
+                others?.map(character => {
+                const healthBarAmount = (character.health/character.maxHealth)*100;
+                return(
+                    <CharacterRow
+                        healthBarAmount={healthBarAmount}
+                        combatCharacter={character}
+                    />
+                )})
+            }
+        </div>
+        <Spacer height={24} />
+
+    </div>);
 }
 
 export default PlayerInitiative;
