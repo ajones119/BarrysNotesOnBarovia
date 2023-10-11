@@ -48,6 +48,9 @@
       ],
       "@images/*": [
         "images/*"
+      ],
+      "@services/*": [
+        "service/*"
       ]
     }
   },

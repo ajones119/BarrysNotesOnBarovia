@@ -4,7 +4,7 @@ import { Grid } from '@mui/material';
 import { TextInput } from '../../TextInput/TextInput';
 
 import css from "./CreateCampaignLocationModal.module.scss"
-import { useAddCampaignLocationButton } from '../../../service/CampaignLocationService';
+import { useAddCampaignLocationButton } from '@services/CampaignLocationService';
 import { CampaignLocation, validateLocation } from '@model/Location';
 import TextEditor from '../../TextEditor';
 

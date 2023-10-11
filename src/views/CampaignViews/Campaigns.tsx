@@ -1,7 +1,7 @@
 import React from "react";
 import { useState } from "react";
 import { Grid } from "@mui/material"
-import { useCampaigns } from "../../service/CampaignService";
+import { useCampaigns } from "@services/CampaignService";
 import { CampaignThumbCard } from "@components/CampaignThumbCard/CampaignThumbCard";
 import css from "./Campaigns.module.scss"
 import { Button } from "@components/Button/Button";

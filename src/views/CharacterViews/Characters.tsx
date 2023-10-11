@@ -5,7 +5,7 @@ import css from "./Characters.module.scss"
 import { CharacterThumbCard } from "@components/CharacterThumbCard/CharatcerThumbCard";
 import { Grid } from "@mui/material"
 import { Character } from "@model/Character";
-import { useCharacters } from "../../service/CharacterService";
+import { useCharacters } from "@services/CharacterService";
 import CampaignPicker from "@components/CampaignPicker/CampaignPicker";
 import { Campaign } from "@model/Campaign";
 import { Spacer } from "@components/Spacer/Spacer";

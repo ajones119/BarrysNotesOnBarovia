@@ -8,7 +8,7 @@ import TextArea from '../../TextArea/TextArea';
 
 import css from "./CreateCharacterModal.module.scss"
 import { Character, validateCharacter } from '@model/Character';
-import { useAddCharacterButton, useUpdateCharacterButton } from '../../../service/CharacterService';
+import { useAddCharacterButton, useUpdateCharacterButton } from '@services/CharacterService';
 import useDeepCompareEffect from 'use-deep-compare-effect';
 
 declare interface CreateCharacterModalProps {

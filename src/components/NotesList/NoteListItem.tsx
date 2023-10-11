@@ -3,7 +3,7 @@ import css from "./NotesList.module.scss";
 import { Note } from '@model/Note';
 import { Avatar } from "@mui/material"
 import BACKUP from "@images/dm-seal.jpg"
-import { useDeleteNoteButton } from '../../service/NotesService';
+import { useDeleteNoteButton } from '@services/NotesService';
 import TextEditorDisplay from '../TextEditor/TextEditDisplay';
 import { Typography } from '../Typography/Typography';
 

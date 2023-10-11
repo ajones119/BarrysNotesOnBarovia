@@ -1,21 +1,21 @@
 import React from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { Typography } from '@components/Typography/Typography';
-import { useCampaign } from '../../../service/CampaignService';
+import { useCampaign } from '@services/CampaignService';
 import css from "./SingleCampaign.module.scss"
 import Tabs from '@components/Tabs/Tabs';
 import { Campaign } from '@model/Campaign';
 import Overview from './Tabs/Overview';
 import CampaignCharacters from './Tabs/CampaignCharacters';
 import CampaignNotes from './Tabs/CampaignNotes';
-import { useCampaignNPCs } from '../../../service/NPCService';
-import { useCampaignCharacters } from '../../../service/CharacterService';
+import { useCampaignNPCs } from '@services/NPCService';
+import { useCampaignCharacters } from '@services/CharacterService';
 import { Character } from '@model/Character';
 import { NPC } from '@model/NPC';
 import { Note } from '@model/Note';
-import { useCampaignNotes } from '../../../service/NotesService';
+import { useCampaignNotes } from '@services/NotesService';
 import CampaignLocations from './Tabs/CampaignLocations/CampaignLocations';
-import { useCampaignLocations } from '../../../service/CampaignLocationService';
+import { useCampaignLocations } from '@services/CampaignLocationService';
 import { CampaignLocation } from '@model/Location';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBook, faEarthAmericas, faMagnifyingGlassLocation, faSkullCrossbones } from '@fortawesome/free-solid-svg-icons';

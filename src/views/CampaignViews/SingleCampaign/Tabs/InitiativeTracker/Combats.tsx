@@ -6,7 +6,7 @@ import { Button } from "@components/Button/Button";
 import { Campaign } from "@model/Campaign";
 import CreateCombatModal from "@components/Modal/CreateCombatModal/CreateCombatModal";
 import { CombatCharacter } from "@model/CombatCharacter";
-import { useCampaignCombats } from "../../../../../service/CombatService";
+import { useCampaignCombats } from "@services/CombatService";
 import { Typography } from "@components/Typography/Typography";
 import { CombatEntryRow } from "./CombatEntryRow";
 

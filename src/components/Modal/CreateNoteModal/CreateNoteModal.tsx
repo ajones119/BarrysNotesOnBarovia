@@ -2,7 +2,7 @@ import React, {useState} from 'react';
 import { Modal } from '../Modal';
 import { Grid } from '@mui/material';
 import css from "./CreateNoteModal.module.scss"
-import { useAddNoteButton } from '../../../service/NotesService';
+import { useAddNoteButton } from '@services/NotesService';
 import { Note, validateNote } from '@model/Note';
 import CharacterPicker from '../../CharacterPicker/CharacterPicker';
 import { Character } from '@model/Character';

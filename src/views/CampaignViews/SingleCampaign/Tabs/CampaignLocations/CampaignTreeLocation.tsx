@@ -9,7 +9,7 @@ import { Item } from '@model/Item';
 import BACKUP from "@images/hauntedCastleBackground.jpg"
 import { NPC } from '@model/NPC';
 import NPCPicker from '@components/NPCPicker/NPCPicker';
-import { SetCampaignLocation, useDeleteCampaignLocationButton } from '../../../../../service/CampaignLocationService';
+import { SetCampaignLocation, useDeleteCampaignLocationButton } from '@services/CampaignLocationService';
 import NPCThumbCard from '@components/NPCThumbCard/NPCThumbCard';
 import css from "../../SingleCampaign.module.scss"
 import TextEditorDisplay from '@components/TextEditor/TextEditDisplay';
