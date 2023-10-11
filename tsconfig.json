@@ -34,7 +34,13 @@
     "forceConsistentCasingInFileNames": true,
     "noImplicitAny": true,
     "noImplicitThis": true,
-    "strictNullChecks": true
+    "strictNullChecks": true,
+    "baseUrl": "src",
+    "paths": {
+      "@model/*": [
+        "model/*"
+      ]
+    }
   },
   "include": [
     "src"
