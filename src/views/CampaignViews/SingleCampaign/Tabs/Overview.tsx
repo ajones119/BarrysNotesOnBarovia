@@ -17,14 +17,14 @@ const Overview = ({ campaign }: OverviewProps) => {
                     <Typography>{campaign.title}</Typography>
                 </Grid>
                 <Grid item xs={12}>
-                    <div className={css.overviewImage}>
+                    <div>
                         <img
+                            className={css.overviewImage}
                             src={campaign.campaignImageURL}
                             onError={({ currentTarget }) => {
                                 currentTarget.onerror = null; // prevents looping
                                 currentTarget.src=BACKUP;
                             }}
-                            width={900}
                             alt="boo"
                         />
                     </div>
