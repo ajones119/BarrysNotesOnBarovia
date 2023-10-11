@@ -5,9 +5,9 @@ import css from "../PlayerInitiative.module.scss";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowRight, faExclamationCircle } from "@fortawesome/free-solid-svg-icons";
 import BACKUP from "../../../images/barry-cartoon.png"
-import { Typography } from "../../../components/Typography/Typography";
+import { Typography } from "@components/Typography/Typography";
 import { getHealthBarColor, getHealthIcon, getIconList } from "../utils";
-import { Spacer } from "../../../components/Spacer/Spacer";
+import { Spacer } from "@components/Spacer/Spacer";
 import { useSpring, animated } from "@react-spring/web";
 
 const BootstrapTooltip = styled(({ className, ...props }: TooltipProps) => (

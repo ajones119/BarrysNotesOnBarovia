@@ -2,14 +2,14 @@ import React from "react";
 import { useState } from "react";
 import { Grid } from "@mui/material"
 import { useCampaigns } from "../../service/CampaignService";
-import { CampaignThumbCard } from "../../components/CampaignThumbCard/CampaignThumbCard";
+import { CampaignThumbCard } from "@components/CampaignThumbCard/CampaignThumbCard";
 import css from "./Campaigns.module.scss"
-import { Button } from "../../components/Button/Button";
-import { Spacer } from "../../components/Spacer/Spacer";
-import CreateCampaignModal from "../../components/Modal/CreateCampaignModal/CreateCampaignModal";
+import { Button } from "@components/Button/Button";
+import { Spacer } from "@components/Spacer/Spacer";
+import CreateCampaignModal from "@components/Modal/CreateCampaignModal/CreateCampaignModal";
 import { useWindowWidth } from "@react-hook/window-size";
-import Boop from "../../components/AnimationComponentWrappers/Boop";
-import { Typography } from "../../components/Typography/Typography";
+import Boop from "@components/AnimationComponentWrappers/Boop";
+import { Typography } from "@components/Typography/Typography";
 
 const getCardWidth = (width: number) => {
   if (width > 1300) {

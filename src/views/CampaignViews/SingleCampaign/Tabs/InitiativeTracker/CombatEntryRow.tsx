@@ -1,9 +1,9 @@
 import React from "react";
 import { TableCell, TableRow } from "@mui/material";
 
-import { Button } from "../../../../../components/Button/Button";
+import { Button } from "@components/Button/Button";
 import { useDeleteCombatButton } from "../../../../../service/CombatService";
-import { Typography } from "../../../../../components/Typography/Typography";
+import { Typography } from "@components/Typography/Typography";
 import { Combat } from "@model/Combat";
 
 type CombatEntryRowProps = {

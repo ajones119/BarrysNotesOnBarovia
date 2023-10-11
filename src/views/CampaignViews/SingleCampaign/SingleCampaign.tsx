@@ -1,9 +1,9 @@
 import React from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { Typography } from '../../../components/Typography/Typography';
+import { Typography } from '@components/Typography/Typography';
 import { useCampaign } from '../../../service/CampaignService';
 import css from "./SingleCampaign.module.scss"
-import Tabs from '../../../components/Tabs/Tabs';
+import Tabs from '@components/Tabs/Tabs';
 import { Campaign } from '@model/Campaign';
 import Overview from './Tabs/Overview';
 import CampaignCharacters from './Tabs/CampaignCharacters';

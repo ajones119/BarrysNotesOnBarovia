@@ -5,15 +5,15 @@ import { useList } from "../../hooks/useList";
 import useDeepCompareEffect from "use-deep-compare-effect";
 import css from "./DMInitiative.module.scss"
 import { TableCell, TableContainer, TableHead, TableRow } from "@mui/material";
-import { Typography } from "../../components/Typography/Typography";
+import { Typography } from "@components/Typography/Typography";
 import InitiativeTrackerTableRow from "./components/InitiativeTrackerTableRow";
 import { Combat } from "@model/Combat";
 import { useCampaign, useUpdateCampaign } from "../../service/CampaignService";
-import { Button } from "../../components/Button/Button";
+import { Button } from "@components/Button/Button";
 import { useCampaignCharacters } from "../../service/CharacterService";
 import { getCombatURL } from "./utils";
-import CopyIcon from "../../components/CopyIcon";
-import CopyButton from "../../components/Button/ReusableButtons/CopyButton";
+import CopyIcon from "@components/CopyIcon";
+import CopyButton from "@components/Button/ReusableButtons/CopyButton";
 
 const DMInitiative = () => {
     const { combatId, campaignId = "" } = useParams()

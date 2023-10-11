@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { collection, doc, query, where } from "firebase/firestore";
 import { firestore } from "./firebase";
 import { useFirestoreDocumentMutation, useFirestoreCollectionMutation, useFirestoreDocumentDeletion, useFirestoreQuery } from "@react-query-firebase/firestore";
-import { ButtonStatuses, LoadingButton } from "../components/Button/LoadingButton"
+import { ButtonStatuses, LoadingButton } from "@components/Button/LoadingButton"
 import { NPC } from '@model/NPC';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTrash } from '@fortawesome/free-solid-svg-icons';

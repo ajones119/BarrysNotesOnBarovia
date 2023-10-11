@@ -2,16 +2,16 @@ import React, {useState } from "react";
 import "../../App.css";
 import css from "./Characters.module.scss"
 
-import { CharacterThumbCard } from "../../components/CharacterThumbCard/CharatcerThumbCard";
+import { CharacterThumbCard } from "@components/CharacterThumbCard/CharatcerThumbCard";
 import { Grid } from "@mui/material"
 import { Character } from "@model/Character";
 import { useCharacters } from "../../service/CharacterService";
-import CampaignPicker from "../../components/CampaignPicker/CampaignPicker";
+import CampaignPicker from "@components/CampaignPicker/CampaignPicker";
 import { Campaign } from "@model/Campaign";
-import { Spacer } from "../../components/Spacer/Spacer";
-import { TextInput } from "../../components/TextInput/TextInput";
-import { Button } from "../../components/Button/Button";
-import CreateCharacterModal from "../../components/Modal/CreateCharacterModal/CreateCharacterModal";
+import { Spacer } from "@components/Spacer/Spacer";
+import { TextInput } from "@components/TextInput/TextInput";
+import { Button } from "@components/Button/Button";
+import CreateCharacterModal from "@components/Modal/CreateCharacterModal/CreateCharacterModal";
 
 //add loading state
 //double check spacing of header/search bar on smaller screens

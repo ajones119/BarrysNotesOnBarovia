@@ -39,6 +39,9 @@
     "paths": {
       "@model/*": [
         "model/*"
+      ],
+      "@components/*": [
+        "components/*"
       ]
     }
   },
