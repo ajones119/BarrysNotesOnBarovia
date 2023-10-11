@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
-import { Character } from '../../model/Character';
+import { Character } from '@model/Character';
 import css from "./NotesList.module.scss";
-import { Note } from '../../model/Note';
+import { Note } from '@model/Note';
 import { Grid } from "@mui/material"
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlusCircle } from '@fortawesome/free-solid-svg-icons';

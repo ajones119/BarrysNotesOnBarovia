@@ -1,13 +1,13 @@
 import React, {useState} from "react"
-import CharacterPicker from "../../components/CharacterPicker/CharacterPicker";
-import { useCampaignCharacters } from "../../service/CharacterService";
+import CharacterPicker from "@components/CharacterPicker/CharacterPicker";
+import { useCampaignCharacters } from "@services/CharacterService";
 import { useParams } from "react-router-dom";
 import css from "./PlayerInitiative.module.scss"
-import { Character } from "../../model/Character";
-import { useCampaign } from "../../service/CampaignService";
-import { Typography } from "../../components/Typography/Typography";
-import { useCombat, useUpdateInitiative } from "../../service/CombatService";
-import { Spacer } from "../../components/Spacer/Spacer";
+import { Character } from "@model/Character";
+import { useCampaign } from "@services/CampaignService";
+import { Typography } from "@components/Typography/Typography";
+import { useCombat, useUpdateInitiative } from "@services/CombatService";
+import { Spacer } from "@components/Spacer/Spacer";
 import SelectedPlayer from "./components/SelectedPlayer";
 import CharacterRow from "./components/CharacterRow";
 

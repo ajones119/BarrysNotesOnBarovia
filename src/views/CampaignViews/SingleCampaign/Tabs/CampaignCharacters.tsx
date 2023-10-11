@@ -2,17 +2,17 @@ import React, {useState} from 'react';
 import css from "../SingleCampaign.module.scss"
 import { useParams } from 'react-router-dom';
 import { Grid } from "@mui/material";
-import { Character } from '../../../../model/Character';
-import { CharacterThumbCard } from '../../../../components/CharacterThumbCard/CharatcerThumbCard';
-import { Spacer } from '../../../../components/Spacer/Spacer';
-import { NPC } from '../../../../model/NPC';
-import NPCThumbCard from '../../../../components/NPCThumbCard/NPCThumbCard';
-import { Typography } from '../../../../components/Typography/Typography';
-import { Button } from '../../../../components/Button/Button';
+import { Character } from '@model/Character';
+import { CharacterThumbCard } from '@components/CharacterThumbCard/CharatcerThumbCard';
+import { Spacer } from '@components/Spacer/Spacer';
+import { NPC } from '@model/NPC';
+import NPCThumbCard from '@components/NPCThumbCard/NPCThumbCard';
+import { Typography } from '@components/Typography/Typography';
+import { Button } from '@components/Button/Button';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlus } from '@fortawesome/free-solid-svg-icons';
-import CreateNPCModal from '../../../../components/Modal/CreateNPCModal/CreateNPCModal';
-import CreateCharacterModal from '../../../../components/Modal/CreateCharacterModal/CreateCharacterModal';
+import CreateNPCModal from '@components/Modal/CreateNPCModal/CreateNPCModal';
+import CreateCharacterModal from '@components/Modal/CreateCharacterModal/CreateCharacterModal';
 
 declare interface CampaignCharactersProps {
     characters: Character[],

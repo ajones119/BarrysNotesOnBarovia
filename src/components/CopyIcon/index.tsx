@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import css from "./CopyIcon.module.scss"
 import {animated, config} from "@react-spring/web";
-import useBoop from "../../hooks/AnimationHooks/useBoop";
+import useBoop from "@hooks/AnimationHooks/useBoop";
 
 const CopyIcon = ({isActive = false}) => {
     const [isHovered, setIsHovered] = useState(false);

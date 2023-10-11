@@ -4,15 +4,15 @@ import React, { useState } from "react"
 import css from "../DMInitiative.module.scss"
 import { faDiceD20, faMinus, faPlus } from "@fortawesome/free-solid-svg-icons";
 import { useFloating, useClick, useInteractions, offset, flip, shift, autoUpdate, useDismiss } from "@floating-ui/react";
-import { TextInput } from "../../../components/TextInput/TextInput";
-import { Typography } from "../../../components/Typography/Typography";
-import { Button } from "../../../components/Button/Button";
-import { CombatCharacter } from "../../../model/CombatCharacter";
-import ColorPicker from "../../../components/ColorPicker/ColorPicker";
-import { Character } from "../../../model/Character";
-import BACKUP from "../../../images/stick1.png"
+import { TextInput } from "@components/TextInput/TextInput";
+import { Typography } from "@components/Typography/Typography";
+import { Button } from "@components/Button/Button";
+import { CombatCharacter } from "@model/CombatCharacter";
+import ColorPicker from "@components/ColorPicker/ColorPicker";
+import { Character } from "@model/Character";
+import BACKUP from "@images/stick1.png"
 import ShowSelector from "./ShowSelector";
-import ConditionSelect from "../../../components/ConditionsSelect/ConditionsSelect";
+import ConditionSelect from "@components/ConditionsSelect/ConditionsSelect";
 
 type InitiativeTrackerTableRowProps = {
     item: CombatCharacter;

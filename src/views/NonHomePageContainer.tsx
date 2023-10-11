@@ -1,7 +1,7 @@
 import React from "react";
 import "../App.css";
-import { NavBar } from "../components/NavBar/NavBar";
-import { Spacer } from "../components/Spacer/Spacer";
+import { NavBar } from "@components/NavBar/NavBar";
+import { Spacer } from "@components/Spacer/Spacer";
 
 declare interface NonHomePageContainerProps {
     page?: React.ReactNode
