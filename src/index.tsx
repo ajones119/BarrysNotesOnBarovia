@@ -7,17 +7,24 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import App from "./App";
 import { QueryClient, QueryClientProvider } from "react-query";
 import ScrollToTop from "./components/ScrollToTop";
+import { ApolloClient, InMemoryCache, ApolloProvider } from '@apollo/client';
 
 const queryClient = new QueryClient()
+const apolloClient = new ApolloClient({
+  uri: "https://www.dnd5eapi.co/graphql",
+  cache: new InMemoryCache(),
+});
 
 const root = ReactDOM.createRoot(document.getElementById('root')!);
 root.render(
   <div className="master">
     <QueryClientProvider client={queryClient}>
-      <HashRouter>
-        <ScrollToTop />
-        { App() }
-      </HashRouter>
+      <ApolloProvider client={apolloClient} >
+        <HashRouter>
+          <ScrollToTop />
+          {App()}
+        </HashRouter>
+      </ApolloProvider>
     </QueryClientProvider>
   </div>);
 
