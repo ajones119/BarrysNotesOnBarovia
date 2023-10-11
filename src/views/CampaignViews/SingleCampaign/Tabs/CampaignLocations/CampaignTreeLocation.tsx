@@ -6,7 +6,7 @@ import CreateCampaignLocationModal from '@components/Modal/CreateCampaignLocatio
 import { Button } from '@components/Button/Button';
 import { Typography } from '@components/Typography/Typography';
 import { Item } from '@model/Item';
-import BACKUP from "../../../../../images/hauntedCastleBackground.jpg"
+import BACKUP from "@images/hauntedCastleBackground.jpg"
 import { NPC } from '@model/NPC';
 import NPCPicker from '@components/NPCPicker/NPCPicker';
 import { SetCampaignLocation, useDeleteCampaignLocationButton } from '../../../../../service/CampaignLocationService';

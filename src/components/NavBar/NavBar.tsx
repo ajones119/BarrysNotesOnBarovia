@@ -1,6 +1,6 @@
 import React from "react";
 import "./NavBar.css"
-import Barry from "../../images/barry-cartoon.png"
+import Barry from "@images/barry-cartoon.png"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faDungeon, faHatWizard } from "@fortawesome/free-solid-svg-icons";
 import { useNavigate } from "react-router-dom";

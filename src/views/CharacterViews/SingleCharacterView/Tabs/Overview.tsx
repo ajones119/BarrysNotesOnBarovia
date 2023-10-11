@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import css from "../SingleCharacter.module.scss"
 import { Grid } from "@mui/material";
 import { Typography } from '@components/Typography/Typography';
-import BACKUP from "../../../../images/stick1.png";
+import BACKUP from "@images/stick1.png";
 import { Character } from '@model/Character';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPenFancy } from '@fortawesome/free-solid-svg-icons';

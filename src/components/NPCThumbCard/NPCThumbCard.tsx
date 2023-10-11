@@ -2,7 +2,7 @@ import React, {useState} from "react";
 import { NPC } from "@model/NPC";
 import css from "./NPCThumbCard.module.scss"
 import { Typography } from "../Typography/Typography";
-import STICK from "../../images/stick1.png";
+import STICK from "@images/stick1.png";
 import { useDeleteNPCButton } from "../../service/NPCService";
 import CreateNPCModal from "../Modal/CreateNPCModal/CreateNPCModal";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";

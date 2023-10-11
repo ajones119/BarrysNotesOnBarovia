@@ -45,6 +45,9 @@
       ],
       "@hooks/*": [
         "hooks/*"
+      ],
+      "@images/*": [
+        "images/*"
       ]
     }
   },

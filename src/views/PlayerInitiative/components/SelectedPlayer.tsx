@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import css from "../PlayerInitiative.module.scss"
 import { Typography } from "@components/Typography/Typography";
 import { Character } from "@model/Character";
-import STICK from "../../../images/stick1.png"
+import STICK from "@images/stick1.png"
 import { TextInput } from "@components/TextInput/TextInput";
 import { Button } from "@components/Button/Button";
 import { Combat } from "@model/Combat";

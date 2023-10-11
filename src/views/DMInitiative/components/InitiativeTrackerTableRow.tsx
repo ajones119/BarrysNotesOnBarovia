@@ -10,7 +10,7 @@ import { Button } from "@components/Button/Button";
 import { CombatCharacter } from "@model/CombatCharacter";
 import ColorPicker from "@components/ColorPicker/ColorPicker";
 import { Character } from "@model/Character";
-import BACKUP from "../../../images/stick1.png"
+import BACKUP from "@images/stick1.png"
 import ShowSelector from "./ShowSelector";
 import ConditionSelect from "@components/ConditionsSelect/ConditionsSelect";
 
