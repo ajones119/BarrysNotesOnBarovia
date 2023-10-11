@@ -2,10 +2,10 @@ import React, {useState} from 'react';
 import css from "../SingleCampaign.module.scss"
 import { useParams } from 'react-router-dom';
 import { Grid } from "@mui/material";
-import { Character } from '../../../../model/Character';
+import { Character } from '@model/Character';
 import { CharacterThumbCard } from '../../../../components/CharacterThumbCard/CharatcerThumbCard';
 import { Spacer } from '../../../../components/Spacer/Spacer';
-import { NPC } from '../../../../model/NPC';
+import { NPC } from '@model/NPC';
 import NPCThumbCard from '../../../../components/NPCThumbCard/NPCThumbCard';
 import { Typography } from '../../../../components/Typography/Typography';
 import { Button } from '../../../../components/Button/Button';

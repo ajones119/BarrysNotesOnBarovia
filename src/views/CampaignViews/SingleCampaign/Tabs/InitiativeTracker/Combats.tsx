@@ -1,11 +1,11 @@
 import React, { useState } from "react";
 import css from "./InitiativeTracker.module.scss"
 import { TableCell, TableContainer, TableHead, TableRow } from "@mui/material";
-import { Character } from "../../../../../model/Character";
+import { Character } from "@model/Character";
 import { Button } from "../../../../../components/Button/Button";
-import { Campaign } from "../../../../../model/Campaign";
+import { Campaign } from "@model/Campaign";
 import CreateCombatModal from "../../../../../components/Modal/CreateCombatModal/CreateCombatModal";
-import { CombatCharacter } from "../../../../../model/CombatCharacter";
+import { CombatCharacter } from "@model/CombatCharacter";
 import { useCampaignCombats } from "../../../../../service/CombatService";
 import { Typography } from "../../../../../components/Typography/Typography";
 import { CombatEntryRow } from "./CombatEntryRow";

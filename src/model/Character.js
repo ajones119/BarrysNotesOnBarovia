@@ -1,4 +1,3 @@
-
 export class Character {
   constructor(
     docId,

@@ -7,7 +7,7 @@ import css from "./DMInitiative.module.scss"
 import { TableCell, TableContainer, TableHead, TableRow } from "@mui/material";
 import { Typography } from "../../components/Typography/Typography";
 import InitiativeTrackerTableRow from "./components/InitiativeTrackerTableRow";
-import { Combat } from "../../model/Combat";
+import { Combat } from "@model/Combat";
 import { useCampaign, useUpdateCampaign } from "../../service/CampaignService";
 import { Button } from "../../components/Button/Button";
 import { useCampaignCharacters } from "../../service/CharacterService";

@@ -2,7 +2,7 @@ import React from 'react';
 import { Select, MenuItem } from "@mui/material"
 import css from "./CharacterPicker.module.scss"
 import { Typography } from '../Typography/Typography';
-import { Character } from '../../model/Character';
+import { Character } from '@model/Character';
 
 declare interface CharacterPickerProps {
     onChange: (value: any) => void,

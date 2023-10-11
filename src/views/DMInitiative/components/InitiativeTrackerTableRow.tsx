@@ -7,9 +7,9 @@ import { useFloating, useClick, useInteractions, offset, flip, shift, autoUpdate
 import { TextInput } from "../../../components/TextInput/TextInput";
 import { Typography } from "../../../components/Typography/Typography";
 import { Button } from "../../../components/Button/Button";
-import { CombatCharacter } from "../../../model/CombatCharacter";
+import { CombatCharacter } from "@model/CombatCharacter";
 import ColorPicker from "../../../components/ColorPicker/ColorPicker";
-import { Character } from "../../../model/Character";
+import { Character } from "@model/Character";
 import BACKUP from "../../../images/stick1.png"
 import ShowSelector from "./ShowSelector";
 import ConditionSelect from "../../../components/ConditionsSelect/ConditionsSelect";

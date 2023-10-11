@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { collection, doc, query } from "firebase/firestore";
 import { firestore } from "./firebase";
 import { useFirestoreCollectionMutation, useFirestoreDocument, useFirestoreDocumentMutation, useFirestoreQuery } from "@react-query-firebase/firestore";
-import { Campaign } from "../model/Campaign";
+import { Campaign } from "@model/Campaign";
 import { ButtonStatuses, LoadingButton } from "../components/Button/LoadingButton";
 
 export function useCampaigns() {

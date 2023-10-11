@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import css from "./CampaignThumbCard.module.scss"
 import STICK from "../../images/homeBackground.jpg"
 import { Typography } from '../Typography/Typography';
-import { Campaign } from '../../model/Campaign';
+import { Campaign } from '@model/Campaign';
 import { useNavigate } from 'react-router-dom';
 import {animated, useSpring, config} from "@react-spring/web"
 

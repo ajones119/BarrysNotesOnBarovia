@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import css from "../SingleCampaign.module.scss"
 import { useParams } from 'react-router-dom';
-import { Note } from '../../../../model/Note';
-import { Character } from '../../../../model/Character';
+import { Note } from '@model/Note';
+import { Character } from '@model/Character';
 import { Grid, ToggleButton, ToggleButtonGroup } from "@mui/material"
 import NotesList from '../../../../components/NotesList/NotesList';
 import { Typography } from '../../../../components/Typography/Typography';

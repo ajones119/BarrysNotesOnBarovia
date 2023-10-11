@@ -3,9 +3,9 @@ import { Modal } from '../Modal';
 import { Grid } from '@mui/material';
 import css from "./CreateNoteModal.module.scss"
 import { useAddNoteButton } from '../../../service/NotesService';
-import { Note, validateNote } from '../../../model/Note';
+import { Note, validateNote } from '@model/Note';
 import CharacterPicker from '../../CharacterPicker/CharacterPicker';
-import { Character } from '../../../model/Character';
+import { Character } from '@model/Character';
 import TextEditor from '../../TextEditor';
 
 declare interface CreateNPCModalProps {

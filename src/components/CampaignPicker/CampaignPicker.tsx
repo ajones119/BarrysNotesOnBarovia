@@ -1,7 +1,7 @@
 import React from 'react';
 import { Select, MenuItem } from "@mui/material"
 import css from "./CampaignPicker.module.scss"
-import { Campaign } from '../../model/Campaign';
+import { Campaign } from '@model/Campaign';
 import { Typography } from '../Typography/Typography';
 import { useCampaigns } from '../../service/CampaignService';
 

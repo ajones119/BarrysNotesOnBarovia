@@ -3,7 +3,7 @@ import { collection, doc, query, where } from "firebase/firestore";
 import { firestore } from "./firebase";
 import { useFirestoreCollectionMutation, useFirestoreDocumentDeletion, useFirestoreQuery } from "@react-query-firebase/firestore";
 import { ButtonStatuses, LoadingButton } from "../components/Button/LoadingButton"
-import { Note } from '../model/Note';
+import { Note } from '@model/Note';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTrash } from '@fortawesome/free-solid-svg-icons';
 

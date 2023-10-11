@@ -2,11 +2,11 @@ import React, {useState} from 'react';
 import { Modal } from '../Modal';
 import { Grid, List, ListItem } from '@mui/material';
 import css from "./ShowNPCModal.module.scss"
-import { validateCharacter } from '../../../model/Character';
-import { NPC } from '../../../model/NPC';
+import { validateCharacter } from '@model/Character';
+import { NPC } from '@model/NPC';
 import useDeepCompareEffect from 'use-deep-compare-effect';
 import { Typography } from '../../Typography/Typography';
-import { CharacterAction, SkillProficiency } from '../../../model/BaseCharacter';
+import { CharacterAction, SkillProficiency } from '@model/BaseCharacter';
 
 declare interface ShowNPCModalProps {
     isOpen: boolean;

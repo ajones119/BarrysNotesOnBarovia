@@ -3,7 +3,7 @@ import CharacterPicker from "../../components/CharacterPicker/CharacterPicker";
 import { useCampaignCharacters } from "../../service/CharacterService";
 import { useParams } from "react-router-dom";
 import css from "./PlayerInitiative.module.scss"
-import { Character } from "../../model/Character";
+import { Character } from "@model/Character";
 import { useCampaign } from "../../service/CampaignService";
 import { Typography } from "../../components/Typography/Typography";
 import { useCombat, useUpdateInitiative } from "../../service/CombatService";

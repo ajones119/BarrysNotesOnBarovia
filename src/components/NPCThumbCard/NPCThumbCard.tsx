@@ -1,5 +1,5 @@
 import React, {useState} from "react";
-import { NPC } from "../../model/NPC";
+import { NPC } from "@model/NPC";
 import css from "./NPCThumbCard.module.scss"
 import { Typography } from "../Typography/Typography";
 import STICK from "../../images/stick1.png";

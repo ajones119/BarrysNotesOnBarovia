@@ -4,8 +4,8 @@ import { Grid } from '@mui/material';
 import { TextInput } from '../../TextInput/TextInput';
 import TextArea from '../../TextArea/TextArea';
 import css from "./CreateNPCModal.module.scss"
-import { validateCharacter } from '../../../model/Character';
-import { NPC } from '../../../model/NPC';
+import { validateCharacter } from '@model/Character';
+import { NPC } from '@model/NPC';
 import { useAddNPCButton, useUpdateNPCButton } from '../../../service/NPCService';
 import useDeepCompareEffect from 'use-deep-compare-effect';
 import { Button } from '../../Button/Button';

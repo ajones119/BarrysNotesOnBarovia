@@ -1,7 +1,7 @@
 import React, { useState } from "react";
-import { NPC } from "../../../../../model/NPC";
+import { NPC } from "@model/NPC";
 import { useParams } from "react-router-dom";
-import { CampaignLocation } from "../../../../../model/Location";
+import { CampaignLocation } from "@model/Location";
 import { Button } from "../../../../../components/Button/Button";
 import CreateCampaignLocationModal from "../../../../../components/Modal/CreateCampaignLocationModal/CreateCampaignLocationModal";
 import { TreeView } from "@mui/lab"; 

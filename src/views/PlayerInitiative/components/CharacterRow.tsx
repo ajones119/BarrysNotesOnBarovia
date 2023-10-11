@@ -1,5 +1,5 @@
 import React from "react";
-import { CombatCharacter } from "../../../model/CombatCharacter";
+import { CombatCharacter } from "@model/CombatCharacter";
 import { Avatar, LinearProgress, Tooltip, TooltipProps, styled, tooltipClasses } from "@mui/material";
 import css from "../PlayerInitiative.module.scss";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";

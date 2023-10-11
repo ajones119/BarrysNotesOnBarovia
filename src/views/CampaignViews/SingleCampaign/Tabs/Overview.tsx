@@ -1,6 +1,6 @@
 import React from 'react';
 import css from "../SingleCampaign.module.scss"
-import { Campaign } from '../../../../model/Campaign';
+import { Campaign } from '@model/Campaign';
 import { Grid } from "@mui/material";
 import { Typography } from '../../../../components/Typography/Typography';
 import BACKUP from "../../../../images/homeBackground.jpg";

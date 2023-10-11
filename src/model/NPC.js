@@ -1,4 +1,4 @@
-import { BASE_ABILITY_SCORES } from "./BaseCharacter";
+import { BASE_ABILITY_SCORES } from "@model/BaseCharacter";
 
 export class NPC {
   constructor(docId, npc) {

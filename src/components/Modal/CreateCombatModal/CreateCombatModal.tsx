@@ -2,7 +2,7 @@ import React, {useState} from 'react';
 import { Modal } from '../Modal';
 import { Grid } from '@mui/material';
 import css from "./CreateCombatModal.module.scss"
-import { Combat, validateCombat } from '../../../model/Combat';
+import { Combat, validateCombat } from '@model/Combat';
 import { useAddCombatButton } from '../../../service/CombatService';
 import { TextInput } from '../../TextInput/TextInput';
 import useDeepCompareEffect from 'use-deep-compare-effect';

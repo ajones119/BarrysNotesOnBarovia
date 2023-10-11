@@ -1,13 +1,13 @@
 import React, { useState } from 'react';
-import { CampaignLocation } from '../../../../../model/Location';
+import { CampaignLocation } from '@model/Location';
 import { TreeItem } from "@mui/lab"; 
 import { Grid } from "@mui/material";
 import CreateCampaignLocationModal from '../../../../../components/Modal/CreateCampaignLocationModal/CreateCampaignLocationModal';
 import { Button } from '../../../../../components/Button/Button';
 import { Typography } from '../../../../../components/Typography/Typography';
-import { Item } from '../../../../../model/Item';
+import { Item } from '@model/Item';
 import BACKUP from "../../../../../images/hauntedCastleBackground.jpg"
-import { NPC } from '../../../../../model/NPC';
+import { NPC } from '@model/NPC';
 import NPCPicker from '../../../../../components/NPCPicker/NPCPicker';
 import { SetCampaignLocation, useDeleteCampaignLocationButton } from '../../../../../service/CampaignLocationService';
 import NPCThumbCard from '../../../../../components/NPCThumbCard/NPCThumbCard';

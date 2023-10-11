@@ -1,6 +1,6 @@
 import { TableCell, TableContainer, TableHead, TableRow } from "@mui/material";
 import { Typography } from "../Typography/Typography";
-import { SkillProficiency } from "../../model/BaseCharacter";
+import { SkillProficiency } from "@model/BaseCharacter";
 import { TextInput } from "../TextInput/TextInput";
 import { Button } from "../Button/Button";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";

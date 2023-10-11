@@ -2,7 +2,7 @@ import React from 'react';
 import { Select, MenuItem } from "@mui/material"
 import css from "./NPCPicker.module.scss"
 import { Typography } from '../Typography/Typography';
-import { NPC } from '../../model/NPC';
+import { NPC } from '@model/NPC';
 
 declare interface NPCPickerProps {
     onChange: (value: any) => void,
