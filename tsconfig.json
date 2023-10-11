@@ -42,6 +42,9 @@
       ],
       "@components/*": [
         "components/*"
+      ],
+      "@hooks/*": [
+        "hooks/*"
       ]
     }
   },

@@ -1,7 +1,7 @@
 import React from "react";
 import { useCombat, useUpdateInitiative } from "../../service/CombatService";
 import { useParams } from "react-router-dom";
-import { useList } from "../../hooks/useList";
+import { useList } from "@hooks/useList";
 import useDeepCompareEffect from "use-deep-compare-effect";
 import css from "./DMInitiative.module.scss"
 import { TableCell, TableContainer, TableHead, TableRow } from "@mui/material";
