@@ -2,17 +2,10 @@
 
 .NPCThumbCard {
     position: relative;
-    margin: 0 auto;
-    border-width: 0px;
-    border-color: $light;
     border-radius: 50px;
-    border-style: solid;
-    color: $success;
-    overflow: hidden;
     max-width: 500px;
     max-height: 300px;
     display: flex;
-    align-items: center;
     justify-content: center;
 
     .cardImage {
@@ -29,6 +22,7 @@
         will-change: transform, opacity;
 
         &.front {
+            position: relative;
             width: 100%;
             height: 100%;
             display: flex;
@@ -38,6 +32,7 @@
             row-gap: 16px;
             flex-direction: column;
             text-align: center;
+            z-index: 0;
 
             .frontName {
                 opacity: 0.8;
@@ -51,9 +46,11 @@
         &.back {
             position: absolute;
             top: 0;
+            left: 0;
             background-color: $dark;
-            width: 100%;
-            height: 100%;
+            border-radius: 50px;
+            min-width: 100%;
+            min-height: 100%;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -61,6 +58,7 @@
             row-gap: 16px;
             flex-direction: column;
             text-align: center;
+            z-index: 2;
 
            .nameRow {
                 display: flex;

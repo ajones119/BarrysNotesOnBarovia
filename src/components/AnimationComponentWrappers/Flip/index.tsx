@@ -12,10 +12,12 @@ type FlipProps = {
         friction?: number,
         mass?: number,
     }
-    className?: string;
+    cardClassName?: string;
+    frontClassName?: string;
+    backClassName?: string
 }
 
-const Flip = ({ front, back, flipOnHover = false, flipOnClick = false, perspective = 0, springConfig = config.default, className = "" }: FlipProps) => {
+const Flip = ({ front, back, flipOnHover = false, flipOnClick = false, perspective = 0, springConfig = config.default, cardClassName, frontClassName, backClassName }: FlipProps) => {
     const [isActive, setIsActive] = useState(false);
     const [isHovered, setIsHovered] = useState(false)
 
@@ -27,12 +29,11 @@ const Flip = ({ front, back, flipOnHover = false, flipOnClick = false, perspecti
 
     return (
         <div
-            className={className}
             onMouseEnter={() => flipOnHover && setIsHovered(true)}
             onMouseLeave={() => flipOnHover && setIsHovered(false)}
             onClick={() => flipOnClick && setIsActive(!isActive)}
         >
-            <animated.div style={{ opacity: opacity.to(o => 1 - o), transform }}>
+            <animated.div style={{ opacity: opacity.to(o => 1 - o), transform }} className={`${cardClassName} ${frontClassName}`}>
                 {front}
             </animated.div>
             <animated.div
@@ -41,6 +42,7 @@ const Flip = ({ front, back, flipOnHover = false, flipOnClick = false, perspecti
                     transform,
                     rotateY: '180deg',
                     }}
+                className={`${cardClassName} ${backClassName}`}
                 >
                     {back}
             </animated.div>

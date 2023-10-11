@@ -22,10 +22,10 @@ const NPCThumbCard = ({ npc }: NPCThumbCardProps) => {
     const deleteButton = useDeleteNPCButton(npc, () => {});
 
     return (
-        <div key={`npc-thumb-card-${npc.docId}`}>
+        <div key={`npc-thumb-card-${npc.docId}`} className={`${css.NPCThumbCard}`}>
            <Flip
                 front={
-                    <div className={`${css.thumbCard} ${css.front}`}>
+                    <div>
                         <img
                             className={css.cardImage}
                             src={npc.characterImageURL}
@@ -39,7 +39,7 @@ const NPCThumbCard = ({ npc }: NPCThumbCardProps) => {
                     </div>
                 }
                 back={
-                    <div className={`${css.thumbCard} ${css.back}`}>
+                    <div>
                         <div className={css.nameRow}>
                             {<Button color="secondary" onClick={() => setIsEditModalOpen(!isEditModalOpen)}><FontAwesomeIcon icon={faPenFancy} /></Button>}
                             <Typography color="primary" weight="bold" size="large">{npc.name}</Typography>
@@ -56,7 +56,9 @@ const NPCThumbCard = ({ npc }: NPCThumbCardProps) => {
                 springConfig={{ mass: 15, tension: 500, friction: 80 }}
                 flipOnClick
                 flipOnHover
-                className={`${css.NPCThumbCard}`}
+                cardClassName={css.thumbCard}
+                frontClassName={css.front}
+                backClassName={css.back}
            />
             <CreateNPCModal
                 isOpen={isEditModalOpen}
