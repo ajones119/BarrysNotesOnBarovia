@@ -39,7 +39,7 @@ const CharacterRow = ({
 
     const rotate = useSpring({ 
         loop: true, 
-        from: { rotateZ: -360 }, 
+        from: { rotateZ: -180 }, 
         to: { rotateZ: 0 }, 
         duration: 2000,
         delay: 5000,
