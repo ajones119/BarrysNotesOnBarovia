@@ -1,6 +1,6 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Avatar, TableCell, TableRow } from "@mui/material";
-import React, { useState } from "react"
+import React, { useEffect, useState } from "react"
 import css from "../DMInitiative.module.scss"
 import { faDiceD20, faMinus, faPlus } from "@fortawesome/free-solid-svg-icons";
 import { useFloating, useClick, useInteractions, offset, flip, shift, autoUpdate, useDismiss } from "@floating-ui/react";
@@ -15,8 +15,7 @@ import { Character } from "@model/Character";
 import BACKUP from "@images/stick1.png"
 import ShowSelector from "./ShowSelector";
 import ConditionSelect from "@components/ConditionsSelect/ConditionsSelect";
-import { useQuery } from "@apollo/client";
-import { GET_MONSTERS } from "@services/DndApiService";
+import { useDndApiMonsters } from "@services/DndApiService";
 
 type InitiativeTrackerTableRowProps = {
     item: CombatCharacter;
@@ -40,8 +39,7 @@ const InitiativeTrackerTableRow = ({ active = false, item, onChange, onRemove, t
 
     const click = useClick(context);
     const dismiss = useDismiss(context)
-
-    const { loading, error, data } = useQuery(GET_MONSTERS, { variables: { limit: 500 } });
+    const { monsters } = useDndApiMonsters();
 
     const { getReferenceProps, getFloatingProps } = useInteractions([
         click,
@@ -102,8 +100,25 @@ const InitiativeTrackerTableRow = ({ active = false, item, onChange, onRemove, t
                     ) : (
                         <Autocomplete
                             disablePortal
-                            id="combo-box-demo"
-                            options={data.monsters.map((monster: { name: string }) => monster.name)}
+                            id="monster-dropdown"
+                            options={monsters.map(monster => ({ id: monster.id, label: monster.name }))}
+                            value={monsters.find(monster => monster.name === item.name) ? { id: monsters.find(monster => monster.name === item.name)?.id ?? "", label: monsters.find(monster => monster.name === item.name)?.name ?? "" } : null}
+                            onChange={(_e, newValue: { label: string; id: string } | null) => {
+                                if (!newValue) return;
+                                const selectedMonsterDatum = monsters.find(monster => monster.id === newValue.id);
+                                if (!selectedMonsterDatum) return;
+
+                                onChange(
+                                    {
+                                        ...item,
+                                        name: selectedMonsterDatum.name,
+                                        health: selectedMonsterDatum.hitPoints,
+                                        maxHealth: selectedMonsterDatum.hitPoints,
+                                        armorClass: selectedMonsterDatum.armorClass,
+                                        initiativeBonus: Math.floor((selectedMonsterDatum.dexterity - 10) / 2)
+                                    }
+                                )
+                            }}
                             sx={{ width: 300 }}
                             renderInput={(params) => <TextField {...params} />}
                         />
