@@ -51,6 +51,7 @@ const ResourceDrawer = ({ onAdd }: ResourceDrawerProps) => {
               )
               .map((monster) => (
                 <ListItem
+                  key={monster.id}
                   secondaryAction={
                     <IconButton
                       onClick={() => {
