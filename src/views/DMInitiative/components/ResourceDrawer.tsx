@@ -3,9 +3,9 @@ import Box from "@mui/material/Box";
 import List from "@mui/material/List";
 import ListItem from "@mui/material/ListItem";
 import { Monster, useDndApiMonsters } from "@services/DndApiService";
-import Drawer from "@components/Drawer";
 import { IconButton, ListItemText, TextField } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
+import SanityDrawer from "@components/Drawer/SanityDrawer";
 
 type ResourceDrawerProps = {
   onAdd?: (data: any) => void;
@@ -30,7 +30,7 @@ const ResourceDrawer = ({ onAdd }: ResourceDrawerProps) => {
   };
 
   return (
-    <Drawer>
+    <SanityDrawer>
       <div style={{ padding: "16px" }}>
         <TextField
           id="monster-search"
@@ -69,7 +69,7 @@ const ResourceDrawer = ({ onAdd }: ResourceDrawerProps) => {
           </List>
         </Box>
       </div>
-    </Drawer>
+    </SanityDrawer>
   );
 };
 

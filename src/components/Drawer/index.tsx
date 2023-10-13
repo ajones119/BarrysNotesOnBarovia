@@ -12,16 +12,13 @@ export declare interface DrawerProps {
     side?: "top" | "bottom" | "right" | "left";
 }
 
-const Drawer = ({ onClose = () => { }, side = "left", children }: DrawerProps) => {
+const Drawer = ({ onClose = () => { }, side = "left", children, isOpen }: DrawerProps) => {
 
     const drawerRoot = useRef(document.createElement("div"));
 
     const drawerTransformations = DRAWER_TRANSFORMS[side];
-    const drawerButtonTransformations = DRAWER_BUTTON_TRANSFORMS[side];
 
-    const [isOpen, setIsOpen] = useState<boolean>(false);
-
-    const transitions = useTransition(isOpen, {
+    const transitions = useTransition((isOpen), {
         from: {
             opacity: 0.3,
             ...drawerTransformations.from
@@ -37,8 +34,6 @@ const Drawer = ({ onClose = () => { }, side = "left", children }: DrawerProps) =
         config: config.default
     })
 
-    const buttonStyle = useSpring(drawerButtonTransformations(isOpen));
-
     useEffect(() => {
         document.body.appendChild(drawerRoot.current);
 
@@ -47,7 +42,7 @@ const Drawer = ({ onClose = () => { }, side = "left", children }: DrawerProps) =
         }
     }, [])
 
-    return transitions((style, isOpen) => <>{isOpen && createPortal(
+    return transitions((style, isOpen) => isOpen && createPortal(
         <animated.div>
             <animated.div style={{ ...style, opacity: undefined }} className={`${css.drawer} ${css[side]}`}>
                 {children}
@@ -55,11 +50,7 @@ const Drawer = ({ onClose = () => { }, side = "left", children }: DrawerProps) =
             <animated.div style={{ opacity: style.opacity }} className={css.drawerBackdrop} onClick={onClose} />
         </animated.div>,
         drawerRoot.current
-    )}
-        <animated.div className={`${css.drawerButton} ${css[side]}`} style={buttonStyle}>
-            <IconButton onClick={() => { setIsOpen(!isOpen) }} >{isOpen ? DrawerIconButtons[side].close : DrawerIconButtons[side].open}</IconButton>
-        </animated.div >
-    </>)
+    ))
 }
 
 export default Drawer;
