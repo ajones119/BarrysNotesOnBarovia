@@ -92,7 +92,7 @@ const ResourceDrawer = ({ onAdd }: ResourceDrawerProps) => {
           <AutoSizer>
             {({ height, width }) => (
               <FixedSizeList
-                itemSize={35}
+                itemSize={45}
                 width={width}
                 height={height}
                 itemData={{
