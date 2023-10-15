@@ -6,6 +6,7 @@ import { Monster, useDndApiMonsters } from "@services/DndApiService";
 import { IconButton, ListItemText, TextField } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 import SanityDrawer from "@components/Drawer/SanityDrawer";
+import css from "./ResourceDrawer.module.scss";
 
 type ResourceDrawerProps = {
   onAdd?: (data: any) => void;
@@ -31,7 +32,7 @@ const ResourceDrawer = ({ onAdd }: ResourceDrawerProps) => {
 
   return (
     <SanityDrawer>
-      <div style={{ padding: "16px" }}>
+      <div style={{ padding: "16px" }} className={css.resourceDrawer}>
         <TextField
           id="monster-search"
           variant="outlined"
@@ -41,6 +42,21 @@ const ResourceDrawer = ({ onAdd }: ResourceDrawerProps) => {
             setSearch(event.target.value);
           }}
           value={search}
+          sx={{
+            "& .MuiOutlinedInput-notchedOutline": {
+              borderColor: "#f4d58d",
+            },
+          }}
+          InputProps={{
+            style: {
+              color: "#f4d58d",
+            },
+          }}
+          InputLabelProps={{
+            style: {
+              color: "#dbe9ee",
+            },
+          }}
         />
         <Box>
           <List>
@@ -58,6 +74,7 @@ const ResourceDrawer = ({ onAdd }: ResourceDrawerProps) => {
                         handleMonsterAdd(monster);
                       }}
                       edge="end"
+                      className={css.icon}
                     >
                       <AddIcon />
                     </IconButton>
