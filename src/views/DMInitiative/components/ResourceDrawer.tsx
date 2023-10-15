@@ -1,15 +1,67 @@
 import React, { useState } from "react";
-import Box from "@mui/material/Box";
-import List from "@mui/material/List";
 import ListItem from "@mui/material/ListItem";
 import { Monster, useDndApiMonsters } from "@services/DndApiService";
 import { IconButton, ListItemText, TextField } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 import SanityDrawer from "@components/Drawer/SanityDrawer";
 import css from "./ResourceDrawer.module.scss";
+import { FixedSizeList, ListChildComponentProps } from "react-window";
+import AutoSizer from "react-virtualized-auto-sizer";
+import styled from "@emotion/styled";
 
 type ResourceDrawerProps = {
   onAdd?: (data: any) => void;
+};
+
+const StyledSearch = styled(TextField)({
+  "& label": {
+    color: "#dbe9ee",
+  },
+  "& label.Mui-focused": {
+    color: "#dbe9ee",
+  },
+  "& .MuiOutlinedInput-input": {
+    color: "#dbe9ee",
+  },
+  "& .MuiInput-underline:after": {
+    borderBottomColor: "#f4d58d",
+  },
+  "& .MuiOutlinedInput-root": {
+    "& fieldset": {
+      borderColor: "#f4d58d",
+    },
+    "&:hover fieldset": {
+      borderColor: "#f4d58d",
+    },
+    "&.Mui-focused fieldset": {
+      borderColor: "#f4d58d",
+    },
+  },
+});
+
+const Row = (props: ListChildComponentProps) => {
+  const { monsters, handleMonsterAdd } = props.data;
+  const monster = monsters[props.index];
+
+  return (
+    <ListItem
+      key={monster.id}
+      style={props.style}
+      secondaryAction={
+        <IconButton
+          onClick={() => {
+            handleMonsterAdd(monster);
+          }}
+          edge="end"
+          className={css.icon}
+        >
+          <AddIcon />
+        </IconButton>
+      }
+    >
+      <ListItemText primary={monster.name} />
+    </ListItem>
+  );
 };
 
 const ResourceDrawer = ({ onAdd }: ResourceDrawerProps) => {
@@ -30,10 +82,16 @@ const ResourceDrawer = ({ onAdd }: ResourceDrawerProps) => {
     onAdd?.(monsterItem);
   };
 
+  // TODO (churt): Find a way to memoize this. Due to how the fixed size list works, the search causes a ton of reruns of the memo.
+  const filteredMonsters = monsters.filter(
+    (monster) =>
+      !search || monster.name.toLowerCase().includes(search.toLowerCase()),
+  );
+
   return (
     <SanityDrawer>
-      <div style={{ padding: "16px" }} className={css.resourceDrawer}>
-        <TextField
+      <div className={css.resourceDrawer}>
+        <StyledSearch
           id="monster-search"
           variant="outlined"
           label="Monster Search"
@@ -42,49 +100,25 @@ const ResourceDrawer = ({ onAdd }: ResourceDrawerProps) => {
             setSearch(event.target.value);
           }}
           value={search}
-          sx={{
-            "& .MuiOutlinedInput-notchedOutline": {
-              borderColor: "#f4d58d",
-            },
-          }}
-          InputProps={{
-            style: {
-              color: "#f4d58d",
-            },
-          }}
-          InputLabelProps={{
-            style: {
-              color: "#dbe9ee",
-            },
-          }}
         />
-        <Box>
-          <List>
-            {monsters
-              .filter(
-                (monster) =>
-                  !search || monster.name.toLowerCase().includes(search),
-              )
-              .map((monster) => (
-                <ListItem
-                  key={monster.id}
-                  secondaryAction={
-                    <IconButton
-                      onClick={() => {
-                        handleMonsterAdd(monster);
-                      }}
-                      edge="end"
-                      className={css.icon}
-                    >
-                      <AddIcon />
-                    </IconButton>
-                  }
-                >
-                  <ListItemText primary={monster.name} />
-                </ListItem>
-              ))}
-          </List>
-        </Box>
+        <div className={css.resourceList}>
+          <AutoSizer>
+            {({ height, width }) => (
+              <FixedSizeList
+                itemSize={45}
+                width={width}
+                height={height}
+                itemData={{
+                  monsters: filteredMonsters,
+                  handleMonsterAdd,
+                }}
+                itemCount={filteredMonsters.length}
+              >
+                {Row}
+              </FixedSizeList>
+            )}
+          </AutoSizer>
+        </div>
       </div>
     </SanityDrawer>
   );
