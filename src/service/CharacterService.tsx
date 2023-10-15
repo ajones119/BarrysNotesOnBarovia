@@ -44,7 +44,6 @@ export const useAddCharacterButton = (newCharacter: Character, onClick: () => vo
     const valid = validate();
     if (valid) {
       mutation.mutate({ name, player, characterImageURL, backstory, className, dndBeyondURL, campaignDocId, passivePerception, initiativeBonus, armorClass, maxHealth })
-      console.log("ERROR", mutation.error)
     }
 
     if (!mutation.error && valid){
@@ -76,14 +75,12 @@ export const useUpdateCharacterButton = (newCharacter: Character, onClick: () =>
   const [buttonStatus, setButtonStatus] = useState<ButtonStatuses>(ButtonStatuses.Idle);
 
   const { name = "", player = "", campaignDocId = "", characterImageURL = "", backstory = "", className = "", dndBeyondURL = "", docId, passivePerception = 0, initiativeBonus = 0, armorClass = 0, maxHealth = 0 } = newCharacter;
-  console.log(newCharacter)
 
   const handleClick = () => {
 
     const valid = validate();
     if (valid) {
       mutation.mutate({ docId, name, player, characterImageURL, backstory, className, dndBeyondURL, campaignDocId, passivePerception, initiativeBonus, armorClass, maxHealth })
-      console.log("ERROR", mutation.error)
     }
 
     if (!mutation.error && valid){

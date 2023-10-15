@@ -8,7 +8,7 @@ declare interface TextEditorProps {
     onChange: (value: string) => void;
     value: string;
     placeholder?: string;
-    preview: "edit" | "live" | "preview";
+    preview?: "edit" | "live" | "preview";
     height: number;
 }
 

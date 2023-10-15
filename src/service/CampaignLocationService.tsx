@@ -23,7 +23,6 @@ export const useAddCampaignLocationButton = (newCampaignLocation: CampaignLocati
   
     const handleClick = () => {
         const valid = validate();
-        console.log(valid)
         if (valid) {
         mutation.mutate({ 
             campaignDocId,
@@ -38,7 +37,6 @@ export const useAddCampaignLocationButton = (newCampaignLocation: CampaignLocati
         }
 
         if (!mutation.error){
-            console.log("onClick")
             onClick();
         }
 
@@ -131,7 +129,6 @@ export const useDeleteCampaignLocationButton = (campaignLocation: CampaignLocati
       mutation.mutate();
   
         if (!mutation.error){
-          console.log("onClick")
           onClick();
         }
   

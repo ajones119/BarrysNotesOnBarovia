@@ -61,11 +61,9 @@ export function useCampaignNotes(campaignDocId: string) {
             isPersonal,
             isCampaign,
             isDungeonMaster, })
-        console.log("ERROR", mutation.error)
       }
   
         if (!mutation.error){
-          console.log("onClick")
           onClick();
         }
   
@@ -94,7 +92,6 @@ export const useDeleteNoteButton = (note: Note, onClick = () => {}) => {
     mutation.mutate();
 
       if (!mutation.error){
-        console.log("onClick")
         onClick();
       }
 

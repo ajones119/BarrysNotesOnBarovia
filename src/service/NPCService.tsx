@@ -35,7 +35,6 @@ export const useAddNPCButton = (newNPC: NPC, onClick: () => void, validate: () =
     const valid = validate();
     if (valid) {
       mutation.mutate({ ...newNPC, campaignDocId: campaignId })
-      console.log("ERROR", mutation.error)
     }
 
     if (!mutation.error && valid){
@@ -70,7 +69,6 @@ export const useDeleteNPCButton = (npc: NPC, onClick = () => {}) => {
     mutation.mutate();
 
       if (!mutation.error){
-        console.log("onClick")
         onClick();
       }
 
@@ -101,7 +99,6 @@ export const useUpdateNPCButton = (newNPC: NPC, onClick: () => void, validate: (
     const valid = validate();
     if (valid) {
       mutation.mutate({ ...newNPC })
-      console.log("ERROR", mutation.error)
     }
 
     if (!mutation.error && valid){

@@ -1,0 +1,83 @@
+@import "src/sass_utils";
+
+.baseCharacterThumbCard {
+    position: relative;
+    border-radius: 50px;
+    max-width: 500px;
+    max-height: 300px;
+    display: flex;
+    justify-content: center;
+
+    .cardImage {
+        border-radius: 50px;
+        max-width: 100%;
+        max-height: 300px;
+    }
+
+    .thumbCard {
+        position: relative;
+        max-width: 500px;
+        max-height: 300px;
+        cursor: pointer;
+        will-change: transform, opacity;
+
+        &.front {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 8px;
+            row-gap: 16px;
+            flex-direction: column;
+            text-align: center;
+            z-index: 0;
+
+            .frontName {
+                opacity: 0.8;
+                background-color: $dark;
+                width: 100%;
+                position: absolute;
+                bottom: 24px;
+            }
+        }
+
+        &.back {
+            position: absolute;
+            top: 0;
+            left: 0;
+            background-color: $dark;
+            border-radius: 50px;
+            min-width: 100%;
+            min-height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 8px;
+            row-gap: 16px;
+            flex-direction: column;
+            text-align: center;
+            z-index: 2;
+
+           .nameRow {
+                display: flex;
+                column-gap: 8px;
+                width: 100%;
+                justify-content: center;
+           }
+
+           .lowerButtons {
+            display: flex;
+            column-gap: 8px;
+            justify-content: center;
+            align-items: center;
+           }
+
+           .moreButtonInner {
+            padding: 8px;
+           }
+        }
+    }
+}
+

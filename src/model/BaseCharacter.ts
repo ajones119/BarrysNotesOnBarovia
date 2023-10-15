@@ -5,23 +5,54 @@ export type AbilityScores = {
     intelligence: number,
     wisdom: number,
     charisma: number
-}
+};
+
+export type SavingThrow = "Strength" | "Dexterity" | "Constitution" | "Intelligence" | "Wisdom" | "Charisma";
 
 export const BASE_ABILITY_SCORES = {
-    strength: 0,
-    dexterity: 0,
-    constitution: 0,
-    intelligence: 0,
-    wisdom: 0,
-    charisma: 0
-}
+    strength: 10,
+    dexterity: 10,
+    constitution: 10,
+    intelligence: 10,
+    wisdom: 10,
+    charisma: 10
+};
 
 export type SkillProficiency = {
     name: string,
     bonus: number,
-}
+};
 
 export type CharacterAction = {
     name: string,
     description: string
-}
+};
+
+export type CharacterSizes = "Tiny" | "Small" | "Medium" | "Large" | "Huge" | "Gargantuan";
+
+export type CharacterType = "Aberration" | "Animal" | "Beast" | "Construct" | "Dragon" | "Elemental" | "Fey" | "Giant" | "Humanoid" | "Magical Beast" | "Monstrosity" | "Ooze" | "Plant" | "Undead" | "Unknown"
+
+export type BaseCharacter = {
+    docId?: string;
+    campaignDocId?: string;
+    name: string;
+    description?: string;
+    backstory?: string;
+    size?: CharacterSizes;
+    type?: CharacterType;
+    characterImageURL?: string;
+    abilityScores: AbilityScores;
+    armorClass?: number;
+    savingThrowProficiencies?: SavingThrow[];
+    averageHitPoints?: number;
+    passivePerception?: number;
+    skillProficiencies?: string[];
+    proficiencyBonus?: number;
+    speed?: number;
+    actions?: string;
+    bonusActions?: string;
+    reactions?: string;
+    lairActions?: string;
+    legendaryActions?: string;
+    otherActions?: string;
+};

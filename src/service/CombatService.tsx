@@ -77,11 +77,9 @@ export const useAddCombatButton = (newCombat: Combat, onClick: () => void, valid
             combatCharacterArray,
             currentTurnIndex,
         })
-        console.log("ERROR", mutation.error)
       }
   
         if (!mutation.error){
-          console.log("onClick")
           onClick();
         }
   
@@ -125,7 +123,6 @@ export const useUpdateInitiative = (combat: Combat) => {
       mutation.mutate();
   
         if (!mutation.error){
-          console.log("onClick")
           onClick();
         }
   
