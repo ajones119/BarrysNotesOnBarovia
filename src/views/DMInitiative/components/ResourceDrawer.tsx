@@ -55,6 +55,7 @@ const ResourceDrawer = ({ onAdd }: ResourceDrawerProps) => {
     onAdd?.(monsterItem);
   };
 
+  // TODO (churt): Find a way to memoize this. Due to how the fixed size list works, the search causes a ton of reruns of the memo.
   const filteredMonsters = monsters.filter(
     (monster) => !search || monster.name.toLowerCase().includes(search),
   );
