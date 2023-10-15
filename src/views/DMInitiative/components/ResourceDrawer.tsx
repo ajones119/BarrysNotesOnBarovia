@@ -1,15 +1,40 @@
 import React, { useState } from "react";
-import Box from "@mui/material/Box";
-import List from "@mui/material/List";
 import ListItem from "@mui/material/ListItem";
 import { Monster, useDndApiMonsters } from "@services/DndApiService";
 import { IconButton, ListItemText, TextField } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 import SanityDrawer from "@components/Drawer/SanityDrawer";
 import css from "./ResourceDrawer.module.scss";
+import { FixedSizeList, ListChildComponentProps } from "react-window";
+import AutoSizer from "react-virtualized-auto-sizer";
 
 type ResourceDrawerProps = {
   onAdd?: (data: any) => void;
+};
+
+const Row = (props: ListChildComponentProps) => {
+  const { monsters, handleMonsterAdd } = props.data;
+  const monster = monsters[props.index];
+
+  return (
+    <ListItem
+      key={monster.id}
+      style={props.style}
+      secondaryAction={
+        <IconButton
+          onClick={() => {
+            handleMonsterAdd(monster);
+          }}
+          edge="end"
+          className={css.icon}
+        >
+          <AddIcon />
+        </IconButton>
+      }
+    >
+      <ListItemText primary={monster.name} />
+    </ListItem>
+  );
 };
 
 const ResourceDrawer = ({ onAdd }: ResourceDrawerProps) => {
@@ -30,9 +55,13 @@ const ResourceDrawer = ({ onAdd }: ResourceDrawerProps) => {
     onAdd?.(monsterItem);
   };
 
+  const filteredMonsters = monsters.filter(
+    (monster) => !search || monster.name.toLowerCase().includes(search),
+  );
+
   return (
     <SanityDrawer>
-      <div style={{ padding: "16px" }} className={css.resourceDrawer}>
+      <div className={css.resourceDrawer}>
         <TextField
           id="monster-search"
           variant="outlined"
@@ -58,33 +87,24 @@ const ResourceDrawer = ({ onAdd }: ResourceDrawerProps) => {
             },
           }}
         />
-        <Box>
-          <List>
-            {monsters
-              .filter(
-                (monster) =>
-                  !search || monster.name.toLowerCase().includes(search),
-              )
-              .map((monster) => (
-                <ListItem
-                  key={monster.id}
-                  secondaryAction={
-                    <IconButton
-                      onClick={() => {
-                        handleMonsterAdd(monster);
-                      }}
-                      edge="end"
-                      className={css.icon}
-                    >
-                      <AddIcon />
-                    </IconButton>
-                  }
-                >
-                  <ListItemText primary={monster.name} />
-                </ListItem>
-              ))}
-          </List>
-        </Box>
+        <div className={css.resourceList}>
+          <AutoSizer>
+            {({ height, width }) => (
+              <FixedSizeList
+                itemSize={35}
+                width={width}
+                height={height}
+                itemData={{
+                  monsters: filteredMonsters,
+                  handleMonsterAdd,
+                }}
+                itemCount={filteredMonsters.length}
+              >
+                {Row}
+              </FixedSizeList>
+            )}
+          </AutoSizer>
+        </div>
       </div>
     </SanityDrawer>
   );

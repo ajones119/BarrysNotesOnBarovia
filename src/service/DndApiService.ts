@@ -41,13 +41,15 @@ export const useDndApiMonsters = (): {
 
   return {
     monsters:
-      data?.monsters.map((monster: GQLMonsterResponse) => ({
-        id: monster.index,
-        armorClass: monster.armor_class[0].value,
-        hitPoints: monster.hit_points,
-        name: monster.name,
-        dexterity: monster.dexterity,
-      })) ?? [],
+      data?.monsters
+        .map((monster: GQLMonsterResponse) => ({
+          id: monster.index,
+          armorClass: monster.armor_class[0].value,
+          hitPoints: monster.hit_points,
+          name: monster.name,
+          dexterity: monster.dexterity,
+        }))
+        .sort((a: Monster, b: Monster) => a.name.localeCompare(b.name)) ?? [],
     isLoading: loading,
   };
 };
