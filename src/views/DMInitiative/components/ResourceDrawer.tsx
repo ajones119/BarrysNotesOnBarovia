@@ -7,10 +7,34 @@ import SanityDrawer from "@components/Drawer/SanityDrawer";
 import css from "./ResourceDrawer.module.scss";
 import { FixedSizeList, ListChildComponentProps } from "react-window";
 import AutoSizer from "react-virtualized-auto-sizer";
+import styled from "@emotion/styled";
 
 type ResourceDrawerProps = {
   onAdd?: (data: any) => void;
 };
+
+const StyledSearch = styled(TextField)({
+  "& label": {
+    color: "#dbe9ee",
+  },
+  "& label.Mui-focused": {
+    color: "#dbe9ee",
+  },
+  "& .MuiInput-underline:after": {
+    borderBottomColor: "#f4d58d",
+  },
+  "& .MuiOutlinedInput-root": {
+    "& fieldset": {
+      borderColor: "#f4d58d",
+    },
+    "&:hover fieldset": {
+      borderColor: "#f4d58d",
+    },
+    "&.Mui-focused fieldset": {
+      borderColor: "#f4d58d",
+    },
+  },
+});
 
 const Row = (props: ListChildComponentProps) => {
   const { monsters, handleMonsterAdd } = props.data;
@@ -63,7 +87,7 @@ const ResourceDrawer = ({ onAdd }: ResourceDrawerProps) => {
   return (
     <SanityDrawer>
       <div className={css.resourceDrawer}>
-        <TextField
+        <StyledSearch
           id="monster-search"
           variant="outlined"
           label="Monster Search"
@@ -72,17 +96,7 @@ const ResourceDrawer = ({ onAdd }: ResourceDrawerProps) => {
             setSearch(event.target.value);
           }}
           value={search}
-          sx={{
-            "& .MuiOutlinedInput-notchedOutline": {
-              borderColor: "#f4d58d",
-            },
-          }}
           InputProps={{
-            style: {
-              color: "#f4d58d",
-            },
-          }}
-          InputLabelProps={{
             style: {
               color: "#dbe9ee",
             },
