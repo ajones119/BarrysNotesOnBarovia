@@ -20,6 +20,9 @@ const StyledSearch = styled(TextField)({
   "& label.Mui-focused": {
     color: "#dbe9ee",
   },
+  "& .MuiOutlinedInput-input": {
+    color: "#dbe9ee",
+  },
   "& .MuiInput-underline:after": {
     borderBottomColor: "#f4d58d",
   },
@@ -96,11 +99,6 @@ const ResourceDrawer = ({ onAdd }: ResourceDrawerProps) => {
             setSearch(event.target.value);
           }}
           value={search}
-          InputProps={{
-            style: {
-              color: "#dbe9ee",
-            },
-          }}
         />
         <div className={css.resourceList}>
           <AutoSizer>
