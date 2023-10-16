@@ -45,7 +45,7 @@ const BaseCharacterThumbCard = ({ baseCharacter, onClickEdit, onClickDelete, onC
                             <Typography color="primary" weight="bold" size="large">{baseCharacter.name}</Typography>
                             {onClickDelete && <LoadingButton isLoading={isDeleting} onClick={onClickDelete}><FontAwesomeIcon icon={faTrash}/></LoadingButton>}
                         </div>
-                        <Typography color="light">{baseCharacter.backstory}</Typography>
+                        <Typography color="light">{baseCharacter.backstory || baseCharacter.description}</Typography>
                         <div className={css.lowerButtons}>
                             { onClickMore &&  <Button color="secondary" onClick={() => setIsDetailsModalOpen(!isDetailsModalOpen)}><div className={css.moreButtonInner}><FontAwesomeIcon icon={faMagnifyingGlass} /> {" "} More</div></Button> }
                             {baseCharacter.characterImageURL && <CopyButton animatedHover={false} color="dark" copiedText={baseCharacter.characterImageURL}>Copy Image</CopyButton>}
