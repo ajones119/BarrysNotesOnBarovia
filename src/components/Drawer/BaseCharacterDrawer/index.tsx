@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import Drawer, { DrawerProps } from "..";
 import { BASE_ABILITY_SCORES, BaseCharacter, CharacterSizes, CharacterType, SavingThrow } from "@model/BaseCharacter";
-import css from "./CreateOrEditBaseCharacterDrawer.module.scss"
+import css from "./BaseCharacterDrawer.module.scss"
 import { Grid } from "@mui/material";
 import { TextInput } from "@components/TextInput/TextInput";
 import SizeSelect from "@components/Selects/SizeSelect";
@@ -14,15 +14,16 @@ import { Button } from "@components/Button/Button";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faXmarkCircle } from "@fortawesome/free-solid-svg-icons";
 import { LoadingButton } from "@components/Button/LoadingButton";
+import { calculateAbilityScoreModifier } from "./utils";
 
-declare interface CreateOrEditBaseCharacterProps extends DrawerProps {
+declare interface BaseCharacterProps extends DrawerProps {
     editCharacter?: BaseCharacter | null;
     edit: (character: BaseCharacter) => void;
     create: (character: BaseCharacter) => void;
     isLoading?: boolean
 }
 
-const CreateOrEditBaseCharacterDrawer = ({isOpen, onClose = () => {}, editCharacter, edit, create, isLoading = false}: CreateOrEditBaseCharacterProps) => {
+const BaseCharacterDrawer = ({isOpen, onClose = () => {}, editCharacter, edit, create, isLoading = false}: BaseCharacterProps) => {
     const [character, setCharacter] = useState<BaseCharacter>({docId: "", name: "", abilityScores: BASE_ABILITY_SCORES});
 
     useEffect(() => {
@@ -79,37 +80,37 @@ const CreateOrEditBaseCharacterDrawer = ({isOpen, onClose = () => {}, editCharac
                         <TextInput value={character?.abilityScores?.strength} onChange={(value) => {
                             const scores = {...character?.abilityScores, strength: Number(value)}
                             setCharacter({...character, abilityScores: scores})
-                        }} placeholder={`Strength (${Math.floor((character?.abilityScores?.strength - 10)/2) >= 0 ? "+" : ""}${Math.floor((character?.abilityScores?.strength - 10)/2)})`} number />
+                        }} placeholder={`Strength (${calculateAbilityScoreModifier(character?.abilityScores.strength)})`} number />
                     </Grid>
                     <Grid item xs={4} md={1}>
                         <TextInput value={character?.abilityScores?.dexterity} onChange={(value) => {
                             const scores = {...character?.abilityScores, dexterity: Number(value)}
                             setCharacter({...character, abilityScores: scores})
-                        }} placeholder={`Dexterity (${Math.floor((character?.abilityScores?.dexterity - 10)/2) >= 0 ? "+" : ""}${Math.floor((character?.abilityScores?.dexterity - 10)/2)})`} number />
+                        }} placeholder={`Dexterity (${calculateAbilityScoreModifier(character?.abilityScores.dexterity)})`} number />
                     </Grid>
                     <Grid item xs={4} md={1}>
                         <TextInput value={character?.abilityScores?.constitution} onChange={(value) => {
                             const scores = {...character?.abilityScores, constitution: Number(value)}
                             setCharacter({...character, abilityScores: scores})
-                        }} placeholder={`Constitution (${Math.floor((character?.abilityScores?.constitution - 10)/2) >= 0 ? "+" : ""}${Math.floor((character?.abilityScores?.constitution - 10)/2)})`} number />
+                        }} placeholder={`Constitution ${calculateAbilityScoreModifier(character?.abilityScores.constitution)}`} number />
                     </Grid>
                     <Grid item xs={4} md={1}>
                         <TextInput value={character?.abilityScores?.intelligence} onChange={(value) => {
                             const scores = {...character?.abilityScores, intelligence: Number(value)}
                             setCharacter({...character, abilityScores: scores})
-                        }} placeholder={`Intelligence (${Math.floor((character?.abilityScores?.intelligence - 10)/2) >= 0 ? "+" : ""}${Math.floor((character?.abilityScores?.intelligence - 10)/2)})`} number />
+                        }} placeholder={`Intelligence (${calculateAbilityScoreModifier(character?.abilityScores.intelligence)})`} number />
                     </Grid>
                     <Grid item xs={4} md={1}>
                         <TextInput value={character?.abilityScores?.wisdom} onChange={(value) => {
                             const scores = {...character?.abilityScores, wisdom: Number(value)}
                             setCharacter({...character, abilityScores: scores})
-                        }} placeholder={`Wisdom (${Math.floor((character?.abilityScores?.wisdom - 10)/2) >= 0 ? "+" : ""}${Math.floor((character?.abilityScores?.wisdom - 10)/2)})`} number />
+                        }} placeholder={`Wisdom (${calculateAbilityScoreModifier(character?.abilityScores.wisdom)})`} number />
                     </Grid>
                     <Grid item xs={4} md={1}>
                         <TextInput value={character?.abilityScores?.charisma} onChange={(value) => {
                             const scores = {...character?.abilityScores, charisma: Number(value)}
                             setCharacter({...character, abilityScores: scores})
-                        }} placeholder={`Charisma (${Math.floor((character?.abilityScores?.charisma - 10)/2) >= 0 ? "+" : ""}${Math.floor((character?.abilityScores?.charisma - 10)/2)})`} number />
+                        }} placeholder={`Charisma (${calculateAbilityScoreModifier(character?.abilityScores.charisma)})`} number />
                     </Grid>
 
                     <Grid item xs={12} md={2}>
@@ -157,4 +158,4 @@ const CreateOrEditBaseCharacterDrawer = ({isOpen, onClose = () => {}, editCharac
 
 }
 
-export default CreateOrEditBaseCharacterDrawer;
+export default BaseCharacterDrawer;

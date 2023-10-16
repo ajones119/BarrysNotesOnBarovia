@@ -9,9 +9,9 @@ import { Button } from "@components/Button/Button";
 import { useCustomMonsters } from "@services/CustomMonstersService";
 import { BaseCharacter } from "@model/BaseCharacter";
 import BaseCharacterThumbCard from "@components/BaseCharacterThumbCard/BaseCharacterThumbCard";
-import CreateOrEditMonsterDrawer from "@components/Drawer/CreateOrEditBaseCharacterDrawer";
+import CreateOrEditMonsterDrawer from "@components/Drawer/BaseCharacterDrawer";
 import MonsterCard from "@components/BaseCharacterThumbCard/Cards/MonsterCard";
-import MonsterDrawer from "@components/Drawer/CreateOrEditBaseCharacterDrawer/MonsterDrawer";
+import MonsterDrawer from "@components/Drawer/BaseCharacterDrawer/MonsterDrawer";
 
 const CustomMonsters = () => {
     const [isMonsterDrawerOpen, setIsMonsterDrawerOpen] = useState(false);

@@ -2,11 +2,7 @@ import React from "react";
 import BaseCharacterThumbCard, { BaseCharacterThumbCardProps } from "../BaseCharacterThumbCard";
 import { useDeleteCustomMonster } from "@services/CustomMonstersService";
 
-declare interface MonsterCardProps extends BaseCharacterThumbCardProps {
-
-}
-
-const MonsterCard = ({ baseCharacter, onClickEdit = () => {} }: MonsterCardProps) => {
+const MonsterCard = ({ baseCharacter, onClickEdit = () => {} }: BaseCharacterThumbCardProps) => {
 
     const {mutate: remove, isLoading: isDeleting} = useDeleteCustomMonster(baseCharacter)
 

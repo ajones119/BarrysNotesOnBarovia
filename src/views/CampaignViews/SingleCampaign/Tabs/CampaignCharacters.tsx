@@ -3,7 +3,7 @@ import css from "../SingleCampaign.module.scss"
 import { useParams } from 'react-router-dom';
 import { Grid } from "@mui/material";
 import { Character } from '@model/Character';
-import { CharacterThumbCard } from '@components/CharacterThumbCard/CharatcerThumbCard';
+import { CharacterThumbCard } from '@components/CharacterThumbCard/CharacterThumbCard';
 import { Spacer } from '@components/Spacer/Spacer';
 import { NPC } from '@model/NPC';
 import { Typography } from '@components/Typography/Typography';
@@ -12,7 +12,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlus } from '@fortawesome/free-solid-svg-icons';
 import CreateCharacterModal from '@components/Modal/CreateCharacterModal/CreateCharacterModal';
 import NPCCard from '@components/BaseCharacterThumbCard/Cards/NPCCard';
-import NPCDrawer from '@components/Drawer/CreateOrEditBaseCharacterDrawer/NPCDrawer';
+import NPCDrawer from '@components/Drawer/BaseCharacterDrawer/NPCDrawer';
 import { BaseCharacter } from '@model/BaseCharacter';
 
 declare interface CampaignCharactersProps {
