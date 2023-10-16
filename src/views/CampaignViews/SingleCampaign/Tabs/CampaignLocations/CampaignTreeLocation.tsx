@@ -10,9 +10,9 @@ import BACKUP from "@images/hauntedCastleBackground.jpg"
 import { NPC } from '@model/NPC';
 import NPCPicker from '@components/NPCPicker/NPCPicker';
 import { SetCampaignLocation, useDeleteCampaignLocationButton } from '@services/CampaignLocationService';
-import NPCThumbCard from '@components/NPCThumbCard/NPCThumbCard';
 import css from "../../SingleCampaign.module.scss"
 import TextEditorDisplay from '@components/TextEditor/TextEditDisplay';
+import NPCCard from '@components/BaseCharacterThumbCard/Cards/NPCCard';
 
 declare interface CampaignTreeLocationProps {
     campaignLocation: CampaignLocation,
@@ -76,7 +76,13 @@ const CampaignTreeLocation = ({ campaignLocation, subLocationOptions = [], campa
                             {
                                 campaignLocationsNPCs.map(npc => (
                                     <Grid item md={4} sm={6} xs={12}>
-                                        <NPCThumbCard npc={npc} />
+                                        <NPCCard
+                                            baseCharacter={npc}
+                                            removeOverride={() => {
+                                                const newNPCs = campaignLocation.npcs.filter(docId => docId !== npc.docId)
+                                                saveCampaignLocation({...campaignLocation, npcs: newNPCs} )
+                                            }}
+                                        />
                                     </Grid>
                                 ))
                             }
