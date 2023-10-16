@@ -2,7 +2,7 @@ import React from "react";
 import "./NavBar.css"
 import Barry from "@images/barry-cartoon.png"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faDungeon, faHatWizard } from "@fortawesome/free-solid-svg-icons";
+import { faDungeon, faHatWizard, faSpaghettiMonsterFlying } from "@fortawesome/free-solid-svg-icons";
 import { useNavigate } from "react-router-dom";
 import { Typography } from "../Typography/Typography";
 
@@ -37,6 +37,10 @@ export const NavBar = () => {
         <div className="navbar-link" onClick={() => { navigate("/Characters/"); }}>
           <FontAwesomeIcon icon={faHatWizard} />
           <Typography>Characters</Typography>
+        </div>
+        <div className="navbar-link" onClick={() => { navigate("/Monsters/"); }}>
+          <FontAwesomeIcon icon={faSpaghettiMonsterFlying} />
+          <Typography>Monsters</Typography>
         </div>
       </div>
     </div>

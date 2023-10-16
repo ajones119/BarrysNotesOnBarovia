@@ -127,7 +127,6 @@ const ConditionSelect = ({onChange, selectedValue, width = "200px"}: ConditionSe
         multiline
         value={selectedValue || []}
         onChange={({target: {value = []}}) => {
-            console.log("VALUE", value)
             const chosen = value;
             
             onChange(chosen as any)

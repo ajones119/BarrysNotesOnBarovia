@@ -13,7 +13,6 @@ type CombatEntryRowProps = {
 export const CombatEntryRow = ({combat}: CombatEntryRowProps) => {
     const button = useDeleteCombatButton(combat, () => {})
     const islocalhost = window.location.host === "localhost:3000";
-    console.log(window.location.host)
 
     return (
         <TableRow>

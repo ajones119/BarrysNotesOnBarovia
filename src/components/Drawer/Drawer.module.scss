@@ -53,6 +53,7 @@
   overflow: auto; /* Enable scroll if needed */
   background-color: $dark;
   z-index: 200;
+  overscroll-behavior: none;
 
   &.bottom {
     left: 0;

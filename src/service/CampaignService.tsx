@@ -63,11 +63,9 @@ export const useAddCampaignButton = (newCampaign: Campaign, onClick: () => void,
     const valid = validate();
     if (valid) {
       mutation.mutate({ title, campaignImageURL, dungeonMaster, description })
-      console.log("ERROR", mutation.error)
     }
 
       if (!mutation.error){
-        console.log("onClick")
         onClick();
       }
 

@@ -8,7 +8,7 @@ import IconButton from "@mui/material/IconButton";
 export declare interface DrawerProps {
     isOpen?: boolean;
     onClose?: () => void;
-    children: ReactNode
+    children?: ReactNode
     side?: "top" | "bottom" | "right" | "left";
 }
 

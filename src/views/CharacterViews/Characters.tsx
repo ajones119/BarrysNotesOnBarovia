@@ -2,7 +2,7 @@ import React, {useState } from "react";
 import "../../App.css";
 import css from "./Characters.module.scss"
 
-import { CharacterThumbCard } from "@components/CharacterThumbCard/CharatcerThumbCard";
+import { CharacterThumbCard } from "@components/CharacterThumbCard/CharacterThumbCard";
 import { Grid } from "@mui/material"
 import { Character } from "@model/Character";
 import { useCharacters } from "@services/CharacterService";
