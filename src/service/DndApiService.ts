@@ -1,55 +1,90 @@
-import { gql, useQuery } from "@apollo/client";
+import { useQuery } from "react-query";
 
-export const GET_MONSTERS = gql`
-  query MonstersQuery($limit: Int!) {
-    monsters(limit: $limit) {
-      index
-      name
-      armor_class {
-        value
-      }
-      hit_points
-      dexterity
-    }
-  }
-`;
+export const GET_MONSTERS = `https://api.open5e.com/v1/monsters/`;
 
-type GQLMonsterResponse = {
-  index: string;
+const apiMonsterFields = [
+  "slug",
+  "name",
+  "type",
+  "dexterity",
+  "armor_class",
+  "hit_points",
+];
+
+type ApiMonsterResponse = {
+  slug: string;
   name: string;
+  type: string;
   dexterity: number;
-  armor_class: { value: number }[];
+  armor_class: number;
   hit_points: number;
 };
 
-export type Monster = Omit<
-  GQLMonsterResponse,
-  "index" | "armor_class" | "hit_points"
-> & {
-  id: string;
+export type Monster = Omit<ApiMonsterResponse, "armor_class" | "hit_points"> & {
   armorClass: number;
   hitPoints: number;
 };
 
-export const useDndApiMonsters = (): {
+export const useDndApiMonsters = (
+  officialOnly?: boolean,
+): {
   monsters: Monster[];
   isLoading: boolean;
+  error: unknown;
 } => {
-  const { loading, error, data } = useQuery(GET_MONSTERS, {
-    variables: { limit: 500 },
+  const { isLoading, error, data } = useQuery<{
+    results: ApiMonsterResponse[];
+  }>({
+    queryKey: ["apiMonsters"],
+    queryFn: () =>
+      fetch(
+        `${GET_MONSTERS}?fields=${apiMonsterFields.join(",")}${officialOnly ? "&document__slug=wotc-srd" : ""
+        }&limit=4000`,
+      ).then((res) => res.json()),
   });
 
   return {
     monsters:
-      data?.monsters
-        .map((monster: GQLMonsterResponse) => ({
-          id: monster.index,
-          armorClass: monster.armor_class[0].value,
+      data?.results
+        ?.map<Monster>((monster: ApiMonsterResponse) => ({
+          slug: monster.slug,
+          type: monster.type,
+          armorClass: monster.armor_class,
           hitPoints: monster.hit_points,
           name: monster.name,
           dexterity: monster.dexterity,
         }))
         .sort((a: Monster, b: Monster) => a.name.localeCompare(b.name)) ?? [],
-    isLoading: loading,
+    isLoading,
+    error,
+  };
+};
+
+export const useDndApiMonsterTypes = (
+  officialOnly?: boolean,
+): {
+  monsterTypes: string[];
+  isLoading: boolean;
+  error: unknown;
+} => {
+  const { isLoading, error, data } = useQuery<ApiMonsterResponse[]>({
+    queryKey: ["apiMonsters", "types"],
+    queryFn: () =>
+      fetch(
+        `${GET_MONSTERS}?fields=type${officialOnly ? "&document__slug=wotc-srd" : ""
+        }&limit=4000`,
+      ).then((res) => res.json()),
+  });
+
+  return {
+    monsterTypes:
+      data
+        ?.filter(
+          (monster: ApiMonsterResponse) => monster.type && monster.type !== "",
+        )
+        ?.map((monster: ApiMonsterResponse) => monster.type)
+        .sort((a: string, b: string) => a.localeCompare(b)) ?? [],
+    isLoading,
+    error: error as string,
   };
 };
