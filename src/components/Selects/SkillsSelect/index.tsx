@@ -21,7 +21,7 @@ const SkillsSelect = ({ onChange, value }: SkillsSelectProps) => {
             <Typography className={css.header} size="caption">Skill Proficiencies</Typography>
             <Select
                 multiple
-                value={value}
+                value={value as any}
                 onChange={(event) => {
                     const skill = event.target.value;
                     onChange(skill)

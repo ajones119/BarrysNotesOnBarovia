@@ -25,7 +25,7 @@ const SavingThrowSelect = ({ onChange, value }: SavingThrowSelectProps) => {
             <Typography className={css.header} size="caption">Saving Throw Proficiencies</Typography>
             <Select
                 multiple
-                value={value}
+                value={value as any}
                 onChange={(event) => {
                     const savingThrow = event.target.value;
                     onChange(savingThrow)
