@@ -7,26 +7,20 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import App from "./App";
 import { QueryClient, QueryClientProvider } from "react-query";
 import ScrollToTop from "./components/ScrollToTop";
-import { ApolloClient, InMemoryCache, ApolloProvider } from '@apollo/client';
 
-const queryClient = new QueryClient()
-const apolloClient = new ApolloClient({
-  uri: "https://www.dnd5eapi.co/graphql",
-  cache: new InMemoryCache(),
-});
+const queryClient = new QueryClient();
 
-const root = ReactDOM.createRoot(document.getElementById('root')!);
+const root = ReactDOM.createRoot(document.getElementById("root")!);
 root.render(
   <div className="master">
     <QueryClientProvider client={queryClient}>
-      <ApolloProvider client={apolloClient} >
-        <HashRouter>
-          <ScrollToTop />
-          {App()}
-        </HashRouter>
-      </ApolloProvider>
+      <HashRouter>
+        <ScrollToTop />
+        {App()}
+      </HashRouter>
     </QueryClientProvider>
-  </div>);
+  </div>,
+);
 
 // If you want to start measuring performance in your app, pass a function
 // to log results (for example: reportWebVitals(console.log))
