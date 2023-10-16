@@ -9,8 +9,9 @@ import { Button } from "@components/Button/Button";
 import { useCustomMonsters } from "@services/CustomMonstersService";
 import { BaseCharacter } from "@model/BaseCharacter";
 import BaseCharacterThumbCard from "@components/BaseCharacterThumbCard/BaseCharacterThumbCard";
-import CreateOrEditMonsterDrawer from "@components/Drawer/CreateOrEditMonsterDrawer";
+import CreateOrEditMonsterDrawer from "@components/Drawer/CreateOrEditBaseCharacterDrawer";
 import MonsterCard from "@components/BaseCharacterThumbCard/Cards/MonsterCard";
+import MonsterDrawer from "@components/Drawer/CreateOrEditBaseCharacterDrawer/MonsterDrawer";
 
 const CustomMonsters = () => {
     const [isMonsterDrawerOpen, setIsMonsterDrawerOpen] = useState(false);
@@ -62,7 +63,7 @@ const CustomMonsters = () => {
           </Grid>
         ))}
         </Grid>
-        <CreateOrEditMonsterDrawer editMonster={selectedMonster} onClose={() => {
+        <MonsterDrawer editMonster={selectedMonster} onClose={() => {
             setIsMonsterDrawerOpen(false);
             setSelectedMonster(null)
           }}
