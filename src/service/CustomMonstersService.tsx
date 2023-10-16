@@ -29,7 +29,7 @@ export const useEditCustomMonster = (monster: BaseCharacter | null = null, onSuc
     }
 }
 
-export const useDeleteCustomMonster = (monster: BaseCharacter, onSuccess?: () => void) => {;
+export const useDeleteCustomMonster = (monster: BaseCharacter, onSuccess?: () => void) => {
     const monsters = collection(firestore, "customMonsters");
     const ref = doc(monsters, monster.docId);
     const mutation = useFirestoreDocumentDeletion(ref, {onSettled: onSuccess});
