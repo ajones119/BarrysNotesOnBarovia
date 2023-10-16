@@ -2,6 +2,15 @@ import { useQuery } from "react-query";
 
 export const GET_MONSTERS = `https://api.open5e.com/v1/monsters/`;
 
+const apiMonsterFields = [
+  "slug",
+  "name",
+  "type",
+  "dexterity",
+  "armor_class",
+  "hit_points",
+];
+
 type ApiMonsterResponse = {
   slug: string;
   name: string;
@@ -16,7 +25,9 @@ export type Monster = Omit<ApiMonsterResponse, "armor_class" | "hit_points"> & {
   hitPoints: number;
 };
 
-export const useDndApiMonsters = (): {
+export const useDndApiMonsters = (
+  officialOnly?: boolean,
+): {
   monsters: Monster[];
   isLoading: boolean;
   error: unknown;
@@ -27,9 +38,8 @@ export const useDndApiMonsters = (): {
     queryKey: ["apiMonsters"],
     queryFn: () =>
       fetch(
-        `${GET_MONSTERS}?fields=${Object.keys({} as ApiMonsterResponse).join(
-          ",",
-        )}&limit=4000`,
+        `${GET_MONSTERS}?fields=${apiMonsterFields.join(",")}${officialOnly ? "&document__slug=wotc-srd" : ""
+        }&limit=4000`,
       ).then((res) => res.json()),
   });
 
@@ -50,7 +60,9 @@ export const useDndApiMonsters = (): {
   };
 };
 
-export const useDndApiMonsterTypes = (): {
+export const useDndApiMonsterTypes = (
+  officialOnly?: boolean,
+): {
   monsterTypes: string[];
   isLoading: boolean;
   error: unknown;
@@ -59,9 +71,8 @@ export const useDndApiMonsterTypes = (): {
     queryKey: ["apiMonsters", "types"],
     queryFn: () =>
       fetch(
-        `${GET_MONSTERS}?${Object.keys({} as ApiMonsterResponse).join(
-          ",",
-        )}&limit=4000`,
+        `${GET_MONSTERS}?fields=type${officialOnly ? "&document__slug=wotc-srd" : ""
+        }&limit=4000`,
       ).then((res) => res.json()),
   });
 
