@@ -6,9 +6,10 @@ import { faMagnifyingGlass, faPenFancy, faTrash } from "@fortawesome/free-solid-
 import { Button } from "../Button/Button";
 import Flip from "@components/AnimationComponentWrappers/Flip";
 import CopyButton from "@components/Button/ReusableButtons/CopyButton";
-import { BaseCharacter } from "@model/BaseCharacter";
+import { BaseCharacter, CharacterType, CharacterTypeLowercase } from "@model/BaseCharacter";
 import STICK from "@images/stick1.png"
 import { LoadingButton } from "@components/Button/LoadingButton";
+import { BASE_CHARACTER_IMAGE_MAP } from "utils/getBaseCharacterGenericImage";
 
 export declare interface BaseCharacterThumbCardProps {
     baseCharacter: BaseCharacter;
@@ -20,6 +21,18 @@ export declare interface BaseCharacterThumbCardProps {
 
 const BaseCharacterThumbCard = ({ baseCharacter, onClickEdit, onClickDelete, onClickMore, isDeleting = false }: BaseCharacterThumbCardProps) => {
     const [isDetailsModalOpen, setIsDetailsModalOpen] = useState(false)
+    const getCardImage = () => {
+        let image = STICK;
+
+        if (baseCharacter?.characterImageURL) {
+            image = baseCharacter.characterImageURL;
+        } else if (baseCharacter?.type) {
+            const type = baseCharacter.type.toLowerCase() as CharacterTypeLowercase
+            image = BASE_CHARACTER_IMAGE_MAP[type || "unknown"]
+        }
+
+        return image;
+    }
 
     return (
         <div key={`base-character-thumb-card-${baseCharacter.docId}`} className={`${css.baseCharacterThumbCard}`}>
@@ -28,7 +41,7 @@ const BaseCharacterThumbCard = ({ baseCharacter, onClickEdit, onClickDelete, onC
                     <div>
                         <img
                             className={css.cardImage}
-                            src={baseCharacter?.characterImageURL || STICK}
+                            src={getCardImage()}
                             onError={({ currentTarget }) => {
                                 currentTarget.onerror = null; // prevents looping
                                 currentTarget.src=STICK;

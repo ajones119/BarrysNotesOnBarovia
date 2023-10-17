@@ -47,7 +47,7 @@ const CustomMonsters = () => {
             </Grid>
           <Grid item xs={12} md={4}>
             <div className={css.characterAddButtton}>
-              <Button size="large" color="dark" onClick={() => setIsMonsterDrawerOpen(true)}>Add Monster</Button>
+              <Button size="large" color="dark" borderColor="primary" onClick={() => setIsMonsterDrawerOpen(true)}>Add Monster</Button>
             </div>
           </Grid>
         </Grid>
