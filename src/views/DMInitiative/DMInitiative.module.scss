@@ -42,6 +42,14 @@
         align-items: center;
     }
 
+    .identifier {
+        display: flex;
+        column-gap: 8px;
+        .avatar {
+            z-index: 1;
+        }
+    }
+
     .randomIcon {
         &:hover {
             cursor: pointer;

@@ -1,6 +1,6 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Avatar, TableCell, TableRow } from "@mui/material";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import css from "../DMInitiative.module.scss";
 import { faDiceD20, faMinus, faPlus } from "@fortawesome/free-solid-svg-icons";
 import {
@@ -19,9 +19,11 @@ import { Button } from "@components/Button/Button";
 import { CombatCharacter } from "@model/CombatCharacter";
 import ColorPicker from "@components/ColorPicker/ColorPicker";
 import { Character } from "@model/Character";
-import BACKUP from "@images/stick1.png";
+import BACKUP from "@images/GenericMonsters/unknown.png";
 import ShowSelector from "./ShowSelector";
 import ConditionSelect from "@components/ConditionsSelect/ConditionsSelect";
+import { BASE_CHARACTER_IMAGE_MAP } from "utils/getBaseCharacterGenericImage";
+import { CharacterTypeLowercase } from "@model/BaseCharacter";
 
 type InitiativeTrackerTableRowProps = {
   item: CombatCharacter;
@@ -75,23 +77,29 @@ const InitiativeTrackerTableRow = ({
     }
   };
 
-  const playerCharacterImageUrl =
-    item?.playerDocId &&
+  const playerCharacterImageUrl = item?.playerDocId &&
     characters.find((character) => character.docId === item?.playerDocId)
       ?.characterImageURL;
-  const identifier = playerCharacterImageUrl ? (
-    <Avatar
-      src={playerCharacterImageUrl || BACKUP}
-      alt="boo"
-      sx={{ width: 32, height: 32 }}
-    />
-  ) : (
-    <ColorPicker
-      width={0}
-      value={item?.color}
-      onChange={(value) => onChange({ ...item, color: value })}
-    />
-  );
+
+  const characterType: CharacterTypeLowercase = (item?.type?.toLowerCase() || "unknown") as CharacterTypeLowercase;
+  const enemyImageURL = item?.imageURL || BASE_CHARACTER_IMAGE_MAP[characterType]
+
+  const image = playerCharacterImageUrl || enemyImageURL;
+
+  const identifier = (
+    <div className={css.identifier}>
+      <Avatar
+        className={css.avatar}
+        src={image || BACKUP}
+        alt="boo"
+        sx={{ width: 32, height: 32 }}
+      />
+      <ColorPicker
+        width={0}
+        value={item?.color}
+        onChange={(value) => onChange({ ...item, color: value })}
+      />
+    </div>)
 
   return (
     <TableRow

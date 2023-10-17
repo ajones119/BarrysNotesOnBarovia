@@ -2,14 +2,13 @@ import React from 'react';
 import { Select, MenuItem } from "@mui/material"
 import css from "./CharacterTypeSelect.module.scss"
 import { Typography } from '@components/Typography/Typography';
-import { CharacterType } from '@model/BaseCharacter';
 
 declare interface CharacterTypeSelectProps {
     onChange: (value: any) => void,
     value?: string | null,
 }
 
-const CHARACTER_TYPES = ["None", "Aberration" , "Animal" , "Beast" , "Construct" , "Dragon" , "Elemental" , "Fey" , "Giant" , "Humanoid" , "Magical Beast" , "Monstrosity" , "Ooze" , "Plant" , "Undead" , "Unknown"]
+const CHARACTER_TYPES = ["None", "Aberration" , "Animal" , "Beast" , "Celestial" ,  "Construct" , "Dragon" , "Elemental" , "Fey" , "Giant" , "Humanoid" , "Magical Beast" , "Monstrosity" , "Ooze" , "Plant" , "Undead" , "Unknown"]
 
 const CharacterTypeSelect = ({ onChange, value }: CharacterTypeSelectProps) => {
 

@@ -10,6 +10,7 @@ import AutoSizer from "react-virtualized-auto-sizer";
 import styled from "@emotion/styled";
 import { useCustomMonsters } from "@services/CustomMonstersService";
 import { useDebounce } from "usehooks-ts";
+import { CharacterType } from "@model/BaseCharacter";
 
 type ResourceDrawerProps = {
   onAdd?: (data: any) => void;
@@ -73,6 +74,8 @@ type DrawerMonster = {
   maxHealth: number,
   armorClass: number,
   initiativeBonus: number,
+  type?: CharacterType,
+  imageURL?: string
 }
 
 const ResourceDrawer = ({ onAdd }: ResourceDrawerProps) => {
@@ -90,6 +93,8 @@ const ResourceDrawer = ({ onAdd }: ResourceDrawerProps) => {
           maxHealth: monster.hitPoints,
           armorClass: monster.armorClass,
           initiativeBonus: Math.floor((monster.dexterity - 10) / 2),
+          type: monster?.type as CharacterType || "",
+
         }
       ));
 
@@ -100,7 +105,9 @@ const ResourceDrawer = ({ onAdd }: ResourceDrawerProps) => {
           health: monster.averageHitPoints || 0,
           maxHealth: monster.averageHitPoints || 0,
           armorClass: monster.armorClass || 0,
-          initiativeBonus: Math.floor((monster.abilityScores.dexterity - 10) / 2),
+          initiativeBonus: Math.floor((monster.abilityScores.dexterity - 10) / 2) || 0,
+          type: monster.type,
+          imageURL: monster?.characterImageURL || ""
         }
       ));
 
