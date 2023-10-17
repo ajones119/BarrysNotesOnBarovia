@@ -12,9 +12,9 @@ import SavingThrowSelect from "@components/Selects/SavingThrowSelect";
 import SkillsSelect from "@components/Selects/SkillsSelect";
 import { Button } from "@components/Button/Button";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faXmarkCircle } from "@fortawesome/free-solid-svg-icons";
 import { LoadingButton } from "@components/Button/LoadingButton";
 import { calculateAbilityScoreModifier } from "./utils";
+import { faXmarkCircle } from "@fortawesome/free-regular-svg-icons";
 
 declare interface BaseCharacterProps extends DrawerProps {
     editCharacter?: BaseCharacter | null;
@@ -40,14 +40,17 @@ const BaseCharacterDrawer = ({isOpen, onClose = () => {}, editCharacter, edit, c
                 <Grid container justifyContent="end" spacing={2}>
                 <Grid item>
                         <LoadingButton
+                            color="success"
                             isLoading={isLoading}
                             onClick={() => {
                                 editCharacter ? edit(character) : create(character)
                             }}
-                        >Submit</LoadingButton>
+                        >
+                            <Typography size="large" color="dark">Submit</Typography>
+                        </LoadingButton>
                     </Grid>
                     <Grid item>
-                        <Button onClick={onClose}><FontAwesomeIcon icon={faXmarkCircle}/></Button>
+                        <Button color="dark" borderColor="error" onClick={onClose}><Typography color="error" size="large"><FontAwesomeIcon icon={faXmarkCircle}/></Typography></Button>
                     </Grid>
                 </Grid>
                 <Grid container spacing={2} rowGap={2}>
