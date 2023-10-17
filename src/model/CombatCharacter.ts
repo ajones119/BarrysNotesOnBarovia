@@ -1,3 +1,5 @@
+import { CharacterType } from "./BaseCharacter";
+
 export type CombatCharacter = {
     initiative?: number;
     initiativeBonus?: number;
@@ -6,6 +8,10 @@ export type CombatCharacter = {
     health?: number;
     maxHealth?: number;
     playerDocId?: string;
+    npcDocId?: string;
+    enemyId?: string;
+    imageURL?: string;
+    type?: CharacterType;
     passivePerception?: number;
     shouldShowHealthBar?: boolean;
     shouldShow?: boolean;

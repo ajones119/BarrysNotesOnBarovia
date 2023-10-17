@@ -12,7 +12,6 @@ import { useCampaign, useUpdateCampaign } from "@services/CampaignService";
 import { Button } from "@components/Button/Button";
 import { useCampaignCharacters } from "@services/CharacterService";
 import { getCombatURL } from "./utils";
-import CopyIcon from "@components/CopyIcon";
 import CopyButton from "@components/Button/ReusableButtons/CopyButton";
 import ResourceDrawer from "@views/DMInitiative/components/ResourceDrawer";
 
@@ -39,6 +38,7 @@ const DMInitiative = () => {
       : combat.currentTurnIndex + 1;
 
   const handleUpdate = (combat: Combat, overrideCharacterArray = list) => {
+    console.log(overrideCharacterArray.filter(item => !item?.playerDocId))
     updateInitiative({
       ...combat,
       combatCharacterArray: overrideCharacterArray,
@@ -62,6 +62,7 @@ const DMInitiative = () => {
 
   return (
     <div className={css.initiativeTrackerContainer}>
+      <Typography color="light" size="large" weight="default">{JSON.stringify(list.filter(item => !item?.playerDocId))}</Typography>
       <div className={css.topButtonsRow}>
         <CopyButton
           animatedHover={false}
