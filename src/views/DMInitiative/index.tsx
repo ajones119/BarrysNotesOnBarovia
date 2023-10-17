@@ -62,7 +62,6 @@ const DMInitiative = () => {
 
   return (
     <div className={css.initiativeTrackerContainer}>
-      <Typography color="light" size="large" weight="default">{JSON.stringify(list.filter(item => !item?.playerDocId))}</Typography>
       <div className={css.topButtonsRow}>
         <CopyButton
           animatedHover={false}
