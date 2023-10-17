@@ -6,6 +6,7 @@ import CELESTIAL from "../images/GenericMonsters/celestial.png"
 import CONSTRUCT from "../images/GenericMonsters/construct.png";
 import DRAGON from "../images/GenericMonsters/dragon.png";
 import ELEMENTAL from "../images/GenericMonsters/elemental.png";
+import FIEND from "../images/GenericMonsters/fiend.png";
 import FEY from "../images/GenericMonsters/fey.png";
 import GIANT from "../images/GenericMonsters/giant.png";
 import HUMANOID from "../images/GenericMonsters/humanoid.png";
@@ -26,6 +27,7 @@ export const BASE_CHARACTER_IMAGE_MAP = {
     celestial: CELESTIAL,
     dragon: DRAGON,
     elemental: ELEMENTAL,
+    fiend: FIEND,
     fey: FEY,
     giant: GIANT,
     "magical beast": MAGICAL_BEASTS,
