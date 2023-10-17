@@ -50,7 +50,7 @@ const BaseCharacterDrawer = ({isOpen, onClose = () => {}, editCharacter, edit, c
                         </LoadingButton>
                     </Grid>
                     <Grid item>
-                        <Button color="dark" borderColor="error" onClick={onClose}><Typography color="error" size="large"><FontAwesomeIcon icon={faXmarkCircle}/></Typography></Button>
+                        <Button color="dark" borderColor="light" onClick={onClose}><Typography color="light" size="large"><FontAwesomeIcon icon={faXmarkCircle}/></Typography></Button>
                     </Grid>
                 </Grid>
                 <Grid container spacing={2} rowGap={2}>

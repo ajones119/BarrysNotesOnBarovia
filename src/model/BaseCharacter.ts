@@ -31,6 +31,7 @@ export type CharacterAction = {
 export type CharacterSizes = "Tiny" | "Small" | "Medium" | "Large" | "Huge" | "Gargantuan";
 
 export type CharacterType = "Aberration" | "Animal" | "Beast" | "Construct" | "Dragon" | "Elemental" | "Fey" | "Giant" | "Humanoid" | "Magical Beast" | "Monstrosity" | "Ooze" | "Plant" | "Undead" | "Unknown"
+export type CharacterTypeLowercase = "aberration" | "animal" | "beast" | "construct" | "dragon" | "elemental" | "fey" | "giant" | "humanoid" | "magical beast" | "monstrosity" | "ooze" | "plant" | "undead" | "unknown"
 
 export type BaseCharacter = {
     docId?: string;
