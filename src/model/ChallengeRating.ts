@@ -87,6 +87,7 @@ export const getEncounterDifficulty = (
   monsters: BaseCharacter[],
   players: Character[],
 ): ENCOUNTER_DIFFICULTY => {
+  // TODO (churt): get better at typescript.
   const partyDifficultyXpThresholds: Record<
     keyof typeof ENCOUNTER_DIFFICULTY,
     number
