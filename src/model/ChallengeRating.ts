@@ -1,3 +1,6 @@
+import { BaseCharacter } from "@model/BaseCharacter";
+import { Character } from "@model/Character";
+
 // Credit to stack overflow - https://stackoverflow.com/a/71700658
 type Tuple<
   T,
@@ -81,19 +84,67 @@ export const getEncounterMultiplier = (
 };
 
 export const getEncounterDifficulty = (
-  monstersXp: number[],
-  playersXp: number[],
+  monsters: BaseCharacter[],
+  players: Character[],
 ): ENCOUNTER_DIFFICULTY => {
-  const playerBudget = playersXp.reduce(
-    (accumulator, currentValue) => accumulator + currentValue,
-  );
+  const partyDifficultyXpThresholds: Record<
+    keyof typeof ENCOUNTER_DIFFICULTY,
+    number
+  > = {
+    easy: players.reduce(
+      (accumulator, currentValue) =>
+        accumulator +
+        CharacterLevelEncounterXpThresholdsByDiffulty.easy[
+        currentValue.level as number
+        ],
+      0,
+    ),
+    medium: players.reduce(
+      (accumulator, currentValue) =>
+        accumulator +
+        CharacterLevelEncounterXpThresholdsByDiffulty.medium[
+        currentValue.level as number
+        ],
+      0,
+    ),
+    hard: players.reduce(
+      (accumulator, currentValue) =>
+        accumulator +
+        CharacterLevelEncounterXpThresholdsByDiffulty.hard[
+        currentValue.level as number
+        ],
+      0,
+    ),
+    deadly: players.reduce(
+      (accumulator, currentValue) =>
+        accumulator +
+        CharacterLevelEncounterXpThresholdsByDiffulty.deadly[
+        currentValue.level as number
+        ],
+      0,
+    ),
+  };
 
-  const currentMonsterCost = monstersXp.reduce(
-    (accumulator, currentValue) => accumulator + currentValue,
+  const currentMonsterCost = monsters.reduce(
+    (accumulator, currentValue) => accumulator + (currentValue.xp ?? 0),
+    0,
   );
 
   const encounterMultipler = getEncounterMultiplier(
-    monstersXp.length,
-    playersXp.length,
+    monsters.length,
+    players.length,
   );
+
+  const encounterCost = currentMonsterCost * encounterMultipler;
+
+  if (encounterCost <= partyDifficultyXpThresholds.easy) {
+    return ENCOUNTER_DIFFICULTY.easy;
+  }
+  if (encounterCost <= partyDifficultyXpThresholds.medium) {
+    return ENCOUNTER_DIFFICULTY.medium;
+  }
+  if (encounterCost <= partyDifficultyXpThresholds.hard) {
+    return ENCOUNTER_DIFFICULTY.hard;
+  }
+  return ENCOUNTER_DIFFICULTY.deadly;
 };

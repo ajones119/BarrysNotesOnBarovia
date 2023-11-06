@@ -1,13 +1,19 @@
 export type AbilityScores = {
-    strength: number,
-    dexterity: number,
-    constitution: number,
-    intelligence: number,
-    wisdom: number,
-    charisma: number
+    strength: number;
+    dexterity: number;
+    constitution: number;
+    intelligence: number;
+    wisdom: number;
+    charisma: number;
 };
 
-export type SavingThrow = "Strength" | "Dexterity" | "Constitution" | "Intelligence" | "Wisdom" | "Charisma";
+export type SavingThrow =
+    | "Strength"
+    | "Dexterity"
+    | "Constitution"
+    | "Intelligence"
+    | "Wisdom"
+    | "Charisma";
 
 export const BASE_ABILITY_SCORES = {
     strength: 10,
@@ -15,23 +21,63 @@ export const BASE_ABILITY_SCORES = {
     constitution: 10,
     intelligence: 10,
     wisdom: 10,
-    charisma: 10
+    charisma: 10,
 };
 
 export type SkillProficiency = {
-    name: string,
-    bonus: number,
+    name: string;
+    bonus: number;
 };
 
 export type CharacterAction = {
-    name: string,
-    description: string
+    name: string;
+    description: string;
 };
 
-export type CharacterSizes = "Tiny" | "Small" | "Medium" | "Large" | "Huge" | "Gargantuan";
+export type CharacterSizes =
+    | "Tiny"
+    | "Small"
+    | "Medium"
+    | "Large"
+    | "Huge"
+    | "Gargantuan";
 
-export type CharacterType = "Aberration" | "Animal" | "Beast" | "Celestial" | "Construct" | "Dragon" | "Elemental" | "Fey" | "Fiend" | "Giant" | "Humanoid" | "Magical Beast" | "Monstrosity" | "Ooze" | "Plant" | "Undead" | "Unknown"
-export type CharacterTypeLowercase = "aberration" | "animal" | "beast" | "celestial" | "construct" | "dragon" | "elemental" | "fey" | "fiend" | "giant" | "humanoid" | "magical beast" | "monstrosity" | "ooze" | "plant" | "undead" | "unknown"
+export type CharacterType =
+    | "Aberration"
+    | "Animal"
+    | "Beast"
+    | "Celestial"
+    | "Construct"
+    | "Dragon"
+    | "Elemental"
+    | "Fey"
+    | "Fiend"
+    | "Giant"
+    | "Humanoid"
+    | "Magical Beast"
+    | "Monstrosity"
+    | "Ooze"
+    | "Plant"
+    | "Undead"
+    | "Unknown";
+export type CharacterTypeLowercase =
+    | "aberration"
+    | "animal"
+    | "beast"
+    | "celestial"
+    | "construct"
+    | "dragon"
+    | "elemental"
+    | "fey"
+    | "fiend"
+    | "giant"
+    | "humanoid"
+    | "magical beast"
+    | "monstrosity"
+    | "ooze"
+    | "plant"
+    | "undead"
+    | "unknown";
 
 export type BaseCharacter = {
     docId?: string;
@@ -56,4 +102,5 @@ export type BaseCharacter = {
     lairActions?: string;
     legendaryActions?: string;
     otherActions?: string;
+    xp?: number;
 };
