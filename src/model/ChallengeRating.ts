@@ -6,7 +6,7 @@ type Tuple<
 > = R["length"] extends N ? R : Tuple<T, N, readonly [T, ...R]>;
 
 type CharacterXpThresholdsByLevel = Tuple<number, 20>;
-enum DIFFICULTY {
+export enum ENCOUNTER_DIFFICULTY {
   easy,
   medium,
   hard,
@@ -15,7 +15,7 @@ enum DIFFICULTY {
 
 // TODO (churt): Maybe there is a formula? But the pattern didn't suggest it.
 export const CharacterLevelEncounterXpThresholdsByDiffulty: Record<
-  keyof typeof DIFFICULTY,
+  keyof typeof ENCOUNTER_DIFFICULTY,
   CharacterXpThresholdsByLevel
 > = {
   easy: [
@@ -34,4 +34,66 @@ export const CharacterLevelEncounterXpThresholdsByDiffulty: Record<
     100, 200, 400, 500, 1100, 1400, 1700, 2100, 2400, 2800, 3600, 4500, 5100,
     5700, 6400, 7200, 8800, 9500, 10900, 12700,
   ],
+};
+
+const EncounterMultipliers = [1, 1.5, 2, 2.5, 3, 5];
+
+export const getEncounterMultiplier = (
+  monsterCount: number,
+  playerCount: number,
+): number => {
+  let multiplierIndex = 0;
+
+  if (monsterCount === 2) {
+    multiplierIndex = 1;
+  }
+
+  if (monsterCount >= 3 && monsterCount <= 6) {
+    multiplierIndex = 2;
+  }
+
+  if (monsterCount >= 7 && monsterCount <= 10) {
+    multiplierIndex = 3;
+  }
+
+  if (monsterCount >= 11 && monsterCount <= 14) {
+    multiplierIndex = 4;
+  }
+
+  if (monsterCount > 15) {
+    multiplierIndex = 5;
+  }
+
+  if (playerCount < 3 && multiplierIndex < 5) {
+    multiplierIndex += 1;
+  }
+
+  if (playerCount > 6) {
+    // Special case for large parties and a single monster.
+    if (monsterCount === 1) {
+      return 0.5;
+    }
+
+    multiplierIndex -= 1;
+  }
+
+  return EncounterMultipliers[multiplierIndex];
+};
+
+export const getEncounterDifficulty = (
+  monstersXp: number[],
+  playersXp: number[],
+): ENCOUNTER_DIFFICULTY => {
+  const playerBudget = playersXp.reduce(
+    (accumulator, currentValue) => accumulator + currentValue,
+  );
+
+  const currentMonsterCost = monstersXp.reduce(
+    (accumulator, currentValue) => accumulator + currentValue,
+  );
+
+  const encounterMultipler = getEncounterMultiplier(
+    monstersXp.length,
+    playersXp.length,
+  );
 };
