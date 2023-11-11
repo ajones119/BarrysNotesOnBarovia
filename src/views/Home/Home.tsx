@@ -1,27 +1,37 @@
 import React from "react";
 import "../../App.css";
-import Party from "@images/party.png";
+import Tavern from "@images/party.png";
 import Castle from "@images/hauntedCastleBackground.jpg"
-import { HomeCard } from "@components/HomeCard/HomeCard";
-import { CursorFollowingPointer } from "@components/CursorFollowingPointer/CursorFollowingPointer";
+import CharacterNoBG from "@images/characterNoBackground.png"
+import Party from "@images/party-no-background.png"
+import NoBGMonster from '@images/monster2-no-background.png'
+import MonsterBG from '@images/monster-background.jpg'
+
 import css from "./Home.module.scss"
-import { Grid } from "@mui/material"
+import HomeCard from "./components/HomeCard";
 
 export const Home = () => {
 
   return(
     <div className={css.homePage}>
-      <Grid container>
-        <Grid item md={4} sm={12}>
-          <HomeCard name="Campaigns" image={Castle} url="/Campaigns/" />
-        </Grid>
-        <Grid  item md={4} sm={12}>
-          <CursorFollowingPointer />
-        </Grid>
-        <Grid  item md={4} sm={12}>
-          <HomeCard name="Characters" image={Party} url="/Characters/"/>
-        </Grid>
-      </Grid>
+        <HomeCard
+          frontImage={CharacterNoBG}
+          backImage={Tavern}
+          title="Characters"
+          href="/Characters/"
+        />
+        <HomeCard
+          frontImage={Party}
+          backImage={Castle}
+          title="Campaigns"
+          href="/Campaigns/"
+        />
+        <HomeCard
+          frontImage={NoBGMonster}
+          backImage={MonsterBG}
+          title="Monsters"
+          href="/Monsters/"
+        />
     </div>
   );
 }
