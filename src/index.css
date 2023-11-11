@@ -17,4 +17,5 @@ code {
   /* Hide vertical scrollbar */
   overflow-x: hidden;
   /* Hide horizontal scrollbar */
+  background-color: #0d1117;
 }
