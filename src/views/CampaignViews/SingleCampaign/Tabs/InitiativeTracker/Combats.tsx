@@ -18,7 +18,7 @@ type CombatsProps = {
 const Combats = ({ campaign, characters }: CombatsProps) => {
     const [createModalOpen, setCreateModalOpen] = useState(false);
 
-    const {combats} = useCampaignCombats(campaign.docId)
+    const {combats} = useCampaignCombats(campaign.docId || "")
 
     const formattedCharacters = characters.map(character => ({
         name: character.name,
@@ -48,7 +48,7 @@ const Combats = ({ campaign, characters }: CombatsProps) => {
                 )
             }
             </TableContainer>
-            <CreateCombatModal characters={formattedCharacters} isOpen={createModalOpen} onClose={() => setCreateModalOpen(false)} campaignId={campaign.docId} />
+            <CreateCombatModal characters={formattedCharacters} isOpen={createModalOpen} onClose={() => setCreateModalOpen(false)} campaignId={campaign.docId || ""} />
         </div>
     )
 }

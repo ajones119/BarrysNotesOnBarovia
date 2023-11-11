@@ -5,33 +5,19 @@ import { useFirestoreCollectionMutation, useFirestoreDocument, useFirestoreDocum
 import { Campaign } from "@model/Campaign";
 import { ButtonStatuses, LoadingButton } from "@components/Button/LoadingButton";
 
-export function useCampaigns() {
+export function useCampaigns(): {campaigns: Campaign[], isLoading: boolean} {
   const ref = query(collection(firestore, "campaigns"));
 
   const campaignQuery = useFirestoreQuery(["campaignsList"], ref, { subscribe: true });
   
   const { data, isLoading } = campaignQuery;
 
-  const campaignsData = data?.docs.map(campaign => {
-    const {
-        title,
-        campaignImageURL,
-        dungeonMaster,
-        description
-    } = campaign.data()
-    return new Campaign(
-        campaign.id,
-        title,
-        campaignImageURL,
-        dungeonMaster,
-        description
-    );
-  });
+  const campaignsData = data?.docs.map(campaign => ({ docId: campaign.id, ...campaign.data()} as Campaign)) || [];
 
   return { campaigns: campaignsData, isLoading };
 }
 
-export function useCampaign(campaignDocId: string = "") {
+export function useCampaign(campaignDocId: string = ""): {campaign: Campaign, isLoading: boolean} {
   const ref = doc(firestore, "campaigns", campaignDocId);
 
   const campaignQuery = useFirestoreDocument(["singleCampaign", campaignDocId], ref, {subscribe: true});
@@ -40,14 +26,7 @@ export function useCampaign(campaignDocId: string = "") {
 
   const campaignData = data?.data() || {};
 
-  const campaign = new Campaign(
-    campaignDocId,
-    campaignData.title,
-    campaignData.campaignImageURL,
-    campaignData.dungeonMaster,
-    campaignData.description,
-    campaignData?.currentCombatDocId
-  );
+  const campaign: Campaign = {docId: campaignDocId, title: campaignData?.title, ...campaignData}
 
   return { campaign, isLoading };
 }

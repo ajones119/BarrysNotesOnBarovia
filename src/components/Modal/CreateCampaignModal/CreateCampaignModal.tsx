@@ -7,15 +7,18 @@ import TextArea from '../../TextArea/TextArea';
 import css from "./CreateCampaignModal.module.scss"
 import { Campaign, validateCampaign } from '@model/Campaign';
 import { useAddCampaignButton } from '@services/CampaignService';
+import { Validator } from '@model/Validator';
 
 declare interface CreateCampaignModalProps {
     isOpen: boolean;
     onClose: () => void;
 };
 
+const DEFAULT_EMPTY_CAMPAIGN: Campaign = {title: ""};
+
 const CreateCampaignModal = ({isOpen, onClose}: CreateCampaignModalProps) => {
-    const [newCampaign, setNewCampaign] = useState(new Campaign(null, ""));
-    const [validator, setValidator] = useState<any>();
+    const [newCampaign, setNewCampaign] = useState<Campaign>(DEFAULT_EMPTY_CAMPAIGN);
+    const [validator, setValidator] = useState<Validator>();
     const saveCampaignButton = useAddCampaignButton(newCampaign, () => handleOnClose(), () => validate());
 
     const { title, campaignImageURL, dungeonMaster, description } = newCampaign;
@@ -28,7 +31,7 @@ const CreateCampaignModal = ({isOpen, onClose}: CreateCampaignModalProps) => {
     }
 
     const handleOnClose = () => {
-            setNewCampaign(new Campaign(null, ""))
+            setNewCampaign(DEFAULT_EMPTY_CAMPAIGN)
             onClose();
     }
 
@@ -39,16 +42,16 @@ const CreateCampaignModal = ({isOpen, onClose}: CreateCampaignModalProps) => {
                 ]}>
                 <Grid container spacing={2} rowSpacing={3} className={css.CreateCampaignModal}>
                     <Grid item lg={6} sm={12}>
-                        <TextInput error={validator?.name} value={title} onChange={value => setNewCampaign({ ...newCampaign, title: value,})} placeholder='Title' />
+                        <TextInput error={!!validator?.name} value={title} onChange={value => setNewCampaign({ ...newCampaign, title: String(value),})} placeholder='Title' />
                     </Grid>
                     <Grid item lg={6} sm={12}>
-                        <TextInput error={validator?.player} value={campaignImageURL} onChange={value => setNewCampaign({ ...newCampaign, campaignImageURL: String(value),})} placeholder='Campaign Image URL' />
+                        <TextInput value={campaignImageURL} onChange={value => setNewCampaign({ ...newCampaign, campaignImageURL: String(value),})} placeholder='Campaign Image URL' />
                     </Grid>
                     <Grid item lg={6} sm={12}>
-                        <TextInput error={validator?.dungeonMaster} value={dungeonMaster} onChange={value => setNewCampaign({ ...newCampaign, dungeonMaster: String(value),})} placeholder='Dungeon Master' />
+                        <TextInput value={dungeonMaster} onChange={value => setNewCampaign({ ...newCampaign, dungeonMaster: String(value),})} placeholder='Dungeon Master' />
                     </Grid>
                     <Grid item sm={12}>
-                        <TextArea value={description} onChange={(value) => setNewCampaign({ ...newCampaign, description: value,})} rows={5} />
+                        <TextArea value={description || ""} onChange={(value) => setNewCampaign({ ...newCampaign, description: value,})} rows={5} />
                     </Grid>
                 </Grid>
             </Modal>

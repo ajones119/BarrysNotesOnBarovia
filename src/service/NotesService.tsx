@@ -7,39 +7,19 @@ import { Note } from '@model/Note';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTrash } from '@fortawesome/free-solid-svg-icons';
 
-export function useCampaignNotes(campaignDocId: string) {
+export function useCampaignNotes(campaignDocId: string): {notes: Note[], isLoading: boolean, refetch: () => void} {
     const ref = query(
         collection(firestore, "notes"),
         where("campaignDocId", "==", campaignDocId),
-        where("isPersonal", "==", false)
+        //where("isPersonal", "==", false)
     );
   
     const notesQuery = useFirestoreQuery([`${campaignDocId}-campaignNotesList`], ref, { subscribe: true });
     
     const { data, isLoading, refetch } = notesQuery;
   
-    const notesData = data?.docs.map(note => {
-      const {
-        characterDocId,
-        campaignDocId,
-        date,
-        content,
-        isPersonal,
-        isCampaign,
-        isDungeonMaster
-      } = note.data()
-      return new Note(
-        note.id,
-        characterDocId,
-        campaignDocId,
-        date,
-        content,
-        isPersonal,
-        isCampaign,
-        isDungeonMaster
-      );
-    });
-  
+    const notesData = data?.docs.map(note =>( {...note.data(), docId: note.id, date: note.data()?.date?.toDate()})) || [];
+
     return { notes: notesData, isLoading, refetch };
   }
 
@@ -48,19 +28,19 @@ export function useCampaignNotes(campaignDocId: string) {
     const mutation = useFirestoreCollectionMutation(ref);
     const [buttonStatus, setButtonStatus] = useState<ButtonStatuses>(ButtonStatuses.Idle);
   
-    const { characterDocId = "", campaignDocId = "", date = "", content = "", isPersonal = false, isCampaign = false, isDungeonMaster = false } = newNote;
+    const { characterDocId = "", campaignDocId = "", date = "", content = "" } = newNote;
   
     const handleClick = () => {
       const valid = validate();
+      console.log("VALID", valid)
+      console.log("NOTE", newNote)
       if (valid) {
         mutation.mutate({
             characterDocId,
             campaignDocId,
             date,
-            content,
-            isPersonal,
-            isCampaign,
-            isDungeonMaster, })
+            content
+          })
       }
   
         if (!mutation.error){

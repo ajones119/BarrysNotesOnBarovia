@@ -28,9 +28,9 @@ export const NotesListItem = ({ note, characterImageURL, characterName }: NotesL
                 </div>
             </div>
             <div className={css.noteTextContainer}>
-            <TextEditorDisplay value={note.content} light />
+            <TextEditorDisplay value={note.content || ""} light />
             <div>
-                <Typography color="default" size="caption" >{characterName || "An Unknown Entity"} - {`${note.date.toDate()}`}</Typography>
+                <Typography color="default" size="caption" >{characterName || "An Unknown Entity"} - {`${note?.date}`}</Typography>
             </div>
             </div>
             <div className={css.noteColumnContainer}>

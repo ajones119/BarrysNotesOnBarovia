@@ -1,7 +1,7 @@
 import { Validator } from "./Validator";
 
 export type Item = {
-      docId: number;
+      docId: string;
       campaignDocId: string;
       name: string;
       description: string;
