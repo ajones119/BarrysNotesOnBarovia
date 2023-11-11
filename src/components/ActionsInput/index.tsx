@@ -1,11 +1,11 @@
 import { TableCell, TableContainer, TableHead, TableRow } from "@mui/material";
 import { Typography } from "../Typography/Typography";
-import { CharacterAction } from "../../model/BaseCharacter";
+import { CharacterAction } from "@model/BaseCharacter";
 import { TextInput } from "../TextInput/TextInput";
 import { Button } from "../Button/Button";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faMinus, faPlus } from "@fortawesome/free-solid-svg-icons";
-import { useList } from "../../hooks/useList";
+import { useList } from "@hooks/useList";
 import useDeepCompareEffect from "use-deep-compare-effect";
 
 declare interface ActionsInputProps {

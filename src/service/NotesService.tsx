@@ -2,8 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { collection, doc, query, where } from "firebase/firestore";
 import { firestore } from "./firebase";
 import { useFirestoreCollectionMutation, useFirestoreDocumentDeletion, useFirestoreQuery } from "@react-query-firebase/firestore";
-import { ButtonStatuses, LoadingButton } from "../components/Button/LoadingButton"
-import { Note } from '../model/Note';
+import { ButtonStatuses, LoadingButton } from "@components/Button/LoadingButton"
+import { Note } from '@model/Note';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTrash } from '@fortawesome/free-solid-svg-icons';
 
@@ -61,11 +61,9 @@ export function useCampaignNotes(campaignDocId: string) {
             isPersonal,
             isCampaign,
             isDungeonMaster, })
-        console.log("ERROR", mutation.error)
       }
   
         if (!mutation.error){
-          console.log("onClick")
           onClick();
         }
   
@@ -94,7 +92,6 @@ export const useDeleteNoteButton = (note: Note, onClick = () => {}) => {
     mutation.mutate();
 
       if (!mutation.error){
-        console.log("onClick")
         onClick();
       }
 

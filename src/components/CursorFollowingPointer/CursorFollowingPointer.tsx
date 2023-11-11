@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import Sword from '../../images/swordimages-removebg-preview.png';
+import Sword from '@images/swordimages-removebg-preview.png';
 
 const IMAGE_DEGREE_OFFSET = 60;
 

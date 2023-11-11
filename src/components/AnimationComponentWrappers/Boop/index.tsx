@@ -1,6 +1,6 @@
 import React, { PropsWithChildren } from 'react';
 import { animated } from '@react-spring/web';
-import useBoop, { BoopProps } from '../../../hooks/AnimationHooks/useBoop';
+import useBoop, { BoopProps } from '@hooks/AnimationHooks/useBoop';
 
 const Boop = (props: PropsWithChildren<BoopProps>) => {
   const {style, trigger} = useBoop(props);

@@ -1,6 +1,6 @@
 import { faFaceAngry, faFaceDizzy, faFaceFrownOpen, faFaceGrimace, faFaceGrin, faFaceLaughBeam, faFaceSadCry, faSkull } from "@fortawesome/free-solid-svg-icons";
-import { CombatCharacter } from "../../model/CombatCharacter";
-import { CONDITION_OPTIONS, Condition } from "../../components/ConditionsSelect/ConditionsSelect";
+import { CombatCharacter } from "@model/CombatCharacter";
+import { CONDITION_OPTIONS, Condition } from "@components/ConditionsSelect/ConditionsSelect";
 
 export const getIconList = (character: CombatCharacter): Condition[] => {
     const icons: Condition[] = [];

@@ -1,12 +1,13 @@
 import React from 'react';
-import { Character } from '../../model/Character';
+import { Character } from '@model/Character';
 import css from "./CharacterThumbCard.module.scss"
-import STICK from "../../images/stick1.png"
+import STICK from "@images/stick1.png"
 import { Typography } from '../Typography/Typography';
 import { useNavigate } from 'react-router-dom';
+import { BaseCharacter } from '@model/BaseCharacter';
 
 declare interface CharacterThumbCardProps {
-    character: Character
+    character: Character | BaseCharacter
 };
 
 export const CharacterThumbCard = ({ character }: CharacterThumbCardProps) => {
@@ -15,7 +16,7 @@ export const CharacterThumbCard = ({ character }: CharacterThumbCardProps) => {
         <div className={css.CharacterThumbCard} onClick={() => navigate(`/characters/${character.docId}`)}>
             <div className={css.imageContainer}>
             <img
-                src={character.characterImageURL}
+                src={character?.characterImageURL}
                 onError={({ currentTarget }) => {
                     currentTarget.onerror = null; // prevents looping
                     currentTarget.src=STICK;

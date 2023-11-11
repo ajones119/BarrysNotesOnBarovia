@@ -1,7 +1,18 @@
 
 .homePage {
     display: flex;
-    margin-top: 20%;
-    padding-left: 8px;
-    padding-right: 8px;
+    justify-content: space-evenly;
+    align-items: center;
+    margin-top: 16px;
+    perspective: 1000px;
+    margin-top: 200px;
+    flex-direction: row;
+}
+
+@media (max-width: 800px){
+    .homePage {
+        flex-direction: column;
+        row-gap: 16px;
+    }
+    
 }

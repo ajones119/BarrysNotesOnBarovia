@@ -2,10 +2,10 @@ import React, { useState, useEffect } from 'react';
 import { collection, doc, query, where } from "firebase/firestore";
 import { firestore } from "./firebase";
 import { useFirestoreCollectionMutation, useFirestoreDocument, useFirestoreDocumentDeletion, useFirestoreDocumentMutation, useFirestoreQuery } from "@react-query-firebase/firestore";
-import { ButtonStatuses, LoadingButton } from "../components/Button/LoadingButton"
+import { ButtonStatuses, LoadingButton } from "@components/Button/LoadingButton"
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTrash } from '@fortawesome/free-solid-svg-icons';
-import { Combat } from '../model/Combat';
+import { Combat } from '@model/Combat';
 
 export function useCampaignCombats(campaignDocId: string) {
   const ref = query(collection(firestore, "combats"), where("campaignDocId", "==", campaignDocId));
@@ -77,11 +77,9 @@ export const useAddCombatButton = (newCombat: Combat, onClick: () => void, valid
             combatCharacterArray,
             currentTurnIndex,
         })
-        console.log("ERROR", mutation.error)
       }
   
         if (!mutation.error){
-          console.log("onClick")
           onClick();
         }
   
@@ -125,7 +123,6 @@ export const useUpdateInitiative = (combat: Combat) => {
       mutation.mutate();
   
         if (!mutation.error){
-          console.log("onClick")
           onClick();
         }
   

@@ -1,18 +1,18 @@
 import React, { useState } from 'react';
-import { CampaignLocation } from '../../../../../model/Location';
+import { CampaignLocation } from '@model/Location';
 import { TreeItem } from "@mui/lab"; 
 import { Grid } from "@mui/material";
-import CreateCampaignLocationModal from '../../../../../components/Modal/CreateCampaignLocationModal/CreateCampaignLocationModal';
-import { Button } from '../../../../../components/Button/Button';
-import { Typography } from '../../../../../components/Typography/Typography';
-import { Item } from '../../../../../model/Item';
-import BACKUP from "../../../../../images/hauntedCastleBackground.jpg"
-import { NPC } from '../../../../../model/NPC';
-import NPCPicker from '../../../../../components/NPCPicker/NPCPicker';
-import { SetCampaignLocation, useDeleteCampaignLocationButton } from '../../../../../service/CampaignLocationService';
-import NPCThumbCard from '../../../../../components/NPCThumbCard/NPCThumbCard';
+import CreateCampaignLocationModal from '@components/Modal/CreateCampaignLocationModal/CreateCampaignLocationModal';
+import { Button } from '@components/Button/Button';
+import { Typography } from '@components/Typography/Typography';
+import { Item } from '@model/Item';
+import BACKUP from "@images/hauntedCastleBackground.jpg"
+import { NPC } from '@model/NPC';
+import NPCPicker from '@components/NPCPicker/NPCPicker';
+import { SetCampaignLocation, useDeleteCampaignLocationButton } from '@services/CampaignLocationService';
 import css from "../../SingleCampaign.module.scss"
-import TextEditorDisplay from '../../../../../components/TextEditor/TextEditDisplay';
+import TextEditorDisplay from '@components/TextEditor/TextEditDisplay';
+import NPCCard from '@components/BaseCharacterThumbCard/Cards/NPCCard';
 
 declare interface CampaignTreeLocationProps {
     campaignLocation: CampaignLocation,
@@ -76,7 +76,13 @@ const CampaignTreeLocation = ({ campaignLocation, subLocationOptions = [], campa
                             {
                                 campaignLocationsNPCs.map(npc => (
                                     <Grid item md={4} sm={6} xs={12}>
-                                        <NPCThumbCard npc={npc} />
+                                        <NPCCard
+                                            baseCharacter={npc}
+                                            removeOverride={() => {
+                                                const newNPCs = campaignLocation.npcs.filter(docId => docId !== npc.docId)
+                                                saveCampaignLocation({...campaignLocation, npcs: newNPCs} )
+                                            }}
+                                        />
                                     </Grid>
                                 ))
                             }

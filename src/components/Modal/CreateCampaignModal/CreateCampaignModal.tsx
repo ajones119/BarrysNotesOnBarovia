@@ -5,8 +5,8 @@ import { TextInput } from '../../TextInput/TextInput';
 import TextArea from '../../TextArea/TextArea';
 
 import css from "./CreateCampaignModal.module.scss"
-import { Campaign, validateCampaign } from '../../../model/Campaign';
-import { useAddCampaignButton } from '../../../service/CampaignService';
+import { Campaign, validateCampaign } from '@model/Campaign';
+import { useAddCampaignButton } from '@services/CampaignService';
 
 declare interface CreateCampaignModalProps {
     isOpen: boolean;

@@ -1,0 +1,22 @@
+@import "src/sass_utils";
+
+.resourceDrawer {
+  color: $primary;
+  border-color: $primary;
+  padding: 16px;
+  height: 95%;
+
+  .resourceList {
+    padding-top: 8px;
+    height: 100%;
+    flex: 1;
+  }
+
+  .icon {
+    color: $light;
+
+    &:hover {
+      background-color: grey;
+    }
+  }
+}

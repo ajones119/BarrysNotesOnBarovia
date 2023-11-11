@@ -2,8 +2,8 @@ import { useState, useEffect } from 'react';
 import { collection, doc, query, where } from "firebase/firestore";
 import { firestore } from "./firebase";
 import { useFirestoreCollectionMutation, useFirestoreDocumentDeletion, useFirestoreDocumentMutation, useFirestoreQuery } from "@react-query-firebase/firestore";
-import { ButtonStatuses, LoadingButton } from "../components/Button/LoadingButton";
-import { CampaignLocation } from '../model/Location';
+import { ButtonStatuses, LoadingButton } from "@components/Button/LoadingButton";
+import { CampaignLocation } from '@model/Location';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTrash } from '@fortawesome/free-solid-svg-icons';
 
@@ -23,7 +23,6 @@ export const useAddCampaignLocationButton = (newCampaignLocation: CampaignLocati
   
     const handleClick = () => {
         const valid = validate();
-        console.log(valid)
         if (valid) {
         mutation.mutate({ 
             campaignDocId,
@@ -38,7 +37,6 @@ export const useAddCampaignLocationButton = (newCampaignLocation: CampaignLocati
         }
 
         if (!mutation.error){
-            console.log("onClick")
             onClick();
         }
 
@@ -131,7 +129,6 @@ export const useDeleteCampaignLocationButton = (campaignLocation: CampaignLocati
       mutation.mutate();
   
         if (!mutation.error){
-          console.log("onClick")
           onClick();
         }
   

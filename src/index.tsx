@@ -8,18 +8,19 @@ import App from "./App";
 import { QueryClient, QueryClientProvider } from "react-query";
 import ScrollToTop from "./components/ScrollToTop";
 
-const queryClient = new QueryClient()
+const queryClient = new QueryClient();
 
-const root = ReactDOM.createRoot(document.getElementById('root')!);
+const root = ReactDOM.createRoot(document.getElementById("root")!);
 root.render(
   <div className="master">
     <QueryClientProvider client={queryClient}>
       <HashRouter>
         <ScrollToTop />
-        { App() }
+        {App()}
       </HashRouter>
     </QueryClientProvider>
-  </div>);
+  </div>,
+);
 
 // If you want to start measuring performance in your app, pass a function
 // to log results (for example: reportWebVitals(console.log))

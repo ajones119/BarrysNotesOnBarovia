@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { Typography } from '../../../components/Typography/Typography';
-import { useCharacter } from '../../../service/CharacterService';
-import Tabs from '../../../components/Tabs/Tabs';
-import { Character } from '../../../model/Character';
+import { Typography } from '@components/Typography/Typography';
+import { useCharacter } from '@services/CharacterService';
+import Tabs from '@components/Tabs/Tabs';
+import { Character } from '@model/Character';
 import Overview from './Tabs/Overview';
 
 const getTabs = (

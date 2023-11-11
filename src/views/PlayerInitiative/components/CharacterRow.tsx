@@ -1,14 +1,16 @@
 import React from "react";
-import { CombatCharacter } from "../../../model/CombatCharacter";
+import { CombatCharacter } from "@model/CombatCharacter";
 import { Avatar, LinearProgress, Tooltip, TooltipProps, styled, tooltipClasses } from "@mui/material";
 import css from "../PlayerInitiative.module.scss";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowRight, faExclamationCircle } from "@fortawesome/free-solid-svg-icons";
-import BACKUP from "../../../images/barry-cartoon.png"
-import { Typography } from "../../../components/Typography/Typography";
+import BACKUP from "@images/barry-cartoon.png"
+import { Typography } from "@components/Typography/Typography";
 import { getHealthBarColor, getHealthIcon, getIconList } from "../utils";
-import { Spacer } from "../../../components/Spacer/Spacer";
+import { Spacer } from "@components/Spacer/Spacer";
 import { useSpring, animated } from "@react-spring/web";
+import { CharacterTypeLowercase } from "@model/BaseCharacter";
+import { BASE_CHARACTER_IMAGE_MAP } from "utils/getBaseCharacterGenericImage";
 
 const BootstrapTooltip = styled(({ className, ...props }: TooltipProps) => (
     <Tooltip {...props} arrow classes={{ popper: className }} />
@@ -23,7 +25,7 @@ const BootstrapTooltip = styled(({ className, ...props }: TooltipProps) => (
 
 type CharacterRowProps = {
     healthBarAmount?: number;
-    playerCharacterImageUrl?: string;
+    rowImageURL?: string;
     combatCharacter: CombatCharacter;
     isCurrentTurn?: boolean;
     isNextTurn?: boolean;
@@ -31,7 +33,7 @@ type CharacterRowProps = {
 
 const CharacterRow = ({
     healthBarAmount,
-    playerCharacterImageUrl,
+    rowImageURL,
     combatCharacter,
     isCurrentTurn = false,
     isNextTurn = false,
@@ -51,7 +53,9 @@ const CharacterRow = ({
         to: { x: 0 }, 
         duration: 5000,
     });*/
-
+    const characterType: CharacterTypeLowercase = (combatCharacter?.type?.toLowerCase() || "unknown") as CharacterTypeLowercase;
+    const defaultImage = BASE_CHARACTER_IMAGE_MAP[characterType] 
+    const image = rowImageURL || defaultImage;
 
     return (
         <div className={css.healthBar}>
@@ -69,8 +73,8 @@ const CharacterRow = ({
                     icon={faArrowRight} 
                 /></animated.div>}
                 <div className={css.nameRow}>
-                    { playerCharacterImageUrl && <Avatar
-                        src={playerCharacterImageUrl || BACKUP}
+                    { <Avatar
+                        src={image || BACKUP}
                         alt="boo"
                         sx={{width: 32, height: 32}}
                     />}

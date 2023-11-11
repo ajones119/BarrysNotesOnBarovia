@@ -2,8 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { collection, doc, query, where } from "firebase/firestore";
 import { firestore } from "./firebase";
 import { useFirestoreCollectionMutation, useFirestoreDocument, useFirestoreDocumentMutation, useFirestoreQuery } from "@react-query-firebase/firestore";
-import { Character } from "../model/Character";
-import { ButtonStatuses, LoadingButton } from "../components/Button/LoadingButton"
+import { Character } from "@model/Character";
+import { ButtonStatuses, LoadingButton } from "@components/Button/LoadingButton"
 
 export function useCharacter(characterDocId = "") {
   const ref = doc(firestore, "characters", characterDocId);
@@ -44,7 +44,6 @@ export const useAddCharacterButton = (newCharacter: Character, onClick: () => vo
     const valid = validate();
     if (valid) {
       mutation.mutate({ name, player, characterImageURL, backstory, className, dndBeyondURL, campaignDocId, passivePerception, initiativeBonus, armorClass, maxHealth })
-      console.log("ERROR", mutation.error)
     }
 
     if (!mutation.error && valid){
@@ -76,14 +75,12 @@ export const useUpdateCharacterButton = (newCharacter: Character, onClick: () =>
   const [buttonStatus, setButtonStatus] = useState<ButtonStatuses>(ButtonStatuses.Idle);
 
   const { name = "", player = "", campaignDocId = "", characterImageURL = "", backstory = "", className = "", dndBeyondURL = "", docId, passivePerception = 0, initiativeBonus = 0, armorClass = 0, maxHealth = 0 } = newCharacter;
-  console.log(newCharacter)
 
   const handleClick = () => {
 
     const valid = validate();
     if (valid) {
       mutation.mutate({ docId, name, player, characterImageURL, backstory, className, dndBeyondURL, campaignDocId, passivePerception, initiativeBonus, armorClass, maxHealth })
-      console.log("ERROR", mutation.error)
     }
 
     if (!mutation.error && valid){
