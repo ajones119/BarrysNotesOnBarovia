@@ -27,7 +27,7 @@ export const NavBar = () => {
   return (
     <div className={`navbar-container ${scrolled ?  "scrolled" : ""}`}>
       <div className="navbar-grid">
-        <div className="navbar-link">
+        <div className="navbar-link" onClick={() => navigate("/")}>
           <img src={ Barry } alt="barry" style={{ height: "75px" }}/>
         </div>
         <div className="navbar-link" onClick={() => { navigate("/Campaigns/"); }}>

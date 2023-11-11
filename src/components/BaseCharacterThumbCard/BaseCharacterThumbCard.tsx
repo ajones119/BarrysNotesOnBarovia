@@ -66,7 +66,7 @@ const BaseCharacterThumbCard = ({ baseCharacter, onClickEdit, onClickDelete, onC
                     </div>
                 }
                 perspective={400}
-                springConfig={{ mass: 15, tension: 500, friction: 80 }}
+                springConfig={{ mass: 10, tension: 500, friction: 100 }}
                 flipOnClick
                 flipOnHover
                 cardClassName={css.thumbCard}
