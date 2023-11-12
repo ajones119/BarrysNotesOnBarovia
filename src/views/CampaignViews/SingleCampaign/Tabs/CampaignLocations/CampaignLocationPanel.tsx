@@ -47,7 +47,6 @@ const CampaignLocationPanel = ({ location, npcs = [], subLocations = [] }: Campa
         );
     }
 
-    console.log("SUB LOCATIONS", subLocations.length)
 
     return (
         <div className={css.currentLocationPanelContainer} >

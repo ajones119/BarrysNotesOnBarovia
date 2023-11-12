@@ -29,7 +29,6 @@ const CampaignLocations = ({
     const baseLocations = locations.filter(l => !l.parentLocationId)
 
     const currentlySelectedLocation = locations.find(location => location.docId == searchParams.get("id"))
-    console.log(currentlySelectedLocation)
     const subLocations = currentlySelectedLocation ? locations.filter(location => location.parentLocationId === currentlySelectedLocation.docId) : [];
 
 

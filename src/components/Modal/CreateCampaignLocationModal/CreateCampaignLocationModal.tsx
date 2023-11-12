@@ -29,7 +29,6 @@ const CreateCampaignLocationModal = ({isOpen, onClose, campaignId, parentLocatio
     } = newCampaignLocation;
 
     const handleOnClose = () => {
-        console.log("RUN ON CLSOE")
         onClose();
         setNewCampaignLocation(editLocation ? editLocation : { campaignDocId: campaignId, parentLocationId: parentLocationIdOverride })
     }
