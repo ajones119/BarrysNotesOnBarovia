@@ -1,0 +1,97 @@
+@import "src/sass_utils";
+
+.locationsTreePage {
+    display: grid;
+    grid-template-columns: 400px 1fr;
+
+    @media (max-width: 800px)  {
+        grid-template-columns: 1fr
+    }
+
+    .locationsTree {
+        color: $light;
+        text-align: left;
+        border-width: 1px;
+        border-style: solid;
+        border-color: $primary;
+        border-radius: 8px;
+        padding: 8px;
+        overflow: scroll;
+    }
+
+    .currentLocationContainer {
+        text-align: left;
+        border-width: 1px;
+        border-style: solid;
+        border-color: $primary;
+        border-radius: 8px;
+        padding: 8px;
+        min-height: 600px;
+    }
+
+    .currentLocationPanelContainer {
+        text-align: left;
+        row-gap: 16px;
+        display: flex;
+        flex-direction: column;
+        
+        .header {
+            display: flex;
+            justify-content: space-between;
+
+            .headerLeft {
+                display: flex;
+                align-items: center;
+                column-gap: 8px;
+                .title {
+                    display: block;
+                    word-break: break-all;
+                    word-wrap: break-word;
+                }
+                .editIcon {
+                    color: $light;
+                    cursor: pointer;
+
+                    &:hover {
+                        color: $primary
+                    }
+                }
+            }
+        }
+
+        .description {
+            padding: 0 16px;
+        }
+
+        .imageContainer {
+            display: flex;
+            justify-content: center;
+            .image {
+                max-width: 100%;
+                width: 600px;
+                border-radius: 8px;
+            }
+        }
+
+        .characters {
+            text-align: left;
+            .characterPickerRow {
+                display: flex;
+                justify-content: center;
+                flex-direction: row;
+                align-items: center;
+                column-gap: 32px;
+            }
+
+            .charactersList {
+                display: grid;
+                justify-content: center;
+                grid-template-columns: 1fr 1fr 1fr;
+
+                @media (max-width < 600) {
+                    grid-template-columns: 1fr;
+                }
+            }
+        }
+    }
+}

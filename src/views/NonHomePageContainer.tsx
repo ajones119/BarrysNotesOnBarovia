@@ -10,9 +10,9 @@ declare interface NonHomePageContainerProps {
 export const NonHomePageContainer = ({ page }: NonHomePageContainerProps) => {
     return (
         <div>
-        <NavBar />
-        <div className="nonHomePage">{ page }</div>
-        <Spacer height={24}/>
+            <NavBar />
+            <div className="nonHomePage">{ page }</div>
+            <Spacer height={64}/>
         </div>
     );
 }

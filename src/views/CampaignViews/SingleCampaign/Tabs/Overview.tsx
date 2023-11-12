@@ -14,11 +14,12 @@ const Overview = ({ campaign }: OverviewProps) => {
         <div className={css.overview}>
             <Grid container rowSpacing={3}>
                 <Grid item xs={12}>
-                    <Typography>{campaign.title}</Typography>
+                    <Typography weight='bold' size='xtraLarge' underline>{campaign.title}</Typography>
                 </Grid>
                 <Grid item xs={12}>
-                    <div className={css.overviewImage}>
+                    <div >
                         <img
+                            className={css.overviewImage}
                             src={campaign.campaignImageURL}
                             onError={({ currentTarget }) => {
                                 currentTarget.onerror = null; // prevents looping
