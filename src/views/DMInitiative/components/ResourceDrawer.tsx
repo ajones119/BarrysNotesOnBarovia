@@ -11,6 +11,7 @@ import styled from "@emotion/styled";
 import { useCustomMonsters } from "@services/CustomMonstersService";
 import { useDebounce } from "usehooks-ts";
 import { CharacterType } from "@model/BaseCharacter";
+import { MonsterXPByChallengeRating } from "@model/ChallengeRating";
 
 type ResourceDrawerProps = {
   onAdd?: (data: any) => void;
@@ -68,62 +69,66 @@ const Row = (props: ListChildComponentProps) => {
 };
 
 type DrawerMonster = {
-  name: string,
-  listName: string,
-  health: number,
-  maxHealth: number,
-  armorClass: number,
-  initiativeBonus: number,
-  type?: CharacterType,
-  imageURL?: string
-}
+  name: string;
+  listName: string;
+  health: number;
+  maxHealth: number;
+  armorClass: number;
+  initiativeBonus: number;
+  xp: number;
+  type?: CharacterType;
+  imageURL?: string;
+};
 
 const ResourceDrawer = ({ onAdd }: ResourceDrawerProps) => {
   const { isLoading, monsters } = useDndApiMonsters();
-  const { isLoading: isCustomMonsterLoading, monsters: customMonsters = [] } = useCustomMonsters();
+  const { isLoading: isCustomMonsterLoading, monsters: customMonsters = [] } =
+    useCustomMonsters();
   const [search, setSearch] = useState<string>();
-  const searchValue = useDebounce(search, 250)
+  const searchValue = useDebounce(search, 250);
   const fullMonsterList = useMemo<DrawerMonster[]>(() => {
     if (!isLoading && !isCustomMonsterLoading) {
-      const apiList: DrawerMonster[] = monsters.map(monster => (
-        {
-          name: monster.name,
-          listName: monster.name,
-          health: monster.hitPoints,
-          maxHealth: monster.hitPoints,
-          armorClass: monster.armorClass,
-          initiativeBonus: Math.floor((monster.dexterity - 10) / 2),
-          type: monster?.type as CharacterType || "",
+      const apiList: DrawerMonster[] = monsters.map((monster) => ({
+        name: monster.name,
+        listName: monster.name,
+        health: monster.hitPoints,
+        maxHealth: monster.hitPoints,
+        armorClass: monster.armorClass,
+        initiativeBonus: Math.floor((monster.dexterity - 10) / 2),
+        type: (monster?.type as CharacterType) || "",
+        xp: MonsterXPByChallengeRating[monster.challengeRating] ?? 1,
+      }));
 
-        }
-      ));
-
-      const customList: DrawerMonster[] = customMonsters?.map(monster => (
-        { 
-          name: monster.name,
-          listName: `${monster.name} (custom)`,
-          health: monster.averageHitPoints || 0,
-          maxHealth: monster.averageHitPoints || 0,
-          armorClass: monster.armorClass || 0,
-          initiativeBonus: Math.floor((monster.abilityScores.dexterity - 10) / 2) || 0,
-          type: monster.type,
-          imageURL: monster?.characterImageURL || ""
-        }
-      ));
+      const customList: DrawerMonster[] = customMonsters?.map((monster) => ({
+        name: monster.name,
+        listName: `${monster.name} (custom)`,
+        health: monster.averageHitPoints || 0,
+        maxHealth: monster.averageHitPoints || 0,
+        armorClass: monster.armorClass || 0,
+        initiativeBonus:
+          Math.floor((monster.abilityScores.dexterity - 10) / 2) || 0,
+        type: monster.type,
+        imageURL: monster?.characterImageURL || "",
+        xp: monster.xp ?? 0,
+      }));
 
       const combinedList = apiList.concat(customList);
-    
-      return combinedList
+
+      return combinedList;
     } else {
       return [];
     }
-  }, [isLoading, isCustomMonsterLoading, searchValue])
+  }, [isLoading, isCustomMonsterLoading, searchValue]);
 
   const filteredMonsters = useMemo(() => {
-    return fullMonsterList.filter(
-      (monster) => !searchValue || monster.name.toLowerCase().includes(searchValue.toLowerCase()),
-    ).sort();
-  }, [searchValue, fullMonsterList.length])
+    return fullMonsterList
+      .filter(
+        (monster) =>
+          !searchValue ||
+          monster.name.toLowerCase().includes(searchValue.toLowerCase()),
+      )
+      .sort();
+  }, [searchValue, fullMonsterList.length]);
 
   if (isLoading || isCustomMonsterLoading) return;
 
