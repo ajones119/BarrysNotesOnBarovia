@@ -33,8 +33,6 @@ const PlayerInitiative = () => {
     const PCs = combatCharacterArray?.filter(character => character?.playerDocId);
     const others = combatCharacterArray?.filter(character => !character?.playerDocId);
 
-    console.log("combat array", combat?.combatCharacterArray)
-
     return (
         <div className={css.playerInitiativeContainer}>
             <CharacterPicker onChange={(value) => {

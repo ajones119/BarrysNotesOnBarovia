@@ -14,6 +14,56 @@ import { useCampaignCharacters } from "@services/CharacterService";
 import { getCombatURL } from "./utils";
 import CopyButton from "@components/Button/ReusableButtons/CopyButton";
 import ResourceDrawer from "@views/DMInitiative/components/ResourceDrawer";
+import LinearProgress from "@mui/material/LinearProgress";
+import {
+  ENCOUNTER_DIFFICULTY,
+  getEncounterDifficulty,
+} from "@model/ChallengeRating";
+import Box from "@mui/material/Box";
+
+type EncounterDiffultyProgressProps = {
+  difficulty: ENCOUNTER_DIFFICULTY;
+};
+
+const EncounterDiffultyProgress = ({
+  difficulty,
+}: EncounterDiffultyProgressProps) => {
+  let hint = "easy";
+  let color: "success" | "secondary" | "warning" | "error" = "success";
+
+  if (difficulty === ENCOUNTER_DIFFICULTY.medium) {
+    hint = "warning";
+    color = "warning";
+  }
+  if (difficulty === ENCOUNTER_DIFFICULTY.hard) {
+    hint = "hard";
+    color = "error";
+  }
+  if (difficulty === ENCOUNTER_DIFFICULTY.deadly) {
+    hint = "deadly";
+    color = "error";
+  }
+
+  return (
+    <Box sx={{ width: "25%" }}>
+      <Box sx={{ display: "flex", alignItems: "center" }}>
+        <Box sx={{ width: "100%" }}>
+          <LinearProgress
+            variant="determinate"
+            value={(difficulty + 1) * 25}
+            color={color}
+          />
+        </Box>
+        <Box sx={{ minWidth: 35, pl: 2 }}>
+          <Typography color="light" size="small" weight="bolder">
+            {hint}
+          </Typography>
+        </Box>
+      </Box>
+      <Typography>Difficulty</Typography>
+    </Box>
+  );
+};
 
 const DMInitiative = () => {
   const { combatId, campaignId = "" } = useParams();
@@ -38,7 +88,6 @@ const DMInitiative = () => {
       : combat.currentTurnIndex + 1;
 
   const handleUpdate = (combat: Combat, overrideCharacterArray = list) => {
-    console.log(overrideCharacterArray.filter(item => !item?.playerDocId))
     updateInitiative({
       ...combat,
       combatCharacterArray: overrideCharacterArray,
@@ -60,6 +109,12 @@ const DMInitiative = () => {
     handleUpdate({ ...combat, currentTurnIndex: newNextTurn }, removedList);
   };
 
+  // TODO: do this properly using types for safety. Maybe a better signifier? What about npcs?
+  const encounterDiffulty = getEncounterDifficulty(
+    list.filter((character) => !character?.playerDocId),
+    characters,
+  );
+
   return (
     <div className={css.initiativeTrackerContainer}>
       <div className={css.topButtonsRow}>
@@ -74,7 +129,7 @@ const DMInitiative = () => {
           </Typography>
         </CopyButton>
         <Typography size={"xtraLarge"}>{combat.name}</Typography>
-        <div />
+        <EncounterDiffultyProgress difficulty={encounterDiffulty} />
       </div>
       <TableContainer>
         <TableHead>
