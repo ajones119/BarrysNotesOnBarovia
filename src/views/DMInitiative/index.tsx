@@ -110,6 +110,7 @@ const DMInitiative = () => {
     handleUpdate({ ...combat, currentTurnIndex: newNextTurn }, removedList);
   };
 
+  // TODO: do this properly using types for safety. Maybe a better signifier? What about npcs?
   const encounterDiffulty = getEncounterDifficulty(
     list.filter((character) => !character?.playerDocId),
     list.filter((character) => character?.playerDocId),
