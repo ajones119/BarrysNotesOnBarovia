@@ -1,109 +1,107 @@
 @import "src/sass_utils";
 
 .initiativeTrackerContainer {
-    margin: 0 auto;
-    max-width: 1096px;
-    flex-shrink: 0;
+  margin: 0 auto;
+  max-width: 1096px;
+  flex-shrink: 0;
 
-    .bottonsContainer {
-        position: fixed;
-        display: flex;
-        column-gap: 8px;
-        bottom: 16px;
-        right: 16px;
-        z-index: 100;
+  .bottonsContainer {
+    position: fixed;
+    display: flex;
+    column-gap: 8px;
+    bottom: 16px;
+    right: 16px;
+    z-index: 100;
+  }
+
+  .topButtonsRow {
+    display: flex;
+    justify-content: space-between;
+    overflow: visible;
+    padding-top: 8px;
+  }
+
+  .active {
+    color: black;
+    background-color: #3b321a;
+  }
+
+  .tableCell {
+    display: flex;
+    color: white;
+    column-gap: 16px;
+    align-items: center;
+    width: 100%;
+  }
+
+  .nameCell {
+    display: grid;
+    grid-template-columns: 1fr;
+    column-gap: 8px;
+    width: 100%;
+    align-items: center;
+  }
+
+  .identifier {
+    display: flex;
+    column-gap: 8px;
+    .avatar {
+      z-index: 1;
     }
+  }
 
-    .topButtonsRow {
-        display: flex;
-        justify-content: space-around;
-        overflow: visible;
-        padding-top: 8px;
+  .randomIcon {
+    &:hover {
+      cursor: pointer;
+      opacity: 0.8;
     }
+  }
 
-    .active {
-        color: black;
-        background-color: #3b321a;
-    }
+  .healthCell {
+    display: flex;
+  }
 
-    .tableCell {
-        display: flex;
-        color: white;
-        column-gap: 16px;
-        align-items: center;
-        width: 100%;
-    }
+  .healthCounterContainer {
+    background-color: black;
+    opacity: 0.9;
+    border-radius: 16px;
+    width: 80px;
+    text-align: center;
+    padding: 16px;
 
-    .nameCell {
-        display: grid;
-        grid-template-columns: 1fr;
-        column-gap: 8px;
-        width: 100%;
-        align-items: center;
-    }
+    .counterButtons {
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+      padding-top: 8px;
 
-    .identifier {
-        display: flex;
-        column-gap: 8px;
-        .avatar {
-            z-index: 1;
-        }
-    }
+      .plus {
+        color: green;
 
-    .randomIcon {
         &:hover {
-            cursor: pointer;
-            opacity: 0.8;
+          opacity: 0.8;
+          cursor: pointer;
         }
-    }
+      }
+      .minus {
+        color: red;
 
-    .healthCell {
-        display: flex;
-    }
-
-    .healthCounterContainer {
-        background-color: black;
-        opacity: 0.9;
-        border-radius: 16px;
-        width: 80px;
-        text-align: center;
-        padding: 16px;
-
-        .counterButtons {
-            display: flex;
-            justify-content: space-around;
-            align-items: center;
-            padding-top: 8px;
-
-            .plus {
-
-                color: green;
-                
-                &:hover {
-                    opacity: 0.8;
-                    cursor: pointer;
-                }
-            }
-            .minus {
-
-                color: red;
-
-                &:hover {
-                    opacity: 0.8;
-                    cursor: pointer;
-                }
-            }
+        &:hover {
+          opacity: 0.8;
+          cursor: pointer;
         }
+      }
     }
+  }
 }
 
 .picker {
-    background-color: $dark;
-    border-width: 1px;
-    //border-style: solid;
-    border-radius: 5px;
-    color: $primary;
-    border-color: $primary;
-    box-shadow: none;
-    text-align: center;
+  background-color: $dark;
+  border-width: 1px;
+  //border-style: solid;
+  border-radius: 5px;
+  color: $primary;
+  border-color: $primary;
+  box-shadow: none;
+  text-align: center;
 }

@@ -9,6 +9,7 @@ const apiMonsterFields = [
   "dexterity",
   "armor_class",
   "hit_points",
+  "cr",
 ];
 
 type ApiMonsterResponse = {
@@ -18,11 +19,16 @@ type ApiMonsterResponse = {
   dexterity: number;
   armor_class: number;
   hit_points: number;
+  cr: number;
 };
 
-export type Monster = Omit<ApiMonsterResponse, "armor_class" | "hit_points"> & {
+export type Monster = Omit<
+  ApiMonsterResponse,
+  "armor_class" | "hit_points" | "cr"
+> & {
   armorClass: number;
   hitPoints: number;
+  challengeRating: number;
 };
 
 export const useDndApiMonsters = (
@@ -38,7 +44,8 @@ export const useDndApiMonsters = (
     queryKey: ["apiMonsters"],
     queryFn: () =>
       fetch(
-        `${GET_MONSTERS}?fields=${apiMonsterFields.join(",")}${officialOnly ? "&document__slug=wotc-srd" : ""
+        `${GET_MONSTERS}?fields=${apiMonsterFields.join(",")}${
+          officialOnly ? "&document__slug=wotc-srd" : ""
         }&limit=4000`,
       ).then((res) => res.json()),
   });
@@ -53,6 +60,7 @@ export const useDndApiMonsters = (
           hitPoints: monster.hit_points,
           name: monster.name,
           dexterity: monster.dexterity,
+          challengeRating: monster.cr,
         }))
         .sort((a: Monster, b: Monster) => a.name.localeCompare(b.name)) ?? [],
     isLoading,
@@ -71,7 +79,8 @@ export const useDndApiMonsterTypes = (
     queryKey: ["apiMonsters", "types"],
     queryFn: () =>
       fetch(
-        `${GET_MONSTERS}?fields=type${officialOnly ? "&document__slug=wotc-srd" : ""
+        `${GET_MONSTERS}?fields=type${
+          officialOnly ? "&document__slug=wotc-srd" : ""
         }&limit=4000`,
       ).then((res) => res.json()),
   });
