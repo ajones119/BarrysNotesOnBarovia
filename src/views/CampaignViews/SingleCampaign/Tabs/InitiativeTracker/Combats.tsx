@@ -31,7 +31,6 @@ const Combats = ({ campaign, characters }: CombatsProps) => {
         health: character?.maxHealth,
         shouldShow: true,
         shouldShowHealthBar: true,
-        level: character.level,
       }) as CombatCharacter,
   );
 
