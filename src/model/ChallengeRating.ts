@@ -95,32 +95,28 @@ export const getEncounterDifficulty = (
     easy: players.reduce(
       (accumulator, currentValue) =>
         accumulator +
-        CharacterLevelEncounterXpThresholdsByDiffulty.easy[
-        currentValue.level as number
-        ],
+        CharacterLevelEncounterXpThresholdsByDiffulty.easy[currentValue.level],
       0,
     ),
     medium: players.reduce(
       (accumulator, currentValue) =>
         accumulator +
         CharacterLevelEncounterXpThresholdsByDiffulty.medium[
-        currentValue.level as number
+          currentValue.level
         ],
       0,
     ),
     hard: players.reduce(
       (accumulator, currentValue) =>
         accumulator +
-        CharacterLevelEncounterXpThresholdsByDiffulty.hard[
-        currentValue.level as number
-        ],
+        CharacterLevelEncounterXpThresholdsByDiffulty.hard[currentValue.level],
       0,
     ),
     deadly: players.reduce(
       (accumulator, currentValue) =>
         accumulator +
         CharacterLevelEncounterXpThresholdsByDiffulty.deadly[
-        currentValue.level as number
+          currentValue.level
         ],
       0,
     ),
