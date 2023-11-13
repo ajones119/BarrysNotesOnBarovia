@@ -7,52 +7,29 @@ import { CampaignLocation } from '@model/Location';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTrash } from '@fortawesome/free-solid-svg-icons';
 
-export const useAddCampaignLocationButton = (newCampaignLocation: CampaignLocation, onClick: () => void, validate: () => boolean) => {
+export const useCreateCampaignLocation = (onSuccess: () => void) => {
     const ref = collection(firestore, "campaignLocations");
     const mutation = useFirestoreCollectionMutation(ref);
-    const [buttonStatus, setButtonStatus] = useState<ButtonStatuses>(ButtonStatuses.Idle);
-    const {
-        campaignDocId = "",
-        name = "",
+
+    useEffect(() => onSuccess(), [mutation.isSuccess])
+
+    return ({
+        campaignDocId,
+        parentLocationId = "",
+        name,
         description = "",
         npcs = [],
-        parentLocationId,
-        childItemIds = [],
         locationImageURL = ""
-    } = newCampaignLocation;
-  
-    const handleClick = () => {
-        const valid = validate();
-        if (valid) {
-        mutation.mutate({ 
+    }: CampaignLocation) => {
+        mutation.mutate({
             campaignDocId,
-            name,
             parentLocationId,
+            name,
             description,
             npcs,
-            childItemIds,
             locationImageURL
-        })
-
-        }
-
-        if (!mutation.error){
-            onClick();
-        }
-
-        setButtonStatus(mutation.status as ButtonStatuses)
+        });
     }
-
-    useEffect(() => {
-        const timer = setTimeout(() => setButtonStatus(ButtonStatuses.Idle), 2000)
-        return () => {
-        clearTimeout(timer)
-        }
-    }, [buttonStatus])
-
-    return (
-        <LoadingButton color="success" size="large" isLoading={mutation.isLoading} status={buttonStatus} onClick={handleClick}>Save Base Location</LoadingButton>
-    );
 }
 
 export function useCampaignLocations(campaignId = "") {
@@ -72,29 +49,29 @@ export function useCampaignLocations(campaignId = "") {
         description = "",
         npcs = [],
         parentLocationId = "",
-        childItemIds = [],
         locationImageURL = ""
       } = campaignLocation.data()
 
-      return new CampaignLocation(
-        campaignLocation.id,
+      return {
+        docId: campaignLocation.id,
         campaignDocId,
         parentLocationId,
         name,
         description,
         npcs,
-        childItemIds,
         locationImageURL
-      );
+      };
     });
   
     return { campaignLocations: campaignsLocationsData, isLoading };
 }
 
-export function SetCampaignLocation(campaignLocation: CampaignLocation) {
+export function SetCampaignLocation(campaignLocation?: CampaignLocation, onSuccess = () => {}) {
     const campaignLocations = collection(firestore, "campaignLocations");
-    const ref = doc(campaignLocations, campaignLocation.docId);
+    const ref = doc(campaignLocations, campaignLocation?.docId || "a");
     const mutation = useFirestoreDocumentMutation(ref);
+
+    useEffect(() => onSuccess(), [mutation.isSuccess])
 
     return ({
         campaignDocId,
@@ -102,7 +79,6 @@ export function SetCampaignLocation(campaignLocation: CampaignLocation) {
         name,
         description,
         npcs,
-        childItemIds,
         locationImageURL
     }: CampaignLocation) => {
         mutation.mutate({
@@ -111,7 +87,6 @@ export function SetCampaignLocation(campaignLocation: CampaignLocation) {
             name,
             description,
             npcs,
-            childItemIds,
             locationImageURL
         });
     }
@@ -119,14 +94,14 @@ export function SetCampaignLocation(campaignLocation: CampaignLocation) {
 
 // ADD NESTED DELETION SO THAT NESTED DATA GET'S DELETED!!!!
 
-export const useDeleteCampaignLocationButton = (campaignLocation: CampaignLocation, onClick = () => {}, disabled = false) => {
+export const useDeleteCampaignLocationButton = (campaignLocation?: CampaignLocation, onClick = () => {}, disabled = false) => {
     const col = collection(firestore, "campaignLocations");
-    const ref = doc(col, campaignLocation.docId);
+    const ref = doc(col, campaignLocation?.docId || "0");
     const mutation = useFirestoreDocumentDeletion(ref);
     const [buttonStatus, setButtonStatus] = useState<ButtonStatuses>(ButtonStatuses.Idle);
     
     const handleClick = () => {
-      mutation.mutate();
+      !!location && mutation.mutate();
   
         if (!mutation.error){
           onClick();

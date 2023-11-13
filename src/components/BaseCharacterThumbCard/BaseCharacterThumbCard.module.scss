@@ -8,12 +8,6 @@
     display: flex;
     justify-content: center;
 
-    .cardImage {
-        border-radius: 50px;
-        max-width: 100%;
-        max-height: 300px;
-    }
-
     .thumbCard {
         position: relative;
         max-width: 500px;
@@ -33,13 +27,21 @@
             flex-direction: column;
             text-align: center;
             z-index: 0;
+            overflow: hidden;
+
+            .cardImage {
+                border-radius: 32px;
+                max-width: 100%;
+                max-height: 300px;
+                margin: 0 auto;
+            }
 
             .frontName {
                 opacity: 0.8;
                 background-color: $dark;
-                width: 100%;
+                width: 94%;
                 position: absolute;
-                bottom: 24px;
+                bottom: 32px;
             }
         }
 

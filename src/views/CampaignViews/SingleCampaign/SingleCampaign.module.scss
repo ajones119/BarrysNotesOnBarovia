@@ -1,6 +1,12 @@
 @import "src/sass_utils";
 
-.center {
-    margin: 0 auto;
-    text-align: center;
+.singleCampaign {
+    display: flex;
+}
+
+.overview {
+    margin-bottom:64px;
+    .overviewImage {
+        border-radius: 24px;
+    }
 }

@@ -88,7 +88,6 @@ const DMInitiative = () => {
       : combat.currentTurnIndex + 1;
 
   const handleUpdate = (combat: Combat, overrideCharacterArray = list) => {
-    console.log(overrideCharacterArray.filter((item) => !item?.playerDocId));
     updateInitiative({
       ...combat,
       combatCharacterArray: overrideCharacterArray,
