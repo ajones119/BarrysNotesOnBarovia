@@ -2,10 +2,8 @@ import React, {useState} from 'react';
 import css from "../SingleCampaign.module.scss"
 import { useParams } from 'react-router-dom';
 import { Grid } from "@mui/material";
-import { Character } from '@model/Character';
 import { CharacterThumbCard } from '@components/CharacterThumbCard/CharacterThumbCard';
 import { Spacer } from '@components/Spacer/Spacer';
-import { NPC } from '@model/NPC';
 import { Typography } from '@components/Typography/Typography';
 import { Button } from '@components/Button/Button';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -14,10 +12,11 @@ import CreateCharacterModal from '@components/Modal/CreateCharacterModal/CreateC
 import NPCCard from '@components/BaseCharacterThumbCard/Cards/NPCCard';
 import NPCDrawer from '@components/Drawer/BaseCharacterDrawer/NPCDrawer';
 import { BaseCharacter } from '@model/BaseCharacter';
+import { PlayerCharacter } from '@model/PlayerCharacter';
 
 declare interface CampaignCharactersProps {
-    characters: Character[],
-    npcs: NPC[]
+    characters: PlayerCharacter[],
+    npcs: BaseCharacter[]
 }
 
 const CampaignCharacters = ({ characters, npcs }: CampaignCharactersProps) => {
@@ -43,7 +42,7 @@ const CampaignCharacters = ({ characters, npcs }: CampaignCharactersProps) => {
             <Grid container justifyContent="space-around" alignItems="center" rowSpacing={2}>
                 <Grid item xs={12}><Typography>Characters{" "} <Button color="dark" onClick={() => setIsAddCharacterOpen(true)}><FontAwesomeIcon icon={faPlus} /></Button></Typography></Grid>
                 {
-                    characters?.map((character: Character) => (
+                    characters?.map((character: PlayerCharacter) => (
                         <Grid item xs={12} md={6}>
                             <CharacterThumbCard character={character}/>
                         </Grid>
@@ -53,7 +52,7 @@ const CampaignCharacters = ({ characters, npcs }: CampaignCharactersProps) => {
             <Spacer height={24}/>
             <Grid container justifyContent="space-around" alignItems="center">
                 <Grid item xs={12}><Typography>Non-player Characters{" "} <Button color="dark" onClick={() => setIsAddNPCOpen(true)}><FontAwesomeIcon icon={faPlus} /></Button></Typography></Grid>
-                { npcs?.map((npc: NPC) => (
+                { npcs?.map((npc: BaseCharacter) => (
                     <Grid item xs={12} md={4} lg={3}>
                         <NPCCard
                             baseCharacter={npc}

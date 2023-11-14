@@ -7,7 +7,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTrash } from '@fortawesome/free-solid-svg-icons';
 import { Combat } from '@model/Combat';
 
-export function useCampaignCombats(campaignDocId: string) {
+export function useCampaignCombats(campaignDocId: string): {combats: Combat[], isLoading: boolean, refetch: () => void} {
   const ref = query(collection(firestore, "combats"), where("campaignDocId", "==", campaignDocId));
 
   const CombatQuery = useFirestoreQuery([`${campaignDocId}-campaignCombatsList`], ref, { subscribe: true });
@@ -15,43 +15,26 @@ export function useCampaignCombats(campaignDocId: string) {
   
   const { data, isLoading, refetch } = CombatQuery;
 
-  const CombatData = data?.docs.map(combat => {
-
-    const {
-      campaignDocId,
-      combatCharacterArray = [],
-      name = "",
-      currentTurnIndex = 0
-    } = combat.data();
-    
-    return new Combat(
-      combat.id,
-      campaignDocId,
-      combatCharacterArray,
-      name,
-      currentTurnIndex
-    );
-  });
+  const CombatData = data?.docs.map(combat => ({
+      ...combat?.data(),
+      docId: combat.id,
+    }) as Combat) || [];
 
   return { combats: CombatData, isLoading, refetch };
 }
 
-export const useCombat = (combatDocId = "") => {
+export const useCombat = (combatDocId = ""): {combat: Combat, isLoading: boolean, isRefetching: boolean} => {
   const ref = doc(firestore, "combats", combatDocId);
 
   const campaignQuery = useFirestoreDocument(["singleCombat", combatDocId], ref, {subscribe: true});
   
   const { data, isLoading, isRefetching } = campaignQuery;
 
-  const combatData = data?.data() || {};
-
-  const combat = new Combat(
-    combatDocId,
-    combatData?.campaignDocId,
-    combatData?.combatCharacterArray,
-    combatData?.name,
-    combatData?.currentTurnIndex
-  );
+  const combat: Combat = {
+    ...data?.data(),
+    combatCharacterArray: data?.data()?.combatCharacterArray,
+    docId: combatDocId,
+  };
 
   return { combat, isLoading, isRefetching };
 }

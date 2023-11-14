@@ -10,8 +10,6 @@ import CampaignCharacters from './Tabs/CampaignCharacters';
 import CampaignNotes from './Tabs/CampaignNotes';
 import { useCampaignNPCs } from '@services/NPCService';
 import { useCampaignCharacters } from '@services/CharacterService';
-import { Character } from '@model/Character';
-import { NPC } from '@model/NPC';
 import { Note } from '@model/Note';
 import { useCampaignNotes } from '@services/NotesService';
 import CampaignLocations from './Tabs/CampaignLocations/CampaignLocations';
@@ -21,11 +19,13 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBook, faEarthAmericas, faMagnifyingGlassLocation, faSkullCrossbones } from '@fortawesome/free-solid-svg-icons';
 import { faCircleUser } from '@fortawesome/free-regular-svg-icons';
 import Combats from './Tabs/InitiativeTracker/Combats';
+import { PlayerCharacter } from '@model/PlayerCharacter';
+import { BaseCharacter } from '@model/BaseCharacter';
 
 const getTabs = (
     campaign: Campaign,
-    characters: Character[],
-    NPCs: NPC[],
+    characters: PlayerCharacter[],
+    NPCs: BaseCharacter[],
     notes: Note[],
     locations: CampaignLocation[]
     ) => [

@@ -4,14 +4,14 @@ import { TreeItem } from "@mui/x-tree-view";
 import CreateCampaignLocationModal from '@components/Modal/CreateCampaignLocationModal/CreateCampaignLocationModal';
 import { Button } from '@components/Button/Button';
 import { Item } from '@model/Item';
-import { NPC } from '@model/NPC';
+import { BaseCharacter } from '@model/BaseCharacter';
 
 declare interface CampaignTreeLocationProps {
     campaignLocation: CampaignLocation,
     subLocationOptions?: CampaignLocation[],
     subItems?: Item[],
     campaignId: string,
-    npcs?: NPC[],
+    npcs?: BaseCharacter[],
     selectedLocation?: CampaignLocation
 }
 

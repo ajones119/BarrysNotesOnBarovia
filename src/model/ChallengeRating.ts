@@ -1,5 +1,5 @@
 import { BaseCharacter } from "@model/BaseCharacter";
-import { Character } from "@model/Character";
+import { PlayerCharacter } from "./PlayerCharacter";
 
 // Credit to stack overflow - https://stackoverflow.com/a/71700658
 type Tuple<
@@ -123,7 +123,7 @@ export const getEncounterMultiplier = (
 
 export const getEncounterDifficulty = (
   monsters: BaseCharacter[],
-  players: Character[],
+  players: PlayerCharacter[],
 ): ENCOUNTER_DIFFICULTY => {
   // TODO (churt): get better at typescript.
   const partyDifficultyXpThresholds: Record<
@@ -133,28 +133,28 @@ export const getEncounterDifficulty = (
     easy: players.reduce(
       (accumulator, currentValue) =>
         accumulator +
-        CharacterLevelEncounterXpThresholdsByDiffulty.easy[currentValue.level],
+        CharacterLevelEncounterXpThresholdsByDiffulty.easy[currentValue.level || 0],
       0,
     ),
     medium: players.reduce(
       (accumulator, currentValue) =>
         accumulator +
         CharacterLevelEncounterXpThresholdsByDiffulty.medium[
-          currentValue.level
+          currentValue.level || 0
         ],
       0,
     ),
     hard: players.reduce(
       (accumulator, currentValue) =>
         accumulator +
-        CharacterLevelEncounterXpThresholdsByDiffulty.hard[currentValue.level],
+        CharacterLevelEncounterXpThresholdsByDiffulty.hard[currentValue.level || 0],
       0,
     ),
     deadly: players.reduce(
       (accumulator, currentValue) =>
         accumulator +
         CharacterLevelEncounterXpThresholdsByDiffulty.deadly[
-          currentValue.level
+          currentValue.level || 0
         ],
       0,
     ),

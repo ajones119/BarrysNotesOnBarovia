@@ -69,6 +69,8 @@ const DMInitiative = () => {
   const { combatId, campaignId = "" } = useParams();
 
   const { combat, isLoading, isRefetching } = useCombat(combatId);
+  console.log("COMBAT", combat)
+  const { currentTurnIndex = 0, combatCharacterArray = [], campaignDocId = "" } = combat;
   const { campaign } = useCampaign(campaignId);
   const { characters = [] } = useCampaignCharacters(campaignId);
   const { insert, removeAt, replaceAt, replaceList, listWithIds, list } =
@@ -78,14 +80,14 @@ const DMInitiative = () => {
   const updateCampaign = useUpdateCampaign(campaign);
   useDeepCompareEffect(() => {
     if (!isLoading && !isRefetching) {
-      replaceList(combat?.combatCharacterArray || [{}]);
+      replaceList(combatCharacterArray || [{}]);
     }
   }, [isRefetching, isLoading, combat]);
 
   const nextTurn =
-    combat?.currentTurnIndex + 1 >= list.length
+    currentTurnIndex + 1 >= list.length
       ? 0
-      : combat.currentTurnIndex + 1;
+      : currentTurnIndex + 1;
 
   const handleUpdate = (combat: Combat, overrideCharacterArray = list) => {
     updateInitiative({
@@ -100,7 +102,7 @@ const DMInitiative = () => {
 
   const handleDelete = (index: number) => {
     const removedList = removeAt(index);
-    let newNextTurn = combat.currentTurnIndex;
+    let newNextTurn = currentTurnIndex;
 
     if (newNextTurn >= index) {
       newNextTurn -= 1;
@@ -122,7 +124,7 @@ const DMInitiative = () => {
           animatedHover={false}
           borderColor="primary"
           color="dark"
-          copiedText={getCombatURL(combat.campaignDocId)}
+          copiedText={getCombatURL(campaignDocId)}
         >
           <Typography size="default" color="primary">
             Copy Player Link

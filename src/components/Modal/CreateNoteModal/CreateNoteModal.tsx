@@ -5,15 +5,15 @@ import css from "./CreateNoteModal.module.scss"
 import { useAddNoteButton } from '@services/NotesService';
 import { Note, validateNote } from '@model/Note';
 import CharacterPicker from '../../CharacterPicker/CharacterPicker';
-import { Character } from '@model/Character';
 import TextEditor from '../../TextEditor';
 import { Validator } from '@model/Validator';
+import { PlayerCharacter } from '@model/PlayerCharacter';
 
 declare interface CreateNPCModalProps {
     isOpen: boolean;
     onClose: () => void;
     campaignId: string,
-    characters: Character[]
+    characters: PlayerCharacter[]
 };
 
 const DEFAULT_NOTE = {date: new Date()}

@@ -2,13 +2,13 @@ import React from 'react';
 import { Select, MenuItem } from "@mui/material"
 import css from "./CharacterPicker.module.scss"
 import { Typography } from '../Typography/Typography';
-import { Character } from '@model/Character';
+import { PlayerCharacter } from '@model/PlayerCharacter';
 
 declare interface CharacterPickerProps {
     onChange: (value: any) => void,
     value?: string | null,
     width?: number,
-    characters?: Character[],
+    characters?: PlayerCharacter[],
 }
 
 const CharacterPicker = ({ onChange, value, width = 300, characters }: CharacterPickerProps) => {
@@ -25,7 +25,7 @@ const CharacterPicker = ({ onChange, value, width = 300, characters }: Character
         return 0;
     });
 
-    characters?.push(new Character( "__none__", "None"))
+    characters?.push({ docId: "__none__", name: "None"})
 
 
     return (

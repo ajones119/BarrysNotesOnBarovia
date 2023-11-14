@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import css from "./InitiativeTracker.module.scss";
 import { TableCell, TableContainer, TableHead, TableRow } from "@mui/material";
-import { Character } from "@model/Character";
 import { Button } from "@components/Button/Button";
 import { Campaign } from "@model/Campaign";
 import CreateCombatModal from "@components/Modal/CreateCombatModal/CreateCombatModal";
@@ -9,10 +8,12 @@ import { CombatCharacter } from "@model/CombatCharacter";
 import { useCampaignCombats } from "@services/CombatService";
 import { Typography } from "@components/Typography/Typography";
 import { CombatEntryRow } from "./CombatEntryRow";
+import { PlayerCharacter } from "@model/PlayerCharacter";
+import { Combat } from "@model/Combat";
 
 type CombatsProps = {
   campaign: Campaign;
-  characters: Character[];
+  characters: PlayerCharacter[];
 };
 
 const Combats = ({ campaign, characters }: CombatsProps) => {
@@ -53,13 +54,13 @@ const Combats = ({ campaign, characters }: CombatsProps) => {
             <TableCell width="20%"></TableCell>
           </TableRow>
         </TableHead>
-        {combats?.map((combat) => <CombatEntryRow combat={combat} />)}
+        {combats?.map((combat: Combat) => <CombatEntryRow combat={combat} />)}
       </TableContainer>
       <CreateCombatModal
         characters={formattedCharacters}
         isOpen={createModalOpen}
         onClose={() => setCreateModalOpen(false)}
-        campaignId={campaign.docId}
+        campaignId={campaign.docId || ""}
       />
     </div>
   );

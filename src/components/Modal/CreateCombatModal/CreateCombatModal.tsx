@@ -2,36 +2,30 @@ import React, {useState} from 'react';
 import { Modal } from '../Modal';
 import { Grid } from '@mui/material';
 import css from "./CreateCombatModal.module.scss"
-import { Combat, validateCombat } from '@model/Combat';
+import { Combat } from '@model/Combat';
 import { useAddCombatButton } from '@services/CombatService';
 import { TextInput } from '../../TextInput/TextInput';
 import useDeepCompareEffect from 'use-deep-compare-effect';
+import { CombatCharacter } from '@model/CombatCharacter';
 
 declare interface CreateNPCModalProps {
     isOpen: boolean;
     onClose: () => void;
     campaignId: string,
-    characters: Array<any>
+    characters: Array<CombatCharacter>
 };
 
-const CreateCombatModal = ({isOpen, onClose, campaignId, characters }: CreateNPCModalProps) => {
-    const [combat, setCombat] = useState(new Combat(null, campaignId, characters));
+const CreateCombatModal = ({isOpen, onClose, campaignId, characters = [] }: CreateNPCModalProps) => {
+    const [combat, setCombat] = useState<Combat>({campaignDocId: campaignId, combatCharacterArray: characters});
     const [validator, setValidator] = useState<any>();
-    const saveCombatButton = useAddCombatButton(combat, () => handleOnClose(), () => validate());
+    const saveCombatButton = useAddCombatButton(combat, () => handleOnClose(), () => true);
 
     useDeepCompareEffect(() => {
-        setCombat(new Combat(null, campaignId, characters))
+        setCombat({campaignDocId: campaignId, combatCharacterArray: characters})
     }, [characters])
 
-    const validate = () => {
-        const valid = validateCombat(Combat)
-        setValidator(valid)
-
-        return !(Object.keys(valid).length > 0);
-    }
-
     const handleOnClose = () => {
-            setCombat(new Combat(null, campaignId, characters))
+            setCombat({campaignDocId: campaignId, combatCharacterArray: characters})
             onClose();
     }
 

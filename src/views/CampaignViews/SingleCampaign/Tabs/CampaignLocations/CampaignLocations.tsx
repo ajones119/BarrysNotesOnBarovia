@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import { NPC } from "@model/NPC";
 import { useParams, useSearchParams } from "react-router-dom";
 import { CampaignLocation } from "@model/Location";
 import { Button } from "@components/Button/Button";
@@ -11,10 +10,11 @@ import { faArrowAltCircleDown, faArrowAltCircleRight } from "@fortawesome/free-s
 import CampaignTreeLocation from "./CampaignTreeLocation";
 import css from "./CampaignLocations.module.scss"
 import CampaignLocationPanel from "./CampaignLocationPanel";
+import { BaseCharacter } from "@model/BaseCharacter";
 
 declare interface CampaignLocationsProps {
     locations?: CampaignLocation[],
-    npcs?: NPC[],
+    npcs?: BaseCharacter[],
 }
 
 const CampaignLocations = ({

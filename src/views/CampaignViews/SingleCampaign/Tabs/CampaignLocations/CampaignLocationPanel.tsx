@@ -1,6 +1,5 @@
 import { CampaignLocation } from "@model/Location";
 import css from "./CampaignLocations.module.scss"
-import { NPC } from "@model/NPC";
 import { Typography } from "@components/Typography/Typography";
 import { SetCampaignLocation, useDeleteCampaignLocationButton } from "@services/CampaignLocationService";
 import BACKUP from "@images/hauntedCastleBackground.jpg"
@@ -14,11 +13,12 @@ import { Grid } from "@mui/material";
 import NPCCard from "@components/BaseCharacterThumbCard/Cards/NPCCard";
 import { Spacer } from "@components/Spacer/Spacer";
 import CreateCampaignLocationModal from "@components/Modal/CreateCampaignLocationModal/CreateCampaignLocationModal";
+import { BaseCharacter } from "@model/BaseCharacter";
 
 type CampaignLocationPanelProps = {
     location?: CampaignLocation;
     campaignId: string,
-    npcs?: NPC[], 
+    npcs?: BaseCharacter[], 
     subLocations?: CampaignLocation[]
 }
 
@@ -28,7 +28,7 @@ const CampaignLocationPanel = ({ location, npcs = [], subLocations = [] }: Campa
     // add nested delete?
     const deleteLocationButton = useDeleteCampaignLocationButton(location, () => {}, subLocations.length > 0)
     const saveCampaignLocation = SetCampaignLocation(location)
-    let selectedNPCs = npcs.filter(npc => location?.npcs?.includes(npc.docId) )
+    let selectedNPCs = npcs.filter(npc => location?.npcs?.includes(npc?.docId || "") )
     selectedNPCs = selectedNPCs?.sort(function (a, b) {
         if (a.name.toLowerCase() < b.name.toLowerCase()) {
           return -1;
@@ -78,7 +78,7 @@ const CampaignLocationPanel = ({ location, npcs = [], subLocations = [] }: Campa
             <div className={css.characters}>
                 <div className={css.characterPickerRow}>
                     <div>
-                        <NPCPicker onChange={(npc) => setCurrentNPC(npc)} npcs={npcs.filter(npc => !(location?.npcs || []).includes(npc.docId))} value={currentNPC} /><div>{"  "}</div>
+                        <NPCPicker onChange={(npc) => setCurrentNPC(npc)} npcs={npcs.filter(npc => !(location?.npcs || []).includes(npc?.docId || ""))} value={currentNPC} /><div>{"  "}</div>
                     </div>
                     <div>
                         <Button

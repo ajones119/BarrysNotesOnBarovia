@@ -18,12 +18,12 @@ import { Typography } from "@components/Typography/Typography";
 import { Button } from "@components/Button/Button";
 import { CombatCharacter } from "@model/CombatCharacter";
 import ColorPicker from "@components/ColorPicker/ColorPicker";
-import { Character } from "@model/Character";
 import BACKUP from "@images/GenericMonsters/unknown.png";
 import ShowSelector from "./ShowSelector";
 import ConditionSelect from "@components/ConditionsSelect/ConditionsSelect";
 import { BASE_CHARACTER_IMAGE_MAP } from "utils/getBaseCharacterGenericImage";
 import { CharacterTypeLowercase } from "@model/BaseCharacter";
+import { PlayerCharacter } from "@model/PlayerCharacter";
 
 type InitiativeTrackerTableRowProps = {
   item: CombatCharacter;
@@ -31,7 +31,7 @@ type InitiativeTrackerTableRowProps = {
   onRemove: () => void;
   active?: boolean;
   tableKey: number;
-  characters: Character[];
+  characters: PlayerCharacter[];
 };
 
 const InitiativeTrackerTableRow = ({

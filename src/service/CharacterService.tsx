@@ -7,11 +7,11 @@ import {
   useFirestoreDocumentMutation,
   useFirestoreQuery,
 } from "@react-query-firebase/firestore";
-import { Character } from "@model/Character";
 import {
   ButtonStatuses,
   LoadingButton,
 } from "@components/Button/LoadingButton";
+import { PlayerCharacter } from "@model/PlayerCharacter";
 
 export function useCharacter(characterDocId = "") {
   const ref = doc(firestore, "characters", characterDocId);
@@ -24,29 +24,17 @@ export function useCharacter(characterDocId = "") {
 
   const { data, isLoading } = campaignQuery;
 
-  const characterData = data?.data() || {};
-
-  const character = new Character(
-    characterDocId,
-    characterData.name,
-    characterData.campaignDocId,
-    characterData.characterImageURL,
-    characterData.player,
-    characterData.backstory,
-    characterData.className,
-    characterData.dndBeyondURL,
-    characterData.passivePerception,
-    characterData.initiativeBonus,
-    characterData.armorClass,
-    characterData.maxHealth,
-    characterData.level,
-  );
+  const character: PlayerCharacter = {
+    docId: characterDocId,
+    name: data?.data()?.name,
+    ...data?.data()
+  };
 
   return { character, isLoading };
 }
 
 export const useAddCharacterButton = (
-  newCharacter: Character,
+  newCharacter: PlayerCharacter,
   onClick: () => void,
   validate: () => boolean,
 ) => {
@@ -118,51 +106,23 @@ export const useAddCharacterButton = (
 };
 
 export const useUpdateCharacterButton = (
-  newCharacter: Character,
+  newCharacter: PlayerCharacter,
   onClick: () => void,
   validate: () => boolean,
 ) => {
   const npcs = collection(firestore, "characters");
-  const ref = newCharacter.docId && doc(npcs, newCharacter.docId);
+  const ref = doc(npcs, newCharacter.docId || "1");
   const mutation = useFirestoreDocumentMutation(ref);
 
   const [buttonStatus, setButtonStatus] = useState<ButtonStatuses>(
     ButtonStatuses.Idle,
   );
 
-  const {
-    name = "",
-    player = "",
-    campaignDocId = "",
-    characterImageURL = "",
-    backstory = "",
-    className = "",
-    dndBeyondURL = "",
-    docId,
-    passivePerception = 0,
-    initiativeBonus = 0,
-    armorClass = 0,
-    maxHealth = 0,
-    level = 1,
-  } = newCharacter;
-
   const handleClick = () => {
     const valid = validate();
     if (valid) {
       mutation.mutate({
-        docId,
-        name,
-        player,
-        characterImageURL,
-        backstory,
-        className,
-        dndBeyondURL,
-        campaignDocId,
-        passivePerception,
-        initiativeBonus,
-        armorClass,
-        maxHealth,
-        level,
+        ...newCharacter
       });
     }
 
@@ -205,41 +165,17 @@ export function useCharacters() {
   const { data, isLoading, refetch } = characterQuery;
 
   const charactersData = data?.docs.map((character) => {
-    const {
-      name,
-      characterImageURL,
-      player,
-      backstory,
-      className,
-      campaignDocId,
-      dndBeyondURL,
-      passivePerception,
-      initiativeBonus,
-      armorClass,
-      maxHealth,
-      level,
-    } = character.data();
-    return new Character(
-      character.id,
-      name,
-      campaignDocId,
-      characterImageURL,
-      player,
-      backstory,
-      className,
-      dndBeyondURL,
-      passivePerception,
-      initiativeBonus,
-      armorClass,
-      maxHealth,
-      level,
-    );
+    return {
+      docId: character.id,
+      name: character.data().name,
+      ...character.data()
+    };
   });
 
   return { characters: charactersData, isLoading, refetch };
 }
 
-export function useCampaignCharacters(campaignDocId: string) {
+export function useCampaignCharacters(campaignDocId: string): {characters: PlayerCharacter[], isLoading: boolean, refetch: () => void} {
   const ref = query(
     collection(firestore, "characters"),
     where("campaignDocId", "==", campaignDocId),
@@ -254,35 +190,12 @@ export function useCampaignCharacters(campaignDocId: string) {
   const { data, isLoading, refetch } = characterQuery;
 
   const charactersData = data?.docs.map((character) => {
-    const {
-      name,
-      characterImageURL,
-      player,
-      backstory,
-      className,
-      campaignDocId,
-      dndBeyondURL,
-      passivePerception,
-      initiativeBonus,
-      armorClass,
-      maxHealth,
-      level,
-    } = character.data();
-    return new Character(
-      character.id,
-      name,
-      campaignDocId,
-      characterImageURL,
-      player,
-      backstory,
-      className,
-      dndBeyondURL,
-      passivePerception,
-      initiativeBonus,
-      armorClass,
-      maxHealth,
-      level,
-    );
+
+    return {
+      docId: character.id,
+      name: character.data().name,
+      ...character.data()
+    };
   });
 
   return {

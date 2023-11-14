@@ -1,11 +1,7 @@
-import React, { useState, useEffect } from 'react';
 import { collection, doc, query, where } from "firebase/firestore";
 import { firestore } from "./firebase";
 import { useFirestoreDocumentMutation, useFirestoreCollectionMutation, useFirestoreDocumentDeletion, useFirestoreQuery } from "@react-query-firebase/firestore";
-import { ButtonStatuses, LoadingButton } from "@components/Button/LoadingButton"
-import { NPC } from '@model/NPC';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faTrash } from '@fortawesome/free-solid-svg-icons';
+
 import { BaseCharacter } from '@model/BaseCharacter';
 
 export function useCampaignNPCs(campaignDocId: string) {
@@ -18,10 +14,7 @@ export function useCampaignNPCs(campaignDocId: string) {
 
   const NPCsData = data?.docs.map(npc => {
     
-    return new NPC(
-      npc.id,
-      npc.data()
-    );
+    return {...npc.data(), docId: npc.id, name: npc.data().name};
   });
 
   return { NPCs: NPCsData, isLoading, refetch };
@@ -55,7 +48,7 @@ export const useEditNPC = (npc: BaseCharacter | null = null, onSuccess: () => vo
 
 export const useDeleteNPC = (npc: BaseCharacter, onSuccess?: () => void) => {
   const npcs = collection(firestore, "npcs");
-  const ref = doc(npcs, npc.docId);
+  const ref = doc(npcs, npc?.docId || "a");
   const mutation = useFirestoreDocumentDeletion(ref, {onSettled: onSuccess});
 
   return {

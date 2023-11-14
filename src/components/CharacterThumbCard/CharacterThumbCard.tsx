@@ -1,5 +1,4 @@
 import React from 'react';
-import { Character } from '@model/Character';
 import css from "./CharacterThumbCard.module.scss"
 import STICK from "@images/stick1.png"
 import { Typography } from '../Typography/Typography';
@@ -7,7 +6,7 @@ import { useNavigate } from 'react-router-dom';
 import { BaseCharacter } from '@model/BaseCharacter';
 
 declare interface CharacterThumbCardProps {
-    character: Character | BaseCharacter
+    character: BaseCharacter
 };
 
 export const CharacterThumbCard = ({ character }: CharacterThumbCardProps) => {

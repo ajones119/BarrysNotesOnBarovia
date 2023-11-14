@@ -79,7 +79,7 @@ export type CharacterTypeLowercase =
   | "undead"
   | "unknown";
 
-export type BaseCharacter = {
+export interface BaseCharacter {
   docId?: string;
   campaignDocId?: string;
   name: string;
@@ -88,7 +88,7 @@ export type BaseCharacter = {
   size?: CharacterSizes;
   type?: CharacterType;
   characterImageURL?: string;
-  abilityScores: AbilityScores;
+  abilityScores?: AbilityScores;
   armorClass?: number;
   savingThrowProficiencies?: SavingThrow[];
   averageHitPoints?: number;
