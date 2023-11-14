@@ -4,7 +4,6 @@ import css from "./Characters.module.scss"
 
 import { CharacterThumbCard } from "@components/CharacterThumbCard/CharacterThumbCard";
 import { Grid } from "@mui/material"
-import { Character } from "@model/Character";
 import { useCharacters } from "@services/CharacterService";
 import CampaignPicker from "@components/CampaignPicker/CampaignPicker";
 import { Campaign } from "@model/Campaign";
@@ -12,6 +11,7 @@ import { Spacer } from "@components/Spacer/Spacer";
 import { TextInput } from "@components/TextInput/TextInput";
 import { Button } from "@components/Button/Button";
 import CreateCharacterModal from "@components/Modal/CreateCharacterModal/CreateCharacterModal";
+import { PlayerCharacter } from "@model/PlayerCharacter";
 
 //add loading state
 //double check spacing of header/search bar on smaller screens
@@ -26,11 +26,11 @@ export const Characters = () => {
   let filteredCharacters = characters;
 
   if (campaignFilter && campaignFilter.docId !== "__none__") {
-    filteredCharacters = filteredCharacters?.filter((character: Character) => character.campaignDocId === campaignFilter.docId);
+    filteredCharacters = filteredCharacters?.filter((character: PlayerCharacter) => character.campaignDocId === campaignFilter.docId);
   }
 
   if (characterFilter) {
-    filteredCharacters = filteredCharacters?.filter((character: Character) => character.name.toLowerCase().includes(characterFilter.trim().toLowerCase()));
+    filteredCharacters = filteredCharacters?.filter((character: PlayerCharacter) => character.name.toLowerCase().includes(characterFilter.trim().toLowerCase()));
   }
 
   filteredCharacters?.sort(function (a, b) {

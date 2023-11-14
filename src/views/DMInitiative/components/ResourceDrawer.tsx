@@ -10,7 +10,7 @@ import AutoSizer from "react-virtualized-auto-sizer";
 import styled from "@emotion/styled";
 import { useCustomMonsters } from "@services/CustomMonstersService";
 import { useDebounce } from "usehooks-ts";
-import { CharacterType } from "@model/BaseCharacter";
+import { BASE_ABILITY_SCORES, BaseCharacter, CharacterType } from "@model/BaseCharacter";
 import { MonsterXPByChallengeRating } from "@model/ChallengeRating";
 
 type ResourceDrawerProps = {
@@ -99,14 +99,14 @@ const ResourceDrawer = ({ onAdd }: ResourceDrawerProps) => {
         xp: MonsterXPByChallengeRating[monster.challengeRating] ?? 1,
       }));
 
-      const customList: DrawerMonster[] = customMonsters?.map((monster) => ({
+      const customList: DrawerMonster[] = customMonsters?.map((monster: BaseCharacter) => ({
         name: monster.name,
         listName: `${monster.name} (custom)`,
         health: monster.averageHitPoints || 0,
         maxHealth: monster.averageHitPoints || 0,
         armorClass: monster.armorClass || 0,
         initiativeBonus:
-          Math.floor((monster.abilityScores.dexterity - 10) / 2) || 0,
+          Math.floor(((monster?.abilityScores || BASE_ABILITY_SCORES).dexterity - 10) / 2) || 0,
         type: monster.type,
         imageURL: monster?.characterImageURL || "",
         xp: monster.xp ?? 0,

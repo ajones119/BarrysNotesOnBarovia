@@ -3,14 +3,14 @@ import css from "../SingleCharacter.module.scss"
 import { Grid } from "@mui/material";
 import { Typography } from '@components/Typography/Typography';
 import BACKUP from "@images/stick1.png";
-import { Character } from '@model/Character';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPenFancy } from '@fortawesome/free-solid-svg-icons';
 import { Button } from '@components/Button/Button';
 import CreateCharacterModal from '@components/Modal/CreateCharacterModal/CreateCharacterModal';
+import { PlayerCharacter } from '@model/PlayerCharacter';
 
 declare interface OverviewProps {
-    character: Character;
+    character: PlayerCharacter;
 };
 
 const Overview = ({ character }: OverviewProps) => {

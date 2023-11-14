@@ -2,14 +2,14 @@ import React, { useState } from 'react';
 import css from "../SingleCampaign.module.scss"
 import { useParams } from 'react-router-dom';
 import { Note } from '@model/Note';
-import { Character } from '@model/Character';
 import { Grid, ToggleButton, ToggleButtonGroup } from "@mui/material"
 import NotesList from '@components/NotesList/NotesList';
 import { Typography } from '@components/Typography/Typography';
+import { PlayerCharacter } from '@model/PlayerCharacter';
 
 declare interface CampaignNotesProps {
     notes: Note[]
-    characters: Character[]
+    characters: PlayerCharacter[]
 }
 
 const CampaignNotes = ({ notes, characters }: CampaignNotesProps) => {
@@ -18,10 +18,10 @@ const CampaignNotes = ({ notes, characters }: CampaignNotesProps) => {
     const [dateFilter, setDateFilter] = useState("new")
 
     notes?.sort(function (a, b) {
-        if (a.date < b.date) {
+        if ((a?.date || 0) < (b?.date || 0)) {
           return -1;
         }
-        if (a.date > b.date) {
+        if ((a?.date || 0) > (b?.date || 0)) {
           return 1;
         }
         return 0;

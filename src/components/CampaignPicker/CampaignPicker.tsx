@@ -27,7 +27,7 @@ const CampaignPicker = ({ onChange, value, width = 300, label, initialCampaignId
       });
 
 
-    campaigns?.push(new Campaign( "__none__", "None"))
+    campaigns?.push({docId: "__none__", title: "None"})
 
     return (
         <div className={css.campaignPicker} style={{width: `${width}px`}}>

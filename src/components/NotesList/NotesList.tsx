@@ -1,5 +1,4 @@
 import React, { useState } from 'react'
-import { Character } from '@model/Character';
 import css from "./NotesList.module.scss";
 import { Note } from '@model/Note';
 import { Grid } from "@mui/material"
@@ -8,14 +7,15 @@ import { faPlusCircle } from '@fortawesome/free-solid-svg-icons';
 import { Button } from '../Button/Button';
 import CreateNoteModal from '../Modal/CreateNoteModal/CreateNoteModal';
 import { NotesListItem } from './NoteListItem';
-const getCharacterFromNote = (note: Note, characters: Character[]) => {
+import { PlayerCharacter } from '@model/PlayerCharacter';
+const getCharacterFromNote = (note: Note, characters: PlayerCharacter[]) => {
     const notedCharacter = characters.find(character => note.characterDocId === character.docId)
 
     return notedCharacter;
 }
 
 declare interface NotesListProps {
-    characters: Character[],
+    characters: PlayerCharacter[],
     notes: Note[],
     campaignId: string
 }

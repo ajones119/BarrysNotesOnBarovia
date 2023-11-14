@@ -3,35 +3,37 @@ import CharacterPicker from "@components/CharacterPicker/CharacterPicker";
 import { useCampaignCharacters } from "@services/CharacterService";
 import { useParams } from "react-router-dom";
 import css from "./PlayerInitiative.module.scss"
-import { Character } from "@model/Character";
 import { useCampaign } from "@services/CampaignService";
 import { Typography } from "@components/Typography/Typography";
 import { useCombat, useUpdateInitiative } from "@services/CombatService";
 import { Spacer } from "@components/Spacer/Spacer";
 import SelectedPlayer from "./components/SelectedPlayer";
 import CharacterRow from "./components/CharacterRow";
+import { PlayerCharacter } from "@model/PlayerCharacter";
+import { CombatCharacter } from "@model/CombatCharacter";
 
 const PlayerInitiative = () => {
-    const [character, setCharacter] = useState<Character | null>()
+    const [character, setCharacter] = useState<PlayerCharacter | null>()
     const {CampaignId} = useParams();
     const {characters} = useCampaignCharacters(CampaignId || "")
     const {campaign} = useCampaign(CampaignId || "")
     const {combat} = useCombat(campaign?.currentCombatDocId || "1")
+    const {currentTurnIndex = 0, combatCharacterArray = [] } = combat;
 
     const update = useUpdateInitiative(combat);
 
     let nextPlayerDocId: string | null = null;
 
-    nextPlayerDocId = combat.combatCharacterArray.find((char, index) => char?.playerDocId && index > combat.currentTurnIndex)?.playerDocId || null;
-    nextPlayerDocId = nextPlayerDocId || combat.combatCharacterArray.find((char) => char?.playerDocId)?.playerDocId || null;
+    nextPlayerDocId = combatCharacterArray.find((char: CombatCharacter, index: number) => char?.playerDocId && index > currentTurnIndex)?.playerDocId || null;
+    nextPlayerDocId = nextPlayerDocId || combatCharacterArray.find((char: CombatCharacter) => char?.playerDocId)?.playerDocId || null;
 
-    const combatCharacterArray = combat?.combatCharacterArray?.filter(character => character?.shouldShow).sort((a, b) => {
-        a = a?.name?.toLowerCase() || "";
-        b = b?.name?.toLowerCase() || "";
-        return a > b ? 1 : -1;
+    const canShowCombatCharacterArray = combat?.combatCharacterArray?.filter((character: CombatCharacter) => character?.shouldShow).sort((a: CombatCharacter, b: CombatCharacter) => {
+        let aName = a?.name?.toLowerCase() || "";
+        let bName = b?.name?.toLowerCase() || "";
+        return aName > bName ? 1 : -1;
     })
-    const PCs = combatCharacterArray?.filter(character => character?.playerDocId);
-    const others = combatCharacterArray?.filter(character => !character?.playerDocId);
+    const PCs = canShowCombatCharacterArray?.filter((character: CombatCharacter) => character?.playerDocId);
+    const others = canShowCombatCharacterArray?.filter((character: CombatCharacter) => !character?.playerDocId);
 
     return (
         <div className={css.playerInitiativeContainer}>
@@ -50,15 +52,16 @@ const PlayerInitiative = () => {
             <div className={css.healthBars}>
                 <Typography>Players</Typography>
                 {
-                    PCs?.map(character => {
-                    const healthBarAmount = (character.health/character.maxHealth)*100;
-                    const playerCharacterImageUrl = characters.find(campaignCharacter => campaignCharacter.docId === character.playerDocId)?.characterImageURL;
+                    PCs?.map((character : CombatCharacter) => {
+                        const {playerDocId, maxHealth = 0, health = 0} = character;
+                    const healthBarAmount = (health/maxHealth)*100;
+                    const playerCharacterImageUrl = characters.find(campaignCharacter => campaignCharacter.docId === playerDocId)?.characterImageURL;
                     return(
                         <CharacterRow
                             healthBarAmount={healthBarAmount}
                             rowImageURL={playerCharacterImageUrl}
                             combatCharacter={character}
-                            isCurrentTurn={combat?.combatCharacterArray[combat?.currentTurnIndex].playerDocId === character.playerDocId}
+                            isCurrentTurn={combat?.combatCharacterArray[currentTurnIndex].playerDocId === playerDocId}
                             isNextTurn={character.playerDocId === nextPlayerDocId}
 
                         />
@@ -68,8 +71,9 @@ const PlayerInitiative = () => {
             <div className={css.healthBars}>
             <Typography>Enemies</Typography>
                 {
-                    others?.map(character => {
-                    const healthBarAmount = (character.health/character.maxHealth)*100;
+                    others?.map((character: CombatCharacter) => {
+                        const { maxHealth = 0, health = 0} = character
+                    const healthBarAmount = (health/maxHealth)*100;
                     return(
                         <CharacterRow
                             rowImageURL={character?.imageURL}

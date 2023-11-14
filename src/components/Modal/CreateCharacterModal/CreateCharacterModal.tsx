@@ -7,38 +7,38 @@ import ClassPicker from "../../ClassPicker/ClassPicker";
 import TextArea from "../../TextArea/TextArea";
 
 import css from "./CreateCharacterModal.module.scss";
-import { Character, validateCharacter } from "@model/Character";
 import {
   useAddCharacterButton,
   useUpdateCharacterButton,
 } from "@services/CharacterService";
 import useDeepCompareEffect from "use-deep-compare-effect";
+import { PlayerCharacter } from "@model/PlayerCharacter";
 
 declare interface CreateCharacterModalProps {
   isOpen: boolean;
   onClose: () => void;
   initialCampaignId?: string;
-  character?: Character;
+  character?: PlayerCharacter;
 }
 
 const CreateCharacterModal = ({
   isOpen,
   onClose,
   initialCampaignId,
-  character = new Character(null, "", initialCampaignId),
+  character = {name: ""},
 }: CreateCharacterModalProps) => {
-  const [newCharacter, setNewCharacter] = useState<Character>(character);
+  const [newCharacter, setNewCharacter] = useState<PlayerCharacter>(character);
   const [validator, setValidator] = useState<any>();
   const [campaign, setCampaign] = useState();
   const saveCharacterButton = useAddCharacterButton(
     newCharacter,
     () => handleOnClose(),
-    () => validate(),
+    () => true,
   );
   const updateCharacterButton = useUpdateCharacterButton(
     newCharacter,
     () => handleOnClose(),
-    () => validate(),
+    () => true,
   );
   const {
     name,
@@ -53,14 +53,6 @@ const CreateCharacterModal = ({
     maxHealth,
     level,
   } = newCharacter;
-
-  const validate = () => {
-    const valid = validateCharacter(newCharacter);
-    setValidator(valid);
-
-    return !(Object.keys(valid).length > 0);
-  };
-
   useDeepCompareEffect(() => {
     setNewCharacter(character);
   }, [character, isOpen]);
@@ -89,7 +81,7 @@ const CreateCharacterModal = ({
               error={validator?.name}
               value={name}
               onChange={(value) =>
-                setNewCharacter({ ...newCharacter, name: value })
+                setNewCharacter({ ...newCharacter, name: String(value) })
               }
               placeholder="Name"
             />
@@ -109,7 +101,7 @@ const CreateCharacterModal = ({
               error={validator?.characterImageURL}
               value={characterImageURL}
               onChange={(value) =>
-                setNewCharacter({ ...newCharacter, characterImageURL: value })
+                setNewCharacter({ ...newCharacter, characterImageURL: String(value) })
               }
               placeholder="Character Image Url"
             />
@@ -212,7 +204,7 @@ const CreateCharacterModal = ({
           </Grid>
           <Grid item sm={12}>
             <TextArea
-              value={backstory}
+              value={backstory || ""}
               onChange={(value) =>
                 setNewCharacter({ ...newCharacter, backstory: value })
               }

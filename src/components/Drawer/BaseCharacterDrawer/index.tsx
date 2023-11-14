@@ -48,12 +48,13 @@ const BaseCharacterDrawer = ({
   useEffect(() => {
     setCharacter(
       editCharacter || {
-        docId: "",
         name: "",
         abilityScores: BASE_ABILITY_SCORES,
       },
     );
   }, [isOpen]);
+
+  const abilityScores = character?.abilityScores || BASE_ABILITY_SCORES;
 
   return (
     <Drawer side="bottom" isOpen={isOpen} onClose={onClose}>
@@ -179,96 +180,96 @@ const BaseCharacterDrawer = ({
           </Grid>
           <Grid item xs={4} md={1}>
             <TextInput
-              value={character?.abilityScores?.strength}
+              value={abilityScores?.strength}
               onChange={(value) => {
                 const scores = {
-                  ...character?.abilityScores,
+                  ...abilityScores,
                   strength: Number(value),
                 };
                 setCharacter({ ...character, abilityScores: scores });
               }}
               placeholder={`Strength (${calculateAbilityScoreModifier(
-                character?.abilityScores.strength,
+                abilityScores.strength,
               )})`}
               number
             />
           </Grid>
           <Grid item xs={4} md={1}>
             <TextInput
-              value={character?.abilityScores?.dexterity}
+              value={abilityScores.dexterity}
               onChange={(value) => {
                 const scores = {
-                  ...character?.abilityScores,
+                  ...abilityScores,
                   dexterity: Number(value),
                 };
                 setCharacter({ ...character, abilityScores: scores });
               }}
               placeholder={`Dexterity (${calculateAbilityScoreModifier(
-                character?.abilityScores.dexterity,
+                abilityScores.dexterity,
               )})`}
               number
             />
           </Grid>
           <Grid item xs={4} md={1}>
             <TextInput
-              value={character?.abilityScores?.constitution}
+              value={abilityScores?.constitution}
               onChange={(value) => {
                 const scores = {
-                  ...character?.abilityScores,
+                  ...abilityScores,
                   constitution: Number(value),
                 };
                 setCharacter({ ...character, abilityScores: scores });
               }}
               placeholder={`Constitution ${calculateAbilityScoreModifier(
-                character?.abilityScores.constitution,
+                abilityScores.constitution,
               )}`}
               number
             />
           </Grid>
           <Grid item xs={4} md={1}>
             <TextInput
-              value={character?.abilityScores?.intelligence}
+              value={abilityScores?.intelligence}
               onChange={(value) => {
                 const scores = {
-                  ...character?.abilityScores,
+                  ...abilityScores,
                   intelligence: Number(value),
                 };
                 setCharacter({ ...character, abilityScores: scores });
               }}
               placeholder={`Intelligence (${calculateAbilityScoreModifier(
-                character?.abilityScores.intelligence,
+                abilityScores.intelligence,
               )})`}
               number
             />
           </Grid>
           <Grid item xs={4} md={1}>
             <TextInput
-              value={character?.abilityScores?.wisdom}
+              value={abilityScores?.wisdom}
               onChange={(value) => {
                 const scores = {
-                  ...character?.abilityScores,
+                  ...abilityScores,
                   wisdom: Number(value),
                 };
                 setCharacter({ ...character, abilityScores: scores });
               }}
               placeholder={`Wisdom (${calculateAbilityScoreModifier(
-                character?.abilityScores.wisdom,
+                abilityScores.wisdom,
               )})`}
               number
             />
           </Grid>
           <Grid item xs={4} md={1}>
             <TextInput
-              value={character?.abilityScores?.charisma}
+              value={abilityScores?.charisma}
               onChange={(value) => {
                 const scores = {
-                  ...character?.abilityScores,
+                  ...abilityScores,
                   charisma: Number(value),
                 };
                 setCharacter({ ...character, abilityScores: scores });
               }}
               placeholder={`Charisma (${calculateAbilityScoreModifier(
-                character?.abilityScores.charisma,
+                abilityScores.charisma,
               )})`}
               number
             />

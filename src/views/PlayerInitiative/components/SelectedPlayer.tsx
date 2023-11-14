@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import css from "../PlayerInitiative.module.scss"
 import { Typography } from "@components/Typography/Typography";
-import { Character } from "@model/Character";
 import STICK from "@images/stick1.png"
 import { TextInput } from "@components/TextInput/TextInput";
 import { Button } from "@components/Button/Button";
@@ -10,9 +9,10 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faFaceAngry, faFaceMehBlank, faFaceSurprise, faMinus, faMugHot, faPlus, faSkullCrossbones } from "@fortawesome/free-solid-svg-icons";
 import ConditionSelect from "@components/ConditionsSelect/ConditionsSelect";
 import { Spacer } from "@components/Spacer/Spacer";
+import { PlayerCharacter } from "@model/PlayerCharacter";
 
 type SelectedPlayerProps = {
-    character: Character,
+    character: PlayerCharacter,
     combat: Combat,
     update: (combat: Combat) => void
 }
@@ -20,7 +20,7 @@ type SelectedPlayerProps = {
 const SelectedPlayer = ({character, combat, update}: SelectedPlayerProps) => {
     const [currentHealthIncrement, setCurrentHealthIncrement] = useState<number | null>(1);
 
-    const {combatCharacterArray} = combat;
+    const {combatCharacterArray = [], currentTurnIndex = 0} = combat;
     const index = combat.combatCharacterArray.findIndex(combatCharacter => combatCharacter.playerDocId === character?.docId)
     const {health = 0, maxHealth = 0, conditions = []} = combatCharacterArray[index] || {health: 0, maxHealth: 0, conditions: []};
 
@@ -28,13 +28,14 @@ const SelectedPlayer = ({character, combat, update}: SelectedPlayerProps) => {
         const newCombat = { ...combat }
 
         if (index !== null) {
-            newCombat.combatCharacterArray[index][key] = value;
+            const newCharacter = {...newCombat.combatCharacterArray[index], key: value}
+            newCombat.combatCharacterArray[index] = newCharacter;
         }
         update(newCombat)
     };
 
     const endTurn = () => {
-        const {currentTurnIndex} = combat;
+        const {combatCharacterArray = [], currentTurnIndex = 0} = combat;
 
         const nextTurn = currentTurnIndex >= combat.combatCharacterArray.length - 1 ? 0 : currentTurnIndex + 1
 
@@ -43,10 +44,10 @@ const SelectedPlayer = ({character, combat, update}: SelectedPlayerProps) => {
 
     let yourTurnDisplay = <><FontAwesomeIcon icon={faFaceMehBlank} /><Typography size="xtraLarge">Not Your Turn</Typography></>;
 
-    if (character?.docId === combat.combatCharacterArray[combat.currentTurnIndex]?.playerDocId) {
+    if (character?.docId === combat.combatCharacterArray[currentTurnIndex]?.playerDocId) {
         yourTurnDisplay = <><FontAwesomeIcon icon={faFaceAngry} /><Typography size="xtraLarge">Your Turn</Typography></>;
     } else if (
-        character?.docId === combat.combatCharacterArray[combat.currentTurnIndex + 1]?.playerDocId
+        character?.docId === combat.combatCharacterArray[currentTurnIndex + 1]?.playerDocId
         || ((combat.currentTurnIndex === combat.combatCharacterArray?.length - 1) && character?.docId === combat.combatCharacterArray[0].playerDocId)
         ) {
         yourTurnDisplay = <><FontAwesomeIcon icon={faFaceSurprise} /><Typography size="xtraLarge">You're Next!</Typography></>;
@@ -104,7 +105,7 @@ const SelectedPlayer = ({character, combat, update}: SelectedPlayerProps) => {
                 <ConditionSelect width="50%" selectedValue={conditions} onChange={(conditions) => updateCharacter("conditions", conditions)}/>
             </div>
             <Spacer height={16} />
-            { character?.docId === combat.combatCharacterArray[combat.currentTurnIndex]?.playerDocId && <div>
+            { character?.docId === combat.combatCharacterArray[currentTurnIndex]?.playerDocId && <div>
                 <Button onClick={endTurn}>End My Turn</Button>
             </div>}
         </div>

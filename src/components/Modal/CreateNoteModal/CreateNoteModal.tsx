@@ -5,19 +5,24 @@ import css from "./CreateNoteModal.module.scss"
 import { useAddNoteButton } from '@services/NotesService';
 import { Note, validateNote } from '@model/Note';
 import CharacterPicker from '../../CharacterPicker/CharacterPicker';
-import { Character } from '@model/Character';
 import TextEditor from '../../TextEditor';
+import { Validator } from '@model/Validator';
+import { PlayerCharacter } from '@model/PlayerCharacter';
 
 declare interface CreateNPCModalProps {
     isOpen: boolean;
     onClose: () => void;
     campaignId: string,
-    characters: Character[]
+    characters: PlayerCharacter[]
 };
 
+const DEFAULT_NOTE = {date: new Date()}
+
 const CreateNoteModal = ({isOpen, onClose, campaignId, characters}: CreateNPCModalProps) => {
-    const [newNote, setNewNote] = useState(new Note(null, "", campaignId, new Date(), "", false, true, false));
-    const [validator, setValidator] = useState<any>();
+    const date = new Date()
+    const defaultNote: Note = {...DEFAULT_NOTE, campaignDocId: campaignId, date}
+    const [newNote, setNewNote] = useState<Note>(defaultNote);
+    const [validator, setValidator] = useState<Validator>();
     const saveNoteButton = useAddNoteButton(newNote, () => handleOnClose(), () => validate());
 
     const {
@@ -32,7 +37,7 @@ const CreateNoteModal = ({isOpen, onClose, campaignId, characters}: CreateNPCMod
     }
 
     const handleOnClose = () => {
-            setNewNote(new Note(null, "", campaignId, new Date(), "", false, true, false))
+            setNewNote(defaultNote)
             onClose();
     }
 
@@ -43,7 +48,7 @@ const CreateNoteModal = ({isOpen, onClose, campaignId, characters}: CreateNPCMod
                 ]}>
                 <Grid container spacing={2} rowSpacing={3} className={css.CreateNoteModal}>
                     <Grid item sm={12}>
-                        <TextEditor value={content} onChange={(value) => setNewNote({ ...newNote, content: value,})} preview="edit" height={250} />
+                        <TextEditor value={content || ""} onChange={(value) => setNewNote({ ...newNote, content: value,})} preview="edit" height={250} />
                     </Grid>
                     <Grid item sm={12}>
                         <CharacterPicker characters={characters} value={newNote.characterDocId} onChange={value => setNewNote({ ...newNote, characterDocId: value})} />
