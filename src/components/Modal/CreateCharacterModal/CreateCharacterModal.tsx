@@ -27,7 +27,7 @@ const CreateCharacterModal = ({
   initialCampaignId,
   character = {name: ""},
 }: CreateCharacterModalProps) => {
-  const [newCharacter, setNewCharacter] = useState<PlayerCharacter>(character);
+  const [newCharacter, setNewCharacter] = useState<PlayerCharacter>({...character, campaignDocId: initialCampaignId});
   const [validator, setValidator] = useState<any>();
   const [campaign, setCampaign] = useState();
   const saveCharacterButton = useAddCharacterButton(
@@ -54,7 +54,7 @@ const CreateCharacterModal = ({
     level,
   } = newCharacter;
   useDeepCompareEffect(() => {
-    setNewCharacter(character);
+    setNewCharacter({...character, campaignDocId: initialCampaignId});
   }, [character, isOpen]);
 
   const handleOnClose = () => {

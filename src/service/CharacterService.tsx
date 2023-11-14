@@ -43,7 +43,6 @@ export const useAddCharacterButton = (
   const [buttonStatus, setButtonStatus] = useState<ButtonStatuses>(
     ButtonStatuses.Idle,
   );
-
   const {
     name = "",
     player = "",
@@ -57,6 +56,7 @@ export const useAddCharacterButton = (
     armorClass = 0,
     maxHealth = 0,
   } = newCharacter;
+  console.log(newCharacter)
 
   const handleClick = () => {
     const valid = validate();
