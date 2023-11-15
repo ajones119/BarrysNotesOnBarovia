@@ -28,24 +28,13 @@ export const TextInput = ({
     const inputRef = useRef<HTMLInputElement>(null);
     const hasNoValue = (value: string | number | null) => (value === "" || value === null)
 
-    const [spring, api] = useSpring(() => ({
-        from: {
+    const spring = useSpring({
             y: hasNoValue(value) ? -24 : 0,
             scale: hasNoValue(value) ? 1 : 0.8,
-        },
-        enter: {
-            y: hasNoValue(value) ? -24 : 0,
-            scale: hasNoValue(value) ? 1 : 0.8,
-        },
-        leave: {}
-    }))
+    })
 
     const handleChange = (value: string | number) => {
         onChange && onChange(value);
-        api.start({
-            y: hasNoValue(value) ? -24 : 0,
-            scale: hasNoValue(value) ? 1 : 0.8,
-        })
     }
 
     return(

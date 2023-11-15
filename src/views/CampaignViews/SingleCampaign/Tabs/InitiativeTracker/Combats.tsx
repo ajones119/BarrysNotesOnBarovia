@@ -21,7 +21,7 @@ const Combats = ({ campaign, characters }: CombatsProps) => {
 
     const {combats} = useCampaignCombats(campaign.docId || "")
 
-  const formattedCharacters = characters.map(
+  const formattedCharacters = characters.filter(character => !character?.disabled).map(
     (character) =>
       ({
         name: character.name,

@@ -7,4 +7,6 @@ export interface PlayerCharacter extends BaseCharacter {
     maxHealth?: number;
     dndBeyondURL?: string;
     initiativeBonus?: number;
+    race?: string;
+    disabled?: boolean;
 }

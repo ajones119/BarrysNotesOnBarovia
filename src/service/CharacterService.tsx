@@ -204,3 +204,29 @@ export function useCampaignCharacters(campaignDocId: string): {characters: Playe
     refetch,
   };
 }
+
+export const useCreatePlayerCharacter = (onSuccess: () => void) => {
+  const ref = collection(firestore, "characters");
+  const mutation = useFirestoreCollectionMutation(ref, {onSuccess: onSuccess});
+
+  return {
+      mutate: (newPC: PlayerCharacter) => mutation.mutate(newPC),
+      isLoading: mutation.isLoading
+  }
+}
+
+export const useEditPlayerCharacter = (pc: PlayerCharacter | null = null, onSuccess: () => void) => {
+  const docId = pc?.docId || "bad value";
+  const pcs = collection(firestore, "characters");
+  const ref = doc(pcs, docId) ;
+  const mutation = useFirestoreDocumentMutation(ref,{}, {onSettled: onSuccess});
+  
+
+  return {
+      mutate: (newPC: PlayerCharacter) => {
+          delete newPC?.docId
+          mutation.mutate(newPC)
+      },
+      isLoading: mutation.isLoading
+  }
+}
