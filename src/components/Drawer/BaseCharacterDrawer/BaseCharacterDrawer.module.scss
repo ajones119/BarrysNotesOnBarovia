@@ -5,3 +5,18 @@
     padding: 16px;
     padding-bottom: 100px;
 }
+
+.disableCheckbox {
+    color: $light;
+    display: flex;
+    column-gap: 8px;
+    align-items: center;
+    border-color: $primary;
+    border-width: 1px;
+    border-radius: 8px;
+    border-style: solid;
+    padding: 4px;
+    cursor: pointer;
+
+    
+}

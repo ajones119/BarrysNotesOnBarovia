@@ -18,8 +18,6 @@ const NPCDrawer = ({
   const { mutate: create, isLoading: createLoading } = useCreateNPC(onClose);
   const { mutate: edit, isLoading: editLoading } = useEditNPC(editNPC, onClose);
 
-  console.log(editNPC)
-
   return (
     <CreateOrEditBaseCharacterDrawer
       editCharacter={editNPC}

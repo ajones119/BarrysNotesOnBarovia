@@ -10,14 +10,15 @@ import { Campaign } from "@model/Campaign";
 import { Spacer } from "@components/Spacer/Spacer";
 import { TextInput } from "@components/TextInput/TextInput";
 import { Button } from "@components/Button/Button";
-import CreateCharacterModal from "@components/Modal/CreateCharacterModal/CreateCharacterModal";
 import { PlayerCharacter } from "@model/PlayerCharacter";
+import PlayerCharacterDrawer from "@components/Drawer/BaseCharacterDrawer/PlayerCharacterDrawer";
 
 //add loading state
 //double check spacing of header/search bar on smaller screens
 
 export const Characters = () => {
-  const [openCharacterModal, setOpenCharacterModal] = useState(false);
+  const [openCharacterDrawer, setOpenCharacterDrawer] = useState(false);
+  const [selectedCharacter, setSelectedCharacter] = useState<PlayerCharacter | null>(null)
   const [campaignFilter, setCampaignFilter] = useState<Campaign | null>(null);
   const [characterFilter, setCharacterFilter] = useState<string>("");
 
@@ -44,7 +45,7 @@ export const Characters = () => {
   });
 
   return (
-    <div className="characters">
+    <div className={css.pageContainer}>
       <div>
         <Grid container justifyContent="space-evenly" spacing={2} alignItems="center">
           <Grid item xs={12} md={4}>
@@ -62,7 +63,7 @@ export const Characters = () => {
           </Grid>
         <Grid item xs={12} md={4}>
           <div className={css.characterAddButtton}>
-            <Button size="large" color="dark" onClick={() => setOpenCharacterModal(true)}>Add Character</Button>
+            <Button size="large" color="dark" onClick={() => setOpenCharacterDrawer(true)}>Add Character</Button>
           </div>
         </Grid>
       </Grid>
@@ -71,14 +72,21 @@ export const Characters = () => {
       <Grid container justifyContent="space-evenly" spacing={2} alignItems="center">
       {filteredCharacters?.map((character) => (
         <Grid item xs={12} sm={6} md={4} lg={3} key={character.docId}>
-          <CharacterThumbCard character={character} />
+          <CharacterThumbCard character={character} onClick={(character) => {
+            setSelectedCharacter(character);
+            setOpenCharacterDrawer(true)
+          }} />
         </Grid>
       ))}
       </Grid>
-      <CreateCharacterModal onClose={() => {
-          setOpenCharacterModal(false);
+      <PlayerCharacterDrawer
+        isOpen={openCharacterDrawer}
+        editCharacter={selectedCharacter}
+        onClose={() => {
+          setSelectedCharacter(null)
+          setOpenCharacterDrawer(!openCharacterDrawer)
         }}
-        isOpen={openCharacterModal} />
+      />
     </div>
   );
 };
