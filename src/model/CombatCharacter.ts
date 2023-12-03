@@ -18,4 +18,9 @@ export type CombatCharacter = {
     isConcentrating?: boolean;
     conditions?: string[];
     color ?: string;
+    size?: "small" | "medium" | "large" | "huge" | "gargantuan" | "colossal"
+    position?: {
+        x?: number;
+        y?: number;
+    }
 }

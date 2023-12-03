@@ -11,12 +11,15 @@ import SelectedPlayer from "./components/SelectedPlayer";
 import CharacterRow from "./components/CharacterRow";
 import { PlayerCharacter } from "@model/PlayerCharacter";
 import { CombatCharacter } from "@model/CombatCharacter";
+import Tabs, { Tab } from "@components/Tabs/Tabs";
+import CombatMap from "@views/CombatMap";
 
 const PlayerInitiative = () => {
     const [character, setCharacter] = useState<PlayerCharacter | null>()
-    const {CampaignId} = useParams();
-    const {characters} = useCampaignCharacters(CampaignId || "")
-    const {campaign} = useCampaign(CampaignId || "")
+    const [tab, setTab] = useState("initiative");
+    const {campaignId} = useParams();
+    const {characters} = useCampaignCharacters(campaignId || "")
+    const {campaign} = useCampaign(campaignId || "")
     const {combat} = useCombat(campaign?.currentCombatDocId || "1")
     const {currentTurnIndex = 0, combatCharacterArray = [] } = combat;
 
@@ -35,9 +38,9 @@ const PlayerInitiative = () => {
     const PCs = canShowCombatCharacterArray?.filter((character: CombatCharacter) => character?.playerDocId);
     const others = canShowCombatCharacterArray?.filter((character: CombatCharacter) => !character?.playerDocId);
 
-    return (
-        <div className={css.playerInitiativeContainer}>
-            <CharacterPicker onChange={(value) => {
+    const initiativeTab = (
+        <div>
+             <CharacterPicker onChange={(value) => {
                 if (value === "__none__") {
                     setCharacter(null)
                 } else {
@@ -83,6 +86,34 @@ const PlayerInitiative = () => {
                     )})
                 }
             </div>
+        </div>
+    );
+
+    const mapTab = (
+        <CombatMap isPlayer combatIdOverride={campaign?.currentCombatDocId} />
+    );
+
+    const pageTabs: Array<Tab> = [
+        {
+            key: "initiative",
+            name: <Typography>Initiative</Typography>,
+            content: initiativeTab
+        },
+        {
+            key: "map",
+            name: <Typography>Map</Typography>,
+            content: mapTab
+        }
+    ];
+
+    return (
+        <div className={css.playerInitiativeContainer}>
+            <Tabs
+                currentTab={tab}
+                onChange={(tab) => setTab(tab)}
+                tabs={pageTabs}
+            ></Tabs>
+           
             <Spacer height={24} />
 
         </div>

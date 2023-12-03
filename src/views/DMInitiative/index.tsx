@@ -11,7 +11,7 @@ import { Combat } from "@model/Combat";
 import { useCampaign, useUpdateCampaign } from "@services/CampaignService";
 import { Button } from "@components/Button/Button";
 import { useCampaignCharacters } from "@services/CharacterService";
-import { getCombatURL } from "./utils";
+import { getCombatMapURL, getCombatURL } from "./utils";
 import CopyButton from "@components/Button/ReusableButtons/CopyButton";
 import ResourceDrawer from "@views/DMInitiative/components/ResourceDrawer";
 import LinearProgress from "@mui/material/LinearProgress";
@@ -67,9 +67,7 @@ const EncounterDiffultyProgress = ({
 
 const DMInitiative = () => {
   const { combatId, campaignId = "" } = useParams();
-
   const { combat, isLoading, isRefetching } = useCombat(combatId);
-  console.log("COMBAT", combat)
   const { currentTurnIndex = 0, combatCharacterArray = [], campaignDocId = "" } = combat;
   const { campaign } = useCampaign(campaignId);
   const { characters = [] } = useCampaignCharacters(campaignId);
@@ -191,6 +189,13 @@ const DMInitiative = () => {
       </TableContainer>
       <ResourceDrawer onAdd={insert} />
       <div className={css.bottonsContainer}>
+      <Button
+          onClick={() =>
+            window.open(getCombatMapURL(campaignDocId, combat?.docId || ""), '_blank')
+          }
+        >
+          Map
+        </Button>
         <Button
           onClick={() =>
             insert({ shouldShow: true, shouldShowHealthBar: true })

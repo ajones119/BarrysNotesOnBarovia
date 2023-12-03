@@ -1,0 +1,18 @@
+
+.settingsDrawerContainer {
+    padding: 8px 16px;
+}
+
+.addTokenEntry {
+    padding: 8px;
+    display: flex;
+    column-gap: 8px;
+    align-items: center;
+    justify-content: space-between;
+
+    .addTokenInfo {
+        display: flex;
+        column-gap: 8px;
+        align-items: center;
+    }
+}

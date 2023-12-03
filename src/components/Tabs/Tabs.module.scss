@@ -7,8 +7,14 @@
         width: 100%;
         .header {
             display: flex;
+            flex-direction: row;
             width: 100%;
             justify-content: center;
+
+            @media(max-width: 600px) {
+                flex-direction: column;
+            }
+
             .tab {
                 padding-left: 8px;
                 padding-right: 8px;
@@ -18,17 +24,21 @@
                 border-right: none;
                 border-left: none;
                 margin: 0 4px;
-                border-color: $primary;
-                color: $primary;
+                border-color: $light;
+                color: $light;
+
+                @media(max-width: 600px) {
+                    padding-top: 16px;
+                }
 
                 &:hover {
-                    border-color: $light;
+                    border-color: $primary;
                     cursor: pointer; 
                 }
             }
             .active {
-                border-color: $light;
-                color: $light;
+                border-color: $primary;
+                color: $primary;
             }
         }
     }

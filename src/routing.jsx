@@ -8,6 +8,7 @@ import SingleCharacter from "@views/CharacterViews/SingleCharacterView/SingleCha
 import PlayerInitiative from "@views/PlayerInitiative/PlayerInitiative";
 import DMInitiative from "@views/DMInitiative";
 import CustomMonsters from "@views/CustomMonsters";
+import CombatMap from "@views/CombatMap";
 
 export const Routing = () => {
   return (
@@ -15,8 +16,9 @@ export const Routing = () => {
       <Route path="/" element={<Home />} />
       <Route path="/Campaigns/" element={<NonHomePageContainer page={<Campaigns />} />} />
       <Route path="/Campaigns/:CampaignId/:tabKey?" element={<NonHomePageContainer page={<SingleCampaign />} />} />
-      <Route path="/Initiative/:CampaignId" element={<PlayerInitiative />} />
+      <Route path="/Initiative/:campaignId" element={<PlayerInitiative />} />
       <Route path="/Initiative/DM/:campaignId/:combatId" element={<NonHomePageContainer page={<DMInitiative />} />} />
+      <Route path="/Initiative/Map/:campaignId/:combatId" element={<NonHomePageContainer page={<CombatMap />} />} />
       <Route path="/Characters/" element={<NonHomePageContainer page={<Characters />} />} />
       <Route path="/Characters/:CharacterId" element={<NonHomePageContainer page={<SingleCharacter />} />} />
       <Route path="/Monsters/" element={<NonHomePageContainer page={<CustomMonsters />} />} />

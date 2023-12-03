@@ -54,11 +54,12 @@ export const useAddCombatButton = (newCombat: Combat, onClick: () => void, valid
     const handleClick = () => {
       const valid = validate();
       if (valid) {
+        console.log("HERE", campaignDocId, name, combatCharacterArray, currentTurnIndex)
         mutation.mutate({
             campaignDocId,
             name,
-            combatCharacterArray,
-            currentTurnIndex,
+            combatCharacterArray
+            
         })
       }
   

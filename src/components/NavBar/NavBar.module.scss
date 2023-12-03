@@ -1,0 +1,42 @@
+@import "src/sass_utils";
+
+.navbarContainer {
+    display: flex;
+    width: 100%;
+    height: 60px;
+    padding-left: 32px;
+    padding-top: 16px;
+    transition: all .25s ease-in;
+    align-items: center;
+    z-index: 10;
+    column-gap: 32px;
+
+    &.scrolled {
+        position: fixed;
+        top: 0;
+        left: 0;
+        background-color: black;
+    }
+
+    .linkContainer {
+        display: flex;
+        column-gap: 16px;
+
+        .navBarLink {
+            display: flex;
+            color: $light;
+            column-gap: 8px;
+            align-items: center;
+
+            &:hover {
+                cursor: pointer;
+                color: $primary;
+            }
+
+            &.activeLink {
+                text-decoration: underline;
+                color: $primary;
+            }
+        }
+    }
+}
