@@ -1,9 +1,8 @@
-import { useCampaign } from "@services/CampaignService";
 import { useCombat, useUpdateInitiative } from "@services/CombatService";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { useParams } from "react-router-dom";
 import css from "./CombatMap.module.scss"
-import {useDroppable, useDraggable, DndContext} from '@dnd-kit/core';
+import {DndContext} from '@dnd-kit/core';
 import Token from "./components/Token";
 import Map from "./components/Map";
 import { Typography } from "@components/Typography/Typography";
@@ -30,7 +29,7 @@ const CombatMap = ({isPlayer = false, combatIdOverride = ""}) => {
     const [mapPosition, setMapPosition] = useState<{x: number, y: number}>({x: 0, y: 0})
 
     const { combat, isLoading, isRefetching } = useCombat(combatId || combatIdOverride);
-    const { currentTurnIndex = 0, combatCharacterArray = [], map = {extraTokens: []} } = combat;
+    const { combatCharacterArray = [], map = {extraTokens: []} } = combat;
     const update = useUpdateInitiative(combat);
 
     useDeepCompareEffectNoCheck(() => {

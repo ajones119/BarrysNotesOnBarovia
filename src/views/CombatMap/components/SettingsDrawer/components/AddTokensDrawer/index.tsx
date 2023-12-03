@@ -4,7 +4,6 @@ import { Typography } from "@components/Typography/Typography";
 import INTERNAL_TOKENS, { InternalToken } from "@views/CombatMap/TokensConfig";
 import React, { useState } from "react"
 import css from "../../SettingsDrawer.module.scss"
-import { IconButton } from "@mui/material";
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useDebounce } from "usehooks-ts";
@@ -55,11 +54,3 @@ const AddTokenDrawer = ({
 }
 
 export default AddTokenDrawer;
-
-/*
-<img
-                                    src={token.image}
-                                    height={32 * token.height}
-                                    width={32 * token.width}
-                                />
-*/

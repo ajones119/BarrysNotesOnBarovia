@@ -1,5 +1,5 @@
 import React, { ReactNode } from "react";
-import { useDraggable, useDroppable } from "@dnd-kit/core";
+import { useDraggable } from "@dnd-kit/core";
 import css from "./Map.module.scss";
 
 const CustomStyle = {
