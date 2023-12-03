@@ -41,7 +41,7 @@ const  Map = ({ children, cols = 15, rows = 7, tokenSize = 46, styles, mapImage,
   const squares = [];
 
   for (let i = 0; i < rows * cols; i++) {
-    squares.push(<div className={css.gridOverlaySquare} style={{height: tokenSize, width: tokenSize }} />)
+    squares.push(<div key={`square-${i}`} className={css.gridOverlaySquare} style={{height: tokenSize, width: tokenSize }} />)
   }
 
   const backgroundImageStyles = {

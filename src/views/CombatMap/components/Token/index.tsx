@@ -28,6 +28,7 @@ function Token({ id, content, styles }: TokenProps) {
       style={{ ...style, ...CustomStyle, ...styles }}
       {...listeners}
       {...attributes}
+      key={id || ""}
     >
       {content}
     </div>

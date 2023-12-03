@@ -12,6 +12,14 @@ import { faMinus } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useAutoAnimate } from '@formkit/auto-animate/react'
 
+/*
+    Left To Add:
+    1. color picker for map background
+    2. more tokens
+    3. better looking player token names + hp, (maybe on hover?)
+    4.
+*/
+
 declare interface SettingsDrawerProps extends DrawerProps {
     map: CombatMap,
     setMap: (_newMap: CombatMap) => void

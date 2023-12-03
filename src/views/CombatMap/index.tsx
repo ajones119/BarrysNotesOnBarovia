@@ -97,6 +97,14 @@ const CombatMap = ({isPlayer = false, combatIdOverride = ""}) => {
             <Typography>{combat?.name}</Typography>
             <Button onClick={() => setIsSettingsDrawerOpen(true)}>SETTINGS</Button>
             <Spacer height={24} />
+            <SettingsDrawer
+              isOpen={isSettingsDrawerOpen}
+              onClose={() => setIsSettingsDrawerOpen(false)}
+              map={map}
+              setMap={(newMap) => {
+                update({...combat, map: {...newMap}});
+              }}
+            />
           </div>
         }
         <div className={css.CombatMapContainer}>
@@ -119,7 +127,6 @@ const CombatMap = ({isPlayer = false, combatIdOverride = ""}) => {
                     left: `${token?.data?.position?.x}px`,
                     top: `${token?.data?.position?.y}px`
                   }}
-                  key={token.id}
                   id={token.id}
                   content={<ExtraTokenContent image={token.data.image} tokenSize={map?.tokenSize || 32} height={token.data.length} width={token.data.width} />}
                 />
@@ -131,7 +138,6 @@ const CombatMap = ({isPlayer = false, combatIdOverride = ""}) => {
                     left: `${token?.data?.position?.x}px`,
                     top: `${token?.data?.position?.y}px`
                   }}
-                  key={token.id}
                   id={token.id}
                   content={<CharacterTokenContent character={token?.data} tokenSize={map?.tokenSize || 32} />}
                 />
@@ -140,14 +146,6 @@ const CombatMap = ({isPlayer = false, combatIdOverride = ""}) => {
             </Map>
           </DndContext>
         </div>
-        <SettingsDrawer
-          isOpen={isSettingsDrawerOpen}
-          onClose={() => setIsSettingsDrawerOpen(false)}
-          map={map}
-          setMap={(newMap) => {
-            update({...combat, map: {...newMap}});
-          }}
-        />
       </div>
     );
 };
