@@ -24,14 +24,15 @@ const Combats = ({ campaign, characters }: CombatsProps) => {
   const formattedCharacters = characters.filter(character => !character?.disabled).map(
     (character) =>
       ({
-        name: character.name,
-        initiativeBonus: character?.initiativeBonus,
-        armorClass: character?.armorClass,
+        name: character.name || "",
+        initiativeBonus: character?.initiativeBonus || 0,
+        armorClass: character?.armorClass || 0,
         playerDocId: character.docId,
-        maxHealth: character?.maxHealth,
-        health: character?.maxHealth,
+        maxHealth: character?.maxHealth || 0,
+        health: character?.maxHealth || 0,
         shouldShow: true,
         shouldShowHealthBar: true,
+        imageURL: character?.characterImageURL,
       }) as CombatCharacter,
   );
 

@@ -10,6 +10,7 @@ const apiMonsterFields = [
   "armor_class",
   "hit_points",
   "cr",
+  "size"
 ];
 
 type ApiMonsterResponse = {
@@ -20,6 +21,7 @@ type ApiMonsterResponse = {
   armor_class: number;
   hit_points: number;
   cr: number;
+  size: string;
 };
 
 export type Monster = Omit<
@@ -61,6 +63,7 @@ export const useDndApiMonsters = (
           name: monster.name,
           dexterity: monster.dexterity,
           challengeRating: monster.cr,
+          size: monster.size,
         }))
         .sort((a: Monster, b: Monster) => a.name.localeCompare(b.name)) ?? [],
     isLoading,

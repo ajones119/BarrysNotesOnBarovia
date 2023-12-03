@@ -75,6 +75,7 @@ type DrawerMonster = {
   maxHealth: number;
   armorClass: number;
   initiativeBonus: number;
+  size: string;
   xp: number;
   type?: CharacterType;
   imageURL?: string;
@@ -94,6 +95,7 @@ const ResourceDrawer = ({ onAdd }: ResourceDrawerProps) => {
         health: monster.hitPoints,
         maxHealth: monster.hitPoints,
         armorClass: monster.armorClass,
+        size: monster.size?.toLocaleLowerCase() || "medium",
         initiativeBonus: Math.floor((monster.dexterity - 10) / 2),
         type: (monster?.type as CharacterType) || "",
         xp: MonsterXPByChallengeRating[monster.challengeRating] ?? 1,
@@ -110,6 +112,7 @@ const ResourceDrawer = ({ onAdd }: ResourceDrawerProps) => {
         type: monster.type,
         imageURL: monster?.characterImageURL || "",
         xp: monster.xp ?? 0,
+        size: monster.size?.toLocaleLowerCase() || "medium",
       }));
 
       const combinedList = apiList.concat(customList);

@@ -1,0 +1,14 @@
+@import "src/sass_utils";
+
+.gridOverlay {
+    position: absolute;
+    display: flex;
+    flex-wrap: wrap;
+
+    .gridOverlaySquare {
+        border-color: $dark;
+        border-style: solid;
+        border-width: 1px;
+        opacity: 0.8;
+    }
+}
