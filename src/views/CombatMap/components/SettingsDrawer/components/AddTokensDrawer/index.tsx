@@ -37,9 +37,8 @@ const AddTokenDrawer = ({
             <TextInput placeholder="search" value={search} onChange={value => setSearch(String(value))} />
                 <div >
                     {options.map(token => (
-                        <div className={css.addTokenEntry}>
+                        <div className={css.addTokenEntry} key={token.name}>
                             <div className={css.addTokenInfo}>
-                                
                                 <Typography>{token.name}</Typography>
                             </div>
                             <Button borderColor="dark" color='dark' onClick={() => onAddToken(token)}>

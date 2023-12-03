@@ -82,15 +82,15 @@ const SettingsDrawer = ({
                 <div ref={animateRef}>
                 {
                     (localMapSettings?.extraTokens || []).map(({id, data: token}) => (
-                        <div className={css.addTokenEntry}>
-                        <div className={css.addTokenInfo}>
-                            
-                            <Typography>{token.name}</Typography>
+                        <div className={css.addTokenEntry} key={id}>
+                            <div className={css.addTokenInfo}>
+                                
+                                <Typography>{token.name}</Typography>
+                            </div>
+                            <Button borderColor="error" color='dark' onClick={() => handleDeleteToken(id)}>
+                                <FontAwesomeIcon icon={faMinus} />
+                            </Button>
                         </div>
-                        <Button borderColor="error" color='dark' onClick={() => handleDeleteToken(id)}>
-                            <FontAwesomeIcon icon={faMinus} />
-                        </Button>
-                    </div>
                     ))
                 }
                 </div>
