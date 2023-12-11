@@ -26,11 +26,13 @@ const SelectedPlayer = ({character, combat, update}: SelectedPlayerProps) => {
 
     const updateCharacter = (key: string, value: any) => {
         const newCombat = { ...combat }
+        console.log("UPDATE", value)
 
         if (index !== null) {
-            const newCharacter = {...newCombat.combatCharacterArray[index], key: value}
+            const newCharacter = {...newCombat.combatCharacterArray[index], [key]: value}
             newCombat.combatCharacterArray[index] = newCharacter;
         }
+
         update(newCombat)
     };
 

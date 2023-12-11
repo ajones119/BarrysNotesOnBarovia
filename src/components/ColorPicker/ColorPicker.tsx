@@ -4,7 +4,11 @@ import css from "./ColorPicker.module.scss"
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCircle } from '@fortawesome/free-solid-svg-icons';
 
-const COLORS = [
+export const COLORS = [
+    {
+        label: "Black",
+        value: "#000000"
+    },
     {
         label: "Blue",
         value: "#190dfc"

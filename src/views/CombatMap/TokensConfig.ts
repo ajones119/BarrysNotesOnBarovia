@@ -6,12 +6,15 @@ import Fog5x3 from "@images/MapTokens/Fog5x3.png"
 import Bush2x2 from "@images/MapTokens/Bush2x2.png"
 import BlackCircle from "@images/MapTokens/BlackCircleOutline.png"
 import BlackSquare from "@images/MapTokens/BlackSquareOutline.png"
+import BlueCone from "@images/MapTokens/bluecone.png"
+
 
 export type InternalToken = {
     image: string;
     name: string;
     height: number;
     width: number;
+    color?: string;
 }
 
 const INTERNAL_TOKENS: Array<InternalToken> = [
@@ -28,7 +31,7 @@ const INTERNAL_TOKENS: Array<InternalToken> = [
         width: 2.2
     },
     {
-        name: "Circle-Black 1x1",
+        name: "Circle 1x1",
         image: BlackCircle,
         height: 1,
         width: 1
@@ -70,6 +73,36 @@ const INTERNAL_TOKENS: Array<InternalToken> = [
         width: 27.2
     },
     {
+        name: "Cone-Blue (10 ft)",
+        image: BlueCone,
+        height: 2,
+        width: 2
+    },
+    {
+        name: "Cone-Blue (15 ft)",
+        image: BlueCone,
+        height: 3,
+        width: 3
+    },
+    {
+        name: "Cone-Blue (20 ft)",
+        image: BlueCone,
+        height: 4,
+        width: 4
+    },
+    {
+        name: "Cone-Blue (25 ft)",
+        image: BlueCone,
+        height: 5,
+        width: 5
+    },
+    {
+        name: "Cone-Blue (30 ft)",
+        image: BlueCone,
+        height: 6,
+        width: 6
+    },
+    {
         name: "Fog 1x1",
         image: Fog1x1,
         height: 3,
@@ -109,7 +142,8 @@ const INTERNAL_TOKENS: Array<InternalToken> = [
         name: "Square-Black 1x1",
         image: BlackSquare,
         height: 1.5,
-        width: 1.5
+        width: 1.5,
+        color: "#000000"
     },
     {
         name: "Square-Black 1x2",

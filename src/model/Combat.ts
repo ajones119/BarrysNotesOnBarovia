@@ -24,7 +24,8 @@ export type CombatMap = {
             }
             length: number,
             width: number,
-            name: string
+            name: string,
+            color?: string
         }
     }>
 }
