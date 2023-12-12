@@ -11,6 +11,7 @@ import { Typography } from "@components/Typography/Typography";
 import { faMinus } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useAutoAnimate } from '@formkit/auto-animate/react'
+import ColorPicker from "@components/ColorPicker/ColorPicker";
 
 /*
     Left To Add:
@@ -49,19 +50,24 @@ const SettingsDrawer = ({
     const handleAddToken = (newToken: InternalToken) => {
         const extraTokens = localMapSettings?.extraTokens || [];
         const uniqueID = Date.now() + Math.random()
-        extraTokens.push({
-          id: `${uniqueID}`,
-          data: {
-            position: {
-              x: 100,
-              y: 100
-            },
-            image: newToken.image,
-            length: newToken.height,
-            width: newToken.width,
-            name: newToken.name
+        const token = {
+            id: `${uniqueID}`,
+            data: {
+              position: {
+                x: 100,
+                y: 100
+              },
+              image: newToken.image,
+              length: newToken.height,
+              width: newToken.width,
+              name: newToken.name,
+              color: ""
+            }
           }
-        })
+        if (newToken?.color) {
+            token.data = {...token.data, color: newToken.color}
+        }
+        extraTokens.push(token)
 
         setLocalMapSettings({...localMapSettings, extraTokens: extraTokens})
         setIsAddTokensDrawerOpen(false);
@@ -89,11 +95,21 @@ const SettingsDrawer = ({
                 <Button onClick={() => setIsAddTokensDrawerOpen(true)}>ADD Token</Button>
                 <div ref={animateRef}>
                 {
-                    (localMapSettings?.extraTokens || []).map(({id, data: token}) => (
+                    (localMapSettings?.extraTokens || []).map(({id, data: token}, index) => (
                         <div className={css.addTokenEntry} key={id}>
                             <div className={css.addTokenInfo}>
                                 
                                 <Typography>{token.name}</Typography>
+                            
+                                {
+                                    token?.color && 
+                                        <ColorPicker width={48} label="Color" value={token?.color} onChange={value => {
+                                            const newToken = {id, data: {...token, color: value}}
+                                            const newTokens = [...localMapSettings.extraTokens || []]
+                                            newTokens[index] = newToken
+                                            setLocalMapSettings({...localMapSettings, extraTokens: newTokens})
+                                        }} />
+                                }
                             </div>
                             <Button borderColor="error" color='dark' onClick={() => handleDeleteToken(id)}>
                                 <FontAwesomeIcon icon={faMinus} />

@@ -9,3 +9,94 @@
     height: 1000px;
     overflow: hidden;
 }
+
+.tooltipContainer {
+    background-color: black;
+    opacity: 0.5;
+    border-radius: 4px;
+    padding: 4px;
+
+    .tooltipCondIcon {
+        color: white;
+        opacity: 1;
+        margin: 0 2px;
+    }
+}
+
+.healthIndicator {
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+}
+
+.characterTokenContainer {
+    padding: 4px;
+    border-radius: 50%;
+
+    &:hover {
+        cursor: grab;
+    }
+
+    &:active {
+        cursor: grabbing;
+    }
+
+    &.flying {
+        animation: floating 3.5s ease-in-out infinite;
+    }
+
+    .burning {
+        z-index: 0;
+        width: 100%;
+        height: 100%;
+        animation: burning 3.5s alternate infinite;
+        
+    }
+
+    .petrified {
+        z-index: 0;
+        width: 100%;
+        height: 100%;
+        animation: petrified 3.5s alternate infinite;
+        
+    }
+}
+
+.overlay {
+    padding: 4px;
+    position: absolute;
+    top: 4px;
+    opacity: 0;
+    border-radius: 50%;
+    background-color: green;
+}
+
+@keyframes burning {
+	0%,
+	50%,
+	100% {
+        box-shadow: 0em 1em 0.55em 0.25em red;
+	}
+	25%,
+	75% {
+        box-shadow: 0em 1em 0.75em 0.5em red;
+	}
+}
+
+@keyframes petrified {
+	0%,
+	50%,
+	100% {
+        box-shadow: 0em 0.5em 0.75em 0.5em white;
+	}
+	25%,
+	75% {
+        box-shadow: 0em 1.5em 0.75em 0.5em white;
+	}
+}
+
+@keyframes floating {
+    0% { transform: translate(0,  0px); }
+    50%  { transform: translate(0, 15px); }
+    100%   { transform: translate(0, -0px); }    
+}

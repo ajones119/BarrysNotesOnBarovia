@@ -3,7 +3,7 @@ import React from "react";
 import css from "./ConditionsSelect.module.scss"
 import CancelIcon from "@mui/icons-material/Cancel";
 import CheckIcon from "@mui/icons-material/Check";
-import { faBed, faBrain, faChildCombatant, faEarDeaf, faFaceFlushed, faFaceGrinHearts, faFaceTired, faFire, faGem, faHandsHoldingChild, faMoon, faPersonFallingBurst, faPersonShelter, faPersonWalkingWithCane, faSkullCrossbones, faUserSecret, faWheelchair } from "@fortawesome/free-solid-svg-icons";
+import { faBed, faBrain, faChildCombatant, faEarDeaf, faFaceFlushed, faFaceGrinHearts, faFaceTired, faFeather, faFire, faGem, faHandsHoldingChild, faMoon, faPersonFallingBurst, faPersonShelter, faPersonWalkingWithCane, faSkullCrossbones, faUserSecret, faWheelchair } from "@fortawesome/free-solid-svg-icons";
 import { IconDefinition } from "@fortawesome/fontawesome-svg-core";
 import { faFaceAngry } from "@fortawesome/free-regular-svg-icons";
 
@@ -57,6 +57,11 @@ export const CONDITION_OPTIONS: Condition[] = [
         label: "Frightened",
         value: "frightened",
         icon: faChildCombatant
+    },
+    {
+        label: "Flying",
+        value: "flying",
+        icon: faFeather
     },
     {
         label: "Grappled",

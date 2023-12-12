@@ -112,8 +112,7 @@ const PlayerInitiative = () => {
                 currentTab={tab}
                 onChange={(tab) => setTab(tab)}
                 tabs={pageTabs}
-            ></Tabs>
-           
+            />
             <Spacer height={24} />
 
         </div>
