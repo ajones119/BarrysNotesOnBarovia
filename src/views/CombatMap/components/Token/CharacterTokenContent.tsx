@@ -69,7 +69,6 @@ const CharacterTokenContent = ({ character, tokenSize = 16, isCurrentTurn = fals
 
     const {health = 0, maxHealth = 0} = character
     const healthBarAmount = (health/maxHealth)*100;
-    console.log("token", character)
     const { conditions } = character;
 
     const wrapperConditions = conditions?.filter(cond => WrapperConditions.includes(cond)) || [];
