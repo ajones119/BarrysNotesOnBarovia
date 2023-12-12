@@ -4,7 +4,7 @@ import Fog1x1 from "@images/MapTokens/Fog1x1.png"
 import Fog2x2 from "@images/MapTokens/Fog2x2.png"
 import Fog5x3 from "@images/MapTokens/Fog5x3.png"
 import Bush2x2 from "@images/MapTokens/Bush2x2.png"
-import BlackCircle from "@images/MapTokens/BlackCircleOutline.png"
+import BlackCircle from "@images/MapTokens/circle2.png"
 import BlackSquare from "@images/MapTokens/BlackSquareOutline.png"
 import BlueCone from "@images/MapTokens/bluecone.png"
 
@@ -34,49 +34,57 @@ const INTERNAL_TOKENS: Array<InternalToken> = [
         name: "Circle 1x1",
         image: BlackCircle,
         height: 1,
-        width: 1
+        width: 1,
+        color: "#000000"
     },
     {
-        name: "Circle-Black (5ft radius) 2x2",
+        name: "Circle (5ft radius) 2x2",
         image: BlackCircle,
-        height: 2.2,
-        width: 2.2
+        height: 2,
+        width: 2,
+        color: "#000000"
     },
     {
-        name: "Circle-Black (10ft radius) 4x4",
+        name: "Circle (10ft radius) 4x4",
         image: BlackCircle,
-        height: 4.5,
-        width: 4.5
+        height: 4,
+        width: 4,
+        color: "#000000"
     },
     {
-        name: "Circle-Black (15ft radius) 6x6",
+        name: "Circle (15ft radius) 6x6",
         image: BlackCircle,
-        height: 6.8,
-        width: 6.8
+        height: 6,
+        width: 6,
+        color: "#000000"
     },
     {
-        name: "Circle-Black (20ft radius) 8x8",
+        name: "Circle (20ft radius) 8x8",
         image: BlackCircle,
-        height: 9,
-        width: 9
+        height: 8,
+        width: 8,
+        color: "#000000"
     },
     {
-        name: "Circle-Black (50ft radius) 20x20",
+        name: "Circle (50ft radius) 20x20",
         image: BlackCircle,
-        height: 22.6,
-        width: 22.6
+        height: 20,
+        width: 20,
+        color: "#000000"
     },
     {
-        name: "Circle-Black (60ft radius) 24x24",
+        name: "Circle (60ft radius) 24x24",
         image: BlackCircle,
-        height: 27.2,
-        width: 27.2
+        height: 24,
+        width: 24,
+        color: "#000000"
     },
     {
         name: "Cone-Blue (10 ft)",
         image: BlueCone,
         height: 2,
-        width: 2
+        width: 2,
+        color: "#000000"
     },
     {
         name: "Cone-Blue (15 ft)",

@@ -4,6 +4,19 @@ import css from "./ColorPicker.module.scss"
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCircle } from '@fortawesome/free-solid-svg-icons';
 
+export const COLORS_MAP = {
+    Black: "#000000",
+    Blue: "#190dfc",
+    Green: "#07d600",
+    Line: "#95ff00",
+    Orange: "#f74c02",
+    Pink: "#eb4492",
+    Red: "#ff0800",
+    Sky: "#63b9ff",
+    White: "#ffffff",
+    Yellow: "#ffbb00"
+}
+
 export const COLORS = [
     {
         label: "Black",
@@ -48,7 +61,7 @@ export const COLORS = [
 ];
 
 declare interface ColorPickerProps {
-    onChange: (value: any) => void,
+    onChange: (value: string) => void,
     value?: string | null,
     width?: number,
     label?: string,
@@ -68,7 +81,7 @@ const ColorPicker = ({ onChange, value, width = 150, label }: ColorPickerProps) 
             <CustomizedSelect
                 value={value}
                 onChange={(event) => {
-                    const chosenColor = event.target.value;
+                    const chosenColor = event.target.value as string;
                     onChange(chosenColor)
                 }}
                 className={css.picker}

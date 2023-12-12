@@ -27,7 +27,6 @@ const CombatMap = ({isPlayer = false, combatIdOverride = "", defaultMapPosition 
     const [extraTokens, setExtraTokens] = useState<DroppableToken[]>([]);
 
     const [mapPosition, setMapPosition] = useState<{x: number, y: number}>(defaultMapPosition)
-    console.log("Map Position", mapPosition)
 
     const { combat, isLoading, isRefetching } = useCombat(combatId || combatIdOverride);
     const { combatCharacterArray = [], map = {extraTokens: []}, currentTurnIndex } = combat;
@@ -129,7 +128,13 @@ const CombatMap = ({isPlayer = false, combatIdOverride = "", defaultMapPosition 
                     top: `${token?.data?.position?.y}px`
                   }}
                   id={token.id}
-                  content={<ExtraTokenContent image={token.data.image} tokenSize={map?.tokenSize || 32} height={token.data.length} width={token.data.width} />}
+                  content={<ExtraTokenContent
+                    image={token.data.image}
+                    tokenSize={map?.tokenSize || 32}
+                    height={token.data.length}
+                    width={token.data.width}
+                    color={token.data?.color || null}
+                  />}
                 />
               ))}
               {tokens.map((token, index) => {
