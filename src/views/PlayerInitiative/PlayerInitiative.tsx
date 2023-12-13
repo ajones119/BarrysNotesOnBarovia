@@ -16,6 +16,7 @@ import CombatMap from "@views/CombatMap";
 
 const PlayerInitiative = () => {
     const [character, setCharacter] = useState<PlayerCharacter | null>()
+    const [mapPosition, setMapPosition] = useState<{x: number, y: number}>({x: 0, y: 0})
     const [tab, setTab] = useState("initiative");
     const {campaignId} = useParams();
     const {characters} = useCampaignCharacters(campaignId || "")
@@ -66,7 +67,7 @@ const PlayerInitiative = () => {
                             combatCharacter={character}
                             isCurrentTurn={combat?.combatCharacterArray[currentTurnIndex].playerDocId === playerDocId}
                             isNextTurn={character.playerDocId === nextPlayerDocId}
-
+                            
                         />
                     )})
                 }
@@ -90,7 +91,7 @@ const PlayerInitiative = () => {
     );
 
     const mapTab = (
-        <CombatMap isPlayer combatIdOverride={campaign?.currentCombatDocId} />
+        <CombatMap defaultMapPosition={mapPosition} setMapDefaultPosition={setMapPosition} isPlayer combatIdOverride={campaign?.currentCombatDocId} />
     );
 
     const pageTabs: Array<Tab> = [
