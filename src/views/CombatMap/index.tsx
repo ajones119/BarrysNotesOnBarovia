@@ -18,7 +18,7 @@ type DroppableToken = {
   data: any
 }
 
-const CombatMap = ({isPlayer = false, combatIdOverride = "", defaultMapPosition = {x: 0, y: 0}}) => {
+const CombatMap = ({isPlayer = false, combatIdOverride = "", defaultMapPosition = {x: 0, y: 0}, setMapDefaultPosition = (_position: any) => {} }) => {
     const { combatId, campaignId = "" } = useParams();
 
     const [isSettingsDrawerOpen, setIsSettingsDrawerOpen] = useState(false);
@@ -84,6 +84,10 @@ const CombatMap = ({isPlayer = false, combatIdOverride = "", defaultMapPosition 
         setExtraTokens(extraTokens);
       } else if (ev.active.id === "map") {
         setMapPosition({
+          x: mapPosition.x + ev.delta.x,
+          y: mapPosition.y + ev.delta.y
+        })
+        setMapDefaultPosition({
           x: mapPosition.x + ev.delta.x,
           y: mapPosition.y + ev.delta.y
         })
