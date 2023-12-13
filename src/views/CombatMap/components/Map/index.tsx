@@ -67,7 +67,7 @@ const  Map = ({
   return (
     <div
       ref={setNodeRef}
-      style={{...CustomStyle, ...style, background: mapColor, height, width, ...styles, ...backgroundImageStyles }}
+      style={{...CustomStyle, ...style, backgroundColor: mapColor, height, width, ...styles, ...backgroundImageStyles }}
       {...listeners}
       {...attributes}
     >
