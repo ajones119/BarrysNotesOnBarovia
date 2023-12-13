@@ -8,13 +8,15 @@ export const COLORS_MAP = {
     Black: "#000000",
     Blue: "#190dfc",
     Green: "#07d600",
-    Line: "#95ff00",
+    Lime: "#95ff00",
     Orange: "#f74c02",
     Pink: "#eb4492",
     Red: "#ff0800",
     Sky: "#63b9ff",
     White: "#ffffff",
-    Yellow: "#ffbb00"
+    Yellow: "#ffbb00",
+    Gray: "#828282",
+    Brown: "#7B3F00"
 }
 
 export const COLORS = [
@@ -57,6 +59,14 @@ export const COLORS = [
     {
         label: "Yellow",
         value: "#ffbb00"
+    },
+    {
+        label: "Gray",
+        value: "#828282"
+    },
+    {
+        label: "Brown",
+        value: "#7B3F00"
     },
 ];
 

@@ -92,21 +92,20 @@ const CombatMap = ({isPlayer = false, combatIdOverride = "", defaultMapPosition 
 
     return (
       <div>
-        { !isPlayer && 
-          <div>
-            <Typography>{combat?.name}</Typography>
-            <Button onClick={() => setIsSettingsDrawerOpen(true)}>SETTINGS</Button>
-            <Spacer height={24} />
-            <SettingsDrawer
-              isOpen={isSettingsDrawerOpen}
-              onClose={() => setIsSettingsDrawerOpen(false)}
-              map={map}
-              setMap={(newMap) => {
-                update({...combat, map: {...newMap}});
-              }}
-            />
-          </div>
-        }
+        <div>
+          <Typography>{combat?.name}</Typography>
+          <Button onClick={() => setIsSettingsDrawerOpen(true)}>SETTINGS</Button>
+          <Spacer height={24} />
+          <SettingsDrawer
+            isOpen={isSettingsDrawerOpen}
+            onClose={() => setIsSettingsDrawerOpen(false)}
+            map={map}
+            setMap={(newMap) => {
+              console.log("set map", map)
+              update({...combat, map: {...newMap}});
+            }}
+          />
+        </div>
         <div className={css.CombatMapContainer}>
           <DndContext onDragEnd={handleDragEnd}>
             <Map
@@ -119,6 +118,9 @@ const CombatMap = ({isPlayer = false, combatIdOverride = "", defaultMapPosition 
                 top: `${mapPosition.y}px`
               }}
               tokenSize={map?.tokenSize || 32}
+              hideGrid={map?.hideGrid}
+              mapColor={map?.mapColor}
+              gridColor={map?.gridColor}
             >
               {extraTokens.map((token) => (
                 <Token
@@ -134,6 +136,8 @@ const CombatMap = ({isPlayer = false, combatIdOverride = "", defaultMapPosition 
                     height={token.data.length}
                     width={token.data.width}
                     color={token.data?.color || null}
+                    opacity={token.data?.opacity || null}
+                    rotate={token?.data?.rotation || null}
                   />}
                 />
               ))}

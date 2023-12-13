@@ -14,6 +14,9 @@ export type CombatMap = {
     columns?: number,
     tokenSize?: number,
     mapImage?: string,
+    hideGrid?: boolean,
+    gridColor?: string,
+    mapColor?: string,
     extraTokens?: Array<{
         id: string,
         data: {
@@ -25,7 +28,10 @@ export type CombatMap = {
             length: number,
             width: number,
             name: string,
-            color?: string
+            color?: string,
+            opacity?: number,
+            rotation?: number,
+            canRotate?: boolean
         }
     }>
 }

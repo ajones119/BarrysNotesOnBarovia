@@ -8,6 +8,7 @@ import { faPlus } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useDebounce } from "usehooks-ts";
 import { TextInput } from "@components/TextInput/TextInput";
+import { Spacer } from "@components/Spacer/Spacer";
 
 declare interface AddTokensDrawerProps extends DrawerProps {
     onAddToken: (_newToken: InternalToken) => void
@@ -24,7 +25,7 @@ const AddTokenDrawer = ({
     let options = INTERNAL_TOKENS;
 
     if (debouncedSearch) {
-        options = options.filter(option => option.name.includes(debouncedSearch))
+        options = options.filter(option => option.name.toLowerCase().includes(debouncedSearch))
     }
 
     return (
@@ -35,6 +36,7 @@ const AddTokenDrawer = ({
         >
             <div className={css.settingsDrawerContainer}>
             <TextInput placeholder="search" value={search} onChange={value => setSearch(String(value))} />
+            <Spacer height={16} />
                 <div >
                     {options.map(token => (
                         <div className={css.addTokenEntry} key={token.name}>
