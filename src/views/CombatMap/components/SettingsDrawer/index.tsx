@@ -11,20 +11,23 @@ import { Typography } from "@components/Typography/Typography";
 import { faMinus } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useAutoAnimate } from '@formkit/auto-animate/react'
-import ColorPicker from "@components/ColorPicker/ColorPicker";
-
-/*
-    Left To Add:
-    1. color picker for map background
-    2. more tokens
-    3. better looking player token names + hp, (maybe on hover?)
-    4.
-*/
+import ColorPicker, { COLORS_MAP } from "@components/ColorPicker/ColorPicker";
+import { Checkbox } from "@mui/material";
 
 declare interface SettingsDrawerProps extends DrawerProps {
     map: CombatMap,
     setMap: (_newMap: CombatMap) => void
 };
+
+const ROTATION_RESULTS = [
+    {value: 0, label: 0},
+    {value: 15, label: 15},
+    {value: 30, label: 30},
+    {value: 45, label: 45},
+    {value: 60, label: 60},
+    {value: 90, label: 90},
+    {value: 115, label: 115},
+]
 
 const SettingsDrawer = ({
     isOpen,
@@ -61,12 +64,22 @@ const SettingsDrawer = ({
               length: newToken.height,
               width: newToken.width,
               name: newToken.name,
-              color: ""
+              color: "",
+              opacity: 0,
+              rotation: 0,
+              canRotate: newToken?.canRotate || false
             }
           }
         if (newToken?.color) {
             token.data = {...token.data, color: newToken.color}
         }
+        if (newToken?.opacity) {
+            token.data = {...token.data, opacity: newToken.opacity}
+        }
+        if (newToken?.canRotate) {
+            token.data = {...token.data, rotation: newToken.rotation || 0}
+        }
+
         extraTokens.push(token)
 
         setLocalMapSettings({...localMapSettings, extraTokens: extraTokens})
@@ -92,6 +105,26 @@ const SettingsDrawer = ({
                 <TextInput value={localMapSettings?.mapImage} placeholder="Map Image" onChange={(value) => setLocalMapSettings({...localMapSettings, mapImage: String(value)})} />
                 <Spacer height={24} />
 
+                <div className={css.settingsRow}>
+                    <Typography color="primary">Background Color</Typography>
+                    <div>
+                        <ColorPicker width={48} label="Color" value={localMapSettings?.mapColor || COLORS_MAP.White} onChange={(value) => setLocalMapSettings({...localMapSettings, mapColor: String(value)})} />
+                    </div>
+                </div>
+
+                <div className={css.settingsRow}>
+                    <Typography color="primary">Grid Color</Typography>
+                    <div>
+                        <ColorPicker width={48} label="Color" value={localMapSettings?.gridColor || COLORS_MAP.Black} onChange={(value) => setLocalMapSettings({...localMapSettings, gridColor: String(value)})} />
+                    </div>
+                </div>
+
+                <div className={css.settingsRow}>
+                    <Typography color="primary">Hide Grid</Typography>
+                    <Checkbox checked={localMapSettings?.hideGrid} placeholder="Map Image" onChange={(value) => setLocalMapSettings({...localMapSettings, hideGrid: !localMapSettings.hideGrid})} />
+                </div>
+                <Spacer height={24} />
+
                 <Button onClick={() => setIsAddTokensDrawerOpen(true)}>ADD Token</Button>
                 <div ref={animateRef}>
                 {
@@ -105,6 +138,15 @@ const SettingsDrawer = ({
                                     token?.color && 
                                         <ColorPicker width={48} label="Color" value={token?.color} onChange={value => {
                                             const newToken = {id, data: {...token, color: value}}
+                                            const newTokens = [...localMapSettings.extraTokens || []]
+                                            newTokens[index] = newToken
+                                            setLocalMapSettings({...localMapSettings, extraTokens: newTokens})
+                                        }} />
+                                }
+                                {
+                                    token?.canRotate && 
+                                        <TextInput placeholder="Rotate" number value={token?.rotation} onChange={value => {
+                                            const newToken = {id, data: {...token, rotation: Number(value)}}
                                             const newTokens = [...localMapSettings.extraTokens || []]
                                             newTokens[index] = newToken
                                             setLocalMapSettings({...localMapSettings, extraTokens: newTokens})

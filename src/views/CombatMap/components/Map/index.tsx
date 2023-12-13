@@ -1,12 +1,12 @@
 import React, { ReactNode } from "react";
 import { useDraggable } from "@dnd-kit/core";
 import css from "./Map.module.scss";
+import { COLORS_MAP } from "@components/ColorPicker/ColorPicker";
 
 const CustomStyle = {
   display: "flex",
   width: "600px",
   height: "600px",
-  background: "#7f8554"
 };
 
 const TOKEN_SIZES = {
@@ -22,10 +22,24 @@ type MapProps = {
   tokenSize?: number,
   styles?: any,
   mapImage?: string,
-  cover?: boolean
+  cover?: boolean,
+  hideGrid?: boolean,
+  mapColor?: string,
+  gridColor?: string
 }
 
-const  Map = ({ children, cols = 15, rows = 7, tokenSize = 46, styles, mapImage, cover = true }: MapProps) => {
+const  Map = ({
+  children,
+  cols = 15,
+  rows = 7,
+  tokenSize = 46,
+  styles,
+  mapImage,
+  cover = true,
+  hideGrid = false,
+  mapColor = COLORS_MAP.White,
+  gridColor = COLORS_MAP.Black
+}: MapProps) => {
   const { attributes, listeners, setNodeRef, transform } = useDraggable({
     id: "map"
   });
@@ -41,7 +55,7 @@ const  Map = ({ children, cols = 15, rows = 7, tokenSize = 46, styles, mapImage,
   const squares = [];
 
   for (let i = 0; i < rows * cols; i++) {
-    squares.push(<div key={`square-${i}`} className={css.gridOverlaySquare} style={{height: tokenSize, width: tokenSize }} />)
+    squares.push(<div key={`square-${i}`} className={css.gridOverlaySquare} style={{height: tokenSize, width: tokenSize, borderColor: gridColor }} />)
   }
 
   const backgroundImageStyles = {
@@ -53,13 +67,13 @@ const  Map = ({ children, cols = 15, rows = 7, tokenSize = 46, styles, mapImage,
   return (
     <div
       ref={setNodeRef}
-      style={{...CustomStyle, ...style, height, width, ...styles, ...backgroundImageStyles }}
+      style={{...CustomStyle, ...style, background: mapColor, height, width, ...styles, ...backgroundImageStyles }}
       {...listeners}
       {...attributes}
     >
       <div style={{position: "relative", width, height}}>
         <div className={css.gridOverlay}>
-          {squares}
+          {!hideGrid && squares}
         </div>
       </div>
       

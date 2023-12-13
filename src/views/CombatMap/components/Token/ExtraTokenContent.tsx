@@ -8,16 +8,23 @@ type ExtraTokenContentProps = {
     width?: number;
     cover?: boolean;
     color?: string;
+    opacity?: number;
+    rotate?: number;
 };
 
-const ExtraTokenContent = ({ image, tokenSize = 16, height = 2, width = 2, cover = false, color }: ExtraTokenContentProps) => {
+const ExtraTokenContent = ({ image, tokenSize = 16, height = 2, width = 2, cover = false, color, opacity, rotate }: ExtraTokenContentProps) => {
     return (
         <div style={{width: tokenSize * width, height: tokenSize * height}}>
             <img
                 src={image}
                 width={tokenSize * width}
                 height={tokenSize * height}
-                style={{objectFit: cover ? "cover" : undefined, filter: color ? getExtraColorsFilterFromNewColor(color) : undefined}}
+                style={{
+                    objectFit: cover ? "cover" : undefined,
+                    filter: color ? getExtraColorsFilterFromNewColor(color) : undefined,
+                    opacity: opacity || undefined,
+                    transform: `rotate(${rotate}deg)`
+                }}
             />
         </div>
     )
