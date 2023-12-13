@@ -70,6 +70,14 @@ const INTERNAL_TOKENS: Array<InternalToken> = [
         opacity: 0.9
     },
     {
+        name: "Animated Circle (30ft radius) 12x12",
+        image: RotatingSpell,
+        height: 12,
+        width: 12,
+        color: COLORS_MAP.Black,
+        opacity: 0.9
+    },
+    {
         name: "Animated Circle (50ft radius) 20x20",
         image: RotatingSpell,
         height: 20,
@@ -152,6 +160,14 @@ const INTERNAL_TOKENS: Array<InternalToken> = [
         image: BlackCircle,
         height: 8,
         width: 8,
+        color: COLORS_MAP.Black,
+        opacity: 0.7
+    },
+    {
+        name: "Circle (30ft radius) 12x12",
+        image: BlackCircle,
+        height: 12,
+        width: 12,
         color: COLORS_MAP.Black,
         opacity: 0.7
     },
