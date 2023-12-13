@@ -12,8 +12,10 @@ import { useCustomMonsters } from "@services/CustomMonstersService";
 import { useDebounce } from "usehooks-ts";
 import { BASE_ABILITY_SCORES, BaseCharacter, CharacterType } from "@model/BaseCharacter";
 import { MonsterXPByChallengeRating } from "@model/ChallengeRating";
+import { useCampaignNPCs } from "@services/NPCService";
 
 type ResourceDrawerProps = {
+  campaignDocId: string,
   onAdd?: (data: any) => void;
 };
 
@@ -77,18 +79,20 @@ type DrawerMonster = {
   initiativeBonus: number;
   size: string;
   xp: number;
-  type?: CharacterType;
+  type?: CharacterType | null;
   imageURL?: string;
 };
 
-const ResourceDrawer = ({ onAdd }: ResourceDrawerProps) => {
+const ResourceDrawer = ({ onAdd, campaignDocId }: ResourceDrawerProps) => {
   const { isLoading, monsters } = useDndApiMonsters();
   const { isLoading: isCustomMonsterLoading, monsters: customMonsters = [] } =
     useCustomMonsters();
+  const {isLoading: npcsLoading, NPCs = []} = useCampaignNPCs(campaignDocId);
+
   const [search, setSearch] = useState<string>();
   const searchValue = useDebounce(search, 250);
   const fullMonsterList = useMemo<DrawerMonster[]>(() => {
-    if (!isLoading && !isCustomMonsterLoading) {
+    if (!isLoading && !isCustomMonsterLoading && !npcsLoading) {
       const apiList: DrawerMonster[] = monsters.map((monster) => ({
         name: monster.name,
         listName: monster.name,
@@ -109,19 +113,33 @@ const ResourceDrawer = ({ onAdd }: ResourceDrawerProps) => {
         armorClass: monster.armorClass || 0,
         initiativeBonus:
           Math.floor(((monster?.abilityScores || BASE_ABILITY_SCORES).dexterity - 10) / 2) || 0,
-        type: monster.type,
+        type: monster.type || null,
         imageURL: monster?.characterImageURL || "",
         xp: monster.xp ?? 0,
         size: monster.size?.toLocaleLowerCase() || "medium",
       }));
 
-      const combinedList = apiList.concat(customList);
+      const npcList: DrawerMonster[] = NPCs?.map((npc: BaseCharacter) => ({
+        name: npc.name,
+        listName: `${npc.name} (Campaign NPC)`,
+        health: npc.averageHitPoints || 0,
+        maxHealth: npc.averageHitPoints || 0,
+        armorClass: npc.armorClass || 0,
+        initiativeBonus:
+          Math.floor(((npc?.abilityScores || BASE_ABILITY_SCORES).dexterity - 10) / 2) || 0,
+        type: npc.type || null,
+        imageURL: npc?.characterImageURL || "",
+        xp: npc.xp ?? 0,
+        size: npc.size?.toLocaleLowerCase() || "medium",
+      }));
 
-      return combinedList;
+      const combinedList = apiList.concat(customList).concat(npcList);
+
+      return combinedList.sort();
     } else {
       return [];
     }
-  }, [isLoading, isCustomMonsterLoading, searchValue]);
+  }, [isLoading, isCustomMonsterLoading, searchValue, npcsLoading]);
 
   const filteredMonsters = useMemo(() => {
     return fullMonsterList
@@ -133,7 +151,7 @@ const ResourceDrawer = ({ onAdd }: ResourceDrawerProps) => {
       .sort();
   }, [searchValue, fullMonsterList.length]);
 
-  if (isLoading || isCustomMonsterLoading) return;
+  if (isLoading || isCustomMonsterLoading || npcsLoading) return;
 
   const handleMonsterAdd = (monster: DrawerMonster) => {
     onAdd?.(monster);

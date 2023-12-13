@@ -111,7 +111,7 @@ const DMInitiative = () => {
 
   // TODO: do this properly using types for safety. Maybe a better signifier? What about npcs?
   const encounterDiffulty = getEncounterDifficulty(
-    list.filter((character) => !character?.playerDocId),
+    list.filter((character) => !character?.playerDocId && !character?.isAlly),
     characters,
   );
 
@@ -171,6 +171,11 @@ const DMInitiative = () => {
             </TableCell>
             <TableCell style={{ width: "2%" }}>
               <Typography color="light" size="large" weight="bolder">
+                Ally?
+              </Typography>
+            </TableCell>
+            <TableCell style={{ width: "2%" }}>
+              <Typography color="light" size="large" weight="bolder">
                 Remove
               </Typography>
             </TableCell>
@@ -187,7 +192,7 @@ const DMInitiative = () => {
           />
         ))}
       </TableContainer>
-      <ResourceDrawer onAdd={insert} />
+      <ResourceDrawer onAdd={insert} campaignDocId={campaignId} />
       <div className={css.bottonsContainer}>
       <Button
           onClick={() =>

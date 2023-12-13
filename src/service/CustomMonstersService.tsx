@@ -8,7 +8,7 @@ export const useCreateCustomMonster = (onSuccess: () => void) => {
     const mutation = useFirestoreCollectionMutation(ref, {onSuccess: onSuccess});
   
     return {
-        mutate: (newMonster: BaseCharacter) => mutation.mutate(newMonster),
+        mutate: (newMonster: BaseCharacter) => mutation.mutate({size: "medium", type: null, ...newMonster}),
         isLoading: mutation.isLoading
     }
 }
