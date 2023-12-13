@@ -8,7 +8,7 @@ import css from "./SettingsDrawer.module.scss"
 import AddTokenDrawer from "./components/AddTokensDrawer";
 import { InternalToken } from "@views/CombatMap/TokensConfig";
 import { Typography } from "@components/Typography/Typography";
-import { faCopy, faMinus } from "@fortawesome/free-solid-svg-icons";
+import { faCopy, faLock, faLockOpen, faMinus } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useAutoAnimate } from '@formkit/auto-animate/react'
 import ColorPicker, { COLORS_MAP } from "@components/ColorPicker/ColorPicker";
@@ -55,9 +55,9 @@ const SettingsDrawer = ({
     const handleAddToken = (newToken: InternalToken) => {
         const extraTokens = localMapSettings?.extraTokens || [];
         const uniqueID = Date.now() + Math.random()
-        console.log(currentMapCoordinates)
         const token = {
             id: `${uniqueID}`,
+            disabled: false,
             data: {
               position: {
                 x: -1 * currentMapCoordinates.x + 500,
@@ -70,7 +70,7 @@ const SettingsDrawer = ({
               color: "",
               opacity: 0,
               rotation: 0,
-              canRotate: newToken?.canRotate || false
+              canRotate: newToken?.canRotate || false,
             }
           }
         if (newToken?.color) {
@@ -131,7 +131,7 @@ const SettingsDrawer = ({
                 <Button onClick={() => setIsAddTokensDrawerOpen(true)}>ADD Token</Button>
                 <div ref={animateRef}>
                 {
-                    (localMapSettings?.extraTokens || []).map(({id, data: token}, index) => (
+                    (localMapSettings?.extraTokens || []).map(({id, data: token, disabled}, index) => (
                         <div className={css.addTokenEntry} key={id}>
                             <div className={css.addTokenInfo}>
                                 
@@ -157,6 +157,14 @@ const SettingsDrawer = ({
                                 }
                             </div>
                             <div className={css.tokenButtons}>
+                            <Button borderColor="primary" color='dark' onClick={() => {
+                                    const newToken = {id, data: {...token}, disabled: !disabled}
+                                    const newTokens = [...localMapSettings.extraTokens || []]
+                                    newTokens[index] = newToken
+                                    setLocalMapSettings({...localMapSettings, extraTokens: newTokens})
+                                }}>
+                                    <FontAwesomeIcon icon={disabled ? faLockOpen : faLock} />
+                                </Button>
                                 <Button borderColor="error" color='dark' onClick={() => handleDeleteToken(id)}>
                                     <FontAwesomeIcon icon={faMinus} />
                                 </Button>

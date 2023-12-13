@@ -9,11 +9,12 @@ type TokenProps = {
   id: string;
   content: ReactNode;
   styles: any;
+  disabled?: boolean,
 };
 
-function Token({ id, content, styles }: TokenProps) {
+function Token({ id, content, styles, disabled = false }: TokenProps) {
   const { attributes, listeners, setNodeRef, transform } = useDraggable({
-    id
+    id, disabled
   });
 
   const style = transform
