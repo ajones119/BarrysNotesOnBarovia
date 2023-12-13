@@ -74,19 +74,18 @@ declare interface ColorPickerProps {
     onChange: (value: string) => void,
     value?: string | null,
     width?: number,
-    outlined?: boolean,
+    label?: string,
 }
 
 const CustomizedSelect = styled(Select)`
-  color: #fffffff;
-  border-color: #fffffff;
+  color: #20b2aa;
 
   :hover {
-    color: #fffffff;
+    color: #2e8b57;
   }
 `;
 
-const ColorPicker = ({ onChange, value, width = 150, outlined }: ColorPickerProps) => {
+const ColorPicker = ({ onChange, value, width = 150, label }: ColorPickerProps) => {
     return (
         <div className={css.colorPicker} style={{width: `${width}px`}}>
             <CustomizedSelect
@@ -96,7 +95,7 @@ const ColorPicker = ({ onChange, value, width = 150, outlined }: ColorPickerProp
                     onChange(chosenColor)
                 }}
                 className={css.picker}
-                style={{width: `${width}px`, borderStyle: outlined ? "solid" : undefined}}
+                style={{width: `${width}px`}}
                 label='color'
                 defaultValue={"#ffffff"}
                 variant="standard"
