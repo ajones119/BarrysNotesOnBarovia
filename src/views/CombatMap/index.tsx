@@ -16,7 +16,8 @@ import useCombatMapStore from "./CombatMapStore";
 
 type DroppableToken = {
   id: string,
-  data: any
+  data: any,
+  disabled?: boolean
 }
 
 const CombatMap = ({combatIdOverride = ""}) => {
@@ -104,7 +105,6 @@ const CombatMap = ({combatIdOverride = ""}) => {
             onClose={() => setIsSettingsDrawerOpen(false)}
             map={map}
             setMap={(newMap) => {
-              console.log("set map", map)
               update({...combat, map: {...newMap}});
             }}
           />
@@ -133,7 +133,9 @@ const CombatMap = ({combatIdOverride = ""}) => {
                     top: `${token?.data?.position?.y}px`
                   }}
                   id={token.id}
-                  content={<ExtraTokenContent
+                  disabled={token?.disabled}
+                  content={
+                  <ExtraTokenContent
                     image={token.data.image}
                     tokenSize={map?.tokenSize || 32}
                     height={token.data.length}

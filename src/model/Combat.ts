@@ -19,6 +19,7 @@ export type CombatMap = {
     mapColor?: string,
     extraTokens?: Array<{
         id: string,
+        disabled?: boolean,
         data: {
             image: string;
             position: {
