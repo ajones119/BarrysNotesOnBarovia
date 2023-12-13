@@ -8,7 +8,7 @@ import css from "./SettingsDrawer.module.scss"
 import AddTokenDrawer from "./components/AddTokensDrawer";
 import { InternalToken } from "@views/CombatMap/TokensConfig";
 import { Typography } from "@components/Typography/Typography";
-import { faMinus } from "@fortawesome/free-solid-svg-icons";
+import { faCopy, faMinus } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useAutoAnimate } from '@formkit/auto-animate/react'
 import ColorPicker, { COLORS_MAP } from "@components/ColorPicker/ColorPicker";
@@ -155,6 +155,9 @@ const SettingsDrawer = ({
                             </div>
                             <Button borderColor="error" color='dark' onClick={() => handleDeleteToken(id)}>
                                 <FontAwesomeIcon icon={faMinus} />
+                            </Button>
+                            <Button borderColor="success" color='dark' onClick={() => handleAddToken({...token, height: token?.length})}>
+                                <FontAwesomeIcon icon={faCopy} />
                             </Button>
                         </div>
                     ))
