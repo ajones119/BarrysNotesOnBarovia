@@ -108,14 +108,14 @@ const SettingsDrawer = ({
                 <div className={css.settingsRow}>
                     <Typography color="primary">Background Color</Typography>
                     <div>
-                        <ColorPicker width={48} label="Color" value={localMapSettings?.mapColor || COLORS_MAP.White} onChange={(value) => setLocalMapSettings({...localMapSettings, mapColor: String(value)})} />
+                        <ColorPicker outlined width={48} value={localMapSettings?.mapColor || COLORS_MAP.White} onChange={(value) => setLocalMapSettings({...localMapSettings, mapColor: String(value)})} />
                     </div>
                 </div>
 
                 <div className={css.settingsRow}>
                     <Typography color="primary">Grid Color</Typography>
                     <div>
-                        <ColorPicker width={48} label="Color" value={localMapSettings?.gridColor || COLORS_MAP.Black} onChange={(value) => setLocalMapSettings({...localMapSettings, gridColor: String(value)})} />
+                        <ColorPicker outlined width={48} value={localMapSettings?.gridColor || COLORS_MAP.Black} onChange={(value) => setLocalMapSettings({...localMapSettings, gridColor: String(value)})} />
                     </div>
                 </div>
 
@@ -136,7 +136,7 @@ const SettingsDrawer = ({
                             
                                 {
                                     token?.color && 
-                                        <ColorPicker width={48} label="Color" value={token?.color} onChange={value => {
+                                        <ColorPicker outlined width={48} label="Color" value={token?.color} onChange={value => {
                                             const newToken = {id, data: {...token, color: value}}
                                             const newTokens = [...localMapSettings.extraTokens || []]
                                             newTokens[index] = newToken
@@ -153,12 +153,14 @@ const SettingsDrawer = ({
                                         }} />
                                 }
                             </div>
-                            <Button borderColor="error" color='dark' onClick={() => handleDeleteToken(id)}>
-                                <FontAwesomeIcon icon={faMinus} />
-                            </Button>
-                            <Button borderColor="success" color='dark' onClick={() => handleAddToken({...token, height: token?.length})}>
-                                <FontAwesomeIcon icon={faCopy} />
-                            </Button>
+                            <div className={css.tokenButtons}>
+                                <Button borderColor="error" color='dark' onClick={() => handleDeleteToken(id)}>
+                                    <FontAwesomeIcon icon={faMinus} />
+                                </Button>
+                                <Button borderColor="success" color='dark' onClick={() => handleAddToken({...token, height: token?.length})}>
+                                    <FontAwesomeIcon icon={faCopy} />
+                                </Button>
+                            </div>
                         </div>
                     ))
                 }
