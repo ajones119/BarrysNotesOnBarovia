@@ -103,7 +103,7 @@ const SelectedPlayer = ({character, combat, update}: SelectedPlayerProps) => {
                 </div>
             <div className={css.conditionsSelector}>
                 <Typography size="default" >Status Effects</Typography>
-                <ConditionSelect width="50%" selectedValue={conditions} onChange={(conditions) => updateCharacter("conditions", conditions)}/>
+                <ConditionSelect outlined width="50%" selectedValue={conditions} onChange={(conditions) => updateCharacter("conditions", conditions)}/>
             </div>
             <Spacer height={16} />
             { character?.docId === combat.combatCharacterArray[currentTurnIndex]?.playerDocId && <div>

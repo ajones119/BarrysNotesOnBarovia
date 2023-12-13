@@ -1,5 +1,5 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { Avatar, TableCell, TableRow } from "@mui/material";
+import { Avatar, Checkbox, TableCell, TableRow } from "@mui/material";
 import React, { useState } from "react";
 import css from "../DMInitiative.module.scss";
 import { faDiceD20, faMinus, faPlus } from "@fortawesome/free-solid-svg-icons";
@@ -176,6 +176,9 @@ const InitiativeTrackerTableRow = ({
           selectedValue={item?.conditions}
           onChange={(value) => onChange({ ...item, conditions: value })}
         />
+      </TableCell>
+      <TableCell style={{ width: "2%" }}>
+       <Checkbox checked={item?.isAlly} disabled={!!item?.playerDocId} onChange={() => onChange({...item, isAlly: !item?.isAlly})} />
       </TableCell>
       <TableCell style={{ width: "2%" }}>
         {!item?.playerDocId && (

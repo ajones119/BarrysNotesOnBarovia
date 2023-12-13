@@ -11,6 +11,7 @@ import BlueCone from "@images/MapTokens/bluecone.png"
 import Chest from "@images/MapTokens/chest.png"
 import CampFire from "@images/MapTokens/campfire.png"
 import RotatingSpell from "@images/MapTokens/rotatefire.gif"
+import RotatingSpellThin from "@images/MapTokens/animated-thin.gif"
 import Rock from "@images/MapTokens/rock.png"
 import FireWall from "@images/MapTokens/fireWall.gif"
 
@@ -26,11 +27,76 @@ export type InternalToken = {
     opacity?: number;
     canRotate?: boolean;
     rotation?: number;
+    conditions?: string[];
 }
 
 const INTERNAL_TOKENS: Array<InternalToken> = [
     {
-        name: "Animated Circle 1x1",
+        name: "Animated Circle Thin 1x1",
+        image: RotatingSpellThin,
+        height: 1,
+        width: 1,
+        color: COLORS_MAP.Black,
+        opacity: 0.9
+    },
+    {
+        name: "Animated Circle Thin (5ft radius) 2x2",
+        image: RotatingSpellThin,
+        height: 2,
+        width: 2,
+        color: COLORS_MAP.Black,
+        opacity: 0.9
+    },
+    {
+        name: "Animated Circle Thin (10ft radius) 4x4",
+        image: RotatingSpellThin,
+        height: 4,
+        width: 4,
+        color: COLORS_MAP.Black,
+        opacity: 0.9
+    },
+    {
+        name: "Animated Circle Thin (15ft radius) 6x6",
+        image: RotatingSpellThin,
+        height: 6,
+        width: 6,
+        color: COLORS_MAP.Black,
+        opacity: 0.9
+    },
+    {
+        name: "Animated Circle Thin (20ft radius) 8x8",
+        image: RotatingSpellThin,
+        height: 8,
+        width: 8,
+        color: COLORS_MAP.Black,
+        opacity: 0.9
+    },
+    {
+        name: "Animated Circle Thin (30ft radius) 12x12",
+        image: RotatingSpellThin,
+        height: 12,
+        width: 12,
+        color: COLORS_MAP.Black,
+        opacity: 0.9
+    },
+    {
+        name: "Animated Circle Thin (50ft radius) 20x20",
+        image: RotatingSpellThin,
+        height: 20,
+        width: 20,
+        color: COLORS_MAP.Black,
+        opacity: 0.9
+    },
+    {
+        name: "Animated Circle Thin (60ft radius) 24x24",
+        image: RotatingSpellThin,
+        height: 24,
+        width: 24,
+        color: COLORS_MAP.Black,
+        opacity: 0.9
+    },
+    {
+        name: "Animated Circle Cyclone 1x1",
         image: RotatingSpell,
         height: 1,
         width: 1,
@@ -38,7 +104,7 @@ const INTERNAL_TOKENS: Array<InternalToken> = [
         opacity: 0.9
     },
     {
-        name: "Animated Circle (5ft radius) 2x2",
+        name: "Animated Circle Cyclone (5ft radius) 2x2",
         image: RotatingSpell,
         height: 2,
         width: 2,
@@ -46,7 +112,7 @@ const INTERNAL_TOKENS: Array<InternalToken> = [
         opacity: 0.9
     },
     {
-        name: "Animated Circle (10ft radius) 4x4",
+        name: "Animated Circle Cyclone (10ft radius) 4x4",
         image: RotatingSpell,
         height: 4,
         width: 4,
@@ -54,7 +120,7 @@ const INTERNAL_TOKENS: Array<InternalToken> = [
         opacity: 0.9
     },
     {
-        name: "Animated Circle (15ft radius) 6x6",
+        name: "Animated Circle Cyclone (15ft radius) 6x6",
         image: RotatingSpell,
         height: 6,
         width: 6,
@@ -62,7 +128,7 @@ const INTERNAL_TOKENS: Array<InternalToken> = [
         opacity: 0.9
     },
     {
-        name: "Animated Circle (20ft radius) 8x8",
+        name: "Animated Circle Cyclone (20ft radius) 8x8",
         image: RotatingSpell,
         height: 8,
         width: 8,
@@ -70,7 +136,7 @@ const INTERNAL_TOKENS: Array<InternalToken> = [
         opacity: 0.9
     },
     {
-        name: "Animated Circle (30ft radius) 12x12",
+        name: "Animated Circle Cyclone (30ft radius) 12x12",
         image: RotatingSpell,
         height: 12,
         width: 12,
@@ -78,7 +144,7 @@ const INTERNAL_TOKENS: Array<InternalToken> = [
         opacity: 0.9
     },
     {
-        name: "Animated Circle (50ft radius) 20x20",
+        name: "Animated Circle Cyclone (50ft radius) 20x20",
         image: RotatingSpell,
         height: 20,
         width: 20,
@@ -86,7 +152,7 @@ const INTERNAL_TOKENS: Array<InternalToken> = [
         opacity: 0.9
     },
     {
-        name: "Animated Circle (60ft radius) 24x24",
+        name: "Animated Circle Cyclone (60ft radius) 24x24",
         image: RotatingSpell,
         height: 24,
         width: 24,
@@ -124,7 +190,7 @@ const INTERNAL_TOKENS: Array<InternalToken> = [
         width: 1
     },
     {
-        name: "Circle 1x1",
+        name: "Circle Solid 1x1",
         image: BlackCircle,
         height: 1,
         width: 1,
@@ -132,7 +198,7 @@ const INTERNAL_TOKENS: Array<InternalToken> = [
         opacity: 0.7
     },
     {
-        name: "Circle (5ft radius) 2x2",
+        name: "Circle Solid (5ft radius) 2x2",
         image: BlackCircle,
         height: 2,
         width: 2,
@@ -140,7 +206,7 @@ const INTERNAL_TOKENS: Array<InternalToken> = [
         opacity: 0.7
     },
     {
-        name: "Circle (10ft radius) 4x4",
+        name: "Circle Solid (10ft radius) 4x4",
         image: BlackCircle,
         height: 4,
         width: 4,
@@ -148,7 +214,7 @@ const INTERNAL_TOKENS: Array<InternalToken> = [
         opacity: 0.7
     },
     {
-        name: "Circle (15ft radius) 6x6",
+        name: "Circle Solid (15ft radius) 6x6",
         image: BlackCircle,
         height: 6,
         width: 6,
@@ -156,7 +222,7 @@ const INTERNAL_TOKENS: Array<InternalToken> = [
         opacity: 0.7
     },
     {
-        name: "Circle (20ft radius) 8x8",
+        name: "Circle Solid (20ft radius) 8x8",
         image: BlackCircle,
         height: 8,
         width: 8,
@@ -164,7 +230,7 @@ const INTERNAL_TOKENS: Array<InternalToken> = [
         opacity: 0.7
     },
     {
-        name: "Circle (30ft radius) 12x12",
+        name: "Circle Solid (30ft radius) 12x12",
         image: BlackCircle,
         height: 12,
         width: 12,
@@ -172,7 +238,7 @@ const INTERNAL_TOKENS: Array<InternalToken> = [
         opacity: 0.7
     },
     {
-        name: "Circle (50ft radius) 20x20",
+        name: "Circle Solid (50ft radius) 20x20",
         image: BlackCircle,
         height: 20,
         width: 20,
@@ -180,7 +246,7 @@ const INTERNAL_TOKENS: Array<InternalToken> = [
         opacity: 0.7
     },
     {
-        name: "Circle (60ft radius) 24x24",
+        name: "Circle Solid (60ft radius) 24x24",
         image: BlackCircle,
         height: 24,
         width: 24,

@@ -13,6 +13,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useAutoAnimate } from '@formkit/auto-animate/react'
 import ColorPicker, { COLORS_MAP } from "@components/ColorPicker/ColorPicker";
 import { Checkbox } from "@mui/material";
+import useCombatMapStore from "@views/CombatMap/CombatMapStore";
 
 declare interface SettingsDrawerProps extends DrawerProps {
     map: CombatMap,
@@ -38,6 +39,7 @@ const SettingsDrawer = ({
     const [localMapSettings, setLocalMapSettings] = useState<CombatMap>(map || {extraTokens: []})
     const [isAddTokensDrawerOpen, setIsAddTokensDrawerOpen] = useState(false)
     const [animateRef] = useAutoAnimate();
+    const currentMapCoordinates = useCombatMapStore(state => state.currentMapCoordinates);
 
     useEffect(() => {
         if (isOpen) {
@@ -53,12 +55,13 @@ const SettingsDrawer = ({
     const handleAddToken = (newToken: InternalToken) => {
         const extraTokens = localMapSettings?.extraTokens || [];
         const uniqueID = Date.now() + Math.random()
+        console.log(currentMapCoordinates)
         const token = {
             id: `${uniqueID}`,
             data: {
               position: {
-                x: 100,
-                y: 100
+                x: -1 * currentMapCoordinates.x + 500,
+                y: -1 * currentMapCoordinates.y + 200
               },
               image: newToken.image,
               length: newToken.height,
@@ -121,7 +124,7 @@ const SettingsDrawer = ({
 
                 <div className={css.settingsRow}>
                     <Typography color="primary">Hide Grid</Typography>
-                    <Checkbox checked={localMapSettings?.hideGrid} placeholder="Map Image" onChange={(value) => setLocalMapSettings({...localMapSettings, hideGrid: !localMapSettings.hideGrid})} />
+                    <Checkbox checked={localMapSettings?.hideGrid} placeholder="Map Image" onChange={() => setLocalMapSettings({...localMapSettings, hideGrid: !localMapSettings.hideGrid})} />
                 </div>
                 <Spacer height={24} />
 

@@ -10,6 +10,7 @@ export type CombatCharacter = {
     playerDocId?: string;
     npcDocId?: string;
     enemyId?: string;
+    isAlly?: boolean;
     imageURL?: string;
     type?: CharacterType;
     passivePerception?: number;

@@ -12,21 +12,22 @@ import { Button } from "@components/Button/Button";
 import ExtraTokenContent from "./components/Token/ExtraTokenContent";
 import SettingsDrawer from "./components/SettingsDrawer";
 import CharacterTokenContent from "./components/Token/CharacterTokenContent";
+import useCombatMapStore from "./CombatMapStore";
 
 type DroppableToken = {
   id: string,
   data: any
 }
 
-const CombatMap = ({isPlayer = false, combatIdOverride = "", defaultMapPosition = {x: 0, y: 0}, setMapDefaultPosition = (_position: any) => {} }) => {
-    const { combatId, campaignId = "" } = useParams();
+const CombatMap = ({combatIdOverride = ""}) => {
+    const { combatId } = useParams();
 
     const [isSettingsDrawerOpen, setIsSettingsDrawerOpen] = useState(false);
 
     const [tokens, setTokens] = useState<DroppableToken[]>([]);
     const [extraTokens, setExtraTokens] = useState<DroppableToken[]>([]);
 
-    const [mapPosition, setMapPosition] = useState<{x: number, y: number}>(defaultMapPosition)
+    const {currentMapCoordinates, setCurrentMapCoordinates} = useCombatMapStore();
 
     const { combat, isLoading, isRefetching } = useCombat(combatId || combatIdOverride);
     const { combatCharacterArray = [], map = {extraTokens: []}, currentTurnIndex } = combat;
@@ -83,14 +84,12 @@ const CombatMap = ({isPlayer = false, combatIdOverride = "", defaultMapPosition 
 
         setExtraTokens(extraTokens);
       } else if (ev.active.id === "map") {
-        setMapPosition({
-          x: mapPosition.x + ev.delta.x,
-          y: mapPosition.y + ev.delta.y
-        })
-        setMapDefaultPosition({
-          x: mapPosition.x + ev.delta.x,
-          y: mapPosition.y + ev.delta.y
-        })
+        setCurrentMapCoordinates(
+          {
+            x: currentMapCoordinates.x + ev.delta.x,
+            y: currentMapCoordinates.y + ev.delta.y
+          }
+        );
       }
     }
 
@@ -118,8 +117,8 @@ const CombatMap = ({isPlayer = false, combatIdOverride = "", defaultMapPosition 
               rows={map?.rows}
               styles={{
                 position: "absolute",
-                left: `${mapPosition.x}px`,
-                top: `${mapPosition.y}px`
+                left: `${currentMapCoordinates.x}px`,
+                top: `${currentMapCoordinates.y}px`
               }}
               tokenSize={map?.tokenSize || 32}
               hideGrid={map?.hideGrid}
@@ -147,7 +146,6 @@ const CombatMap = ({isPlayer = false, combatIdOverride = "", defaultMapPosition 
               ))}
               {tokens.map((token, index) => {
                 const { data } = token;
-                const { conditions } = data;
                 return data?.shouldShow && (
                 <Token
                   styles={{

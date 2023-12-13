@@ -11,6 +11,7 @@ type ConditionSelectProps = {
     onChange: (value: string[] | null) => void,
     selectedValue?: string[] | null,
     width?: string,
+    outlined?: boolean,
 }
 
 export type Condition = {
@@ -125,7 +126,7 @@ export const CONDITION_OPTIONS: Condition[] = [
     },
 ]
 
-const ConditionSelect = ({onChange, selectedValue, width = "200px"}: ConditionSelectProps) => {
+const ConditionSelect = ({onChange, selectedValue, width = "200px", outlined = false}: ConditionSelectProps) => {
     return (<CustomizedSelect
         label="Conditions"
         multiple
@@ -137,7 +138,7 @@ const ConditionSelect = ({onChange, selectedValue, width = "200px"}: ConditionSe
             onChange(chosen as any)
         }}
         className={css.picker}
-        style={{width: `${width}`}}
+        style={{width: `${width}`, borderStyle: outlined ? "solid" : undefined}}
         variant="standard"
         renderValue={(selected: any) => (
             <Stack gap={1} direction="row" flexWrap="wrap">

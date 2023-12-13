@@ -16,7 +16,6 @@ import CombatMap from "@views/CombatMap";
 
 const PlayerInitiative = () => {
     const [character, setCharacter] = useState<PlayerCharacter | null>()
-    const [mapPosition, setMapPosition] = useState<{x: number, y: number}>({x: 0, y: 0})
     const [tab, setTab] = useState("initiative");
     const {campaignId} = useParams();
     const {characters} = useCampaignCharacters(campaignId || "")
@@ -31,13 +30,14 @@ const PlayerInitiative = () => {
     nextPlayerDocId = combatCharacterArray.find((char: CombatCharacter, index: number) => char?.playerDocId && index > currentTurnIndex)?.playerDocId || null;
     nextPlayerDocId = nextPlayerDocId || combatCharacterArray.find((char: CombatCharacter) => char?.playerDocId)?.playerDocId || null;
 
-    const canShowCombatCharacterArray = combat?.combatCharacterArray?.filter((character: CombatCharacter) => character?.shouldShow).sort((a: CombatCharacter, b: CombatCharacter) => {
+    const canShowCombatCharacterArray = combat?.combatCharacterArray?.filter((character: CombatCharacter) => character?.shouldShow)
+    const PCs = canShowCombatCharacterArray?.filter((character: CombatCharacter) => character?.playerDocId);
+    const allies = canShowCombatCharacterArray?.filter((character: CombatCharacter) => !character?.playerDocId && character?.isAlly);
+    const enemies = canShowCombatCharacterArray?.filter((character: CombatCharacter) => !character?.playerDocId && !character?.isAlly).sort((a: CombatCharacter, b: CombatCharacter) => {
         let aName = a?.name?.toLowerCase() || "";
         let bName = b?.name?.toLowerCase() || "";
         return aName > bName ? 1 : -1;
-    })
-    const PCs = canShowCombatCharacterArray?.filter((character: CombatCharacter) => character?.playerDocId);
-    const others = canShowCombatCharacterArray?.filter((character: CombatCharacter) => !character?.playerDocId);
+    });
 
     const initiativeTab = (
         <div>
@@ -54,7 +54,7 @@ const PlayerInitiative = () => {
             }
             <Spacer height={24} />
             <div className={css.healthBars}>
-                <Typography>Players</Typography>
+                    <Typography>Players</Typography>
                 {
                     PCs?.map((character : CombatCharacter) => {
                         const {playerDocId, maxHealth = 0, health = 0} = character;
@@ -72,10 +72,27 @@ const PlayerInitiative = () => {
                     )})
                 }
             </div>
+            { allies?.length > 0 && 
+                <div className={css.healthBars}>
+                    <Typography>Allies</Typography>
+                    {
+                        allies?.map((character: CombatCharacter) => {
+                            const { maxHealth = 0, health = 0} = character
+                        const healthBarAmount = (health/maxHealth)*100;
+                        return(
+                            <CharacterRow
+                                rowImageURL={character?.imageURL}
+                                healthBarAmount={healthBarAmount}
+                                combatCharacter={character}
+                            />
+                        )})
+                    }
+                </div>
+            }
             <div className={css.healthBars}>
-            <Typography>Enemies</Typography>
+                <Typography>Enemies</Typography>
                 {
-                    others?.map((character: CombatCharacter) => {
+                    enemies?.map((character: CombatCharacter) => {
                         const { maxHealth = 0, health = 0} = character
                     const healthBarAmount = (health/maxHealth)*100;
                     return(
@@ -91,7 +108,7 @@ const PlayerInitiative = () => {
     );
 
     const mapTab = (
-        <CombatMap defaultMapPosition={mapPosition} setMapDefaultPosition={setMapPosition} isPlayer combatIdOverride={campaign?.currentCombatDocId} />
+        <CombatMap combatIdOverride={campaign?.currentCombatDocId} />
     );
 
     const pageTabs: Array<Tab> = [
