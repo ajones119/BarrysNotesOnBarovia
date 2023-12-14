@@ -17,24 +17,16 @@ import useCombatMapStore from "@views/CombatMap/CombatMapStore";
 
 declare interface SettingsDrawerProps extends DrawerProps {
     map: CombatMap,
-    setMap: (_newMap: CombatMap) => void
+    setMap: (_newMap: CombatMap) => void,
+    isPlayer?: boolean
 };
-
-const ROTATION_RESULTS = [
-    {value: 0, label: 0},
-    {value: 15, label: 15},
-    {value: 30, label: 30},
-    {value: 45, label: 45},
-    {value: 60, label: 60},
-    {value: 90, label: 90},
-    {value: 115, label: 115},
-]
 
 const SettingsDrawer = ({
     isOpen,
     onClose,
     map,
-    setMap
+    setMap,
+    isPlayer = false
 }: SettingsDrawerProps) => {
     const [localMapSettings, setLocalMapSettings] = useState<CombatMap>(map || {extraTokens: []})
     const [isAddTokensDrawerOpen, setIsAddTokensDrawerOpen] = useState(false)
@@ -71,6 +63,7 @@ const SettingsDrawer = ({
               opacity: 0,
               rotation: 0,
               canRotate: newToken?.canRotate || false,
+              playerAdded: isPlayer
             }
           }
         if (newToken?.color) {
@@ -88,6 +81,8 @@ const SettingsDrawer = ({
         setLocalMapSettings({...localMapSettings, extraTokens: extraTokens})
         setIsAddTokensDrawerOpen(false);
       }
+
+      const extraTokensToDisplay = isPlayer ? localMapSettings?.extraTokens?.filter(token => token?.data?.playerAdded) || [] : localMapSettings?.extraTokens
 
     return (
         <Drawer
@@ -131,7 +126,7 @@ const SettingsDrawer = ({
                 <Button onClick={() => setIsAddTokensDrawerOpen(true)}>ADD Token</Button>
                 <div ref={animateRef}>
                 {
-                    (localMapSettings?.extraTokens || []).map(({id, data: token, disabled}, index) => (
+                    (extraTokensToDisplay || []).map(({id, data: token, disabled}, index) => (
                         <div className={css.addTokenEntry} key={id}>
                             <div className={css.addTokenInfo}>
                                 

@@ -32,7 +32,8 @@ export type CombatMap = {
             color?: string,
             opacity?: number,
             rotation?: number,
-            canRotate?: boolean
+            canRotate?: boolean,
+            playerAdded?: boolean
         }
     }>
 }

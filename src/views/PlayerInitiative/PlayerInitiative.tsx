@@ -108,7 +108,7 @@ const PlayerInitiative = () => {
     );
 
     const mapTab = (
-        <CombatMap combatIdOverride={campaign?.currentCombatDocId} />
+        <CombatMap combatIdOverride={campaign?.currentCombatDocId} isPlayer />
     );
 
     const pageTabs: Array<Tab> = [

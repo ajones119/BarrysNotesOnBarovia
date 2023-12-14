@@ -20,7 +20,7 @@ type DroppableToken = {
   disabled?: boolean
 }
 
-const CombatMap = ({combatIdOverride = ""}) => {
+const CombatMap = ({combatIdOverride = "", isPlayer = false}) => {
     const { combatId } = useParams();
 
     const [isSettingsDrawerOpen, setIsSettingsDrawerOpen] = useState(false);
@@ -107,6 +107,7 @@ const CombatMap = ({combatIdOverride = ""}) => {
             setMap={(newMap) => {
               update({...combat, map: {...newMap}});
             }}
+            isPlayer={isPlayer}
           />
         </div>
         <div className={css.CombatMapContainer}>
