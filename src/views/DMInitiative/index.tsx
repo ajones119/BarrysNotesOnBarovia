@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { useCombat, useUpdateInitiative } from "@services/CombatService";
 import { useParams } from "react-router-dom";
 import { useList } from "@hooks/useList";
@@ -20,6 +20,8 @@ import {
   getEncounterDifficulty,
 } from "@model/ChallengeRating";
 import Box from "@mui/material/Box";
+import { Spacer } from "@components/Spacer/Spacer";
+import ColorPicker from "@components/ColorPicker/ColorPicker";
 
 type EncounterDiffultyProgressProps = {
   difficulty: ENCOUNTER_DIFFICULTY;
@@ -73,6 +75,7 @@ const DMInitiative = () => {
   const { characters = [] } = useCampaignCharacters(campaignId);
   const { insert, removeAt, replaceAt, replaceList, listWithIds, list } =
     useList([]);
+    const [colorFilter, setColorFilter] = useState<string | null>(null)
 
   const updateInitiative = useUpdateInitiative(combat);
   const updateCampaign = useUpdateCampaign(campaign);
@@ -115,19 +118,36 @@ const DMInitiative = () => {
     characters,
   );
 
+  const filteredList = colorFilter ? listWithIds.filter(item => item?.data?.color === colorFilter) : listWithIds;
+
   return (
     <div className={css.initiativeTrackerContainer}>
       <div className={css.topButtonsRow}>
-        <CopyButton
-          animatedHover={false}
-          borderColor="primary"
-          color="dark"
-          copiedText={getCombatURL(campaignDocId)}
-        >
-          <Typography size="default" color="primary">
-            Copy Player Link
-          </Typography>
-        </CopyButton>
+        <div>
+          <CopyButton
+            animatedHover={false}
+            borderColor="primary"
+            color="dark"
+            copiedText={getCombatURL(campaignDocId)}
+          >
+            <Typography size="default" color="primary">
+              Copy Player Link
+            </Typography>
+          </CopyButton>
+          <Spacer height={8} />
+          <div style={{display: "flex"}}>
+            <Typography size="small">Filter</Typography>
+            <ColorPicker width={48} outlined value={colorFilter} onChange={value => {
+              console.log("value", value)
+              console.log("value", colorFilter)
+              if (value !== "#ffffff") {
+                setColorFilter(value)
+              } else {
+                setColorFilter(null)
+              }
+              }} />
+          </div>
+        </div>
         <Typography size={"xtraLarge"}>{combat.name}</Typography>
         <EncounterDiffultyProgress difficulty={encounterDiffulty} />
       </div>
@@ -181,7 +201,7 @@ const DMInitiative = () => {
             </TableCell>
           </TableRow>
         </TableHead>
-        {listWithIds.map((item, index) => (
+        {filteredList.map((item, index) => (
           <InitiativeTrackerTableRow
             tableKey={item._id}
             active={index === combat.currentTurnIndex}
