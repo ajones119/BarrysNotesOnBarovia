@@ -14,6 +14,7 @@ import RotatingSpell from "@images/MapTokens/rotatefire.gif"
 import RotatingSpellThin from "@images/MapTokens/animated-thin.gif"
 import Rock from "@images/MapTokens/rock.png"
 import FireWall from "@images/MapTokens/fireWall.gif"
+import MetalDoor from "@images/MapTokens/metalDoor.png"
 
 import { COLORS_MAP } from "@components/ColorPicker/ColorPicker"
 
@@ -290,6 +291,18 @@ const INTERNAL_TOKENS: Array<InternalToken> = [
         color: COLORS_MAP.Black
     },
     {
+        name: "Door - Metal (5 ft)",
+        image: MetalDoor,
+        height: 1,
+        width: 1,
+    },
+    {
+        name: "Door - Metal (10 ft)",
+        image: MetalDoor,
+        height: 1,
+        width: 2,
+    },
+    {
         name: "Spell Wall 1x1",
         image: FireWall,
         height: 1,
@@ -401,6 +414,33 @@ const INTERNAL_TOKENS: Array<InternalToken> = [
         name: "Square Solid 2x1",
         image: BlackSolidSquare,
         height: 2,
+        width: 1,
+        color: COLORS_MAP.Black,
+        canRotate: true,
+        opacity: 0.9,
+    },
+    {
+        name: "Square Solid 3x1",
+        image: BlackSolidSquare,
+        height: 3,
+        width: 1,
+        color: COLORS_MAP.Black,
+        canRotate: true,
+        opacity: 0.9,
+    },
+    {
+        name: "Square Solid 4x1",
+        image: BlackSolidSquare,
+        height: 4,
+        width: 1,
+        color: COLORS_MAP.Black,
+        canRotate: true,
+        opacity: 0.9,
+    },
+    {
+        name: "Square Solid 6x1",
+        image: BlackSolidSquare,
+        height: 6,
         width: 1,
         color: COLORS_MAP.Black,
         canRotate: true,
