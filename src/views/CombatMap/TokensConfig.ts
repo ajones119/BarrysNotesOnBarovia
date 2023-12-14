@@ -15,6 +15,7 @@ import RotatingSpellThin from "@images/MapTokens/animated-thin.gif"
 import Rock from "@images/MapTokens/rock.png"
 import FireWall from "@images/MapTokens/fireWall.gif"
 import MetalDoor from "@images/MapTokens/metalDoor.png"
+import StairsStone1x1 from "@images/MapTokens/stairs1x1.png"
 
 import { COLORS_MAP } from "@components/ColorPicker/ColorPicker"
 
@@ -301,6 +302,12 @@ const INTERNAL_TOKENS: Array<InternalToken> = [
         image: MetalDoor,
         height: 1,
         width: 2,
+    },
+    {
+        name: "Stairs - Stone (5 ft)",
+        image: StairsStone1x1,
+        height: 1,
+        width: 1,
     },
     {
         name: "Spell Wall 1x1",
