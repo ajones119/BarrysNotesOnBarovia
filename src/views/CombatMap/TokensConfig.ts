@@ -296,18 +296,21 @@ const INTERNAL_TOKENS: Array<InternalToken> = [
         image: MetalDoor,
         height: 1,
         width: 1,
+        canRotate: true
     },
     {
         name: "Door - Metal (10 ft)",
         image: MetalDoor,
         height: 1,
         width: 2,
+        canRotate: true
     },
     {
         name: "Stairs - Stone (5 ft)",
         image: StairsStone1x1,
         height: 1,
         width: 1,
+        canRotate: true
     },
     {
         name: "Spell Wall 1x1",
