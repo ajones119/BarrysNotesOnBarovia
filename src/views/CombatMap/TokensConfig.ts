@@ -133,7 +133,7 @@ const INTERNAL_TOKENS: Array<{
                 height: 3,
                 width: 3,
                 color: COLORS_MAP.Black,
-                canRotate: true,
+                
             },
             {
                 name: "Cone (20 ft)",
@@ -162,7 +162,7 @@ const INTERNAL_TOKENS: Array<{
                 height: 1,
                 width: 1,
                 color: COLORS_MAP.Black,
-                canRotate: true,
+                
                 opacity: 0.9,
             },
             {
@@ -171,7 +171,7 @@ const INTERNAL_TOKENS: Array<{
                 height: 1,
                 width: 2,
                 color: COLORS_MAP.Black,
-                canRotate: true,
+                
                 opacity: 0.9,
             },
             {
@@ -180,7 +180,7 @@ const INTERNAL_TOKENS: Array<{
                 height: 2,
                 width: 1,
                 color: COLORS_MAP.Black,
-                canRotate: true,
+                
                 opacity: 0.9,
             },
             {
@@ -189,7 +189,7 @@ const INTERNAL_TOKENS: Array<{
                 height: 3,
                 width: 1,
                 color: COLORS_MAP.Black,
-                canRotate: true,
+                
                 opacity: 0.9,
             },
             {
@@ -198,7 +198,7 @@ const INTERNAL_TOKENS: Array<{
                 height: 4,
                 width: 1,
                 color: COLORS_MAP.Black,
-                canRotate: true,
+                
                 opacity: 0.9,
             },
             {
@@ -207,7 +207,7 @@ const INTERNAL_TOKENS: Array<{
                 height: 6,
                 width: 1,
                 color: COLORS_MAP.Black,
-                canRotate: true,
+                
                 opacity: 0.9,
             },
             {
@@ -216,7 +216,7 @@ const INTERNAL_TOKENS: Array<{
                 height: 2,
                 width: 2,
                 color: COLORS_MAP.Black,
-                canRotate: true,
+                
                 opacity: 0.9,
             },
             {
@@ -225,7 +225,7 @@ const INTERNAL_TOKENS: Array<{
                 height: 3,
                 width: 3,
                 color: COLORS_MAP.Black,
-                canRotate: true,
+                
                 opacity: 0.9,
             },
             {
@@ -234,7 +234,7 @@ const INTERNAL_TOKENS: Array<{
                 height: 6,
                 width: 6,
                 color: COLORS_MAP.Black,
-                canRotate: true,
+                
                 opacity: 0.9,
             },
             {
@@ -243,7 +243,7 @@ const INTERNAL_TOKENS: Array<{
                 height: 8,
                 width: 8,
                 color: COLORS_MAP.Black,
-                canRotate: true,
+                
                 opacity: 0.9,
             },
             {
@@ -252,7 +252,7 @@ const INTERNAL_TOKENS: Array<{
                 height: 1.5,
                 width: 1.5,
                 color: COLORS_MAP.Black,
-                canRotate: true
+                
             },
             {
                 name: "Square Hollow 1x2",
@@ -260,7 +260,7 @@ const INTERNAL_TOKENS: Array<{
                 height: 1.5,
                 width: 3,
                 color: COLORS_MAP.Black,
-                canRotate: true
+                
             },
             {
                 name: "Square Hollow 2x1",
@@ -268,7 +268,7 @@ const INTERNAL_TOKENS: Array<{
                 height: 3,
                 width: 1.5,
                 color: COLORS_MAP.Black,
-                canRotate: true
+                
             },
             {
                 name: "Square Hollow 2x2",
@@ -276,7 +276,7 @@ const INTERNAL_TOKENS: Array<{
                 height: 3,
                 width: 3,
                 color: COLORS_MAP.Black,
-                canRotate: true
+                
             },
             {
                 name: "Square Hollow 3x3",
@@ -284,7 +284,7 @@ const INTERNAL_TOKENS: Array<{
                 height: 4.7,
                 width: 4.7,
                 color: COLORS_MAP.Black,
-                canRotate: true
+                
             },
             {
                 name: "Square Hollow 6x6",
@@ -292,7 +292,7 @@ const INTERNAL_TOKENS: Array<{
                 height: 10,
                 width: 10,
                 color: COLORS_MAP.Black,
-                canRotate: true
+                
             },
             {
                 name: "Square Hollow 8x8",
@@ -300,7 +300,7 @@ const INTERNAL_TOKENS: Array<{
                 height: 13,
                 width: 13,
                 color: COLORS_MAP.Black,
-                canRotate: true
+                
             },
         ]
     },
@@ -449,7 +449,7 @@ const INTERNAL_TOKENS: Array<{
                 height: 3,
                 width: 3,
                 color: COLORS_MAP.Black,
-                canRotate: true,
+                
             },
             {
                 name: "Cone (20 ft)",
@@ -485,7 +485,7 @@ const INTERNAL_TOKENS: Array<{
                 height: 1,
                 width: 1,
                 color: COLORS_MAP.Black,
-                canRotate: true
+                
             },
             {
                 name: "Spell Wall (20 ft) 1x4",
@@ -493,7 +493,7 @@ const INTERNAL_TOKENS: Array<{
                 height: 1,
                 width: 4,
                 color: COLORS_MAP.Black,
-                canRotate: true
+                
             },
             {
                 name: "Spell Wall (40 ft) 1x8",
@@ -501,7 +501,7 @@ const INTERNAL_TOKENS: Array<{
                 height: 1,
                 width: 8,
                 color: COLORS_MAP.Black,
-                canRotate: true
+                
             },
             {
                 name: "Spell Wall (60ft) 1x12",
@@ -509,7 +509,7 @@ const INTERNAL_TOKENS: Array<{
                 height: 1,
                 width: 12,
                 color: COLORS_MAP.Black,
-                canRotate: true
+                
             },
             {
                 name: "Spell Wall (80ft) 1x16",
@@ -517,7 +517,7 @@ const INTERNAL_TOKENS: Array<{
                 height: 1,
                 width: 16,
                 color: COLORS_MAP.Black,
-                canRotate: true
+                
             },
             {
                 name: "Spell Wall (100ft) 1x20",
@@ -525,7 +525,7 @@ const INTERNAL_TOKENS: Array<{
                 height: 1,
                 width: 20,
                 color: COLORS_MAP.Black,
-                canRotate: true
+                
             },
             {
                 name: "Fog 1x1",
@@ -598,21 +598,21 @@ const INTERNAL_TOKENS: Array<{
                 image: Ladder,
                 height: 1,
                 width: 1,
-                canRotate: true
+                
             },
             {
                 name: "Hay Bed",
                 image: HayBed,
                 height: 1,
                 width: 1,
-                canRotate: true
+                
             },
             {
                 name: "Wood Desk",
                 image: WoodDesk,
                 height: 1,
                 width: 2,
-                canRotate: true
+                
             },
         ],
     },
@@ -625,140 +625,140 @@ const INTERNAL_TOKENS: Array<{
                 image: MetalDoor,
                 height: 1,
                 width: 1,
-                canRotate: true
+                
             },
             {
                 name: "Door - Metal (10 ft)",
                 image: MetalDoor,
                 height: 1,
                 width: 2,
-                canRotate: true
+                
             },
             {
                 name: "Door - Wood (5 ft)",
                 image: WoodDoor,
                 height: 1,
                 width: 1,
-                canRotate: true
+                
             },
             {
                 name: "Door - Wood (10 ft)",
                 image: WoodDoor,
                 height: 1,
                 width: 2,
-                canRotate: true
+                
             },
             {
                 name: "Ladder",
                 image: Ladder,
                 height: 1,
                 width: 1,
-                canRotate: true
+                
             },
             {
                 name: "Hay Bed",
                 image: HayBed,
                 height: 1,
                 width: 1,
-                canRotate: true
+                
             },
             {
                 name: "Stairs - Stone (2.5 ft)",
                 image: StairsStone1x1,
                 height: 1,
                 width: 1,
-                canRotate: true
+                
             },
             {
                 name: "Stairs - Stone (5 ft)",
                 image: StairsStone1x1,
                 height: 2,
                 width: 1,
-                canRotate: true
+                
             },
             {
                 name: "Stairs Long Stone",
                 image: StairsStoneLong,
                 height: 1.5,
                 width: 1,
-                canRotate: true
+                
             },
             {
                 name: "Stairs Long Stone x2",
                 image: StairsStoneLong,
                 height: 3,
                 width: 1,
-                canRotate: true
+                
             },
             {
                 name: "Stone Wall 1x1",
                 image: StoneWall1x1,
                 height: 1,
                 width: 1,
-                canRotate: true
+                
             },
             {
                 name: "Stone Wall 2x1",
                 image: StoneWall2x1,
                 height: 1,
                 width: 2,
-                canRotate: true
+                
             },
             {
                 name: "Stone Wall 3x1",
                 image: StoneWall3x1,
                 height: 1,
                 width: 3,
-                canRotate: true
+                
             },
             {
                 name: "Stone Wall 6x1",
                 image: StoneWall3x1,
                 height: 1,
                 width: 6,
-                canRotate: true
+                
             },
             {
                 name: "Wood Wall 1x1",
                 image: WoodWall1x1,
                 height: 1,
                 width: 1,
-                canRotate: true
+                
             },
             {
                 name: "Wood Wall 2x1",
                 image: WoodWall2x1,
                 height: 1,
                 width: 2,
-                canRotate: true
+                
             },
             {
                 name: "Wood Wall 3x1",
                 image: WoodWall3x1,
                 height: 1,
                 width: 3,
-                canRotate: true
+                
             },
             {
                 name: "Wood Wall 6x1",
                 image: WoodWall3x1,
                 height: 1,
                 width: 6,
-                canRotate: true
+                
             },
             {
                 name: "Wood Wall Cross",
                 image: WoodWallCross,
                 height: 1,
                 width: 1,
-                canRotate: true
+                
             },
             {
                 name: "Wood Wall T",
                 image: WoodWallT,
                 height: 1,
                 width: 1,
-                canRotate: true
+                
             },
         ],
     },

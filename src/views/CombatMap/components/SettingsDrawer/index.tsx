@@ -30,6 +30,7 @@ const SettingsDrawer = ({
 }: SettingsDrawerProps) => {
     const [localMapSettings, setLocalMapSettings] = useState<CombatMap>(map || {extraTokens: []})
     const [isAddTokensDrawerOpen, setIsAddTokensDrawerOpen] = useState(false)
+    const [showLocked, setShowLocked] = useState(true);
     const [animateRef] = useAutoAnimate();
     const currentMapCoordinates = useCombatMapStore(state => state.currentMapCoordinates);
 
@@ -47,13 +48,14 @@ const SettingsDrawer = ({
     const handleAddToken = (newToken: InternalToken) => {
         const extraTokens = localMapSettings?.extraTokens || [];
         const uniqueID = Date.now() + Math.random()
+        console.log(currentMapCoordinates.x + 200)
         const token = {
             id: `${uniqueID}`,
             disabled: false,
             data: {
               position: {
-                x: -1 * currentMapCoordinates.x + 500,
-                y: -1 * currentMapCoordinates.y + 200
+                x: currentMapCoordinates.x + 200,
+                y: currentMapCoordinates.y + 200
               },
               image: newToken.image,
               length: newToken.height,
@@ -82,7 +84,8 @@ const SettingsDrawer = ({
         setIsAddTokensDrawerOpen(false);
       }
 
-      const extraTokensToDisplay = isPlayer ? localMapSettings?.extraTokens?.filter(token => token?.data?.playerAdded) || [] : localMapSettings?.extraTokens
+      let extraTokensToDisplay = isPlayer ? localMapSettings?.extraTokens?.filter(token => token?.data?.playerAdded) || [] : localMapSettings?.extraTokens;
+      extraTokensToDisplay = showLocked ? extraTokensToDisplay : extraTokensToDisplay?.filter(token => !token?.disabled)
 
     return (
         <Drawer
@@ -124,6 +127,8 @@ const SettingsDrawer = ({
                 <Spacer height={24} />
 
                 <Button onClick={() => setIsAddTokensDrawerOpen(true)}>ADD Token</Button>
+                <Spacer height={8} />
+                <Button onClick={() => setShowLocked(!showLocked)}>{showLocked ? "Hide" : "Show"} Locked</Button>
                 <div ref={animateRef}>
                 {
                     (extraTokensToDisplay || []).map(({id, data: token, disabled}, index) => (
@@ -142,25 +147,16 @@ const SettingsDrawer = ({
                                             setLocalMapSettings({...localMapSettings, extraTokens: newTokens})
                                         }} />
                                 }
-                                {
-                                    token?.canRotate && 
-                                        <TextInput placeholder="Rotate" number value={token?.rotation} onChange={value => {
-                                            const tokenIndex = localMapSettings?.extraTokens?.findIndex(token => token.id === id) || 0;
-                                            const newToken = {id, data: {...token, rotation: Number(value)}}
-                                            const newTokens = [...localMapSettings.extraTokens || []]
-                                            newTokens[tokenIndex] = newToken
-                                            setLocalMapSettings({...localMapSettings, extraTokens: newTokens})
-                                        }} />
-                                }
                             </div>
                             <div className={css.tokenButtons}>
                             <Button borderColor="primary" color='dark' onClick={() => {
+                                    const tokenIndex = localMapSettings?.extraTokens?.findIndex(token => token.id === id) || 0;
                                     const newToken = {id, data: {...token}, disabled: !disabled}
                                     const newTokens = [...localMapSettings.extraTokens || []]
-                                    newTokens[index] = newToken
+                                    newTokens[tokenIndex] = newToken
                                     setLocalMapSettings({...localMapSettings, extraTokens: newTokens})
                                 }}>
-                                    <FontAwesomeIcon icon={disabled ? faLockOpen : faLock} />
+                                    <FontAwesomeIcon icon={disabled ? faLock : faLockOpen} />
                                 </Button>
                                 <Button borderColor="error" color='dark' onClick={() => handleDeleteToken(id)}>
                                     <FontAwesomeIcon icon={faMinus} />
