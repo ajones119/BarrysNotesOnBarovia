@@ -1,5 +1,5 @@
 import { useCombat, useUpdateInitiative } from "@services/CombatService";
-import React, { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useParams } from "react-router-dom";
 import css from "./CombatMap.module.scss"
 import {DndContext} from '@dnd-kit/core';
@@ -13,6 +13,7 @@ import ExtraTokenContent from "./components/Token/ExtraTokenContent";
 import SettingsDrawer from "./components/SettingsDrawer";
 import CharacterTokenContent from "./components/Token/CharacterTokenContent";
 import useCombatMapStore from "./CombatMapStore";
+import { useEffectOnce, useLockedBody } from "usehooks-ts";
 
 type DroppableToken = {
   id: string,
@@ -27,12 +28,61 @@ const CombatMap = ({combatIdOverride = "", isPlayer = false}) => {
 
     const [tokens, setTokens] = useState<DroppableToken[]>([]);
     const [extraTokens, setExtraTokens] = useState<DroppableToken[]>([]);
-
+    const [selectedToken, setSelectedToken] = useState<DroppableToken| null>()
+    const canRotate = useRef(false)
     const {currentMapCoordinates, setCurrentMapCoordinates} = useCombatMapStore();
 
     const { combat, isLoading, isRefetching } = useCombat(combatId || combatIdOverride);
     const { combatCharacterArray = [], map = {extraTokens: []}, currentTurnIndex } = combat;
     const update = useUpdateInitiative(combat);
+
+    const mapRef = useRef<HTMLDivElement>(null); 
+
+    const onScroll = (e: Event) => {
+      setCurrentMapCoordinates({x: mapRef?.current?.scrollLeft || 0, y: mapRef?.current?.scrollTop || 0})
+    }
+
+    const downHandler = (e: KeyboardEvent) => {
+      e.preventDefault();
+
+      const {key} = e;
+      let rotate = 0;
+
+      if (key === "ArrowRight") {
+        rotate = 45;
+      } else if (key === "ArrowLeft") {
+        rotate = -45;
+      }
+
+      console.log(key)
+      if (selectedToken && rotate) {
+        console.log("ROTATE")
+        let newToken = { ...selectedToken }
+        newToken.data.rotation += rotate;
+
+        const newTokens = extraTokens?.map(token => {
+          if (token?.id === newToken?.id) {
+            return newToken
+          } else {
+            return token
+          }
+        })
+
+        update({...combat, map: {...map, extraTokens: newTokens}});
+      }
+    }
+
+    useEffect(() => {
+      mapRef?.current?.scrollTo(currentMapCoordinates?.x || 0, currentMapCoordinates?.y || 0)
+      mapRef?.current?.addEventListener('scroll', onScroll);
+      mapRef?.current?.addEventListener('keydown', downHandler);
+
+      return () => {
+        mapRef?.current?.removeEventListener('scroll', onScroll);
+        mapRef?.current?.removeEventListener('keydown', downHandler)
+      }
+    }, [JSON.stringify(selectedToken)])
+
 
     useDeepCompareEffectNoCheck(() => {
       if (!isLoading && !isRefetching) {
@@ -84,13 +134,16 @@ const CombatMap = ({combatIdOverride = "", isPlayer = false}) => {
         update({...combat, map: {...map, extraTokens}})
 
         setExtraTokens(extraTokens);
-      } else if (ev.active.id === "map") {
-        setCurrentMapCoordinates(
-          {
-            x: currentMapCoordinates.x + ev.delta.x,
-            y: currentMapCoordinates.y + ev.delta.y
-          }
-        );
+      }
+
+      setSelectedToken(null);
+    }
+
+    const handleDragMove = (ev: any) => {
+      let extraToken = extraTokens.find((x: DroppableToken) => x.id === ev.active.id);
+      if (extraToken) {
+        console.log("SEL SELECTED")
+        setSelectedToken(extraToken);
       }
     }
 
@@ -110,17 +163,12 @@ const CombatMap = ({combatIdOverride = "", isPlayer = false}) => {
             isPlayer={isPlayer}
           />
         </div>
-        <div className={css.CombatMapContainer}>
-          <DndContext onDragEnd={handleDragEnd}>
+        <div className={css.CombatMapContainer} ref={mapRef} id="CombatMap">
+          <DndContext onDragEnd={handleDragEnd} onDragMove={handleDragMove}>
             <Map
               mapImage={map?.mapImage}
               cols={map?.columns}
               rows={map?.rows}
-              styles={{
-                position: "absolute",
-                left: `${currentMapCoordinates.x}px`,
-                top: `${currentMapCoordinates.y}px`
-              }}
               tokenSize={map?.tokenSize || 32}
               hideGrid={map?.hideGrid}
               mapColor={map?.mapColor}

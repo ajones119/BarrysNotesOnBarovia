@@ -1,4 +1,4 @@
-import React, { ReactNode } from "react";
+import React, { ReactNode, useRef } from "react";
 import { useDraggable } from "@dnd-kit/core";
 import css from "./Map.module.scss";
 import { COLORS_MAP } from "@components/ColorPicker/ColorPicker";
@@ -40,16 +40,6 @@ const  Map = ({
   mapColor = COLORS_MAP.White,
   gridColor = COLORS_MAP.Black
 }: MapProps) => {
-  const { attributes, listeners, setNodeRef, transform } = useDraggable({
-    id: "map"
-  });
-
-  const style = transform
-    ? {
-        transform: `translate3d(${transform.x}px, ${transform.y}px, 0)`
-      }
-    : {};
-
   const height = rows * tokenSize;
   const width = cols * tokenSize;
   const squares = [];
@@ -66,10 +56,7 @@ const  Map = ({
 
   return (
     <div
-      ref={setNodeRef}
-      style={{...CustomStyle, ...style, backgroundColor: mapColor, height, width, ...styles, ...backgroundImageStyles }}
-      {...listeners}
-      {...attributes}
+      style={{...CustomStyle, backgroundColor: mapColor, height, width, ...styles, ...backgroundImageStyles }}
     >
       <div style={{position: "relative", width, height}}>
         <div className={css.gridOverlay}>
