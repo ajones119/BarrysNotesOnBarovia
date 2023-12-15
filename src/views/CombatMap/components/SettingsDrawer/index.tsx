@@ -144,9 +144,10 @@ const SettingsDrawer = ({
                                 {
                                     token?.canRotate && 
                                         <TextInput placeholder="Rotate" number value={token?.rotation} onChange={value => {
+                                            const tokenIndex = localMapSettings?.extraTokens?.findIndex(token => token.id === id);
                                             const newToken = {id, data: {...token, rotation: Number(value)}}
                                             const newTokens = [...localMapSettings.extraTokens || []]
-                                            newTokens[index] = newToken
+                                            newTokens[tokenIndex] = newToken
                                             setLocalMapSettings({...localMapSettings, extraTokens: newTokens})
                                         }} />
                                 }
