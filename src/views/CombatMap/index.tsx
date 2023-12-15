@@ -54,9 +54,7 @@ const CombatMap = ({combatIdOverride = "", isPlayer = false}) => {
         rotate = -45;
       }
 
-      console.log(key)
       if (selectedToken && rotate) {
-        console.log("ROTATE")
         let newToken = { ...selectedToken }
         newToken.data.rotation += rotate;
 
@@ -142,7 +140,6 @@ const CombatMap = ({combatIdOverride = "", isPlayer = false}) => {
     const handleDragMove = (ev: any) => {
       let extraToken = extraTokens.find((x: DroppableToken) => x.id === ev.active.id);
       if (extraToken) {
-        console.log("SEL SELECTED")
         setSelectedToken(extraToken);
       }
     }
