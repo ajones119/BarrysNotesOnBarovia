@@ -135,9 +135,10 @@ const SettingsDrawer = ({
                                 {
                                     token?.color && 
                                         <ColorPicker outlined width={48} value={token?.color} onChange={value => {
+                                            const tokenIndex = localMapSettings?.extraTokens?.findIndex(token => token.id === id) || 0;
                                             const newToken = {id, data: {...token, color: value}}
                                             const newTokens = [...localMapSettings.extraTokens || []]
-                                            newTokens[index] = newToken
+                                            newTokens[tokenIndex] = newToken
                                             setLocalMapSettings({...localMapSettings, extraTokens: newTokens})
                                         }} />
                                 }
