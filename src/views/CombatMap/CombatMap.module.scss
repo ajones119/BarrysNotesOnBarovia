@@ -10,6 +10,10 @@
     overflow: scroll;
 }
 
+.tokenWrapper {
+    touch-action: none;
+}
+
 .tooltipContainer {
     background-color: black;
     opacity: 0.5;
