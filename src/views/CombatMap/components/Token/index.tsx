@@ -1,5 +1,6 @@
 import React, { ReactNode } from "react";
 import { useDraggable } from "@dnd-kit/core";
+import css from "../../CombatMap.module.scss"
 
 const CustomStyle = {
   display: "flex",
@@ -30,6 +31,7 @@ function Token({ id, content, styles, disabled = false }: TokenProps) {
       {...listeners}
       {...attributes}
       key={id || ""}
+      className={css.tokenWrapper}
     >
       {content}
     </div>
