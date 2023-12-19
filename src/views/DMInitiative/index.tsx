@@ -201,7 +201,7 @@ const DMInitiative = () => {
             </TableCell>
           </TableRow>
         </TableHead>
-        {filteredList.map((item, index) => (
+        {listWithIds.map((item, index) => filteredList.includes(item) && (
           <InitiativeTrackerTableRow
             tableKey={item._id}
             active={index === combat.currentTurnIndex}
