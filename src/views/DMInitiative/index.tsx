@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useCombat, useUpdateInitiative } from "@services/CombatService";
 import { useParams } from "react-router-dom";
 import { useList } from "@hooks/useList";
@@ -22,6 +22,8 @@ import {
 import Box from "@mui/material/Box";
 import { Spacer } from "@components/Spacer/Spacer";
 import ColorPicker from "@components/ColorPicker/ColorPicker";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faCircleXmark } from "@fortawesome/free-solid-svg-icons";
 
 type EncounterDiffultyProgressProps = {
   difficulty: ENCOUNTER_DIFFICULTY;
@@ -118,7 +120,24 @@ const DMInitiative = () => {
     characters,
   );
 
-  const filteredList = colorFilter ? listWithIds.filter(item => item?.data?.color === colorFilter) : listWithIds;
+  const filteredList = colorFilter ? listWithIds.filter(item => item?.data?.color === colorFilter || item?.data?.playerDocId || item?.data?.isAlly) : listWithIds;
+
+  useEffect(() => {
+    window.addEventListener("keypress", (e) => {
+      if (e.key === "Enter") {
+        handleUpdate({...combat})
+      }
+    });
+    
+
+    return () => {
+      window.removeEventListener("keypress", (e) => {
+        if (e.key === "Enter") {
+          handleUpdate({...combat})
+        }
+      });
+    }
+  }, [combat])
 
   return (
     <div className={css.initiativeTrackerContainer}>
@@ -135,17 +154,12 @@ const DMInitiative = () => {
             </Typography>
           </CopyButton>
           <Spacer height={8} />
-          <div style={{display: "flex"}}>
+          <div style={{display: "flex", alignItems: "center"}}>
             <Typography size="small">Filter</Typography>
             <ColorPicker width={48} outlined value={colorFilter} onChange={value => {
-              console.log("value", value)
-              console.log("value", colorFilter)
-              if (value !== "#ffffff") {
                 setColorFilter(value)
-              } else {
-                setColorFilter(null)
-              }
               }} />
+              <FontAwesomeIcon icon={faCircleXmark} color="red" onClick={() => {setColorFilter(null)}} />
           </div>
         </div>
         <Typography size={"xtraLarge"}>{combat.name}</Typography>
@@ -238,6 +252,13 @@ const DMInitiative = () => {
           }}
         >
           SORT
+        </Button>
+        <Button
+          onClick={() => {
+            handleUpdate({ ...combat });
+          }}
+        >
+          Save
         </Button>
         <Button onClick={() => handleStart()}>Start</Button>
         <Button
