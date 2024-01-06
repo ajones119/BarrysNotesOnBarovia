@@ -64,7 +64,5 @@ export const getExtraColorsFilterFromNewColor = (color: string) => {
             break;
     }
 
-
-
     return filters;
 }

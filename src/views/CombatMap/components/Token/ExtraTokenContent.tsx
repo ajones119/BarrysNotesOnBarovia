@@ -10,11 +10,12 @@ type ExtraTokenContentProps = {
     color?: string;
     opacity?: number;
     rotate?: number;
+    onClick?: () => void;
 };
 
-const ExtraTokenContent = ({ image, tokenSize = 16, height = 2, width = 2, cover = false, color, opacity, rotate }: ExtraTokenContentProps) => {
+const ExtraTokenContent = ({ image, tokenSize = 16, height = 2, width = 2, cover = false, color, opacity, rotate, onClick }: ExtraTokenContentProps) => {
     return (
-        <div style={{width: tokenSize * width, height: tokenSize * height}}>
+        <div style={{width: tokenSize * width, height: tokenSize * height}} onClick={onClick}>
             <img
                 src={image}
                 width={tokenSize * width}
