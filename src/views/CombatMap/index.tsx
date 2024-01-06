@@ -1,6 +1,6 @@
 import { useCombat, useUpdateInitiative } from "@services/CombatService";
 import React, { useEffect, useRef, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useSearchParams } from "react-router-dom";
 import css from "./CombatMap.module.scss"
 import {DndContext} from '@dnd-kit/core';
 import Token from "./components/Token";
@@ -13,7 +13,8 @@ import ExtraTokenContent from "./components/Token/ExtraTokenContent";
 import SettingsDrawer from "./components/SettingsDrawer";
 import CharacterTokenContent from "./components/Token/CharacterTokenContent";
 import useCombatMapStore from "./CombatMapStore";
-import { useEffectOnce, useLockedBody } from "usehooks-ts";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faMinus, faPlus } from "@fortawesome/free-solid-svg-icons";
 
 type DroppableToken = {
   id: string,
@@ -23,6 +24,8 @@ type DroppableToken = {
 
 const CombatMap = ({combatIdOverride = "", isPlayer = false}) => {
     const { combatId } = useParams();
+    const [searchParams, setSearchParams] = useSearchParams();
+    const scale = Number(searchParams.get("scale")) || 1;
 
     const [isSettingsDrawerOpen, setIsSettingsDrawerOpen] = useState(false);
 
@@ -104,8 +107,8 @@ const CombatMap = ({combatIdOverride = "", isPlayer = false}) => {
       let extraToken = extraTokens.find((x: DroppableToken) => x.id === ev.active.id);
       if (token) {
         token["data"]["position"] = {
-          x: token?.data?.position?.x + ev.delta.x,
-          y: token?.data?.position?.y + ev.delta.y
+          x: (token?.data?.position?.x + ev.delta.x / scale),
+          y: (token?.data?.position?.y + ev.delta.y / scale)
         }
         
         const _tokens = tokens.map((x) => {
@@ -118,12 +121,15 @@ const CombatMap = ({combatIdOverride = "", isPlayer = false}) => {
         newCombat.combatCharacterArray[updatedCharacterIndex] = { ...newCombat?.combatCharacterArray[updatedCharacterIndex], position: { x: token.data.position.x, y: token.data.position.y } }
         update({...newCombat})
         
-
         setTokens(_tokens);
       } else if (extraToken) {
-        extraToken["data"]["position"] = {
-          x: extraToken?.data?.position?.x + ev.delta.x,
-          y: extraToken?.data?.position?.y + ev.delta.y
+        if (ev.delta.x === 0 && ev.delta.y === 0) {
+          extraToken["data"]["rotation"] += 45;
+        } else {
+          extraToken["data"]["position"] = {
+            x: (extraToken?.data?.position?.x + ev.delta.x / scale),
+            y:( extraToken?.data?.position?.y + ev.delta.y / scale)
+          }
         }
 
         const updatedTokenIndex = map?.extraTokens?.findIndex((token) => token.id === extraToken?.id) || 0;
@@ -137,7 +143,7 @@ const CombatMap = ({combatIdOverride = "", isPlayer = false}) => {
       setSelectedToken(null);
     }
 
-    const handleDragMove = (ev: any) => {
+    const handleDragStart = (ev: any) => {
       let extraToken = extraTokens.find((x: DroppableToken) => x.id === ev.active.id);
       if (extraToken) {
         setSelectedToken(extraToken);
@@ -149,6 +155,11 @@ const CombatMap = ({combatIdOverride = "", isPlayer = false}) => {
         <div>
           <Typography>{combat?.name}</Typography>
           <Button onClick={() => setIsSettingsDrawerOpen(true)}>SETTINGS</Button>
+          <div style={{display: "flex", justifyContent: "center", alignItems: "center", columnGap: 4}}>
+            <Button onClick={() => setSearchParams({scale: String((scale - 0.1).toFixed(2))})}><FontAwesomeIcon icon={faMinus} /></Button>
+              <Typography>Zoom</Typography>
+            <Button onClick={() => setSearchParams({scale: String((scale + 0.1).toFixed(2))})}><FontAwesomeIcon icon={faPlus} /></Button>
+          </div>
           <Spacer height={24} />
           <SettingsDrawer
             isOpen={isSettingsDrawerOpen}
@@ -161,12 +172,12 @@ const CombatMap = ({combatIdOverride = "", isPlayer = false}) => {
           />
         </div>
         <div className={css.CombatMapContainer} ref={mapRef} id="CombatMap">
-          <DndContext onDragEnd={handleDragEnd} onDragMove={handleDragMove}>
+          <DndContext onDragEnd={handleDragEnd} onDragStart={handleDragStart}>
             <Map
               mapImage={map?.mapImage}
               cols={map?.columns}
               rows={map?.rows}
-              tokenSize={map?.tokenSize || 32}
+              tokenSize={(map?.tokenSize || 32) * (scale || 1)}
               hideGrid={map?.hideGrid}
               mapColor={map?.mapColor}
               gridColor={map?.gridColor}
@@ -175,15 +186,15 @@ const CombatMap = ({combatIdOverride = "", isPlayer = false}) => {
                 <Token
                   styles={{
                     position: "absolute",
-                    left: `${token?.data?.position?.x}px`,
-                    top: `${token?.data?.position?.y}px`
+                    left: `${token?.data?.position?.x * scale}px`,
+                    top: `${token?.data?.position?.y * scale}px`
                   }}
                   id={token.id}
                   disabled={token?.disabled}
                   content={
                   <ExtraTokenContent
                     image={token.data.image}
-                    tokenSize={map?.tokenSize || 32}
+                    tokenSize={(map?.tokenSize || 32) * (scale || 1)}
                     height={token.data.length}
                     width={token.data.width}
                     color={token.data?.color || null}
@@ -198,11 +209,11 @@ const CombatMap = ({combatIdOverride = "", isPlayer = false}) => {
                 <Token
                   styles={{
                     position: "absolute",
-                    left: `${data?.position?.x}px`,
-                    top: `${data?.position?.y}px`
+                    left: `${data?.position?.x * scale}px`,
+                    top: `${data?.position?.y * scale}px`
                   }}
                   id={token.id}
-                  content={<CharacterTokenContent character={data} tokenSize={map?.tokenSize || 32} isCurrentTurn={currentTurnIndex === index && data?.playerDocId} />}
+                  content={<CharacterTokenContent character={data} tokenSize={(map?.tokenSize || 32) * (scale || 1)} isCurrentTurn={currentTurnIndex === index && data?.playerDocId} />}
                 />
               )})}
             </Map>
