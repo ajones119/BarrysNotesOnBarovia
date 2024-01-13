@@ -17,7 +17,8 @@ type CharacterTokenContentProps = {
     character: CombatCharacter;
     tokenSize?: number;
     visibility?: string;
-    isCurrentTurn?: boolean
+    isCurrentTurn?: boolean,
+    isPlayer: boolean
 };
 
 const TOKEN_SIZE_MULTIPLIERS = {
@@ -30,7 +31,7 @@ const TOKEN_SIZE_MULTIPLIERS = {
 
 };
 
-const CharacterTokenContent = ({ character, tokenSize = 16, isCurrentTurn = false }: CharacterTokenContentProps) => {
+const CharacterTokenContent = ({ character, tokenSize = 16, isCurrentTurn = false, isPlayer = false }: CharacterTokenContentProps) => {
     const characterType: CharacterTypeLowercase = (character?.type?.toLowerCase() || "unknown") as CharacterTypeLowercase;
     const defaultImage = BASE_CHARACTER_IMAGE_MAP[characterType] 
     const image = character?.imageURL || defaultImage;
@@ -157,7 +158,7 @@ const CharacterTokenContent = ({ character, tokenSize = 16, isCurrentTurn = fals
                     style={floatingStyles}
                     {...getFloatingProps()}
                 >
-                    <Typography>{character?.name}</Typography>
+                    <Typography>{isPlayer ? "" : `${character?.uniqueId} - `}{character?.name}</Typography>
                     {
                         character?.shouldShowHealthBar && 
                         <div><LinearProgress variant={healthBarAmount || 0 < 101 ? "determinate" : "indeterminate"} value={healthBarAmount} color={getHealthBarColor(healthBarAmount || 0)} /></div>

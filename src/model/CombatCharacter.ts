@@ -1,6 +1,7 @@
 import { CharacterType } from "./BaseCharacter";
 
 export type CombatCharacter = {
+    uniqueId?: number;
     initiative?: number;
     initiativeBonus?: number;
     name?: string;

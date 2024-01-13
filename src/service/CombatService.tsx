@@ -6,12 +6,12 @@ import { ButtonStatuses, LoadingButton } from "@components/Button/LoadingButton"
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTrash } from '@fortawesome/free-solid-svg-icons';
 import { Combat } from '@model/Combat';
+import { useAddCombatMap, useCombatMap, useDeleteCombatMap } from './CombatMapService';
 
 export function useCampaignCombats(campaignDocId: string): {combats: Combat[], isLoading: boolean, refetch: () => void} {
   const ref = query(collection(firestore, "combats"), where("campaignDocId", "==", campaignDocId));
 
   const CombatQuery = useFirestoreQuery([`${campaignDocId}-campaignCombatsList`], ref, { subscribe: true });
-  
   
   const { data, isLoading, refetch } = CombatQuery;
 
@@ -23,12 +23,12 @@ export function useCampaignCombats(campaignDocId: string): {combats: Combat[], i
   return { combats: CombatData, isLoading, refetch };
 }
 
-export const useCombat = (combatDocId = ""): {combat: Combat, isLoading: boolean, isRefetching: boolean} => {
+export const useCombat = (combatDocId = ""): {combat: Combat, isLoading: boolean, isRefetching: boolean, isFetching: boolean} => {
   const ref = doc(firestore, "combats", combatDocId);
 
   const campaignQuery = useFirestoreDocument(["singleCombat", combatDocId], ref, {subscribe: true});
   
-  const { data, isLoading, isRefetching } = campaignQuery;
+  const { data, isLoading, isRefetching, isFetching } = campaignQuery;
 
   const combat: Combat = {
     ...data?.data(),
@@ -36,30 +36,44 @@ export const useCombat = (combatDocId = ""): {combat: Combat, isLoading: boolean
     docId: combatDocId,
   };
 
-  return { combat, isLoading, isRefetching };
+  return { combat, isLoading, isRefetching, isFetching };
 }
 
 export const useAddCombatButton = (newCombat: Combat, onClick: () => void, validate: () => boolean) => {
     const ref = collection(firestore, "combats");
     const mutation = useFirestoreCollectionMutation(ref);
+    const mapMutation = useAddCombatMap();
     const [buttonStatus, setButtonStatus] = useState<ButtonStatuses>(ButtonStatuses.Idle);
   
     const { 
         campaignDocId,
         name = "",
         combatCharacterArray = [],
-        currentTurnIndex = 0
     } = newCombat;
   
-    const handleClick = () => {
+    const handleClick = async() => {
       const valid = validate();
       if (valid) {
-        console.log("HERE", campaignDocId, name, combatCharacterArray, currentTurnIndex)
-        mutation.mutate({
+        const response = await mutation.mutateAsync({
             campaignDocId,
             name,
             combatCharacterArray
             
+        })
+
+        await mapMutation.mutateAsync({
+          combatDocId: response?.id,
+          campaignDocId: newCombat?.campaignDocId,
+          combatMapCharacterArray: combatCharacterArray?.map((character) => ({
+            playerDocId: character?.playerDocId || "",
+            enemyId: character?.enemyId || "",
+            npcDocId: character?.npcDocId || "",
+            position: {
+              x: 100,
+              y: 100
+            },
+            uniqueId: character?.uniqueId
+          })),
         })
       }
   
@@ -84,10 +98,11 @@ export const useAddCombatButton = (newCombat: Combat, onClick: () => void, valid
 
 export const useUpdateInitiative = (combat: Combat) => {
     const combatCollection = collection(firestore, "combats");
-    const ref = doc(combatCollection, combat.docId)
+    const ref = doc(combatCollection, combat?.docId)
     const mutation = useFirestoreDocumentMutation(ref);
 
     const update = (updatedCombat: Combat) => {
+      console.log("UPDATED COMBAT")
       delete(updatedCombat.docId)
         mutation.mutate({
             ...updatedCombat
@@ -101,10 +116,15 @@ export const useUpdateInitiative = (combat: Combat) => {
     const col = collection(firestore, "combats");
     const ref = doc(col, combat.docId);
     const mutation = useFirestoreDocumentDeletion(ref);
+
+    const {combatMap, isLoading} = useCombatMap(combat?.docId || "");
+    const mapsDelete = useDeleteCombatMap(combatMap?.docId || "1")
+
     const [buttonStatus, setButtonStatus] = useState<ButtonStatuses>(ButtonStatuses.Idle);
-    
-    const handleClick = () => {
-      mutation.mutate();
+  
+    const handleClick = async () => {
+      await mutation.mutateAsync();
+      await mapsDelete.mutateAsync()
   
         if (!mutation.error){
           onClick();

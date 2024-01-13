@@ -24,6 +24,8 @@ import { Spacer } from "@components/Spacer/Spacer";
 import ColorPicker from "@components/ColorPicker/ColorPicker";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCircleXmark } from "@fortawesome/free-solid-svg-icons";
+import { useCombatMap, useUpdateCombatMap } from "@services/CombatMapService";
+import { CombatCharacter } from "@model/CombatCharacter";
 
 type EncounterDiffultyProgressProps = {
   difficulty: ENCOUNTER_DIFFICULTY;
@@ -71,7 +73,8 @@ const EncounterDiffultyProgress = ({
 
 const DMInitiative = () => {
   const { combatId, campaignId = "" } = useParams();
-  const { combat, isLoading, isRefetching } = useCombat(combatId);
+  const { combat, isLoading, isRefetching, isFetching } = useCombat(combatId);
+  const { combatMap, isLoading: isMapLoading, isRefetching: isMapRefetching } = useCombatMap(combatId || "");
   const { currentTurnIndex = 0, combatCharacterArray = [], campaignDocId = "" } = combat;
   const { campaign } = useCampaign(campaignId);
   const { characters = [] } = useCampaignCharacters(campaignId);
@@ -81,22 +84,51 @@ const DMInitiative = () => {
 
   const updateInitiative = useUpdateInitiative(combat);
   const updateCampaign = useUpdateCampaign(campaign);
+  const updateCombatMap = useUpdateCombatMap(combatMap);
+
   useDeepCompareEffect(() => {
     if (!isLoading && !isRefetching) {
       replaceList(combatCharacterArray || [{}]);
     }
   }, [isRefetching, isLoading, combat]);
 
+  //finish this auto save function by adding save
+  useDeepCompareEffect(() => {
+    if (!isRefetching ) {
+      const timeout = setTimeout(() => handleUpdate({...combat}), 500)
+
+      return () => clearTimeout(timeout)
+    }
+  }, [isFetching, list]);
+
+
   const nextTurn =
     currentTurnIndex + 1 >= list.length
       ? 0
       : currentTurnIndex + 1;
 
-  const handleUpdate = (combat: Combat, overrideCharacterArray = list) => {
+  const handleUpdate = (combat: Combat, overrideCharacterArray = list) => { 
     updateInitiative({
       ...combat,
       combatCharacterArray: overrideCharacterArray,
     });
+
+      const { combatMapCharacterArray = [] } = combatMap;
+      const combinedCharacterArrays = overrideCharacterArray.map((characterFromCombat, index) => {
+        const characterFromMap = combatMapCharacterArray.find(item => item?.uniqueId === characterFromCombat?.uniqueId);
+        return {
+          ...characterFromMap,
+          ...characterFromCombat,
+          position: {
+            x: characterFromMap?.position?.x || 100,
+            y: characterFromMap?.position?.y || 100,
+          },
+          uniqueId: characterFromCombat?.uniqueId !== undefined ? characterFromCombat?.uniqueId : getNewUniqueId()
+        };
+      })
+
+
+      updateCombatMap({...combatMap, combatMapCharacterArray: combinedCharacterArrays})
   };
 
   const handleStart = () => {
@@ -121,6 +153,20 @@ const DMInitiative = () => {
   );
 
   const filteredList = colorFilter ? listWithIds.filter(item => item?.data?.color === colorFilter || item?.data?.playerDocId || item?.data?.isAlly) : listWithIds;
+
+  const getNewUniqueId = () => {
+    let newId = 0;
+
+    list.forEach(character => {
+      const testId = character?.uniqueId || 0;
+
+      if (testId > newId) {
+        newId = testId;
+      }
+    })
+
+    return newId + 1;
+  }
 
   useEffect(() => {
     window.addEventListener("keypress", (e) => {
@@ -226,7 +272,7 @@ const DMInitiative = () => {
           />
         ))}
       </TableContainer>
-      <ResourceDrawer onAdd={insert} campaignDocId={campaignId} />
+      <ResourceDrawer onAdd={(data) => insert({...data, uniqueId: getNewUniqueId()})} campaignDocId={campaignId} />
       <div className={css.bottonsContainer}>
       <Button
           onClick={() =>
@@ -237,7 +283,7 @@ const DMInitiative = () => {
         </Button>
         <Button
           onClick={() =>
-            insert({ shouldShow: true, shouldShowHealthBar: true })
+            insert({ shouldShow: true, shouldShowHealthBar: true, uniqueId: getNewUniqueId() })
           }
         >
           ADD
