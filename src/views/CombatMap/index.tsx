@@ -15,6 +15,7 @@ import CharacterTokenContent from "./components/Token/CharacterTokenContent";
 import useCombatMapStore from "./CombatMapStore";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faMinus, faPlus } from "@fortawesome/free-solid-svg-icons";
+import { useCombatMap, useUpdateCombatMap } from "@services/CombatMapService";
 
 type DroppableToken = {
   id: string,
@@ -32,12 +33,15 @@ const CombatMap = ({combatIdOverride = "", isPlayer = false}) => {
     const [tokens, setTokens] = useState<DroppableToken[]>([]);
     const [extraTokens, setExtraTokens] = useState<DroppableToken[]>([]);
     const [selectedToken, setSelectedToken] = useState<DroppableToken| null>()
-    const canRotate = useRef(false)
     const {currentMapCoordinates, setCurrentMapCoordinates} = useCombatMapStore();
 
     const { combat, isLoading, isRefetching } = useCombat(combatId || combatIdOverride);
-    const { combatCharacterArray = [], map = {extraTokens: []}, currentTurnIndex } = combat;
-    const update = useUpdateInitiative(combat);
+    const { combatMap, isLoading: isMapLoading, isRefetching: isMapRefetching } = useCombatMap(combatId || combatIdOverride);
+    console.log("MAP", combatMap, isMapLoading)
+
+    const { combatCharacterArray = [], currentTurnIndex } = combat;
+    const { map, combatMapCharacterArray } = combatMap || {map: {extraTokens: []}, combatMapCharacterArray: []  };
+    const update = useUpdateCombatMap(combatMap);
 
     const mapRef = useRef<HTMLDivElement>(null); 
 
@@ -69,7 +73,7 @@ const CombatMap = ({combatIdOverride = "", isPlayer = false}) => {
           }
         })
 
-        update({...combat, map: {...map, extraTokens: newTokens}});
+        update({...combatMap, map: {...map, extraTokens: newTokens}});
       }
     }
 
@@ -84,23 +88,20 @@ const CombatMap = ({combatIdOverride = "", isPlayer = false}) => {
       }
     }, [JSON.stringify(selectedToken)])
 
-
+    // set local data from remote
     useDeepCompareEffectNoCheck(() => {
-      if (!isLoading && !isRefetching) {
-        const tokensFromCombat = combatCharacterArray?.map((character, index) => ({
-          id: `${index}-${character.name}`,
+      if (!isMapLoading && !isMapRefetching && !isLoading && !isRefetching) {
+        const tokensFromCombat = combatMapCharacterArray?.map((character, index) => ({
+          id: `${index}-${character.turnIndex}`,
           data: {
-            position: {
-              x: 200,
-              y: 200,
-            },
+            ...combatCharacterArray[index],
             ...character
           }
         }))
         setExtraTokens(map?.extraTokens || [])
         setTokens(tokensFromCombat);
     }
-    }, [combat]);
+    }, [combatMap, combat]);
 
     function handleDragEnd(ev: any) {
       let token = tokens.find((x: DroppableToken) => x.id === ev.active.id);
@@ -116,10 +117,10 @@ const CombatMap = ({combatIdOverride = "", isPlayer = false}) => {
           return x;
         });
 
-        const newCombat = {...combat}
-        const updatedCharacterIndex = newCombat?.combatCharacterArray?.findIndex((character, index) => `${index}-${character.name}` === token?.id)
-        newCombat.combatCharacterArray[updatedCharacterIndex] = { ...newCombat?.combatCharacterArray[updatedCharacterIndex], position: { x: token.data.position.x, y: token.data.position.y } }
-        update({...newCombat})
+        const newCombatMap = {...combatMap}
+        const updatedCharacterIndex = newCombatMap?.combatMapCharacterArray?.findIndex((character, index) => `${index}-${character.turnIndex}` === token?.id)
+        newCombatMap.combatMapCharacterArray[updatedCharacterIndex] = { ...newCombatMap?.combatMapCharacterArray[updatedCharacterIndex], position: { x: token.data.position.x, y: token.data.position.y } }
+        update({...newCombatMap})
         
         setTokens(_tokens);
       } else if (extraToken) {
@@ -133,9 +134,9 @@ const CombatMap = ({combatIdOverride = "", isPlayer = false}) => {
         }
 
         const updatedTokenIndex = map?.extraTokens?.findIndex((token) => token.id === extraToken?.id) || 0;
-        const { extraTokens = [] } = map;
+        const { extraTokens = [] } = map || {extraTokens: []};
         extraTokens[updatedTokenIndex] = {...extraToken}
-        update({...combat, map: {...map, extraTokens}})
+        update({...combatMap, map: {...map, extraTokens}})
 
         setExtraTokens(extraTokens);
       }
@@ -164,9 +165,9 @@ const CombatMap = ({combatIdOverride = "", isPlayer = false}) => {
           <SettingsDrawer
             isOpen={isSettingsDrawerOpen}
             onClose={() => setIsSettingsDrawerOpen(false)}
-            map={map}
+            map={map || {extraTokens: []}}
             setMap={(newMap) => {
-              update({...combat, map: {...newMap}});
+              update({...combatMap, map: {...newMap}});
             }}
             isPlayer={isPlayer}
           />
@@ -213,7 +214,7 @@ const CombatMap = ({combatIdOverride = "", isPlayer = false}) => {
                     top: `${data?.position?.y * scale}px`
                   }}
                   id={token.id}
-                  content={<CharacterTokenContent character={data} tokenSize={(map?.tokenSize || 32) * (scale || 1)} isCurrentTurn={currentTurnIndex === index && data?.playerDocId} />}
+                  content={<CharacterTokenContent isPlayer={isPlayer} character={data} tokenSize={(map?.tokenSize || 32) * (scale || 1)} isCurrentTurn={currentTurnIndex === index && data?.playerDocId} />}
                 />
               )})}
             </Map>

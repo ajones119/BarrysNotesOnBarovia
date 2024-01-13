@@ -21,11 +21,11 @@ const CreateCombatModal = ({isOpen, onClose, campaignId, characters = [] }: Crea
     const saveCombatButton = useAddCombatButton(combat, () => handleOnClose(), () => true);
 
     useDeepCompareEffect(() => {
-        setCombat({campaignDocId: campaignId, combatCharacterArray: characters})
+        setCombat({campaignDocId: campaignId, combatCharacterArray: characters.map((character, index) => ({...character, uniqueId: index}))})
     }, [characters])
 
     const handleOnClose = () => {
-            setCombat({campaignDocId: campaignId, combatCharacterArray: characters})
+            setCombat({campaignDocId: campaignId, combatCharacterArray: characters.map((character, index) => ({...character, uniqueId: index}))})
             onClose();
     }
 

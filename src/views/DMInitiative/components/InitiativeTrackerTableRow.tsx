@@ -107,10 +107,13 @@ const InitiativeTrackerTableRow = ({
       key={`initiative-${tableKey}-item-${item?.color}`}
     >
       <TableCell style={{ width: "5%" }}>
-        <ShowSelector
-          value={getShowValue()}
-          onChange={(value) => handleShowChange(value)}
-        />
+        <div style={{display: "flex", alignItems: "center", columnGap: "4px"}}>
+          <Typography>{item?.uniqueId}</Typography> 
+          <ShowSelector
+            value={getShowValue()}
+            onChange={(value) => handleShowChange(value)}
+          />
+        </div>
       </TableCell>
       <TableCell style={{ width: "5%" }}>{identifier}</TableCell>
       <TableCell style={{ width: "15%" }}>

@@ -1,16 +1,25 @@
-import { CombatCharacter } from "./CombatCharacter";
-
-export type Combat = {
-    docId?: string;
-    campaignDocId?: string;
-    combatCharacterArray: CombatCharacter[];
-    name?: string;
-    currentTurnIndex?: number;
-    map?: CombatMap;
-}
 
 export type CombatMap = {
     docId?: string;
+    campaignDocId?: string;
+    combatDocId?: string;
+    combatMapCharacterArray: CombatMapCharacter[];
+    map?: CombatMapSettings;
+}
+
+type CombatMapCharacter = {
+    position: {
+        x: number,
+        y: number
+    }
+    turnIndex: number,
+    playerDocId?: string,
+    npcDocId?: string,
+    enemyId?: string
+    uniqueId?: number;
+}
+
+type CombatMapSettings = {
     rows?: number,
     columns?: number,
     tokenSize?: number,
