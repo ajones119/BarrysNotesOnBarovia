@@ -4,7 +4,7 @@ import { useParams } from "react-router-dom";
 import { useList } from "@hooks/useList";
 import useDeepCompareEffect from "use-deep-compare-effect";
 import css from "./DMInitiative.module.scss";
-import { TableCell, TableContainer, TableHead, TableRow } from "@mui/material";
+import { Checkbox, TableCell, TableContainer, TableHead, TableRow } from "@mui/material";
 import { Typography } from "@components/Typography/Typography";
 import InitiativeTrackerTableRow from "./components/InitiativeTrackerTableRow";
 import { Combat } from "@model/Combat";
@@ -25,7 +25,6 @@ import ColorPicker from "@components/ColorPicker/ColorPicker";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCircleXmark } from "@fortawesome/free-solid-svg-icons";
 import { useCombatMap, useUpdateCombatMap } from "@services/CombatMapService";
-import { CombatCharacter } from "@model/CombatCharacter";
 
 type EncounterDiffultyProgressProps = {
   difficulty: ENCOUNTER_DIFFICULTY;
@@ -80,8 +79,7 @@ const DMInitiative = () => {
   const { characters = [] } = useCampaignCharacters(campaignId);
   const { insert, removeAt, replaceAt, replaceList, listWithIds, list } =
     useList([]);
-    const [colorFilter, setColorFilter] = useState<string | null>(null)
-
+  const [colorFilter, setColorFilter] = useState<string[]>([])
   const updateInitiative = useUpdateInitiative(combat);
   const updateCampaign = useUpdateCampaign(campaign);
   const updateCombatMap = useUpdateCombatMap(combatMap);
@@ -92,20 +90,17 @@ const DMInitiative = () => {
     }
   }, [isRefetching, isLoading, combat]);
 
-  //finish this auto save function by adding save
-  useDeepCompareEffect(() => {
-    if (!isRefetching ) {
+  //autosaving not needed rn, currently breaks delete
+ /* useDeepCompareEffect(() => {
+    if (!isRefetching && !isLoading) {
       const timeout = setTimeout(() => handleUpdate({...combat}), 500)
 
       return () => clearTimeout(timeout)
     }
-  }, [isFetching, list]);
+  }, [isFetching, list]);*/
 
 
-  const nextTurn =
-    currentTurnIndex + 1 >= list.length
-      ? 0
-      : currentTurnIndex + 1;
+
 
   const handleUpdate = (combat: Combat, overrideCharacterArray = list) => { 
     updateInitiative({
@@ -114,7 +109,7 @@ const DMInitiative = () => {
     });
 
       const { combatMapCharacterArray = [] } = combatMap;
-      const combinedCharacterArrays = overrideCharacterArray.map((characterFromCombat, index) => {
+      const combinedCharacterArrays = overrideCharacterArray.map((characterFromCombat) => {
         const characterFromMap = combatMapCharacterArray.find(item => item?.uniqueId === characterFromCombat?.uniqueId);
         return {
           ...characterFromMap,
@@ -152,7 +147,7 @@ const DMInitiative = () => {
     characters,
   );
 
-  const filteredList = colorFilter ? listWithIds.filter(item => item?.data?.color === colorFilter || item?.data?.playerDocId || item?.data?.isAlly) : listWithIds;
+  const filteredList = colorFilter.length > 0 ? listWithIds.filter(item => colorFilter.includes(item?.data?.color) || item?.data?.playerDocId || item?.data?.isAlly) : listWithIds;
 
   const getNewUniqueId = () => {
     let newId = 0;
@@ -200,12 +195,38 @@ const DMInitiative = () => {
             </Typography>
           </CopyButton>
           <Spacer height={8} />
-          <div style={{display: "flex", alignItems: "center"}}>
-            <Typography size="small">Filter</Typography>
-            <ColorPicker width={48} outlined value={colorFilter} onChange={value => {
-                setColorFilter(value)
-              }} />
-              <FontAwesomeIcon icon={faCircleXmark} color="red" onClick={() => {setColorFilter(null)}} />
+          <div style={{display: "flex", alignItems: "center", columnGap: 4}}>
+            <Typography size="default">Color Filter</Typography>
+            <ColorPicker
+              multiple
+              width={96}
+              outlined
+              value={colorFilter}
+              onChange={(value: string[]) => setColorFilter(value)} />
+              <FontAwesomeIcon icon={faCircleXmark} color="red" onClick={() => {setColorFilter([])}} />
+          </div>
+          <Spacer height={8} />
+          <div style={{display: "flex", alignItems: "center", columnGap: 4}}>
+            <Button onClick={() => {
+              const newCombatCharacterArray = combatCharacterArray.map(item => {
+                if ((colorFilter.includes(item?.color || "") || colorFilter.length < 1) && !item?.playerDocId) {
+                  return {...item, shouldShow: false, shouldShowHealthBar: false}
+                }
+                return item
+              })
+
+              handleUpdate(combat, newCombatCharacterArray)
+            }} color="dark">Hide All</Button>
+            <Button onClick={() => {
+              const newCombatCharacterArray = combatCharacterArray.map(item => {
+                if ((colorFilter.includes(item?.color || "") || colorFilter.length < 1) && !item?.playerDocId) {
+                  return {...item, shouldShow: true, shouldShowHealthBar: true}
+                }
+                return item
+              })
+
+              handleUpdate(combat, newCombatCharacterArray)
+            }} color="dark">Show All</Button>
           </div>
         </div>
         <Typography size={"xtraLarge"}>{combat.name}</Typography>
@@ -308,9 +329,20 @@ const DMInitiative = () => {
         </Button>
         <Button onClick={() => handleStart()}>Start</Button>
         <Button
-          onClick={() =>
+          onClick={() =>{
+            let nextTurn =
+            currentTurnIndex + 1 >= list.length
+              ? 0
+              : currentTurnIndex + 1;
+
+              while (filteredList.filter(item => listWithIds[nextTurn].data.uniqueId === item.data.uniqueId).length < 1) {
+                nextTurn =
+                  nextTurn + 1 >= list.length
+                    ? 0
+                    : nextTurn + 1;
+              }
             handleUpdate({ ...combat, currentTurnIndex: nextTurn })
-          }
+          }}
         >
           Next
         </Button>

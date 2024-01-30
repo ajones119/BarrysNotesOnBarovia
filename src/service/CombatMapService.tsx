@@ -5,13 +5,11 @@ import { useFirestoreCollectionMutation, useFirestoreDocument, useFirestoreDocum
 import { CombatMap } from '@model/CombatMap';
 
 export const useUpdateCombatMap = (combat: CombatMap) => {
-    console.log("ON UPDATET", combat)
     const combatMapCollection = collection(firestore, "combatMaps");
     const ref = doc(combatMapCollection, combat?.docId || "1")
     const mutation = useFirestoreDocumentMutation(ref);
 
     const update = (updatedCombat: CombatMap) => {
-        console.log("UPDATING WITH", updatedCombat)
         delete(updatedCombat.docId)
         mutation.mutate({
             ...updatedCombat
