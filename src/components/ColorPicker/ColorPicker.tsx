@@ -70,11 +70,12 @@ export const COLORS = [
     },
 ];
 
-declare interface ColorPickerProps {
-    onChange: (value: string) => void,
-    value?: string | null,
+declare interface ColorPickerProps<T> {
+    onChange: (value: T) => void,
+    value?: T | null,
     width?: number,
     outlined?: boolean,
+    multiple?: boolean
 }
 
 const CustomizedSelect = styled(Select)`
@@ -86,13 +87,15 @@ const CustomizedSelect = styled(Select)`
   }
 `;
 
-const ColorPicker = ({ onChange, value, width = 150, outlined }: ColorPickerProps) => {
+const ColorPicker = <T,>({ onChange, value, width = 150, outlined, multiple = false }: ColorPickerProps<T>) => {
     return (
         <div className={css.colorPicker} style={{width: `${width}px`}}>
             <CustomizedSelect
+                multiple={multiple}
                 value={value}
                 onChange={(event) => {
-                    const chosenColor = event.target.value as string;
+                    
+                    const chosenColor = event.target.value as T;
                     onChange(chosenColor)
                 }}
                 className={css.picker}

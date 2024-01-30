@@ -102,7 +102,6 @@ export const useUpdateInitiative = (combat: Combat) => {
     const mutation = useFirestoreDocumentMutation(ref);
 
     const update = (updatedCombat: Combat) => {
-      console.log("UPDATED COMBAT")
       delete(updatedCombat.docId)
         mutation.mutate({
             ...updatedCombat
