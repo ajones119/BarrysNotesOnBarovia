@@ -54,7 +54,7 @@ const PlayerInitiative = () => {
             }
             <Spacer height={24} />
             <div className={css.healthBars}>
-                    <Typography>Players</Typography>
+                    <Typography size="xtraLarge" weight="bolder">Players</Typography>
                 {
                     PCs?.map((character : CombatCharacter) => {
                         const {playerDocId, maxHealth = 0, health = 0} = character;
@@ -74,7 +74,7 @@ const PlayerInitiative = () => {
             </div>
             { allies?.length > 0 && 
                 <div className={css.healthBars}>
-                    <Typography>Allies</Typography>
+                    <Typography size="xtraLarge" weight="bolder">Allies</Typography>
                     {
                         allies?.map((character: CombatCharacter) => {
                             const { maxHealth = 0, health = 0} = character
@@ -90,7 +90,7 @@ const PlayerInitiative = () => {
                 </div>
             }
             <div className={css.healthBars}>
-                <Typography>Enemies</Typography>
+                <Typography size="xtraLarge" weight="bolder">Enemies</Typography>
                 {
                     enemies?.map((character: CombatCharacter) => {
                         const { maxHealth = 0, health = 0} = character
