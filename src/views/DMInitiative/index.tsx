@@ -4,7 +4,7 @@ import { useParams } from "react-router-dom";
 import { useList } from "@hooks/useList";
 import useDeepCompareEffect from "use-deep-compare-effect";
 import css from "./DMInitiative.module.scss";
-import { Checkbox, TableCell, TableContainer, TableHead, TableRow } from "@mui/material";
+import { TableCell, TableContainer, TableHead, TableRow } from "@mui/material";
 import { Typography } from "@components/Typography/Typography";
 import InitiativeTrackerTableRow from "./components/InitiativeTrackerTableRow";
 import { Combat } from "@model/Combat";
@@ -74,7 +74,7 @@ const DMInitiative = () => {
   const { combatId, campaignId = "" } = useParams();
   const { combat, isLoading, isRefetching, isFetching } = useCombat(combatId);
   const { combatMap, isLoading: isMapLoading, isRefetching: isMapRefetching } = useCombatMap(combatId || "");
-  const { currentTurnIndex = 0, combatCharacterArray = [], campaignDocId = "" } = combat;
+  const { currentTurnIndex = null, combatCharacterArray = [], campaignDocId = "" } = combat;
   const { campaign } = useCampaign(campaignId);
   const { characters = [] } = useCampaignCharacters(campaignId);
   const { insert, removeAt, replaceAt, replaceList, listWithIds, list } =
@@ -98,9 +98,6 @@ const DMInitiative = () => {
       return () => clearTimeout(timeout)
     }
   }, [isFetching, list]);*/
-
-
-
 
   const handleUpdate = (combat: Combat, overrideCharacterArray = list) => { 
     updateInitiative({
@@ -134,11 +131,11 @@ const DMInitiative = () => {
     const removedList = removeAt(index);
     let newNextTurn = currentTurnIndex;
 
-    if (newNextTurn >= index) {
+    if (newNextTurn !== null && newNextTurn >= index) {
       newNextTurn -= 1;
     }
 
-    handleUpdate({ ...combat, currentTurnIndex: newNextTurn }, removedList);
+    handleUpdate({ ...combat, currentTurnIndex: newNextTurn || 0 }, removedList);
   };
 
   // TODO: do this properly using types for safety. Maybe a better signifier? What about npcs?
@@ -312,9 +309,16 @@ const DMInitiative = () => {
         <Button
           onClick={() => {
             const tempList = [...list];
-            const sortedList = tempList.sort((a, b) =>
-              Number(a["initiative"]) < Number(b["initiative"]) ? 1 : -1,
-            );
+            const sortedList = tempList.sort((a, b) =>{
+              let aInititative = Number(a["initiative"] || -100);
+              let bInitiative = Number(b["initiative"] || -100);
+                if (aInititative === bInitiative) {
+                  aInititative += Number(a["dexterity"] || -100)
+                  bInitiative += Number(a["dexterity"] || -100)
+                }
+              
+                return aInititative <= bInitiative ? 1 : -1;
+            });
             handleUpdate({ ...combat }, sortedList);
           }}
         >
@@ -330,17 +334,20 @@ const DMInitiative = () => {
         <Button onClick={() => handleStart()}>Start</Button>
         <Button
           onClick={() =>{
-            let nextTurn =
-            currentTurnIndex + 1 >= list.length
-              ? 0
-              : currentTurnIndex + 1;
+            let nextTurn = 0;
+            if (currentTurnIndex !== null) {
+              nextTurn =
+                currentTurnIndex + 1 >= list.length
+                  ? 0
+                  : currentTurnIndex + 1;
 
-              while (filteredList.filter(item => listWithIds[nextTurn].data.uniqueId === item.data.uniqueId).length < 1) {
-                nextTurn =
-                  nextTurn + 1 >= list.length
-                    ? 0
-                    : nextTurn + 1;
-              }
+                while (filteredList.filter(item => listWithIds[nextTurn].data.uniqueId === item.data.uniqueId).length < 1) {
+                  nextTurn =
+                    nextTurn + 1 >= list.length
+                      ? 0
+                      : nextTurn + 1;
+                }
+            }
             handleUpdate({ ...combat, currentTurnIndex: nextTurn })
           }}
         >

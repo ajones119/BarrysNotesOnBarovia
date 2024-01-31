@@ -11,10 +11,10 @@ export declare interface ButtonProps {
     borderColor?: "success" | "light" | "dark" | "error" | "primary" | "default" | "secondary";
     size?: "small" | "default" | "large";
     hollow?: boolean;
+    round?: boolean;
 }
 
-export const Button = ({ onClick, children, disabled = false, animatedHover = true, borderColor = "default", hollow = false, color = "default", size = "default" }: ButtonProps) => {
-
+export const Button = ({ onClick, children, disabled = false, animatedHover = false, borderColor = "default", hollow = false, color = "default", size = "default" }: ButtonProps) => {
 
     return (
         <Boop rotation={1} disabled={!animatedHover || disabled}>

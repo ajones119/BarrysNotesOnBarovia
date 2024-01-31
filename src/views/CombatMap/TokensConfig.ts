@@ -530,8 +530,8 @@ const INTERNAL_TOKENS: Array<{
             {
                 name: "Fog 1x1",
                 image: Fog1x1,
-                height: 3,
-                width: 3,
+                height: 2,
+                width: 2,
                 color: COLORS_MAP.White
             },
             {
@@ -781,8 +781,8 @@ const INTERNAL_TOKENS: Array<{
             {
                 name: "Fog 1x1",
                 image: Fog1x1,
-                height: 3,
-                width: 3,
+                height: 2,
+                width: 2,
                 color: COLORS_MAP.White
             },
             {

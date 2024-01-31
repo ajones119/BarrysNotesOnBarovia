@@ -33,7 +33,6 @@ export const useDeleteCombatMap = (docId: string) => {
 }
 
 export const useCombatMap = (combatId: string) => {
-    console.log("COMBAT ID FOR MAP", combatId)
     const ref = query(collection(firestore, "combatMaps"), where("combatDocId", "==", combatId));
 
     const CombatQuery = useFirestoreQuery([`${combatId}-campaignCombatMapsList`], ref, { subscribe: true });
@@ -45,6 +44,5 @@ export const useCombatMap = (combatId: string) => {
         ...combat?.data(),
         docId: combat.id,
       }) as CombatMap) || [];
-      console.log("compatMap", data?.docs)
     return { combatMap: CombatData[0], isLoading, isRefetching, refetch };
 }

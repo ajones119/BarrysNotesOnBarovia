@@ -16,6 +16,7 @@ import useCombatMapStore from "./CombatMapStore";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faMinus, faPlus } from "@fortawesome/free-solid-svg-icons";
 import { useCombatMap, useUpdateCombatMap } from "@services/CombatMapService";
+import { FullScreen, useFullScreenHandle } from "react-full-screen";
 
 type DroppableToken = {
   id: string,
@@ -24,6 +25,7 @@ type DroppableToken = {
 }
 
 const CombatMap = ({combatIdOverride = "", isPlayer = false}) => {
+    const mapContainer = useFullScreenHandle();
     const { combatId } = useParams();
     const [searchParams, setSearchParams] = useSearchParams();
     const scale = Number(searchParams.get("scale")) || 1;
@@ -37,7 +39,6 @@ const CombatMap = ({combatIdOverride = "", isPlayer = false}) => {
 
     const { combat, isLoading, isRefetching } = useCombat(combatId || combatIdOverride);
     const { combatMap, isLoading: isMapLoading, isRefetching: isMapRefetching } = useCombatMap(combatId || combatIdOverride);
-    console.log("MAP", combatMap, isMapLoading)
 
     const { combatCharacterArray = [], currentTurnIndex } = combat;
     const { map, combatMapCharacterArray } = combatMap || {map: {extraTokens: []}, combatMapCharacterArray: []  };
@@ -155,71 +156,76 @@ const CombatMap = ({combatIdOverride = "", isPlayer = false}) => {
       <div>
         <div>
           <Typography>{combat?.name}</Typography>
-          <Button onClick={() => setIsSettingsDrawerOpen(true)}>SETTINGS</Button>
-          <div style={{display: "flex", justifyContent: "center", alignItems: "center", columnGap: 4}}>
-            <Button onClick={() => setSearchParams({scale: String((scale - 0.1).toFixed(2))})}><FontAwesomeIcon icon={faMinus} /></Button>
-              <Typography>Zoom</Typography>
-            <Button onClick={() => setSearchParams({scale: String((scale + 0.1).toFixed(2))})}><FontAwesomeIcon icon={faPlus} /></Button>
-          </div>
           <Spacer height={24} />
-          <SettingsDrawer
-            isOpen={isSettingsDrawerOpen}
-            onClose={() => setIsSettingsDrawerOpen(false)}
-            map={map || {extraTokens: []}}
-            setMap={(newMap) => {
-              update({...combatMap, map: {...newMap}});
-            }}
-            isPlayer={isPlayer}
-          />
         </div>
-        <div className={css.CombatMapContainer} ref={mapRef} id="CombatMap">
-          <DndContext onDragEnd={handleDragEnd} onDragStart={handleDragStart}>
-            <Map
-              mapImage={map?.mapImage}
-              cols={map?.columns}
-              rows={map?.rows}
-              tokenSize={(map?.tokenSize || 32) * (scale || 1)}
-              hideGrid={map?.hideGrid}
-              mapColor={map?.mapColor}
-              gridColor={map?.gridColor}
-            >
-              {extraTokens.map((token) => (
-                <Token
-                  styles={{
-                    position: "absolute",
-                    left: `${token?.data?.position?.x * scale}px`,
-                    top: `${token?.data?.position?.y * scale}px`
-                  }}
-                  id={token.id}
-                  disabled={token?.disabled}
-                  content={
-                  <ExtraTokenContent
-                    image={token.data.image}
-                    tokenSize={(map?.tokenSize || 32) * (scale || 1)}
-                    height={token.data.length}
-                    width={token.data.width}
-                    color={token.data?.color || null}
-                    opacity={token.data?.opacity || null}
-                    rotate={token?.data?.rotation || null}
-                  />}
-                />
-              ))}
-              {tokens.map((token, index) => {
-                const { data } = token;
-                return data?.shouldShow && (
-                <Token
-                  styles={{
-                    position: "absolute",
-                    left: `${data?.position?.x * scale}px`,
-                    top: `${data?.position?.y * scale}px`
-                  }}
-                  id={token.id}
-                  content={<CharacterTokenContent isPlayer={isPlayer} character={data} tokenSize={(map?.tokenSize || 32) * (scale || 1)} isCurrentTurn={currentTurnIndex === index && data?.playerDocId} />}
-                />
-              )})}
-            </Map>
-          </DndContext>
-        </div>
+        <FullScreen handle={mapContainer}>
+          <div className={css.CombatMapContainer} ref={mapRef} id="CombatMap">
+            <DndContext onDragEnd={handleDragEnd} onDragStart={handleDragStart}>
+              <Map
+                mapImage={map?.mapImage}
+                cols={map?.columns}
+                rows={map?.rows}
+                tokenSize={(map?.tokenSize || 32) * (scale || 1)}
+                hideGrid={map?.hideGrid}
+                mapColor={map?.mapColor}
+                gridColor={map?.gridColor}
+              >
+                {extraTokens.map((token) => (
+                  <Token
+                    styles={{
+                      position: "absolute",
+                      left: `${token?.data?.position?.x * scale}px`,
+                      top: `${token?.data?.position?.y * scale}px`
+                    }}
+                    id={token.id}
+                    disabled={token?.disabled}
+                    content={
+                    <ExtraTokenContent
+                      image={token.data.image}
+                      tokenSize={(map?.tokenSize || 32) * (scale || 1)}
+                      height={token.data.length}
+                      width={token.data.width}
+                      color={token.data?.color || null}
+                      opacity={token.data?.opacity || null}
+                      rotate={token?.data?.rotation || null}
+                    />}
+                  />
+                ))}
+                {tokens.map((token, index) => {
+                  const { data } = token;
+                  return data?.shouldShow && (
+                  <Token
+                    styles={{
+                      position: "absolute",
+                      left: `${data?.position?.x * scale}px`,
+                      top: `${data?.position?.y * scale}px`
+                    }}
+                    id={token.id}
+                    content={<CharacterTokenContent isPlayer={isPlayer} character={data} tokenSize={(map?.tokenSize || 32) * (scale || 1)} isCurrentTurn={currentTurnIndex === index && data?.playerDocId} />}
+                  />
+                )})}
+              </Map>
+            </DndContext>
+          </div>
+          <div className={css.buttonsContainer}>
+            {!mapContainer.active && <Button onClick={() => setIsSettingsDrawerOpen(true)}><Typography color="dark">Settings</Typography></Button>}
+            <Button onClick={() => mapContainer.active ? mapContainer.exit() : mapContainer.enter()}><Typography color="dark">FullScreen</Typography></Button>
+            <div style={{display: "flex", justifyContent: "center", alignItems: "center", columnGap: 4}}>
+              <Button onClick={() => setSearchParams({scale: String((scale - 0.1).toFixed(2))})}><FontAwesomeIcon icon={faMinus} /></Button>
+                <Typography weight="bold" color="primary">Zoom</Typography>
+              <Button onClick={() => setSearchParams({scale: String((scale + 0.1).toFixed(2))})}><FontAwesomeIcon icon={faPlus} /></Button>
+            </div>
+          </div>
+            <SettingsDrawer
+              isOpen={isSettingsDrawerOpen}
+              onClose={() => setIsSettingsDrawerOpen(false)}
+              map={map || {extraTokens: []}}
+              setMap={(newMap) => {
+                update({...combatMap, map: {...newMap}});
+              }}
+              isPlayer={isPlayer}
+            />
+        </FullScreen>
       </div>
     );
 };
