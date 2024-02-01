@@ -3,6 +3,8 @@ import WoodPile from "@images/MapTokens/WoodPile1x1.png"
 import Fog1x1 from "@images/MapTokens/Fog1x1.png"
 import Fog2x2 from "@images/MapTokens/Fog2x2.png"
 import Fog5x3 from "@images/MapTokens/Fog5x3.png"
+import Cloud from "@images/MapTokens/cloudGif.gif"
+import Lightning from "@images/MapTokens/lightning.gif"
 import Bush2x2 from "@images/MapTokens/Bush2x2.png"
 import BlackCircle from "@images/MapTokens/circle2.png"
 import BlackSquare from "@images/MapTokens/BlackSquareOutline.png"
@@ -437,6 +439,75 @@ const INTERNAL_TOKENS: Array<{
                 opacity: 0.9
             },
             {
+                name: "Animated Fog 1x1",
+                image: Cloud,
+                height: 1,
+                width: 1,
+                color: COLORS_MAP.Black,
+                opacity: 0.9
+            },
+            {
+                name: "Animated Fog 2x2",
+                image: Cloud,
+                height: 2,
+                width: 2,
+                color: COLORS_MAP.Black,
+                opacity: 0.9
+            },
+            {
+                name: "Animated Fog 3x3",
+                image: Cloud,
+                height: 3,
+                width: 3,
+                color: COLORS_MAP.Black,
+                opacity: 0.9
+            },
+            {
+                name: "Animated Fog 4x4",
+                image: Cloud,
+                height: 4,
+                width: 4,
+                color: COLORS_MAP.Black,
+                opacity: 0.9
+            },
+            {
+                name: "Animated Fog 5x5",
+                image: Cloud,
+                height: 5,
+                width: 5,
+                color: COLORS_MAP.Black,
+                opacity: 0.9
+            },
+            {
+                name: "Animated Fog 6x6",
+                image: Cloud,
+                height: 6,
+                width: 6,
+                color: COLORS_MAP.Black,
+                opacity: 0.9
+            },
+            {
+                name: "Animated Lightning",
+                image: Lightning,
+                height: 1,
+                width: 1,
+                opacity: 0.9
+            },
+            {
+                name: "Animated Lightning 30 feet",
+                image: Lightning,
+                height: 6,
+                width: 1,
+                opacity: 0.9
+            },
+            {
+                name: "Animated Lightning 100 feet",
+                image: Lightning,
+                height: 20,
+                width: 1,
+                opacity: 0.9
+            },
+            {
                 name: "Cone (10 ft)",
                 image: BlueCone,
                 height: 2,
@@ -477,6 +548,20 @@ const INTERNAL_TOKENS: Array<{
                 image: BlueCone,
                 height: 8,
                 width: 8,
+                color: COLORS_MAP.Black
+            },
+            {
+                name: "Cone (50 ft)",
+                image: BlueCone,
+                height: 10,
+                width: 10,
+                color: COLORS_MAP.Black
+            },
+            {
+                name: "Cone (60 ft)",
+                image: BlueCone,
+                height: 12,
+                width: 12,
                 color: COLORS_MAP.Black
             },
             {
@@ -766,6 +851,42 @@ const INTERNAL_TOKENS: Array<{
         id: "misc",
         name: "Misc.",
         tokens: [
+            {
+                name: "Animated Fog of War 1x1",
+                image: Cloud,
+                height: 1,
+                width: 1,
+            },
+            {
+                name: "Animated Fog of War 2x2",
+                image: Cloud,
+                height: 2,
+                width: 2,
+            },
+            {
+                name: "Animated Fog of War 3x3",
+                image: Cloud,
+                height: 3,
+                width: 3,
+            },
+            {
+                name: "Animated Fog of War 4x4",
+                image: Cloud,
+                height: 4,
+                width: 4,
+            },
+            {
+                name: "Animated Fog of War 5x5",
+                image: Cloud,
+                height: 5,
+                width: 5,
+            },
+            {
+                name: "Animated Fog of War 6x6",
+                image: Cloud,
+                height: 6,
+                width: 6,
+            },
             {
                 name: "Bush 1x1",
                 image: Bush2x2,
