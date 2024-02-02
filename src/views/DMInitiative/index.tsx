@@ -160,9 +160,11 @@ const DMInitiative = () => {
     return newId + 1;
   }
 
+/*
   useEffect(() => {
     window.addEventListener("keypress", (e) => {
-      if (e.key === "Enter") {
+      if (e.key === "Enter" ) {
+        console.log("SAVING")
         handleUpdate({...combat})
       }
     });
@@ -175,7 +177,9 @@ const DMInitiative = () => {
         }
       });
     }
-  }, [combat])
+  }, [JSON.stringify(combat)])
+  */
+  
 
   return (
     <div className={css.initiativeTrackerContainer}>
