@@ -42,7 +42,7 @@ const CombatMap = ({combatIdOverride = "", isPlayer = false}) => {
 
     const { combatCharacterArray = [], currentTurnIndex } = combat;
     const { map, combatMapCharacterArray } = combatMap || {map: {extraTokens: []}, combatMapCharacterArray: []  };
-    const update = useUpdateCombatMap(combatMap);
+    const {mutate: update} = useUpdateCombatMap(combatMap);
 
     const mapRef = useRef<HTMLDivElement>(null); 
 

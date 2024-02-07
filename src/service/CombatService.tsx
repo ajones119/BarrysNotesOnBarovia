@@ -39,61 +39,43 @@ export const useCombat = (combatDocId = ""): {combat: Combat, isLoading: boolean
   return { combat, isLoading, isRefetching, isFetching };
 }
 
-export const useAddCombatButton = (newCombat: Combat, onClick: () => void, validate: () => boolean) => {
+export const useAddCombatButton = (onSuccess: () => void) => {
     const ref = collection(firestore, "combats");
-    const mutation = useFirestoreCollectionMutation(ref);
+    const mutation = useFirestoreCollectionMutation(ref, {onSuccess});
     const mapMutation = useAddCombatMap();
-    const [buttonStatus, setButtonStatus] = useState<ButtonStatuses>(ButtonStatuses.Idle);
-  
-    const { 
+
+    const handleMutate = async(newCombat: Combat) => {
+      const { 
         campaignDocId,
         name = "",
         combatCharacterArray = [],
     } = newCombat;
-  
-    const handleClick = async() => {
-      const valid = validate();
-      if (valid) {
-        const response = await mutation.mutateAsync({
-            campaignDocId,
-            name,
-            combatCharacterArray
-            
-        })
+      const response = await mutation.mutateAsync({
+          campaignDocId,
+          name,
+          combatCharacterArray
+      })
 
-        await mapMutation.mutateAsync({
-          combatDocId: response?.id,
-          campaignDocId: newCombat?.campaignDocId,
-          combatMapCharacterArray: combatCharacterArray?.map((character) => ({
-            playerDocId: character?.playerDocId || "",
-            enemyId: character?.enemyId || "",
-            npcDocId: character?.npcDocId || "",
-            position: {
-              x: 100,
-              y: 100
-            },
-            uniqueId: character?.uniqueId
-          })),
-        })
-      }
-  
-        if (!mutation.error){
-          onClick();
-        }
-  
-      setButtonStatus(mutation.status as ButtonStatuses)
+      await mapMutation.mutateAsync({
+        combatDocId: response?.id,
+        campaignDocId: newCombat?.campaignDocId,
+        combatMapCharacterArray: combatCharacterArray?.map((character) => ({
+          playerDocId: character?.playerDocId || "",
+          enemyId: character?.enemyId || "",
+          npcDocId: character?.npcDocId || "",
+          position: {
+            x: 100,
+            y: 100
+          },
+          uniqueId: character?.uniqueId
+        })),
+      })
     }
   
-    useEffect(() => {
-      const timer = setTimeout(() => setButtonStatus(ButtonStatuses.Idle), 2000)
-      return () => {
-        clearTimeout(timer)
-      }
-    }, [buttonStatus])
-  
-    return (
-      <LoadingButton color="success" size="large" isLoading={mutation.isLoading} status={buttonStatus} onClick={handleClick}>Save Encounter</LoadingButton>
-    );
+    return {
+      ...mutation,
+      mutate: handleMutate
+    }
   }
 
 export const useUpdateInitiative = (combat: Combat) => {
@@ -111,35 +93,22 @@ export const useUpdateInitiative = (combat: Combat) => {
     return update;
   }
 
-  export const useDeleteCombatButton = (combat: Combat, onClick = () => {}) => {
+  export const useDeleteCombat = (combatID: string) => {
     const col = collection(firestore, "combats");
-    const ref = doc(col, combat.docId);
+    const ref = doc(col, combatID);
     const mutation = useFirestoreDocumentDeletion(ref);
 
-    const {combatMap, isLoading} = useCombatMap(combat?.docId || "");
+    const {combatMap, isLoading} = useCombatMap(combatID || "");
     const mapsDelete = useDeleteCombatMap(combatMap?.docId || "1")
+  
+    const handleMutate = async () => {
+      if (!isLoading) {
+        await mutation.mutateAsync();
+        await mapsDelete.mutateAsync()
+      }
 
-    const [buttonStatus, setButtonStatus] = useState<ButtonStatuses>(ButtonStatuses.Idle);
-  
-    const handleClick = async () => {
-      await mutation.mutateAsync();
-      await mapsDelete.mutateAsync()
-  
-        if (!mutation.error){
-          onClick();
-        }
-  
-      setButtonStatus(mutation.status as ButtonStatuses)
     }
   
-    useEffect(() => {
-      const timer = setTimeout(() => setButtonStatus(ButtonStatuses.Idle), 2000)
-      return () => {
-        clearTimeout(timer)
-      }
-    }, [buttonStatus])
   
-    return (
-      <LoadingButton color="error" isLoading={mutation.isLoading} status={buttonStatus} onClick={handleClick}><FontAwesomeIcon icon={faTrash} /></LoadingButton>
-    );
+    return {...mutation, mutate: handleMutate};
   }

@@ -8,6 +8,7 @@ import css from "./CreateCampaignModal.module.scss"
 import { Campaign, validateCampaign } from '@model/Campaign';
 import { useAddCampaignButton } from '@services/CampaignService';
 import { Validator } from '@model/Validator';
+import { ButtonStatuses, LoadingButton } from '@components/Button/LoadingButton';
 
 declare interface CreateCampaignModalProps {
     isOpen: boolean;
@@ -19,7 +20,15 @@ const DEFAULT_EMPTY_CAMPAIGN: Campaign = {title: ""};
 const CreateCampaignModal = ({isOpen, onClose}: CreateCampaignModalProps) => {
     const [newCampaign, setNewCampaign] = useState<Campaign>(DEFAULT_EMPTY_CAMPAIGN);
     const [validator, setValidator] = useState<Validator>();
-    const saveCampaignButton = useAddCampaignButton(newCampaign, () => handleOnClose(), () => validate());
+    
+    const handleOnClose = () => {
+        setNewCampaign(DEFAULT_EMPTY_CAMPAIGN)
+        onClose();
+    }
+
+    const {mutate, isLoading, isError, isSuccess} = useAddCampaignButton(
+        handleOnClose
+    );
 
     const { title, campaignImageURL, dungeonMaster, description } = newCampaign;
 
@@ -30,15 +39,23 @@ const CreateCampaignModal = ({isOpen, onClose}: CreateCampaignModalProps) => {
         return !(Object.keys(valid).length > 0);
     }
 
-    const handleOnClose = () => {
-            setNewCampaign(DEFAULT_EMPTY_CAMPAIGN)
-            onClose();
-    }
-
     return (
         <div>
             <Modal isOpen={isOpen} onClose={handleOnClose} extraButtons={[
-                saveCampaignButton
+                <LoadingButton
+                    color="success"
+                    size="large"
+                    isLoading={isLoading}
+                    status={isError || validator ? ButtonStatuses.Error : isSuccess ? ButtonStatuses.Success : ButtonStatuses.Idle}
+                    onClick={() => {
+                        const valid = validate();
+                        if (valid) {
+                            mutate(newCampaign)
+                        }
+                    }}
+                    >
+                        Save Campaign
+                    </LoadingButton>
                 ]}>
                 <Grid container spacing={2} rowSpacing={3} className={css.CreateCampaignModal}>
                     <Grid item lg={6} sm={12}>

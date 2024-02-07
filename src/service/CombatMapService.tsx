@@ -16,7 +16,7 @@ export const useUpdateCombatMap = (combat: CombatMap) => {
         })
       }
 
-    return update;
+    return {...mutation, mutate: update};
 }
 
 export const useAddCombatMap = () => {

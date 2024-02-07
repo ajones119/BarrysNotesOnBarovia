@@ -2,12 +2,12 @@ import React, {useEffect, useState} from 'react';
 import { Modal } from '../Modal';
 import { Grid } from '@mui/material';
 import css from "./CreateNoteModal.module.scss"
-import { useAddNoteButton } from '@services/NotesService';
+import { useAddNote } from '@services/NotesService';
 import { Note, validateNote } from '@model/Note';
 import CharacterPicker from '../../CharacterPicker/CharacterPicker';
 import TextEditor from '../../TextEditor';
-import { Validator } from '@model/Validator';
 import { PlayerCharacter } from '@model/PlayerCharacter';
+import { ButtonStatuses, LoadingButton } from '@components/Button/LoadingButton';
 
 declare interface CreateNPCModalProps {
     isOpen: boolean;
@@ -22,21 +22,15 @@ const CreateNoteModal = ({isOpen, onClose, campaignId, characters}: CreateNPCMod
     const date = new Date()
     const defaultNote: Note = {...DEFAULT_NOTE, campaignDocId: campaignId, date}
     const [newNote, setNewNote] = useState<Note>(defaultNote);
-    const saveNoteButton = useAddNoteButton(newNote, () => handleOnClose(), () => validate());
+    const handleOnClose = () => {
+        onClose();
+    }
+
+    const {mutate, isLoading, isError, isSuccess} = useAddNote(handleOnClose);
 
     const {
         content,
     } = newNote;
-
-    const validate = () => {
-        const valid = validateNote(newNote)
-
-        return !(Object.keys(valid).length > 0);
-    }
-
-    const handleOnClose = () => {
-        onClose();
-    }
 
     useEffect(() => {
         setNewNote({...newNote, date: new Date(), content: ""})
@@ -45,7 +39,15 @@ const CreateNoteModal = ({isOpen, onClose, campaignId, characters}: CreateNPCMod
     return (
         <div>
             <Modal isOpen={isOpen} onClose={handleOnClose} extraButtons={[
-                    saveNoteButton
+                    <LoadingButton
+                    color="success"
+                    size="large"
+                    isLoading={isLoading}
+                    status={isError ? ButtonStatuses.Error : isSuccess ? ButtonStatuses.Success : ButtonStatuses.Idle}
+                    onClick={() => {
+                            mutate(newNote)
+                    }}
+                >Save Note</LoadingButton>
                 ]}>
                 <Grid container spacing={2} rowSpacing={3} className={css.CreateNoteModal}>
                     <Grid item sm={12}>

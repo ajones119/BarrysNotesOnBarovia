@@ -36,6 +36,8 @@
             &.activeLink {
                 text-decoration: underline;
                 color: $primary;
+                pointer-events: none;
+                cursor: default;
             }
         }
     }

@@ -5,16 +5,16 @@ import { Note } from '@model/Note';
 import { Grid, ToggleButton, ToggleButtonGroup } from "@mui/material"
 import NotesList from '@components/NotesList/NotesList';
 import { Typography } from '@components/Typography/Typography';
-import { PlayerCharacter } from '@model/PlayerCharacter';
+import { useCampaignCharacters } from '@services/CharacterService';
+import { useCampaignNotes } from '@services/NotesService';
 
-declare interface CampaignNotesProps {
-    notes: Note[]
-    characters: PlayerCharacter[]
-}
-
-const CampaignNotes = ({ notes, characters }: CampaignNotesProps) => {
+const CampaignNotes = () => {
     const params = useParams();
     const { CampaignId } = params;
+    const {characters} = useCampaignCharacters(CampaignId || "");
+    const {notes: NotesData} = useCampaignNotes(CampaignId || "");
+    let notes = NotesData;
+
     const [dateFilter, setDateFilter] = useState("new")
 
     notes?.sort(function (a, b) {

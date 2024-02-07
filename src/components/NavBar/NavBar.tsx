@@ -34,18 +34,18 @@ export const NavBar = () => {
         </div>
       </div>
       <div className={css.linkContainer}>
-        <div className={`${css.navBarLink} ${pathname === "/Campaigns/" ? css.activeLink : ""}`} onClick={() => { navigate("/Campaigns/"); }}>
+        <a className={`${css.navBarLink} ${pathname === "/Campaigns/" ? css.activeLink : ""}`} href="/#/Campaigns/">
           <FontAwesomeIcon icon={faDungeon} />
           <Typography className={`${css.navBarLink} ${pathname === "/Campaigns/" ? css.activeLink : ""}`}>Campaigns</Typography>
-        </div>
-        <div className={`${css.navBarLink} ${pathname === "/Characters/" ? css.activeLink : ""}`} onClick={() => { navigate("/Characters/"); }}>
+        </a>
+        <a className={`${css.navBarLink} ${pathname === "/Characters/" ? css.activeLink : ""}`} href="/#/Characters/">
           <FontAwesomeIcon icon={faHatWizard} />
           <Typography className={`${css.navBarLink} ${pathname === "/Characters/" ? css.activeLink : ""}`}>Characters</Typography>
-        </div>
-        <div className={`${css.navBarLink} ${pathname === "/Monsters/" ? css.activeLink : ""}`} onClick={() => { navigate("/Monsters/"); }}>
+        </a>
+        <a className={`${css.navBarLink} ${pathname === "/Monsters/" ? css.activeLink : ""}`} href="/#/Monsters/">
           <FontAwesomeIcon icon={faSpaghettiMonsterFlying} />
           <Typography className={`${css.navBarLink} ${pathname === "/Monsters/" ? css.activeLink : ""}`}>Monsters</Typography>
-        </div>
+        </a>
       </div>
     </div>
   );
