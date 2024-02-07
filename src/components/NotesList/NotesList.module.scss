@@ -1,3 +1,4 @@
+@import "src/sass_utils";
 
 .addNoteButton {
     position: fixed;
@@ -12,14 +13,14 @@
 }
 
 .notesList {
-    background-color: white;
+    background-color: $dark;
 
     .note {
         height: 100%;
         padding: 16px 8px;
         border-top-width: 1px;
         border-top-style: solid;
-        border-top-color: black;
+        border-top-color: $light;
         display: grid;
         grid-template-columns: 48px auto 56px;
         column-gap: 8px;

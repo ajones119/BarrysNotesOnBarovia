@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import { Modal } from '../Modal';
 import { Grid } from '@mui/material';
 import css from "./CreateNoteModal.module.scss"
@@ -22,7 +22,6 @@ const CreateNoteModal = ({isOpen, onClose, campaignId, characters}: CreateNPCMod
     const date = new Date()
     const defaultNote: Note = {...DEFAULT_NOTE, campaignDocId: campaignId, date}
     const [newNote, setNewNote] = useState<Note>(defaultNote);
-    const [validator, setValidator] = useState<Validator>();
     const saveNoteButton = useAddNoteButton(newNote, () => handleOnClose(), () => validate());
 
     const {
@@ -31,15 +30,17 @@ const CreateNoteModal = ({isOpen, onClose, campaignId, characters}: CreateNPCMod
 
     const validate = () => {
         const valid = validateNote(newNote)
-        setValidator(valid)
 
         return !(Object.keys(valid).length > 0);
     }
 
     const handleOnClose = () => {
-            setNewNote(defaultNote)
-            onClose();
+        onClose();
     }
+
+    useEffect(() => {
+        setNewNote({...newNote, date: new Date(), content: ""})
+    }, [isOpen])
 
     return (
         <div>

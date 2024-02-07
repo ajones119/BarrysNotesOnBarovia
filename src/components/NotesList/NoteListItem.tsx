@@ -6,6 +6,8 @@ import BACKUP from "@images/dm-seal.jpg"
 import { useDeleteNoteButton } from '@services/NotesService';
 import TextEditorDisplay from '../TextEditor/TextEditDisplay';
 import { Typography } from '../Typography/Typography';
+import Markdown from 'react-markdown'
+
 
 declare interface NotesListItemProps{
     note: Note
@@ -28,9 +30,9 @@ export const NotesListItem = ({ note, characterImageURL, characterName }: NotesL
                 </div>
             </div>
             <div className={css.noteTextContainer}>
-            <TextEditorDisplay value={note.content || ""} light />
+            <Typography color="light" ><Markdown>{note.content}</Markdown></Typography>
             <div>
-                <Typography color="default" size="caption" >{characterName || "An Unknown Entity"} - {`${note?.date}`}</Typography>
+                <Typography color="light" size="caption" >{characterName || "An Unknown Entity"} - {`${note?.date}`}</Typography>
             </div>
             </div>
             <div className={css.noteColumnContainer}>
