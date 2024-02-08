@@ -12,7 +12,6 @@ import { useCampaign, useUpdateCampaign } from "@services/CampaignService";
 import { Button } from "@components/Button/Button";
 import { useCampaignCharacters } from "@services/CharacterService";
 import { getCombatMapURL, getCombatURL } from "./utils";
-import CopyButton from "@components/Button/ReusableButtons/CopyButton";
 import ResourceDrawer from "@views/DMInitiative/components/ResourceDrawer";
 import LinearProgress from "@mui/material/LinearProgress";
 import {
@@ -71,18 +70,18 @@ const EncounterDiffultyProgress = ({
 };
 
 const DMInitiative = () => {
-  const { combatId, campaignId = "" } = useParams();
+  const { combatId, CampaignId: campaignId = "" } = useParams();
   const { combat, isLoading, isRefetching, isFetching } = useCombat(combatId);
   const { combatMap, isLoading: isMapLoading, isRefetching: isMapRefetching } = useCombatMap(combatId || "");
   const { currentTurnIndex = null, combatCharacterArray = [], campaignDocId = "" } = combat;
-  const { campaign } = useCampaign(campaignId);
+  const { data: campaign } = useCampaign(campaignId);
   const { characters = [] } = useCampaignCharacters(campaignId);
   const { insert, removeAt, replaceAt, replaceList, listWithIds, list } =
     useList([]);
   const [colorFilter, setColorFilter] = useState<string[]>([])
   const updateInitiative = useUpdateInitiative(combat);
-  const updateCampaign = useUpdateCampaign(campaign);
-  const updateCombatMap = useUpdateCombatMap(combatMap);
+  const updateCampaign = useUpdateCampaign(campaignId);
+  const {mutate: updateCombatMap} = useUpdateCombatMap(combatMap);
 
   useDeepCompareEffect(() => {
     if (!isLoading && !isRefetching) {
@@ -159,42 +158,12 @@ const DMInitiative = () => {
 
     return newId + 1;
   }
-
-/*
-  useEffect(() => {
-    window.addEventListener("keypress", (e) => {
-      if (e.key === "Enter" ) {
-        console.log("SAVING")
-        handleUpdate({...combat})
-      }
-    });
-    
-
-    return () => {
-      window.removeEventListener("keypress", (e) => {
-        if (e.key === "Enter") {
-          handleUpdate({...combat})
-        }
-      });
-    }
-  }, [JSON.stringify(combat)])
-  */
   
 
   return (
     <div className={css.initiativeTrackerContainer}>
       <div className={css.topButtonsRow}>
         <div>
-          <CopyButton
-            animatedHover={false}
-            borderColor="primary"
-            color="dark"
-            copiedText={getCombatURL(campaignDocId)}
-          >
-            <Typography size="default" color="primary">
-              Copy Player Link
-            </Typography>
-          </CopyButton>
           <Spacer height={8} />
           <div style={{display: "flex", alignItems: "center", columnGap: 4}}>
             <Typography size="default">Color Filter</Typography>

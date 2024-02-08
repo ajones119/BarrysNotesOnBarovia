@@ -13,21 +13,20 @@ import NPCDrawer from '@components/Drawer/BaseCharacterDrawer/NPCDrawer';
 import { BaseCharacter } from '@model/BaseCharacter';
 import { PlayerCharacter } from '@model/PlayerCharacter';
 import PlayerCharacterDrawer from '@components/Drawer/BaseCharacterDrawer/PlayerCharacterDrawer';
+import { useCampaignCharacters } from '@services/CharacterService';
+import { useCampaignNPCs } from '@services/NPCService';
 
-declare interface CampaignCharactersProps {
-    characters: PlayerCharacter[],
-    npcs: BaseCharacter[]
-}
-
-const CampaignCharacters = ({ characters, npcs }: CampaignCharactersProps) => {
-
-    const params = useParams();
-    const { CampaignId } = params;
+const CampaignCharacters = () => {
+    const { CampaignId } = useParams();
 
     const [isAddNPCOpen, setIsAddNPCOpen] = useState(false);
     const [isAddCharacterOpen, setIsAddCharacterOpen] = useState(false);
     const [selectedCharacter, setSelectedCharacter] = useState<PlayerCharacter | null>(null);
     const [selectedNPC, setSelectedNPC] = useState<BaseCharacter | null>();
+
+    const {characters} = useCampaignCharacters(CampaignId || "");
+    const {NPCs = []} = useCampaignNPCs(CampaignId || "");
+    let npcs = NPCs;
 
     npcs = npcs?.sort(function (a, b) {
       if (a.name.toLowerCase() < b.name.toLowerCase()) {

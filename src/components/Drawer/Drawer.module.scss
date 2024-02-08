@@ -30,16 +30,6 @@
     left: 0;
     top: 50%;
   }
-
-  &.top {
-    left: 50%;
-    bottom: 10%;
-  }
-
-  &.right {
-    right: 0;
-    top: 50%;
-  }
 }
 
 .drawer {
@@ -62,17 +52,6 @@
 
   &.left {
     left: 0;
-    top: 0;
-    max-width: 450px;
-  }
-
-  &.top {
-    left: 0;
-    bottom: 10%;
-  }
-
-  &.right {
-    right: 0;
     top: 0;
     max-width: 450px;
   }

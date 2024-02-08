@@ -11,7 +11,6 @@ export function useCampaignNotes(campaignDocId: string): {notes: Note[], isLoadi
     const ref = query(
         collection(firestore, "notes"),
         where("campaignDocId", "==", campaignDocId),
-        //where("isPersonal", "==", false)
     );
   
     const notesQuery = useFirestoreQuery([`${campaignDocId}-campaignNotesList`], ref, { subscribe: true });
@@ -23,69 +22,16 @@ export function useCampaignNotes(campaignDocId: string): {notes: Note[], isLoadi
     return { notes: notesData, isLoading, refetch };
   }
 
-  export const useAddNoteButton = (newNote: Note, onClick: () => void, validate: () => boolean) => {
+  export const useAddNote = (onSuccess?: () => void) => {
     const ref = collection(firestore, "notes");
-    const mutation = useFirestoreCollectionMutation(ref);
-    const [buttonStatus, setButtonStatus] = useState<ButtonStatuses>(ButtonStatuses.Idle);
+    const mutation = useFirestoreCollectionMutation(ref, {onSuccess});
   
-    const { characterDocId = "", campaignDocId = "", date = "", content = "" } = newNote;
-  
-    const handleClick = () => {
-      const valid = validate();
-      console.log("VALID", valid)
-      console.log("NOTE", newNote)
-      if (valid) {
-        mutation.mutate({
-            characterDocId,
-            campaignDocId,
-            date,
-            content
-          })
-      }
-  
-        if (!mutation.error){
-          onClick();
-        }
-  
-      setButtonStatus(mutation.status as ButtonStatuses)
-    }
-  
-    useEffect(() => {
-      const timer = setTimeout(() => setButtonStatus(ButtonStatuses.Idle), 2000)
-      return () => {
-        clearTimeout(timer)
-      }
-    }, [buttonStatus])
-  
-    return (
-      <LoadingButton color="success" size="large" isLoading={mutation.isLoading} status={buttonStatus} onClick={handleClick}>Save Note</LoadingButton>
-    );
+    return {...mutation, mutate: (newNote: Note) => mutation.mutate(newNote)}
   }
 
-export const useDeleteNoteButton = (note: Note, onClick = () => {}) => {
+export const useDeleteNote = (noteID: string) => {
   const col = collection(firestore, "notes");
-  const ref = doc(col, note.docId);
+  const ref = doc(col, noteID);
   const mutation = useFirestoreDocumentDeletion(ref);
-  const [buttonStatus, setButtonStatus] = useState<ButtonStatuses>(ButtonStatuses.Idle);
-  
-  const handleClick = () => {
-    mutation.mutate();
-
-      if (!mutation.error){
-        onClick();
-      }
-
-    setButtonStatus(mutation.status as ButtonStatuses)
-  }
-
-  useEffect(() => {
-    const timer = setTimeout(() => setButtonStatus(ButtonStatuses.Idle), 2000)
-    return () => {
-      clearTimeout(timer)
-    }
-  }, [buttonStatus])
-
-  return (
-    <LoadingButton color="error" size="large" isLoading={mutation.isLoading} status={buttonStatus} onClick={handleClick}><FontAwesomeIcon icon={faTrash} /></LoadingButton>
-  );
+  return mutation;
 }

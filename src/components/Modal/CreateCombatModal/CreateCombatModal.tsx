@@ -7,6 +7,7 @@ import { useAddCombatButton } from '@services/CombatService';
 import { TextInput } from '../../TextInput/TextInput';
 import useDeepCompareEffect from 'use-deep-compare-effect';
 import { CombatCharacter } from '@model/CombatCharacter';
+import { ButtonStatuses, LoadingButton } from '@components/Button/LoadingButton';
 
 declare interface CreateNPCModalProps {
     isOpen: boolean;
@@ -18,21 +19,35 @@ declare interface CreateNPCModalProps {
 const CreateCombatModal = ({isOpen, onClose, campaignId, characters = [] }: CreateNPCModalProps) => {
     const [combat, setCombat] = useState<Combat>({campaignDocId: campaignId, combatCharacterArray: characters});
     const [validator, setValidator] = useState<any>();
-    const saveCombatButton = useAddCombatButton(combat, () => handleOnClose(), () => true);
+
+    const handleOnClose = () => {
+        setCombat({campaignDocId: campaignId, combatCharacterArray: characters.map((character, index) => ({...character, uniqueId: index}))})
+        onClose();
+    }
+
+const {mutate, isLoading, isError, isSuccess} = useAddCombatButton(handleOnClose);
+
 
     useDeepCompareEffect(() => {
         setCombat({campaignDocId: campaignId, combatCharacterArray: characters.map((character, index) => ({...character, uniqueId: index}))})
     }, [characters])
 
-    const handleOnClose = () => {
-            setCombat({campaignDocId: campaignId, combatCharacterArray: characters.map((character, index) => ({...character, uniqueId: index}))})
-            onClose();
-    }
-
     return (
         <div>
             <Modal isOpen={isOpen} onClose={handleOnClose} extraButtons={[
-                    saveCombatButton
+                    <LoadingButton
+                        color="success"
+                        size="large"
+                        isLoading={isLoading}
+                        status={isError ? ButtonStatuses.Error : isSuccess ? ButtonStatuses.Success : ButtonStatuses.Idle}
+                        onClick={() => {
+                            if (combat?.name) {
+                                mutate(combat)
+                            } else {
+                                setValidator({name: "required"})
+                            }
+                        }}
+                    >Save Encounter</LoadingButton>
                 ]}>
                 <Grid container spacing={2} rowSpacing={3} className={css.CreateCombatModal}>
                     <Grid item sm={12}>

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import css from "./Button.module.scss"
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faFaceFlushed, faFaceGrin, faFaceSadCry } from '@fortawesome/free-solid-svg-icons';
@@ -29,15 +29,22 @@ const success = (
 )
 
 export const LoadingButton = ({ onClick, children, disabled = false, neon = false, color = "default", size = "default", isLoading, status = ButtonStatuses.Idle, animatedHover = true }: LoadingButtonProps) => {
-
+    const [buttonStatus, setButtonStatus] = useState(status)
+    useEffect(() => {
+        const timer = setTimeout(() => setButtonStatus(ButtonStatuses.Idle), 2000);
+        setButtonStatus(status)
+        return () => {
+          clearTimeout(timer);
+        };
+      }, [status]);
 
     return (
         <Boop rotation={1} disabled={!animatedHover || disabled}>
             <button onClick={onClick} className={`${css.button} ${neon && css.neon} ${css[color]} ${css[size]} `} disabled={disabled}>
                 {isLoading && loader}
-                {(!isLoading && status === ButtonStatuses.Idle) && children}
-                {(!isLoading && status === ButtonStatuses.Error) && error}
-                {(!isLoading && status === ButtonStatuses.Success) && success}
+                {(!isLoading && buttonStatus === ButtonStatuses.Idle) && children}
+                {(!isLoading && buttonStatus === ButtonStatuses.Error) && error}
+                {(!isLoading && buttonStatus === ButtonStatuses.Success) && success}
 
             </button>
         </Boop>

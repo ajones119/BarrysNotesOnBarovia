@@ -10,16 +10,15 @@ import { Typography } from "@components/Typography/Typography";
 import { CombatEntryRow } from "./CombatEntryRow";
 import { PlayerCharacter } from "@model/PlayerCharacter";
 import { Combat } from "@model/Combat";
+import { useParams } from "react-router-dom";
+import { useCampaignCharacters } from "@services/CharacterService";
 
-type CombatsProps = {
-  campaign: Campaign;
-  characters: PlayerCharacter[];
-};
-
-const Combats = ({ campaign, characters }: CombatsProps) => {
+const Combats = () => {
   const [createModalOpen, setCreateModalOpen] = useState(false);
+  const { CampaignId } = useParams();
 
-    const {combats} = useCampaignCombats(campaign.docId || "")
+  const {characters} = useCampaignCharacters(CampaignId || "");
+  const {combats} = useCampaignCombats(CampaignId || "")
 
   const formattedCharacters = characters.filter(character => !character?.disabled).map(
     (character) =>
@@ -61,7 +60,7 @@ const Combats = ({ campaign, characters }: CombatsProps) => {
         characters={formattedCharacters}
         isOpen={createModalOpen}
         onClose={() => setCreateModalOpen(false)}
-        campaignId={campaign.docId || ""}
+        campaignId={CampaignId || ""}
       />
     </div>
   );

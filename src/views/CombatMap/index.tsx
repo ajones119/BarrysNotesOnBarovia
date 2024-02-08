@@ -42,7 +42,7 @@ const CombatMap = ({combatIdOverride = "", isPlayer = false}) => {
 
     const { combatCharacterArray = [], currentTurnIndex } = combat;
     const { map, combatMapCharacterArray } = combatMap || {map: {extraTokens: []}, combatMapCharacterArray: []  };
-    const update = useUpdateCombatMap(combatMap);
+    const {mutate: update} = useUpdateCombatMap(combatMap);
 
     const mapRef = useRef<HTMLDivElement>(null); 
 
@@ -159,7 +159,7 @@ const CombatMap = ({combatIdOverride = "", isPlayer = false}) => {
           <Spacer height={24} />
         </div>
         <FullScreen handle={mapContainer}>
-          <div className={css.CombatMapContainer} ref={mapRef} id="CombatMap">
+          <div className={`${css.CombatMapContainer} ${mapContainer.active ? css.fullscreen : null}`} ref={mapRef} id="CombatMap">
             <DndContext onDragEnd={handleDragEnd} onDragStart={handleDragStart}>
               <Map
                 mapImage={map?.mapImage}

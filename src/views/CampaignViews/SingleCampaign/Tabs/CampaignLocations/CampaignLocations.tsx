@@ -11,23 +11,19 @@ import CampaignTreeLocation from "./CampaignTreeLocation";
 import css from "./CampaignLocations.module.scss"
 import CampaignLocationPanel from "./CampaignLocationPanel";
 import { BaseCharacter } from "@model/BaseCharacter";
+import { useCampaignLocations } from "@services/CampaignLocationService";
+import { useCampaignNPCs } from "@services/NPCService";
 
-declare interface CampaignLocationsProps {
-    locations?: CampaignLocation[],
-    npcs?: BaseCharacter[],
-}
-
-const CampaignLocations = ({
-    locations = [],
-    npcs = [],
-}: CampaignLocationsProps) => {
+const CampaignLocations = () => {
     const params = useParams();
     const [searchParams, setSearchParams] = useSearchParams();
     const { CampaignId } = params;
     const [isModalOpen, setIsModalOpen] = useState(false);
 
-    const baseLocations = locations.filter(l => !l.parentLocationId)
+    const {campaignLocations: locations = []} = useCampaignLocations(CampaignId || "");
+    const {NPCs: npcs} = useCampaignNPCs(CampaignId || "");
 
+    const baseLocations = locations?.filter(l => !l.parentLocationId)
     const currentlySelectedLocation = locations.find(location => location.docId == searchParams.get("id"))
     const subLocations = currentlySelectedLocation ? locations.filter(location => location.parentLocationId === currentlySelectedLocation.docId) : [];
 

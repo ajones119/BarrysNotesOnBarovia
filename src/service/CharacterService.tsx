@@ -33,128 +33,6 @@ export function useCharacter(characterDocId = "") {
   return { character, isLoading };
 }
 
-export const useAddCharacterButton = (
-  newCharacter: PlayerCharacter,
-  onClick: () => void,
-  validate: () => boolean,
-) => {
-  const ref = collection(firestore, "characters");
-  const mutation = useFirestoreCollectionMutation(ref);
-  const [buttonStatus, setButtonStatus] = useState<ButtonStatuses>(
-    ButtonStatuses.Idle,
-  );
-  const {
-    name = "",
-    player = "",
-    campaignDocId = "",
-    characterImageURL = "",
-    backstory = "",
-    className = "",
-    dndBeyondURL = "",
-    passivePerception = 0,
-    initiativeBonus = 0,
-    armorClass = 0,
-    maxHealth = 0,
-  } = newCharacter;
-  console.log(newCharacter)
-
-  const handleClick = () => {
-    const valid = validate();
-    if (valid) {
-      mutation.mutate({
-        name,
-        player,
-        characterImageURL,
-        backstory,
-        className,
-        dndBeyondURL,
-        campaignDocId,
-        passivePerception,
-        initiativeBonus,
-        armorClass,
-        maxHealth,
-      });
-    }
-
-    if (!mutation.error && valid) {
-      setButtonStatus(mutation.status as ButtonStatuses);
-
-      onClick();
-    } else {
-      setButtonStatus(ButtonStatuses.Error as ButtonStatuses);
-    }
-  };
-
-  useEffect(() => {
-    const timer = setTimeout(() => setButtonStatus(ButtonStatuses.Idle), 2000);
-    return () => {
-      clearTimeout(timer);
-    };
-  }, [buttonStatus]);
-
-  return (
-    <LoadingButton
-      color="success"
-      size="large"
-      isLoading={mutation.isLoading}
-      status={buttonStatus}
-      onClick={handleClick}
-    >
-      Save Character
-    </LoadingButton>
-  );
-};
-
-export const useUpdateCharacterButton = (
-  newCharacter: PlayerCharacter,
-  onClick: () => void,
-  validate: () => boolean,
-) => {
-  const npcs = collection(firestore, "characters");
-  const ref = doc(npcs, newCharacter.docId || "1");
-  const mutation = useFirestoreDocumentMutation(ref);
-
-  const [buttonStatus, setButtonStatus] = useState<ButtonStatuses>(
-    ButtonStatuses.Idle,
-  );
-
-  const handleClick = () => {
-    const valid = validate();
-    if (valid) {
-      mutation.mutate({
-        ...newCharacter
-      });
-    }
-
-    if (!mutation.error && valid) {
-      setButtonStatus(mutation.status as ButtonStatuses);
-
-      onClick();
-    } else {
-      setButtonStatus(ButtonStatuses.Error as ButtonStatuses);
-    }
-  };
-
-  useEffect(() => {
-    const timer = setTimeout(() => setButtonStatus(ButtonStatuses.Idle), 2000);
-    return () => {
-      clearTimeout(timer);
-    };
-  }, [buttonStatus]);
-
-  return (
-    <LoadingButton
-      color="success"
-      size="large"
-      isLoading={mutation.isLoading}
-      status={buttonStatus}
-      onClick={handleClick}
-    >
-      Update Character
-    </LoadingButton>
-  );
-};
-
 export function useCharacters() {
   const ref = query(collection(firestore, "characters"));
 
@@ -210,8 +88,8 @@ export const useCreatePlayerCharacter = (onSuccess: () => void) => {
   const mutation = useFirestoreCollectionMutation(ref, {onSuccess: onSuccess});
 
   return {
+    ...mutation,
       mutate: (newPC: PlayerCharacter) => mutation.mutate(newPC),
-      isLoading: mutation.isLoading
   }
 }
 
@@ -221,12 +99,10 @@ export const useEditPlayerCharacter = (pc: PlayerCharacter | null = null, onSucc
   const ref = doc(pcs, docId) ;
   const mutation = useFirestoreDocumentMutation(ref,{}, {onSettled: onSuccess});
   
-
-  return {
+  return {...mutation,
       mutate: (newPC: PlayerCharacter) => {
           delete newPC?.docId
           mutation.mutate(newPC)
       },
-      isLoading: mutation.isLoading
   }
 }

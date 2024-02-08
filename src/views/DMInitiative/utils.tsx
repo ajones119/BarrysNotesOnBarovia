@@ -17,3 +17,7 @@ export const getCombatMapURL = (campaignDocId: string, combatDocId: string) => {
 
     return url;
 }
+
+export const getCombatMapRoute = (campaignDocId: string) => {
+    return`/Initiative/${campaignDocId}`;
+}
