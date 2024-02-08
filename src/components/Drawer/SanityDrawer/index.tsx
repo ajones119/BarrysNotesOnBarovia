@@ -7,7 +7,7 @@ import { DRAWER_BUTTON_TRANSFORMS, DrawerIconButtons } from "../utils";
 
 declare interface SanityDrawerProps extends DrawerProps {
     children: ReactNode;
-    side?: "top" | "bottom" | "right" | "left";
+    side?: "bottom" | "left";
 }
 
 const SanityDrawer = ({ side = "left", children }: SanityDrawerProps) => {
