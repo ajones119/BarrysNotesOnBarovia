@@ -70,7 +70,7 @@ const EncounterDiffultyProgress = ({
 };
 
 const DMInitiative = () => {
-  const { combatId, campaignId = "" } = useParams();
+  const { combatId, CampaignId: campaignId = "" } = useParams();
   const { combat, isLoading, isRefetching, isFetching } = useCombat(combatId);
   const { combatMap, isLoading: isMapLoading, isRefetching: isMapRefetching } = useCombatMap(combatId || "");
   const { currentTurnIndex = null, combatCharacterArray = [], campaignDocId = "" } = combat;

@@ -17,7 +17,7 @@ import CombatMap from "@views/CombatMap";
 const PlayerInitiative = () => {
     const [character, setCharacter] = useState<PlayerCharacter | null>()
     const [tab, setTab] = useState("initiative");
-    const {campaignId} = useParams();
+    const {CampaignId: campaignId} = useParams();
     const {characters} = useCampaignCharacters(campaignId || "")
     const {data: campaign} = useCampaign(campaignId || "")
     const {combat} = useCombat(campaign?.currentCombatDocId || "1")

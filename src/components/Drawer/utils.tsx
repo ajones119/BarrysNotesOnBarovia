@@ -10,9 +10,9 @@ export const DRAWER_TRANSFORMS = {
         leave: { translateX: "-100%" }
     },
     right: {
-        from: { translateX: "100%" },
-        enter: { translateX: "0%" },
-        leave: { translateX: "100%" }
+        from: {  },
+        enter: { },
+        leave: {  }
     },
     top: {
         from: { translateY: "-100%" },

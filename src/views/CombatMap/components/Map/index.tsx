@@ -1,5 +1,4 @@
-import React, { ReactNode, useRef } from "react";
-import { useDraggable } from "@dnd-kit/core";
+import React, { ReactNode, useEffect, useRef } from "react";
 import css from "./Map.module.scss";
 import { COLORS_MAP } from "@components/ColorPicker/ColorPicker";
 
@@ -43,6 +42,11 @@ const  Map = ({
   const height = rows * tokenSize;
   const width = cols * tokenSize;
   const squares = [];
+  const ref = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    ref.current?.scrollIntoView()
+  },[])
 
   for (let i = 0; i < rows * cols; i++) {
     squares.push(<div key={`square-${i}`} className={css.gridOverlaySquare} style={{height: tokenSize, width: tokenSize, borderColor: gridColor }} />)
@@ -55,8 +59,10 @@ const  Map = ({
   }
 
   return (
+    <div style={{width: width * 1.5}}>
     <div
-      style={{...CustomStyle, backgroundColor: mapColor, height, width, ...styles, ...backgroundImageStyles }}
+      ref={ref}
+      style={{...CustomStyle, backgroundColor: mapColor, height, width, ...styles, ...backgroundImageStyles, marginLeft: 250}}
     >
       <div style={{position: "relative", width, height}}>
         <div className={css.gridOverlay}>
@@ -65,6 +71,7 @@ const  Map = ({
       </div>
       
       {children}
+    </div>
     </div>
   );
 }

@@ -8,6 +8,10 @@
     width: 98%;
     height: 1000px;
     overflow: scroll;
+
+    &.fullscreen {
+        height: 100%
+    }
 }
 
 .tokenWrapper {

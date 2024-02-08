@@ -1,56 +1,138 @@
 import React from 'react';
 import css from "../SingleCampaign.module.scss"
-import { Campaign } from '@model/Campaign';
-import { Grid } from "@mui/material";
 import { Typography } from '@components/Typography/Typography';
 import BACKUP from "@images/homeBackground.jpg";
-import { getCombatMapRoute } from '@views/DMInitiative/utils';
-import { Button } from '@components/Button/Button';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useCampaign } from '@services/CampaignService';
+import Party from "@images/party.png"
+import Notes from "@images/notes.jpg"
+import Locations from "@images/locations.jpg"
+import Combat from "@images/combat.jpg"
+import Encounters from "@images/encounters.jpg"
+import { getCombatMapRoute } from '@views/DMInitiative/utils';
+
 
 const Overview = () => {
     const { CampaignId } = useParams();
     const { data: campaign } = useCampaign(CampaignId as string);
     const navigate = useNavigate();
 
-    console.log("CAMPAIGN", CampaignId, campaign)
     return (
         <div className={css.overview}>
-            <Grid container rowSpacing={3}>
-                <Grid item xs={12}>
-                    <Typography weight='bold' size='xtraLarge' underline>{campaign.title}</Typography>
-                </Grid>
-                <Grid item xs={12}>
-                    <div >
+            <div className={css.overviewRow}>
+                <div className={css.overviewItemContainer}>
+                    <div className={css.overviewCard} onClick={() => navigate(`/Campaigns/${CampaignId}/overview`)}>
                         <img
-                            className={css.overviewImage}
+                            className={css.overviewCardImage}
                             src={campaign.campaignImageURL}
                             onError={({ currentTarget }) => {
                                 currentTarget.onerror = null; // prevents looping
                                 currentTarget.src=BACKUP;
                             }}
-                            width={900}
                             alt="boo"
                         />
+                        <div className={css.overviewCardText}>
+                            <Typography size="large" weight="bold">
+                                {campaign.title}
+                            </Typography>
+                        </div>
                     </div>
-                </Grid>
-                <Button
-                    borderColor="primary"
-                    color="dark"
-                    onClick={() => navigate(getCombatMapRoute(campaign?.docId || ""))}
-                >
-                    <Typography size="default" color="primary">
-                    Player Link
-                    </Typography>
-                </Button>
-                <Grid item xs={12}>
-                    <Typography>{campaign.description}</Typography>
-                </Grid>
-                <Grid item xs={12}>
-                    <Typography>DM'd By: {campaign.dungeonMaster || "A Dead God"}</Typography>
-                </Grid>
-            </Grid>
+                </div>
+                <div className={css.overviewItemContainer}>
+                    <div className={css.overviewCard} onClick={() => navigate(`/Campaigns/${CampaignId}/characters`)}>
+                        <img
+                            className={css.overviewCardImage}
+                            src={Party}
+                            onError={({ currentTarget }) => {
+                                currentTarget.onerror = null; // prevents looping
+                                currentTarget.src=BACKUP;
+                            }}
+                            alt="boo"
+                        />
+                        <div className={css.overviewCardText}>
+                            <Typography size="large" weight="bold">
+                                Characters
+                            </Typography>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div className={css.overviewRow}>
+                <div className={css.overviewItemContainer}>
+                    <div className={css.overviewCard} onClick={() => navigate(`/Campaigns/${CampaignId}/notes`)}>
+                        <img
+                            className={css.overviewCardImage}
+                            src={Notes}
+                            onError={({ currentTarget }) => {
+                                currentTarget.onerror = null; // prevents looping
+                                currentTarget.src=BACKUP;
+                            }}
+                            alt="boo"
+                        />
+                        <div className={css.overviewCardText}>
+                            <Typography size="large" weight="bold">
+                                Notes
+                            </Typography>
+                        </div>
+                    </div>
+                </div>
+                <div className={css.overviewItemContainer}>
+                    <div className={css.overviewCard} onClick={() => navigate(`/Campaigns/${CampaignId}/locations`)}>
+                        <img
+                            className={css.overviewCardImage}
+                            src={Locations}
+                            onError={({ currentTarget }) => {
+                                currentTarget.onerror = null; // prevents looping
+                                currentTarget.src=BACKUP;
+                            }}
+                            alt="boo"
+                        />
+                        <div className={css.overviewCardText}>
+                            <Typography size="large" weight="bold">
+                                Locations
+                            </Typography>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div className={css.overviewRow}>
+                <div className={css.overviewItemContainer}>
+                    <div className={css.overviewCard} onClick={() => navigate(getCombatMapRoute(campaign?.docId || ""))}>
+                        <img
+                            className={css.overviewCardImage}
+                            src={Combat}
+                            onError={({ currentTarget }) => {
+                                currentTarget.onerror = null; // prevents looping
+                                currentTarget.src=BACKUP;
+                            }}
+                            alt="boo"
+                        />
+                        <div className={css.overviewCardText}>
+                            <Typography size="large" weight="bold">
+                                Combat
+                            </Typography>
+                        </div>
+                    </div>
+                </div>
+                <div className={css.overviewItemContainer}>
+                    <div className={css.overviewCard} onClick={() => navigate(`/Campaigns/${CampaignId}/combat`)}>
+                        <img
+                            className={css.overviewCardImage}
+                            src={Encounters}
+                            onError={({ currentTarget }) => {
+                                currentTarget.onerror = null; // prevents looping
+                                currentTarget.src=BACKUP;
+                            }}
+                            alt="boo"
+                        />
+                        <div className={css.overviewCardText}>
+                            <Typography size="large" weight="bold">
+                                Encounters
+                            </Typography>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     );
 }

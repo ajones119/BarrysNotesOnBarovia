@@ -51,7 +51,7 @@ const SingleCampaign = () => {
 
     return (
         <div className={css.singleCampaign}>
-            <Tabs currentTab={tabKey} tabs={getTabs()} onChange={(tabKey) => navigate(`/Campaigns/${CampaignId}/${tabKey}`)} />
+            <Tabs currentTab={tabKey} disableTabMenu tabs={getTabs()} onChange={(tabKey) => navigate(`/Campaigns/${CampaignId}/${tabKey}`)} />
         </div>
     );
 };

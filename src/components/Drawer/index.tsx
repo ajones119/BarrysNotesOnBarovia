@@ -2,14 +2,13 @@ import { useTransition, useSpring, animated, config } from "@react-spring/web";
 import React, { ReactNode, useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import css from "./Drawer.module.scss"
-import { DRAWER_BUTTON_TRANSFORMS, DRAWER_TRANSFORMS, DrawerIconButtons } from "./utils";
-import IconButton from "@mui/material/IconButton";
+import { DRAWER_TRANSFORMS } from "./utils";
 
 export declare interface DrawerProps {
     isOpen?: boolean;
     onClose?: () => void;
     children?: ReactNode
-    side?: "top" | "bottom" | "right" | "left";
+    side?: "bottom" | "left";
 }
 
 const Drawer = ({ onClose = () => { }, side = "left", children, isOpen }: DrawerProps) => {
