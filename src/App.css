@@ -1,6 +1,8 @@
 .App {
   /*background: url(./images/homeBackground.jpg) no-repeat center center fixed;*/
-  background-color: #0d1117;
+  /*#0d1117*/
+  background: rgb(2,0,36);
+  background: linear-gradient(207deg, rgba(2,0,36,1) 61%, rgba(42,9,121,1) 100%, rgba(117,0,255,1) 100%);
   overflow: hidden;
   -webkit-background-size: cover;
   -moz-background-size: cover;
@@ -15,7 +17,6 @@
   margin-bottom: 64px;
   padding-left: 16px;
   padding-right: 16px;
-  overflow: hidden;
 }
 
 ::-webkit-scrollbar {

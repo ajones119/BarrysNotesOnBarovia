@@ -4,14 +4,10 @@ import { Typography } from '@components/Typography/Typography';
 import { useCampaign } from '@services/CampaignService';
 import css from "./SingleCampaign.module.scss"
 import Tabs from '@components/Tabs/Tabs';
-import Overview from './Tabs/Overview';
+import Overview from './Overview/Overview';
 import CampaignCharacters from './Tabs/CampaignCharacters';
 import CampaignNotes from './Tabs/CampaignNotes';
-import { useCampaignNPCs } from '@services/NPCService';
-import { useCampaignCharacters } from '@services/CharacterService';
-import { useCampaignNotes } from '@services/NotesService';
 import CampaignLocations from './Tabs/CampaignLocations/CampaignLocations';
-import { useCampaignLocations } from '@services/CampaignLocationService';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBook, faEarthAmericas, faMagnifyingGlassLocation, faSkullCrossbones } from '@fortawesome/free-solid-svg-icons';
 import { faCircleUser } from '@fortawesome/free-regular-svg-icons';

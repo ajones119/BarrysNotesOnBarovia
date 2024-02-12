@@ -20,6 +20,8 @@
 
 .overview {
     width: 100%;
+    max-width: 1440px;
+    margin: 0 auto;
     display: flex;
     flex-direction: column;
     row-gap: 16px;
@@ -42,37 +44,82 @@
 
             .overviewCard {
                 position: relative;
+                display: flex;
+                align-items: center;
                 width: 100%;
                 overflow: hidden;
-                .overviewCardImage {
-                    //margin-top: -30%;
-                    height: 400px;
+                height: 250px;
+                border-radius: 8px;
 
+                &:hover {
+                    .overviewCardImage {
+                        filter: brightness(100%);
+                    }
+                    cursor: pointer;
+                }
+
+                @media (max-width: 1000px) {
+                    height: 200px;
+                }
+                @media (max-width: 600px) {
+                    height: 200px;
+                }
+                .overviewCardImage {
                     width: 100%;
                     filter: brightness(40%);
 
-                    &:hover {
-                        filter: brightness(100%);
-                        cursor: pointer;
-                    }
                     
-                    @media (max-width: 1200px) {
-                        height: 400px;
-                    }
-                    @media (max-width: 600px) {
-                        height: 200px;
-                    }
                 }
 
-                .overviewCardText {
+                .overviewCardTextContainer {
                     position: absolute;
                     z-index: 1;
                     width: 100%;
                     top: 50%;
-                    opacity: 0.8;
-                    background-color: $dark;
+                    opacity: 1;
+                    background-color: #24252690;
+
+                    .overviewCardText {
+                        opacity: 100;
+                    }
                 }
             }
+        }
+    }
+}
+
+
+.characters {
+    display: flex;
+    flex-direction: column;
+    width: 90%;
+    max-width: 1440px;
+    margin: 0 auto;
+
+    .characterSection {
+        display: flex;
+        flex-direction: column;
+        row-gap: 24px;
+
+        .sectionHeaderRow {
+            display: flex;
+            column-gap: 16px;
+            justify-content: center;
+            align-items: center;
+
+            .addButton {
+                padding-top: 16px;
+            }
+        }
+
+        .charactersContainer {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            row-gap: 16px;
+            column-gap: 4px;
         }
     }
 }

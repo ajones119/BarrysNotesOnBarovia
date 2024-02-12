@@ -5,7 +5,6 @@ import { Button } from "@components/Button/Button";
 import { useDeleteCombat } from "@services/CombatService";
 import { Typography } from "@components/Typography/Typography";
 import { Combat } from "@model/Combat";
-import { LoadingButton } from "@components/Button/LoadingButton";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTrash } from "@fortawesome/free-solid-svg-icons";
 
@@ -21,7 +20,7 @@ export const CombatEntryRow = ({combat}: CombatEntryRowProps) => {
         <TableRow>
             <TableCell><Button onClick={() => window.open(`/${islocalhost ? 'BarrysNotesOnBarovia/#' :'BarrysNotesOnBarovia#'}/Initiative/DM/${combat.campaignDocId}/${combat.docId}`, '_blank')}>Open</Button></TableCell>
             <TableCell><Typography>{combat?.name}</Typography></TableCell>
-            <TableCell><LoadingButton color="error" isLoading={isLoading} onClick={mutate}><FontAwesomeIcon icon={faTrash} /></LoadingButton></TableCell>
+            <TableCell><Button color="error" isLoading={isLoading} onClick={mutate}><FontAwesomeIcon icon={faTrash} /></Button></TableCell>
         </TableRow>
     )
 }

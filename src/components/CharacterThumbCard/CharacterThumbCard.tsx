@@ -25,7 +25,11 @@ export const CharacterThumbCard = ({ character, onClick = (_character: PlayerCha
                     alt="boo"
                 />
                 <div className={css.nameContainer}>
-                <Typography color="primary"> {character.name} </Typography>
+                <Typography
+                    color="tertiary"
+                    size="large"
+                    fontStyle="secondary"
+                > {character.name} </Typography>
                 </div>
             </div>
         </div>

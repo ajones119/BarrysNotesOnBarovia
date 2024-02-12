@@ -1,28 +1,23 @@
 import React, { useEffect, useState } from "react";
 import {
   BASE_ABILITY_SCORES,
-  CharacterSizes,
-  CharacterType,
   SavingThrow,
 } from "@model/BaseCharacter";
 import css from "../BaseCharacterDrawer.module.scss";
-import { Checkbox, Grid } from "@mui/material";
+import { Grid } from "@mui/material";
 import { TextInput } from "@components/TextInput/TextInput";
-import SizeSelect from "@components/Selects/SizeSelect";
-import CharacterTypeSelect from "@components/Selects/CharatcerTypeSelect";
 import TextEditor from "@components/TextEditor";
 import { Typography } from "@components/Typography/Typography";
 import SavingThrowSelect from "@components/Selects/SavingThrowSelect";
 import SkillsSelect from "@components/Selects/SkillsSelect";
 import { Button } from "@components/Button/Button";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { LoadingButton } from "@components/Button/LoadingButton";
 import { faXmarkCircle } from "@fortawesome/free-regular-svg-icons";
 import Drawer, { DrawerProps } from "@components/Drawer";
 import { PlayerCharacter } from "@model/PlayerCharacter";
 import { calculateAbilityScoreModifier } from "../utils";
 import ClassPicker from "@components/ClassPicker/ClassPicker";
-import { useCreatePlayerCharacter, useEditPlayerCharacter } from "@services/CharacterService";
+import { useCreatePlayerCharacter, useDeletePlayerCharacter, useEditPlayerCharacter } from "@services/CharacterService";
 import CampaignPicker from "@components/CampaignPicker/CampaignPicker";
 
 declare interface PlayerCharacterDrawerProps extends DrawerProps {
@@ -45,6 +40,7 @@ const PlayerCharacterDrawer = ({
 
     const { mutate: create, isLoading: createLoading } = useCreatePlayerCharacter(onClose);
     const { mutate: edit, isLoading: editLoading } = useEditPlayerCharacter(editCharacter, onClose);
+    const {mutate: remove, isLoading: isDeleting } = useDeletePlayerCharacter(character?.docId || "1")
 
   const isLoading = createLoading || editLoading;
 
@@ -65,24 +61,44 @@ const PlayerCharacterDrawer = ({
       <div className={css.characterDrawer}>
         <Grid container justifyContent="end" spacing={2}>
           <Grid item>
-            <Button color={character?.disabled ? "error" : "primary"} onClick={() =>setCharacter({ ...character, disabled: !character?.disabled })}>{character?.disabled ? "Disabled" : "Enabled"}</Button>
+            <Button
+              color={character?.disabled ? "error" : "primary"}
+              onClick={() =>setCharacter({ ...character, disabled: !character?.disabled })}>
+                <Typography color="light" size="default">
+                  {character?.disabled ? "Disabled" : "Enabled"}
+                </Typography>
+            </Button>
           </Grid>
           <Grid item>
-            <LoadingButton
+            <Button
               color="success"
               isLoading={isLoading}
               onClick={() => {
                 editCharacter ? edit(character) : create(character);
               }}
             >
-              <Typography size="large" color="dark">
+              <Typography color="light">
                 Submit
               </Typography>
-            </LoadingButton>
+            </Button>
+          </Grid>
+          <Grid item>
+            <Button
+              color="error"
+              isLoading={isDeleting}
+              onClick={() => {
+                remove();
+                onClose();
+              }}
+            >
+              <Typography color="light">
+                Delete
+              </Typography>
+            </Button>
           </Grid>
           <Grid item>
             <Button color="dark" borderColor="light" onClick={onClose}>
-              <Typography color="light" size="large">
+              <Typography color="light">
                 <FontAwesomeIcon icon={faXmarkCircle} />
               </Typography>
             </Button>

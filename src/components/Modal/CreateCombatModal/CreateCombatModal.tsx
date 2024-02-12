@@ -7,7 +7,7 @@ import { useAddCombatButton } from '@services/CombatService';
 import { TextInput } from '../../TextInput/TextInput';
 import useDeepCompareEffect from 'use-deep-compare-effect';
 import { CombatCharacter } from '@model/CombatCharacter';
-import { ButtonStatuses, LoadingButton } from '@components/Button/LoadingButton';
+import { Button } from '@components/Button/Button';
 
 declare interface CreateNPCModalProps {
     isOpen: boolean;
@@ -25,7 +25,7 @@ const CreateCombatModal = ({isOpen, onClose, campaignId, characters = [] }: Crea
         onClose();
     }
 
-const {mutate, isLoading, isError, isSuccess} = useAddCombatButton(handleOnClose);
+const {mutate, isLoading} = useAddCombatButton(handleOnClose);
 
 
     useDeepCompareEffect(() => {
@@ -35,11 +35,10 @@ const {mutate, isLoading, isError, isSuccess} = useAddCombatButton(handleOnClose
     return (
         <div>
             <Modal isOpen={isOpen} onClose={handleOnClose} extraButtons={[
-                    <LoadingButton
+                    <Button
                         color="success"
                         size="large"
                         isLoading={isLoading}
-                        status={isError ? ButtonStatuses.Error : isSuccess ? ButtonStatuses.Success : ButtonStatuses.Idle}
                         onClick={() => {
                             if (combat?.name) {
                                 mutate(combat)
@@ -47,7 +46,7 @@ const {mutate, isLoading, isError, isSuccess} = useAddCombatButton(handleOnClose
                                 setValidator({name: "required"})
                             }
                         }}
-                    >Save Encounter</LoadingButton>
+                    >Save Encounter</Button>
                 ]}>
                 <Grid container spacing={2} rowSpacing={3} className={css.CreateCombatModal}>
                     <Grid item sm={12}>

@@ -44,10 +44,6 @@ const  Map = ({
   const squares = [];
   const ref = useRef<HTMLDivElement>(null);
 
-  useEffect(() => {
-    ref.current?.scrollIntoView()
-  },[])
-
   for (let i = 0; i < rows * cols; i++) {
     squares.push(<div key={`square-${i}`} className={css.gridOverlaySquare} style={{height: tokenSize, width: tokenSize, borderColor: gridColor }} />)
   }

@@ -6,10 +6,10 @@ import { faMagnifyingGlass, faPenFancy, faTrash } from "@fortawesome/free-solid-
 import { Button } from "../Button/Button";
 import Flip from "@components/AnimationComponentWrappers/Flip";
 import CopyButton from "@components/Button/ReusableButtons/CopyButton";
-import { BaseCharacter, CharacterType, CharacterTypeLowercase } from "@model/BaseCharacter";
+import { BaseCharacter, CharacterTypeLowercase } from "@model/BaseCharacter";
 import STICK from "@images/stick1.png"
-import { LoadingButton } from "@components/Button/LoadingButton";
 import { BASE_CHARACTER_IMAGE_MAP } from "utils/getBaseCharacterGenericImage";
+import ViewImageModal from "@components/Modal/ImageModal";
 
 export declare interface BaseCharacterThumbCardProps {
     baseCharacter: BaseCharacter;
@@ -21,6 +21,8 @@ export declare interface BaseCharacterThumbCardProps {
 
 const BaseCharacterThumbCard = ({ baseCharacter, onClickEdit, onClickDelete, onClickMore, isDeleting = false }: BaseCharacterThumbCardProps) => {
     const [isDetailsModalOpen, setIsDetailsModalOpen] = useState(false)
+    const [isImageModalOpen, setIsImageModalOpen] = useState(false);
+
     const getCardImage = () => {
         let image = STICK;
 
@@ -36,7 +38,7 @@ const BaseCharacterThumbCard = ({ baseCharacter, onClickEdit, onClickDelete, onC
 
     return (
         <div key={`base-character-thumb-card-${baseCharacter.docId}`} className={`${css.baseCharacterThumbCard}`}>
-           <Flip
+            <Flip
                 front={
                     <div>
                         <img
@@ -48,7 +50,13 @@ const BaseCharacterThumbCard = ({ baseCharacter, onClickEdit, onClickDelete, onC
                             }}
                             alt="boo"
                         />
-                        <Typography className={css.frontName} color="primary" weight="bold" size="large">{baseCharacter.name}</Typography>
+                        <Typography
+                            className={css.frontName}
+                            color="tertiary"
+                            fontStyle="secondary"
+
+                            size="large"
+                        >{baseCharacter.name}</Typography>
                     </div>
                 }
                 back={
@@ -56,23 +64,38 @@ const BaseCharacterThumbCard = ({ baseCharacter, onClickEdit, onClickDelete, onC
                         <div className={css.nameRow}>
                             {onClickEdit && <Button color="secondary" onClick={() => onClickEdit(baseCharacter)}><FontAwesomeIcon icon={faPenFancy} /></Button>}
                             <Typography color="primary" weight="bold" size="large">{baseCharacter.name}</Typography>
-                            {onClickDelete && <LoadingButton isLoading={isDeleting} onClick={onClickDelete}><FontAwesomeIcon icon={faTrash}/></LoadingButton>}
+                            {onClickDelete && <Button isLoading={isDeleting} onClick={onClickDelete} color="error"><FontAwesomeIcon icon={faTrash}/></Button>}
                         </div>
                         <Typography color="light">{baseCharacter.backstory || baseCharacter.description}</Typography>
                         <div className={css.lowerButtons}>
                             { onClickMore &&  <Button color="secondary" onClick={() => setIsDetailsModalOpen(!isDetailsModalOpen)}><div className={css.moreButtonInner}><FontAwesomeIcon icon={faMagnifyingGlass} /> {" "} More</div></Button> }
-                            {baseCharacter.characterImageURL && <CopyButton animatedHover={false} color="dark" copiedText={baseCharacter.characterImageURL}>Copy Image</CopyButton>}
+                            {
+                            baseCharacter.characterImageURL &&
+                                <CopyButton
+                                    animatedHover={false}
+                                    color="dark"
+                                    copiedText={baseCharacter.characterImageURL}
+                                    onClick={() => setIsImageModalOpen(true)}
+                                >
+                                    View Image
+                                </CopyButton>}
                         </div>
                     </div>
                 }
                 perspective={400}
                 springConfig={{ mass: 10, tension: 500, friction: 100 }}
                 flipOnClick
-                flipOnHover
                 cardClassName={css.thumbCard}
                 frontClassName={css.front}
                 backClassName={css.back}
            />
+           <ViewImageModal
+                isOpen={isImageModalOpen}
+                onClose={() => {
+                    setIsImageModalOpen(false);
+                }}
+                imageURL={baseCharacter.characterImageURL}
+            />
         </div>
     )
 }

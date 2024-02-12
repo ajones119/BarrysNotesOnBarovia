@@ -94,39 +94,43 @@ const SettingsDrawer = ({
             side="left"
         >
             <div className={css.settingsDrawerContainer}>
-                <TextInput value={localMapSettings?.columns} placeholder="cols" number onChange={(value) => setLocalMapSettings({...localMapSettings, columns: Number(value)})} />
-                <Spacer height={24} />
-
-                <TextInput value={localMapSettings?.rows} placeholder="rows" number onChange={(value) => setLocalMapSettings({...localMapSettings, rows: Number(value)})} />
-                <Spacer height={24} />
-
-                <TextInput value={localMapSettings?.tokenSize} placeholder="base token size" number onChange={(value) => setLocalMapSettings({...localMapSettings, tokenSize: Number(value)})} />
-                <Spacer height={24} />
-
-                <TextInput value={localMapSettings?.mapImage} placeholder="Map Image" onChange={(value) => setLocalMapSettings({...localMapSettings, mapImage: String(value)})} />
-                <Spacer height={24} />
-
-                <div className={css.settingsRow}>
-                    <Typography color="primary">Background Color</Typography>
+                { !isPlayer &&
                     <div>
-                        <ColorPicker outlined width={48} value={localMapSettings?.mapColor || COLORS_MAP.White} onChange={(value) => setLocalMapSettings({...localMapSettings, mapColor: String(value)})} />
+                        <TextInput value={localMapSettings?.columns} placeholder="cols" number onChange={(value) => setLocalMapSettings({...localMapSettings, columns: Number(value)})} />
+                        <Spacer height={24} />
+
+                        <TextInput value={localMapSettings?.rows} placeholder="rows" number onChange={(value) => setLocalMapSettings({...localMapSettings, rows: Number(value)})} />
+                        <Spacer height={24} />
+
+                        <TextInput value={localMapSettings?.tokenSize} placeholder="base token size" number onChange={(value) => setLocalMapSettings({...localMapSettings, tokenSize: Number(value)})} />
+                        <Spacer height={24} />
+
+                        <TextInput value={localMapSettings?.mapImage} placeholder="Map Image" onChange={(value) => setLocalMapSettings({...localMapSettings, mapImage: String(value)})} />
+                        <Spacer height={24} />
+
+                        <div className={css.settingsRow}>
+                            <Typography color="primary">Background Color</Typography>
+                            <div>
+                                <ColorPicker outlined width={48} value={localMapSettings?.mapColor || COLORS_MAP.White} onChange={(value) => setLocalMapSettings({...localMapSettings, mapColor: String(value)})} />
+                            </div>
+                        </div>
+
+                        <div className={css.settingsRow}>
+                            <Typography color="primary">Grid Color</Typography>
+                            <div>
+                                <ColorPicker outlined width={48} value={localMapSettings?.gridColor || COLORS_MAP.Black} onChange={(value) => setLocalMapSettings({...localMapSettings, gridColor: String(value)})} />
+                            </div>
+                        </div>
+
+                        <div className={css.settingsRow}>
+                            <Typography color="primary">Hide Grid</Typography>
+                            <Checkbox checked={localMapSettings?.hideGrid} placeholder="Map Image" onChange={() => setLocalMapSettings({...localMapSettings, hideGrid: !localMapSettings.hideGrid})} />
+                        </div>
+                        <Spacer height={24} />
                     </div>
-                </div>
+                }
 
-                <div className={css.settingsRow}>
-                    <Typography color="primary">Grid Color</Typography>
-                    <div>
-                        <ColorPicker outlined width={48} value={localMapSettings?.gridColor || COLORS_MAP.Black} onChange={(value) => setLocalMapSettings({...localMapSettings, gridColor: String(value)})} />
-                    </div>
-                </div>
-
-                <div className={css.settingsRow}>
-                    <Typography color="primary">Hide Grid</Typography>
-                    <Checkbox checked={localMapSettings?.hideGrid} placeholder="Map Image" onChange={() => setLocalMapSettings({...localMapSettings, hideGrid: !localMapSettings.hideGrid})} />
-                </div>
-                <Spacer height={24} />
-
-                <Button onClick={() => setIsAddTokensDrawerOpen(true)}>ADD Token</Button>
+                <Button onClick={() => setIsAddTokensDrawerOpen(true)} size="large" color="success"><Typography>ADD Token</Typography></Button>
                 <Spacer height={8} />
                 <Button onClick={() => setShowLocked(!showLocked)}>{showLocked ? "Hide" : "Show"} Locked</Button>
                 <div ref={animateRef}>

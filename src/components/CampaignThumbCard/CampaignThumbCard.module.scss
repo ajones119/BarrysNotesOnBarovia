@@ -3,26 +3,33 @@
 .CampaignThumbCard {
     position: relative;
     margin: 0 auto;
-    border-width: 0px;
-    border-color: $light;
-    border-radius: 50px;
+    border-width: 3px;
+    border-color: $dark;
+    border-radius: 16px;
     border-style: solid;
     color: $success;
     overflow: hidden;
 
-    :hover {
+    &:hover {
         cursor: pointer;
-        z-index: 100;
+        z-index: 10;
+        border-color: $primary;
+        transition: all 1s ease-in;
+    }
+
+    .imageContainer {
+        max-height: 400px;
+        overflow: hidden;
+        display: flex;
+        align-items: center;
     }
 
     &.CampaignThumbCard:hover {
         transition: filter .5s ease-in-out;
         transform-origin: center center;
-        z-index: 100;
 
         &:hover {
             filter: contrast(200%);
-            z-index: 100;
             
         }
     }
@@ -35,7 +42,17 @@
         background-color: $dark;
         width: 100%;
         z-index: 1;
-        transition: all 0.5s linear;
+        transition: all 0.2s linear;
 
     }
 }
+
+@keyframes glow {
+    from {
+      box-shadow: 0 0 10px -10px $tertiary;
+    }
+    to {
+      box-shadow: 0 0 10px 10px $tertiary;
+    }
+  }
+

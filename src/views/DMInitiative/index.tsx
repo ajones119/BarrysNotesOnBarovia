@@ -90,13 +90,13 @@ const DMInitiative = () => {
   }, [isRefetching, isLoading, combat]);
 
   //autosaving not needed rn, currently breaks delete
- /* useDeepCompareEffect(() => {
+  useDeepCompareEffect(() => {
     if (!isRefetching && !isLoading) {
       const timeout = setTimeout(() => handleUpdate({...combat}), 500)
 
       return () => clearTimeout(timeout)
     }
-  }, [isFetching, list]);*/
+  }, [isFetching, list]);
 
   const handleUpdate = (combat: Combat, overrideCharacterArray = list) => { 
     updateInitiative({

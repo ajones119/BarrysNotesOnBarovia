@@ -2,13 +2,11 @@ import React, {useEffect, useState} from 'react';
 import { Modal } from '../Modal';
 import { Grid } from '@mui/material';
 import { TextInput } from '../../TextInput/TextInput';
-
 import css from "./CreateCampaignLocationModal.module.scss"
 import { SetCampaignLocation, useCreateCampaignLocation } from '@services/CampaignLocationService';
 import { CampaignLocation } from '@model/Location';
 import TextEditor from '../../TextEditor';
 import { Button } from '@components/Button/Button';
-import { LoadingButton } from '@components/Button/LoadingButton';
 
 declare interface CreateCampaignLocationModalProps {
     isOpen: boolean;
@@ -47,7 +45,7 @@ const CreateCampaignLocationModal = ({isOpen, onClose, campaignId, parentLocatio
     return (
         <div>
             <Modal isOpen={isOpen} onClose={handleOnClose} extraButtons={[
-                <LoadingButton size="large" isLoading={false} color="success" onClick={() => mutate(newCampaignLocation)}>Save Location</LoadingButton>
+                <Button size="large" isLoading={false} color="success" onClick={() => mutate(newCampaignLocation)}>Save Location</Button>
                 ]}>
                 <Grid container spacing={2} rowSpacing={3} className={css.CreateCampaignLocationModal}>
                     <Grid item lg={6} sm={12}>

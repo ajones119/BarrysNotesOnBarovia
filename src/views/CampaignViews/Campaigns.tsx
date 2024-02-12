@@ -10,6 +10,10 @@ import CreateCampaignModal from "@components/Modal/CreateCampaignModal/CreateCam
 import { useWindowWidth } from "@react-hook/window-size";
 import Boop from "@components/AnimationComponentWrappers/Boop";
 import { Typography } from "@components/Typography/Typography";
+import FloatingButtonContainer from "@components/FloatingButtonContainer";
+import useDeviceSizeHook from "@hooks/useDeviceSizeHook";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faPlus } from "@fortawesome/free-solid-svg-icons";
 
 const getCardWidth = (width: number) => {
   if (width > 1300) {
@@ -27,26 +31,28 @@ export const Campaigns = () => {
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
   const {campaigns} = useCampaigns();
   const width = useWindowWidth();
+  const {isMobile} = useDeviceSizeHook();
 
   const cardWidth = getCardWidth(width);
 
   return (
     <div className={css.campaigns}>
-      <Grid container justifyContent="center" alignItems="center">
-        <Grid item xs={12}>
-          <div className={css.addButton} style={{width: `${cardWidth-24}px`}}>
-            <Button size="large" color="dark" borderColor="primary" onClick={() => setIsCreateModalOpen(true)} animatedHover>Add Campaigns</Button>
+      <FloatingButtonContainer>
+        <Button animatedHover onClick={() => {setIsCreateModalOpen(true)}}>
+          <Typography size="large" color="default">{
+            isMobile
+            ? <FontAwesomeIcon icon={faPlus} />
+            : "Add Campaign +"
+          }</Typography>
+        </Button>
+      </FloatingButtonContainer>
+      <div className={css.campaignsContainer}>
+        {campaigns?.map((campaign) => (
+          <div className={css.campaignContainer} key={campaign.docId}>
+            <CampaignThumbCard campaign={campaign} width={cardWidth} />
           </div>
-        </Grid>
-      </Grid>
-      <Spacer height={24} />
-      <Grid container justifyContent="space-evenly" spacing={2} alignItems="center">
-      {campaigns?.map((campaign) => (
-        <Grid item xs={12} md={6} key={campaign.docId}>
-          <CampaignThumbCard campaign={campaign} width={cardWidth} />
-        </Grid>
-      ))}
-      </Grid>
+        ))}
+      </div>
       <CreateCampaignModal onClose={() => setIsCreateModalOpen(false)} isOpen={isCreateModalOpen} />
     </div>
   );

@@ -1,5 +1,5 @@
 export type CampaignLocation = {
-    docId?: string;
+    docId: string;
     campaignDocId?: string;
     parentLocationId?: string;
     name?: string;

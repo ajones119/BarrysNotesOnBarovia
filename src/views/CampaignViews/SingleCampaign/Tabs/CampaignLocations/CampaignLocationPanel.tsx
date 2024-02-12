@@ -1,11 +1,11 @@
 import { CampaignLocation } from "@model/Location";
 import css from "./CampaignLocations.module.scss"
 import { Typography } from "@components/Typography/Typography";
-import { SetCampaignLocation, useDeleteCampaignLocationButton } from "@services/CampaignLocationService";
+import { SetCampaignLocation, useDeleteCampaignLocation } from "@services/CampaignLocationService";
 import BACKUP from "@images/hauntedCastleBackground.jpg"
 import TextEditorDisplay from "@components/TextEditor/TextEditDisplay";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faFeather } from "@fortawesome/free-solid-svg-icons";
+import { faFeather, faTrash } from "@fortawesome/free-solid-svg-icons";
 import { Button } from "@components/Button/Button";
 import NPCPicker from "@components/NPCPicker/NPCPicker";
 import { useState } from "react";
@@ -14,6 +14,7 @@ import NPCCard from "@components/BaseCharacterThumbCard/Cards/NPCCard";
 import { Spacer } from "@components/Spacer/Spacer";
 import CreateCampaignLocationModal from "@components/Modal/CreateCampaignLocationModal/CreateCampaignLocationModal";
 import { BaseCharacter } from "@model/BaseCharacter";
+import Markdown from "react-markdown";
 
 type CampaignLocationPanelProps = {
     location?: CampaignLocation;
@@ -25,8 +26,8 @@ type CampaignLocationPanelProps = {
 const CampaignLocationPanel = ({ location, npcs = [], subLocations = [] }: CampaignLocationPanelProps) => {
     const [currentNPC, setCurrentNPC] = useState<string>("");
     const [isEditModalOpen, setIsEditModalOpen] = useState<boolean>(false);
-    // add nested delete?
-    const deleteLocationButton = useDeleteCampaignLocationButton(location, () => {}, subLocations.length > 0)
+
+    const {mutate, isLoading} = useDeleteCampaignLocation(location?.docId || "1")
     const saveCampaignLocation = SetCampaignLocation(location)
     let selectedNPCs = npcs.filter(npc => location?.npcs?.includes(npc?.docId || "") )
     selectedNPCs = selectedNPCs?.sort(function (a, b) {
@@ -52,17 +53,19 @@ const CampaignLocationPanel = ({ location, npcs = [], subLocations = [] }: Campa
         <div className={css.currentLocationPanelContainer} >
             <div className={css.header}>
                 <div className={css.headerLeft}>
-                <Typography className={css.title} size="xtraLarge" weight="bold" underline>
+                <Typography className={css.title} size="xtraLarge" fontStyle="secondary" underline>
                     {location?.name}
                 </Typography>
                 <div className={css.editIcon} onClick={() => setIsEditModalOpen(true)}>
                     <FontAwesomeIcon icon={faFeather} />
                     </div>
                 </div>
-                {subLocations.length === 0 && deleteLocationButton}
+                {subLocations.length === 0 && (
+                    <Button color="error" isLoading={isLoading} onClick={mutate} disabled={subLocations.length !== 0}><FontAwesomeIcon icon={faTrash} /></Button>
+                )}
             </div>
             <div className={css.description}>
-                    <TextEditorDisplay value={location?.description || ""} />
+                    <Typography color="light" ><Markdown>{location?.description || ""}</Markdown></Typography>
             </div>
             <div className={css.imageContainer}>
                 <img
