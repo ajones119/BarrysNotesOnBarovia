@@ -12,6 +12,16 @@
     color: $light;
     overflow: hidden;
 
+    &.hollow {
+        background: none;
+        background-color: none;
+        border-color: $primary;
+
+        &:hover {
+            opacity: 90%;
+        }
+    }
+
     &:hover {
         background: linear-gradient(246deg, rgba(108,34,195,1) 0%, rgba(20,5,61,1) 100%);
         border-color: $primary;
@@ -29,6 +39,16 @@
     &.error {
         background: none;
         background-color: $error;
+
+        &.hollow {
+            background: none;
+            background-color: none;
+            border-color: $error;
+
+            &:hover {
+                opacity: 90%;
+            }
+        }
     }
 
     &.success {

@@ -55,10 +55,13 @@
     }
 }
 
-.menuButton {
+.menuButtons {
     position: fixed;
     right: 16px;
     top: 12px;
+    display: flex;
+    align-items: center;
+    column-gap: 8px;
 }
 
 .mobileLinkContainer {

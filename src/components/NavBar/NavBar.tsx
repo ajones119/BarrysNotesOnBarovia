@@ -2,7 +2,7 @@ import React, {useState} from "react";
 import css from "./NavBar.module.scss"
 import Barry from "@images/barry-cartoon.png"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faDungeon, faGripHorizontal, faHatWizard, faSpaghettiMonsterFlying, faXmark } from "@fortawesome/free-solid-svg-icons";
+import { faDungeon, faGripHorizontal, faHatWizard, faHomeAlt, faSpaghettiMonsterFlying, faXmark } from "@fortawesome/free-solid-svg-icons";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { Typography } from "../Typography/Typography";
 import { useWindowWidth } from "@react-hook/window-size";
@@ -20,9 +20,10 @@ export type NavBarLink = {
 
 type NavBarProps = {
   additionalLinks?: NavBarLink[]
+  sectionHomeLink?: NavBarLink
 };
 
-export const NavBar = ({additionalLinks = []}: NavBarProps) => {
+export const NavBar = ({additionalLinks = [], sectionHomeLink = null}: NavBarProps) => {
   const [scrolled, setScrolled] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
   const navigate = useNavigate();
@@ -67,8 +68,10 @@ export const NavBar = ({additionalLinks = []}: NavBarProps) => {
             <Typography className={`${css.navBarLink} ${pathname === "/Monsters/" ? css.activeLink : ""}`}>Monsters</Typography>
           </Link>
           { additionalLinks.length > 0 && 
-            <div className={css.menuButton}>
-              <Button onClick={() => setIsOpen(true)}><FontAwesomeIcon icon={faGripHorizontal} /></Button>
+            <div className={css.menuButtons}>
+              {sectionHomeLink && <Button hollow onClick={() => navigate(sectionHomeLink.url)}><FontAwesomeIcon icon={faHomeAlt} /></Button>}
+              <Button hollow onClick={() => setIsOpen(true)}><FontAwesomeIcon icon={faGripHorizontal} /></Button>
+              
             </div>
           }
         </div>

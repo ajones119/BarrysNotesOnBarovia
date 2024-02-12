@@ -4,7 +4,7 @@ import css from "./Typography.module.scss"
 declare interface TypographyProps {
     children: React.ReactNode;
     color?: "success" | "light" | "dark" | "error" | "primary" | "default" | "tertiary"
-    size?: "default" | "caption" | "small" | "large" | "xtraLarge"
+    size?: "default" | "caption" | "small" | "large" | "xtraLarge" | "xx-large"
     weight?: "default" | "bolder" | "bold"
     fontStyle?: "default" | "rough" | "block" | "secondary" | "primary"
     underline?: boolean,

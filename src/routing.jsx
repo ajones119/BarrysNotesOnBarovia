@@ -12,6 +12,12 @@ import { faBook, faCircleUser, faCrosshairs, faEarthAmericas, faMagic, faMagnify
 import { getCombatMapRoute } from "@views/DMInitiative/utils";
 
 const CampaignAdditionalLinks = {
+  topLink: ({CampaignId}) => (
+    {
+      name: "This Campaign",
+      url: `/Campaigns/${CampaignId}/overview`,
+      icon: faEarthAmericas
+    }),
   getAdditionalLinks: ({CampaignId}) => ([
     {
       name: "Overview",

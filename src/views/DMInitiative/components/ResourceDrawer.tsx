@@ -1,9 +1,8 @@
 import React, { useMemo, useState } from "react";
 import ListItem from "@mui/material/ListItem";
-import { Monster, useDndApiMonsters } from "@services/DndApiService";
+import { useDndApiMonsters } from "@services/DndApiService";
 import { IconButton, ListItemText, TextField } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
-import SanityDrawer from "@components/Drawer/SanityDrawer";
 import css from "./ResourceDrawer.module.scss";
 import { FixedSizeList, ListChildComponentProps } from "react-window";
 import AutoSizer from "react-virtualized-auto-sizer";
@@ -13,8 +12,11 @@ import { useDebounce } from "usehooks-ts";
 import { BASE_ABILITY_SCORES, BaseCharacter, CharacterType } from "@model/BaseCharacter";
 import { MonsterXPByChallengeRating } from "@model/ChallengeRating";
 import { useCampaignNPCs } from "@services/NPCService";
+import Drawer from "@components/Drawer";
 
 type ResourceDrawerProps = {
+  isOpen?: boolean,
+  onClose: () => void,
   campaignDocId: string,
   onAdd?: (data: any) => void;
 };
@@ -83,7 +85,7 @@ type DrawerMonster = {
   imageURL?: string;
 };
 
-const ResourceDrawer = ({ onAdd, campaignDocId }: ResourceDrawerProps) => {
+const ResourceDrawer = ({ isOpen = false, onAdd, campaignDocId, onClose }: ResourceDrawerProps) => {
   const { isLoading, monsters } = useDndApiMonsters();
   const { isLoading: isCustomMonsterLoading, monsters: customMonsters = [] } =
     useCustomMonsters();
@@ -160,7 +162,7 @@ const ResourceDrawer = ({ onAdd, campaignDocId }: ResourceDrawerProps) => {
   // TODO (churt): Find a way to memoize this. Due to how the fixed size list works, the search causes a ton of reruns of the memo.
 
   return (
-    <SanityDrawer>
+    <Drawer isOpen={isOpen} side="left" onClose={onClose}>
       <div className={css.resourceDrawer}>
         <StyledSearch
           id="monster-search"
@@ -191,7 +193,7 @@ const ResourceDrawer = ({ onAdd, campaignDocId }: ResourceDrawerProps) => {
           </AutoSizer>
         </div>
       </div>
-    </SanityDrawer>
+    </Drawer>
   );
 };
 

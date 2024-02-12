@@ -9,29 +9,34 @@ import MonsterBG from '@images/monster-background.jpg'
 
 import css from "./Home.module.scss"
 import HomeCard from "./components/HomeCard";
+import { Typography } from "@components/Typography/Typography";
 
 export const Home = () => {
 
   return(
     <div className={css.homePage}>
-        <HomeCard
-          frontImage={CharacterNoBG}
-          backImage={Tavern}
-          title="Characters"
-          href="/Characters/"
-        />
-        <HomeCard
-          frontImage={Party}
-          backImage={Castle}
-          title="Campaigns"
-          href="/Campaigns/"
-        />
-        <HomeCard
-          frontImage={NoBGMonster}
-          backImage={MonsterBG}
-          title="Monsters"
-          href="/Monsters/"
-        />
+      <Typography color="tertiary" size="xx-large" fontStyle="rough" inderline>BARRY'S NOTES ON BAROVIA</Typography>
+
+      <div className={css.homePageCards}>
+          <HomeCard
+            frontImage={CharacterNoBG}
+            backImage={Tavern}
+            title="Characters"
+            href="/Characters/"
+          />
+          <HomeCard
+            frontImage={Party}
+            backImage={Castle}
+            title="Campaigns"
+            href="/Campaigns/"
+          />
+          <HomeCard
+            frontImage={NoBGMonster}
+            backImage={MonsterBG}
+            title="Monsters"
+            href="/Monsters/"
+          />
+      </div>
     </div>
   );
 }

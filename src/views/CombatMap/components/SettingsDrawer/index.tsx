@@ -48,26 +48,25 @@ const SettingsDrawer = ({
     const handleAddToken = (newToken: InternalToken) => {
         const extraTokens = localMapSettings?.extraTokens || [];
         const uniqueID = Date.now() + Math.random()
-        console.log(currentMapCoordinates.x + 200)
         const token = {
             id: `${uniqueID}`,
             disabled: false,
             data: {
-              position: {
+                position: {
                 x: currentMapCoordinates.x + 200,
                 y: currentMapCoordinates.y + 200
-              },
-              image: newToken.image,
-              length: newToken.height,
-              width: newToken.width,
-              name: newToken.name,
-              color: "",
-              opacity: 0,
-              rotation: 0,
-              canRotate: newToken?.canRotate || false,
-              playerAdded: isPlayer
+                },
+                image: newToken.image,
+                length: newToken.height,
+                width: newToken.width,
+                name: newToken.name,
+                color: "",
+                opacity: 0,
+                rotation: 0,
+                canRotate: newToken?.canRotate || false,
+                playerAdded: isPlayer
             }
-          }
+        }
         if (newToken?.color) {
             token.data = {...token.data, color: newToken.color}
         }
@@ -82,10 +81,10 @@ const SettingsDrawer = ({
 
         setLocalMapSettings({...localMapSettings, extraTokens: extraTokens})
         setIsAddTokensDrawerOpen(false);
-      }
+    }
 
-      let extraTokensToDisplay = isPlayer ? localMapSettings?.extraTokens?.filter(token => token?.data?.playerAdded) || [] : localMapSettings?.extraTokens;
-      extraTokensToDisplay = showLocked ? extraTokensToDisplay : extraTokensToDisplay?.filter(token => !token?.disabled)
+    let extraTokensToDisplay = isPlayer ? localMapSettings?.extraTokens?.filter(token => token?.data?.playerAdded) || [] : localMapSettings?.extraTokens;
+    extraTokensToDisplay = showLocked ? extraTokensToDisplay : extraTokensToDisplay?.filter(token => !token?.disabled)
 
     return (
         <Drawer

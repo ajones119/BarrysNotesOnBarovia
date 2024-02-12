@@ -25,7 +25,6 @@ const HomeCard = ({
         <Typography
             color="light"
             size="xtraLarge"
-            weight="bolder"
             fontStyle="secondary"
             className={css.label}
         >{title}</Typography>

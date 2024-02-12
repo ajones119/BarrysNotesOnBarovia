@@ -22,8 +22,9 @@ import Box from "@mui/material/Box";
 import { Spacer } from "@components/Spacer/Spacer";
 import ColorPicker from "@components/ColorPicker/ColorPicker";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCircleXmark } from "@fortawesome/free-solid-svg-icons";
+import { faArrowRightRotate, faCircleXmark } from "@fortawesome/free-solid-svg-icons";
 import { useCombatMap, useUpdateCombatMap } from "@services/CombatMapService";
+import FloatingButtonContainer from "@components/FloatingButtonContainer";
 
 type EncounterDiffultyProgressProps = {
   difficulty: ENCOUNTER_DIFFICULTY;
@@ -82,6 +83,7 @@ const DMInitiative = () => {
   const updateInitiative = useUpdateInitiative(combat);
   const updateCampaign = useUpdateCampaign(campaignId);
   const {mutate: updateCombatMap} = useUpdateCombatMap(combatMap);
+  const [isAddDrawerOpen, setIsAddDrawerOpen] = useState(false);
 
   useDeepCompareEffect(() => {
     if (!isLoading && !isRefetching) {
@@ -173,7 +175,7 @@ const DMInitiative = () => {
               outlined
               value={colorFilter}
               onChange={(value: string[]) => setColorFilter(value)} />
-              <FontAwesomeIcon icon={faCircleXmark} color="red" onClick={() => {setColorFilter([])}} />
+              <Button hollow color="error" onClick={() => {setColorFilter([])}} ><FontAwesomeIcon icon={faCircleXmark} color="red"  /></Button>
           </div>
           <Spacer height={8} />
           <div style={{display: "flex", alignItems: "center", columnGap: 4}}>
@@ -199,54 +201,54 @@ const DMInitiative = () => {
             }} color="dark">Show All</Button>
           </div>
         </div>
-        <Typography size={"xtraLarge"}>{combat.name}</Typography>
+        <Typography size={"xtraLarge"} fontStyle="secondary">{combat.name}</Typography>
         <EncounterDiffultyProgress difficulty={encounterDiffulty} />
       </div>
       <TableContainer>
         <TableHead>
           <TableRow>
             <TableCell style={{ width: "5%" }}>
-              <Typography color="light" size="large" weight="bolder">
+              <Typography color="light" size="large">
                 Show
               </Typography>
             </TableCell>
             <TableCell style={{ width: "5%" }}>
-              <Typography color="light" size="large" weight="bolder">
+              <Typography color="light" size="large">
                 {" "}
               </Typography>
             </TableCell>
             <TableCell style={{ width: "10%" }}>
-              <Typography color="light" size="large" weight="bolder">
+              <Typography color="light" size="large">
                 Initiative
               </Typography>
             </TableCell>
             <TableCell style={{ width: "70%" }}>
-              <Typography color="light" size="large" weight="bolder">
+              <Typography color="light" size="large">
                 Name
               </Typography>
             </TableCell>
             <TableCell style={{ width: "10%" }}>
-              <Typography color="light" size="large" weight="bolder">
+              <Typography color="light" size="large">
                 Health
               </Typography>
             </TableCell>
             <TableCell style={{ width: "5%" }}>
-              <Typography color="light" size="large" weight="bolder">
+              <Typography color="light" size="large">
                 AC
               </Typography>
             </TableCell>
             <TableCell style={{ width: "50px" }}>
-              <Typography color="light" size="large" weight="bolder">
+              <Typography color="light" size="large">
                 Conditions
               </Typography>
             </TableCell>
             <TableCell style={{ width: "2%" }}>
-              <Typography color="light" size="large" weight="bolder">
+              <Typography color="light" size="large">
                 Ally?
               </Typography>
             </TableCell>
             <TableCell style={{ width: "2%" }}>
-              <Typography color="light" size="large" weight="bolder">
+              <Typography color="light" size="large">
                 Remove
               </Typography>
             </TableCell>
@@ -263,70 +265,117 @@ const DMInitiative = () => {
           />
         ))}
       </TableContainer>
-      <ResourceDrawer onAdd={(data) => insert({...data, uniqueId: getNewUniqueId()})} campaignDocId={campaignId} />
-      <div className={css.bottonsContainer}>
-      <Button
-          onClick={() =>
-            window.open(getCombatMapURL(campaignDocId, combat?.docId || ""), '_blank')
-          }
-        >
-          Map
-        </Button>
-        <Button
-          onClick={() =>
-            insert({ shouldShow: true, shouldShowHealthBar: true, uniqueId: getNewUniqueId() })
-          }
-        >
-          ADD
-        </Button>
-        <Button
-          onClick={() => {
-            const tempList = [...list];
-            const sortedList = tempList.sort((a, b) =>{
-              let aInititative = Number(a["initiative"] || -100);
-              let bInitiative = Number(b["initiative"] || -100);
-                if (aInititative === bInitiative) {
-                  aInititative += Number(a["dexterity"] || -100)
-                  bInitiative += Number(a["dexterity"] || -100)
-                }
-              
-                return aInititative <= bInitiative ? 1 : -1;
-            });
-            handleUpdate({ ...combat }, sortedList);
-          }}
-        >
-          SORT
-        </Button>
-        <Button
-          onClick={() => {
-            handleUpdate({ ...combat });
-          }}
-        >
-          Save
-        </Button>
-        <Button onClick={() => handleStart()}>Start</Button>
-        <Button
-          onClick={() =>{
-            let nextTurn = 0;
-            if (currentTurnIndex !== null) {
-              nextTurn =
-                currentTurnIndex + 1 >= list.length
-                  ? 0
-                  : currentTurnIndex + 1;
+      <ResourceDrawer
+        isOpen={isAddDrawerOpen}
+        onAdd={(data) => insert({...data, uniqueId: getNewUniqueId()})}
+        campaignDocId={campaignId}
+        onClose={() => setIsAddDrawerOpen(false)}
+      />
+      <FloatingButtonContainer>
+        <div className={css.bottonsContainer}>
+          <div className={css.buttonsColumn}>
+            <Button
+              onClick={() =>
+                window.open(getCombatMapURL(campaignDocId, combat?.docId || ""), '_blank')
+              }
+            >
+              <Typography>Go To Map</Typography>
+            </Button>
+            <Button onClick={() => handleStart()}><Typography>Start</Typography></Button>
+          </div>
+          
+          <div className={css.buttonsColumn}>
+            <Button
+              onClick={() =>
+                insert({ shouldShow: true, shouldShowHealthBar: true, uniqueId: getNewUniqueId() })
+              }
+            >
+              <Typography>Add Empty</Typography>
+            </Button>
+            <Button
+              onClick={() => {
+                setIsAddDrawerOpen(true)
+              }}
+            >
+              <Typography>Add Template</Typography>
+            </Button>
+          </div>
 
-                while (filteredList.filter(item => listWithIds[nextTurn].data.uniqueId === item.data.uniqueId).length < 1) {
-                  nextTurn =
-                    nextTurn + 1 >= list.length
-                      ? 0
-                      : nextTurn + 1;
-                }
-            }
-            handleUpdate({ ...combat, currentTurnIndex: nextTurn })
-          }}
-        >
-          Next
-        </Button>
-      </div>
+          <div className={css.buttonsColumn}>
+            <Button
+              onClick={() => {
+                const tempList = [...list];
+                const sortedList = tempList.sort((a, b) =>{
+                  let aInititative = Number(a["initiative"] || -100);
+                  let bInitiative = Number(b["initiative"] || -100);
+                    if (aInititative === bInitiative) {
+                      aInititative += Number(a["dexterity"] || -100)
+                      bInitiative += Number(a["dexterity"] || -100)
+                    }
+                  
+                    return aInititative <= bInitiative ? 1 : -1;
+                });
+                handleUpdate({ ...combat }, sortedList);
+              }}
+            >
+              <Typography>Sort</Typography>
+            </Button>
+            <Button
+              onClick={() => {
+                handleUpdate({ ...combat });
+              }}
+            >
+              <Typography>Save</Typography>
+            </Button>
+          </div>
+
+          <Button
+            color="error"
+            onClick={() =>{
+              let nextTurn = 0;
+              if (currentTurnIndex !== null) {
+                nextTurn =
+                  currentTurnIndex - 1 < 0
+                    ? list.length-1
+                    : currentTurnIndex - 1;
+
+                  while (filteredList.filter(item => listWithIds[nextTurn].data.uniqueId === item.data.uniqueId).length < 1) {
+                    nextTurn =
+                      nextTurn - 1 <= 0
+                        ? 0
+                        : nextTurn - 1;
+                  }
+              }
+              handleUpdate({ ...combat, currentTurnIndex: nextTurn })
+            }}
+          >
+            <Typography>Back</Typography>
+          </Button>
+          <Button
+            color="success"
+            onClick={() =>{
+              let nextTurn = 0;
+              if (currentTurnIndex !== null) {
+                nextTurn =
+                  currentTurnIndex + 1 >= list.length
+                    ? 0
+                    : currentTurnIndex + 1;
+
+                  while (filteredList.filter(item => listWithIds[nextTurn].data.uniqueId === item.data.uniqueId).length < 1) {
+                    nextTurn =
+                      nextTurn + 1 >= list.length
+                        ? 0
+                        : nextTurn + 1;
+                  }
+              }
+              handleUpdate({ ...combat, currentTurnIndex: nextTurn })
+            }}
+          >
+            <Typography>Next</Typography>
+          </Button>
+
+        </div>
+      </FloatingButtonContainer>
     </div>
   );
 };

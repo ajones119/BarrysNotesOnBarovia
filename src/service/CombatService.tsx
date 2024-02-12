@@ -41,7 +41,6 @@ export const useAddCombatButton = (onSuccess: () => void) => {
     const mapMutation = useAddCombatMap();
 
     const handleMutate = async(newCombat: Combat) => {
-      console.log(newCombat)
       const { 
         campaignDocId,
         name = "",
