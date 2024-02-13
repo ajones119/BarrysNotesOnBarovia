@@ -3,7 +3,7 @@ import "../../App.css";
 import css from "./Characters.module.scss"
 
 import { CharacterThumbCard } from "@components/CharacterThumbCard/CharacterThumbCard";
-import { Grid } from "@mui/material"
+import { Grid, Typography } from "@mui/material"
 import { useCharacters } from "@services/CharacterService";
 import CampaignPicker from "@components/CampaignPicker/CampaignPicker";
 import { Campaign } from "@model/Campaign";
@@ -63,7 +63,7 @@ export const Characters = () => {
           </Grid>
         <Grid item xs={12} md={4}>
           <div className={css.characterAddButtton}>
-            <Button size="large" color="dark" onClick={() => setOpenCharacterDrawer(true)}>Add Character</Button>
+            <Button size="large" color="dark" onClick={() => setOpenCharacterDrawer(true)}><Typography size="large">Add Character</Typography></Button>
           </div>
         </Grid>
       </Grid>

@@ -48,26 +48,25 @@ const SettingsDrawer = ({
     const handleAddToken = (newToken: InternalToken) => {
         const extraTokens = localMapSettings?.extraTokens || [];
         const uniqueID = Date.now() + Math.random()
-        console.log(currentMapCoordinates.x + 200)
         const token = {
             id: `${uniqueID}`,
             disabled: false,
             data: {
-              position: {
+                position: {
                 x: currentMapCoordinates.x + 200,
                 y: currentMapCoordinates.y + 200
-              },
-              image: newToken.image,
-              length: newToken.height,
-              width: newToken.width,
-              name: newToken.name,
-              color: "",
-              opacity: 0,
-              rotation: 0,
-              canRotate: newToken?.canRotate || false,
-              playerAdded: isPlayer
+                },
+                image: newToken.image,
+                length: newToken.height,
+                width: newToken.width,
+                name: newToken.name,
+                color: "",
+                opacity: 0,
+                rotation: 0,
+                canRotate: newToken?.canRotate || false,
+                playerAdded: isPlayer
             }
-          }
+        }
         if (newToken?.color) {
             token.data = {...token.data, color: newToken.color}
         }
@@ -82,10 +81,10 @@ const SettingsDrawer = ({
 
         setLocalMapSettings({...localMapSettings, extraTokens: extraTokens})
         setIsAddTokensDrawerOpen(false);
-      }
+    }
 
-      let extraTokensToDisplay = isPlayer ? localMapSettings?.extraTokens?.filter(token => token?.data?.playerAdded) || [] : localMapSettings?.extraTokens;
-      extraTokensToDisplay = showLocked ? extraTokensToDisplay : extraTokensToDisplay?.filter(token => !token?.disabled)
+    let extraTokensToDisplay = isPlayer ? localMapSettings?.extraTokens?.filter(token => token?.data?.playerAdded) || [] : localMapSettings?.extraTokens;
+    extraTokensToDisplay = showLocked ? extraTokensToDisplay : extraTokensToDisplay?.filter(token => !token?.disabled)
 
     return (
         <Drawer
@@ -94,39 +93,43 @@ const SettingsDrawer = ({
             side="left"
         >
             <div className={css.settingsDrawerContainer}>
-                <TextInput value={localMapSettings?.columns} placeholder="cols" number onChange={(value) => setLocalMapSettings({...localMapSettings, columns: Number(value)})} />
-                <Spacer height={24} />
-
-                <TextInput value={localMapSettings?.rows} placeholder="rows" number onChange={(value) => setLocalMapSettings({...localMapSettings, rows: Number(value)})} />
-                <Spacer height={24} />
-
-                <TextInput value={localMapSettings?.tokenSize} placeholder="base token size" number onChange={(value) => setLocalMapSettings({...localMapSettings, tokenSize: Number(value)})} />
-                <Spacer height={24} />
-
-                <TextInput value={localMapSettings?.mapImage} placeholder="Map Image" onChange={(value) => setLocalMapSettings({...localMapSettings, mapImage: String(value)})} />
-                <Spacer height={24} />
-
-                <div className={css.settingsRow}>
-                    <Typography color="primary">Background Color</Typography>
+                { !isPlayer &&
                     <div>
-                        <ColorPicker outlined width={48} value={localMapSettings?.mapColor || COLORS_MAP.White} onChange={(value) => setLocalMapSettings({...localMapSettings, mapColor: String(value)})} />
+                        <TextInput value={localMapSettings?.columns} placeholder="cols" number onChange={(value) => setLocalMapSettings({...localMapSettings, columns: Number(value)})} />
+                        <Spacer height={24} />
+
+                        <TextInput value={localMapSettings?.rows} placeholder="rows" number onChange={(value) => setLocalMapSettings({...localMapSettings, rows: Number(value)})} />
+                        <Spacer height={24} />
+
+                        <TextInput value={localMapSettings?.tokenSize} placeholder="base token size" number onChange={(value) => setLocalMapSettings({...localMapSettings, tokenSize: Number(value)})} />
+                        <Spacer height={24} />
+
+                        <TextInput value={localMapSettings?.mapImage} placeholder="Map Image" onChange={(value) => setLocalMapSettings({...localMapSettings, mapImage: String(value)})} />
+                        <Spacer height={24} />
+
+                        <div className={css.settingsRow}>
+                            <Typography color="primary">Background Color</Typography>
+                            <div>
+                                <ColorPicker outlined width={48} value={localMapSettings?.mapColor || COLORS_MAP.White} onChange={(value) => setLocalMapSettings({...localMapSettings, mapColor: String(value)})} />
+                            </div>
+                        </div>
+
+                        <div className={css.settingsRow}>
+                            <Typography color="primary">Grid Color</Typography>
+                            <div>
+                                <ColorPicker outlined width={48} value={localMapSettings?.gridColor || COLORS_MAP.Black} onChange={(value) => setLocalMapSettings({...localMapSettings, gridColor: String(value)})} />
+                            </div>
+                        </div>
+
+                        <div className={css.settingsRow}>
+                            <Typography color="primary">Hide Grid</Typography>
+                            <Checkbox checked={localMapSettings?.hideGrid} placeholder="Map Image" onChange={() => setLocalMapSettings({...localMapSettings, hideGrid: !localMapSettings.hideGrid})} />
+                        </div>
+                        <Spacer height={24} />
                     </div>
-                </div>
+                }
 
-                <div className={css.settingsRow}>
-                    <Typography color="primary">Grid Color</Typography>
-                    <div>
-                        <ColorPicker outlined width={48} value={localMapSettings?.gridColor || COLORS_MAP.Black} onChange={(value) => setLocalMapSettings({...localMapSettings, gridColor: String(value)})} />
-                    </div>
-                </div>
-
-                <div className={css.settingsRow}>
-                    <Typography color="primary">Hide Grid</Typography>
-                    <Checkbox checked={localMapSettings?.hideGrid} placeholder="Map Image" onChange={() => setLocalMapSettings({...localMapSettings, hideGrid: !localMapSettings.hideGrid})} />
-                </div>
-                <Spacer height={24} />
-
-                <Button onClick={() => setIsAddTokensDrawerOpen(true)}>ADD Token</Button>
+                <Button onClick={() => setIsAddTokensDrawerOpen(true)} size="large" color="success"><Typography>ADD Token</Typography></Button>
                 <Spacer height={8} />
                 <Button onClick={() => setShowLocked(!showLocked)}>{showLocked ? "Hide" : "Show"} Locked</Button>
                 <div ref={animateRef}>
@@ -149,7 +152,7 @@ const SettingsDrawer = ({
                                 }
                             </div>
                             <div className={css.tokenButtons}>
-                            <Button borderColor="primary" color='dark' onClick={() => {
+                            <Button color='dark' onClick={() => {
                                     const tokenIndex = localMapSettings?.extraTokens?.findIndex(token => token.id === id) || 0;
                                     const newToken = {id, data: {...token}, disabled: !disabled}
                                     const newTokens = [...localMapSettings.extraTokens || []]
@@ -158,10 +161,10 @@ const SettingsDrawer = ({
                                 }}>
                                     <FontAwesomeIcon icon={disabled ? faLock : faLockOpen} />
                                 </Button>
-                                <Button borderColor="error" color='dark' onClick={() => handleDeleteToken(id)}>
+                                <Button color='dark' onClick={() => handleDeleteToken(id)}>
                                     <FontAwesomeIcon icon={faMinus} />
                                 </Button>
-                                <Button borderColor="success" color='dark' onClick={() => handleAddToken({...token, height: token?.length})}>
+                                <Button color='dark' onClick={() => handleAddToken({...token, height: token?.length})}>
                                     <FontAwesomeIcon icon={faCopy} />
                                 </Button>
                             </div>

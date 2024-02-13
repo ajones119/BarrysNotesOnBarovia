@@ -16,7 +16,7 @@ export const CampaignThumbCard = ({ campaign, width = 600 }: CampaignThumbCardPr
     const [isHovered, setIsHovered] = useState(false);
     const style = useSpring({
         transform: isHovered
-        ? `scale(1.05)
+        ? `scale(1.01)
         `
         : `scale(1)
         `,
@@ -47,7 +47,7 @@ export const CampaignThumbCard = ({ campaign, width = 600 }: CampaignThumbCardPr
                     alt="boo"
                 /></div>
                 <div className={css.nameContainer}>
-                <Typography color="primary"> {campaign.title} </Typography>
+                <Typography fontStyle="secondary" size="large" color="light"> {campaign.title} </Typography>
                 </div>
             </div>
         </animated.div>

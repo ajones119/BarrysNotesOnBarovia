@@ -8,7 +8,7 @@ import css from "./CreateCampaignModal.module.scss"
 import { Campaign, validateCampaign } from '@model/Campaign';
 import { useAddCampaignButton } from '@services/CampaignService';
 import { Validator } from '@model/Validator';
-import { ButtonStatuses, LoadingButton } from '@components/Button/LoadingButton';
+import { Button } from '@components/Button/Button';
 
 declare interface CreateCampaignModalProps {
     isOpen: boolean;
@@ -26,7 +26,7 @@ const CreateCampaignModal = ({isOpen, onClose}: CreateCampaignModalProps) => {
         onClose();
     }
 
-    const {mutate, isLoading, isError, isSuccess} = useAddCampaignButton(
+    const {mutate, isLoading} = useAddCampaignButton(
         handleOnClose
     );
 
@@ -42,11 +42,10 @@ const CreateCampaignModal = ({isOpen, onClose}: CreateCampaignModalProps) => {
     return (
         <div>
             <Modal isOpen={isOpen} onClose={handleOnClose} extraButtons={[
-                <LoadingButton
+                <Button
                     color="success"
                     size="large"
                     isLoading={isLoading}
-                    status={isError || validator ? ButtonStatuses.Error : isSuccess ? ButtonStatuses.Success : ButtonStatuses.Idle}
                     onClick={() => {
                         const valid = validate();
                         if (valid) {
@@ -55,7 +54,7 @@ const CreateCampaignModal = ({isOpen, onClose}: CreateCampaignModalProps) => {
                     }}
                     >
                         Save Campaign
-                    </LoadingButton>
+                    </Button>
                 ]}>
                 <Grid container spacing={2} rowSpacing={3} className={css.CreateCampaignModal}>
                     <Grid item lg={6} sm={12}>

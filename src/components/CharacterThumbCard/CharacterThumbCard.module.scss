@@ -7,11 +7,10 @@
     transform-style: preserve-3d;
     transition: all 300ms ease;
     border-radius: 50px;
-    border-color: $primary;
+    border-color: $neutral;
     border-style: solid;
     border-width: 1px;
     
-
     &:hover {
         cursor: pointer;
 
@@ -44,14 +43,11 @@
         width: 100%;
     }
 
-    //&.CharacterThumbCard:hover .imageContainer {}
-
     .nameContainer {
         position: absolute;
         top: 50%;
-        opacity: 0.8;
         align-items: center;
-        background-color: $dark;
+        background-color: var(--floating-container-color);
         width: 100%;
         z-index: 1;
         transition: all 300ms ease;

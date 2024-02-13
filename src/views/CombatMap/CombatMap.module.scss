@@ -71,12 +71,9 @@
 }
 
 .buttonsContainer {
-    position: fixed;
     display: flex;
     column-gap: 8px;
-    bottom: 16px;
-    right: 16px;
-    z-index: 100;
+    flex-wrap: wrap;
 }
 
 .overlay {

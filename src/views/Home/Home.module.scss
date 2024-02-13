@@ -1,16 +1,19 @@
 
 .homePage {
+    padding-top: 32px;
+}
+.homePageCards {
     display: flex;
     justify-content: space-evenly;
     align-items: center;
     margin-top: 16px;
     perspective: 1000px;
-    margin-top: 200px;
+    margin-top: 100px;
     flex-direction: row;
 }
 
 @media (max-width: 800px){
-    .homePage {
+    .homePageCards {
         flex-direction: column;
         row-gap: 16px;
     }

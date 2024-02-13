@@ -7,8 +7,8 @@ import { useDeleteNote } from '@services/NotesService';
 import { Typography } from '../Typography/Typography';
 import Markdown from 'react-markdown'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { ButtonStatuses, LoadingButton } from '@components/Button/LoadingButton';
 import { faTrash } from '@fortawesome/free-solid-svg-icons';
+import { Button } from '@components/Button/Button';
 
 
 declare interface NotesListItemProps{
@@ -38,7 +38,7 @@ export const NotesListItem = ({ note, characterImageURL, characterName }: NotesL
                 </div>
             </div>
             <div className={css.noteColumnContainer}>
-                <LoadingButton color="error" size="large" isLoading={isLoading} status={ButtonStatuses.Idle} onClick={mutate}><FontAwesomeIcon icon={faTrash} /></LoadingButton>
+                <Button color="error" size="large" isLoading={isLoading} onClick={mutate}><FontAwesomeIcon icon={faTrash} /></Button>
             </div>
         </div>
     )

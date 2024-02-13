@@ -1,16 +1,13 @@
-import React, { useState, useEffect } from "react";
 import { collection, doc, query, where } from "firebase/firestore";
 import { firestore } from "./firebase";
 import {
   useFirestoreCollectionMutation,
   useFirestoreDocument,
+  useFirestoreDocumentDeletion,
   useFirestoreDocumentMutation,
   useFirestoreQuery,
 } from "@react-query-firebase/firestore";
-import {
-  ButtonStatuses,
-  LoadingButton,
-} from "@components/Button/LoadingButton";
+
 import { PlayerCharacter } from "@model/PlayerCharacter";
 
 export function useCharacter(characterDocId = "") {
@@ -105,4 +102,12 @@ export const useEditPlayerCharacter = (pc: PlayerCharacter | null = null, onSucc
           mutation.mutate(newPC)
       },
   }
+}
+
+export const useDeletePlayerCharacter = (characterDocId: string) => {
+  const col = collection(firestore, "characters");
+  const ref = doc(col, characterDocId);
+  const mutation = useFirestoreDocumentDeletion(ref);    
+
+  return mutation;
 }

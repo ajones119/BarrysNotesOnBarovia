@@ -11,7 +11,7 @@ export interface Tab {
 declare interface TabsProps {
     tabs: Array<Tab>,
     currentTab: string,
-    onChange: (tabKey: string) => void,
+    onChange?: (tabKey: string) => void,
     disableTabMenu?: boolean,
 }
 
@@ -25,7 +25,7 @@ const Tabs = ({ tabs, currentTab, onChange, disableTabMenu = false }: TabsProps)
             <div className={css.headerContainer}>
                 <div className={css.header}>
                     { tabs?.map(tab => (
-                        <div className={`${css.tab} ${tab.key === current?.key && css.active} `} onClick={() => onChange(tab.key)}>{tab.name}</div>
+                        <div className={`${css.tab} ${tab.key === current?.key && css.active} `} onClick={() => onChange && onChange(tab.key)}>{tab.name}</div>
                     )) }
                 </div>
                 <Spacer height={24} />

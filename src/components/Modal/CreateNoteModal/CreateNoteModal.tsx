@@ -3,11 +3,11 @@ import { Modal } from '../Modal';
 import { Grid } from '@mui/material';
 import css from "./CreateNoteModal.module.scss"
 import { useAddNote } from '@services/NotesService';
-import { Note, validateNote } from '@model/Note';
+import { Note } from '@model/Note';
 import CharacterPicker from '../../CharacterPicker/CharacterPicker';
 import TextEditor from '../../TextEditor';
 import { PlayerCharacter } from '@model/PlayerCharacter';
-import { ButtonStatuses, LoadingButton } from '@components/Button/LoadingButton';
+import { Button } from '@components/Button/Button';
 
 declare interface CreateNPCModalProps {
     isOpen: boolean;
@@ -26,7 +26,7 @@ const CreateNoteModal = ({isOpen, onClose, campaignId, characters}: CreateNPCMod
         onClose();
     }
 
-    const {mutate, isLoading, isError, isSuccess} = useAddNote(handleOnClose);
+    const {mutate, isLoading} = useAddNote(handleOnClose);
 
     const {
         content,
@@ -39,15 +39,14 @@ const CreateNoteModal = ({isOpen, onClose, campaignId, characters}: CreateNPCMod
     return (
         <div>
             <Modal isOpen={isOpen} onClose={handleOnClose} extraButtons={[
-                    <LoadingButton
-                    color="success"
-                    size="large"
-                    isLoading={isLoading}
-                    status={isError ? ButtonStatuses.Error : isSuccess ? ButtonStatuses.Success : ButtonStatuses.Idle}
-                    onClick={() => {
-                            mutate(newNote)
-                    }}
-                >Save Note</LoadingButton>
+                    <Button
+                        color="success"
+                        size="large"
+                        isLoading={isLoading}
+                        onClick={() => {
+                                mutate(newNote)
+                        }}
+                >Save Note</Button>
                 ]}>
                 <Grid container spacing={2} rowSpacing={3} className={css.CreateNoteModal}>
                     <Grid item sm={12}>

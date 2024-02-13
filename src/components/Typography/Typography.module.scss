@@ -2,9 +2,26 @@
 
 
 .typography {
-    font-size: medium;
+    font-size: 16px;
+    font-family: $primary_font_family;
+
+    &.block {
+        font-family: $block_font_family;
+    }
+
+    &.rough {
+        font-family: $rough_font_family;
+    }
+
+    &.secondary {
+        font-family: $secondary_font_family;
+    }
+
     &.light {
         color: $light;
+    }
+    &.tertiary {
+        color: $tertiary;
     }
     &.dark {
         color: $dark;
@@ -15,21 +32,28 @@
     &.primary {
         color: $primary;
     }
+    &.success {
+        color: $success;
+    }
 
     &.caption {
-        font-size: x-small;
+        font-size: 10px;
     }
 
     &.small {
-        font-size: small;
+        font-size: 12px;
     }
 
     &.large {
-        font-size: large;
+        font-size: 24px;
     }
 
     &.xtraLarge {
-        font-size: xx-large;
+        font-size: 36px;
+    }
+
+    &.xx-large {
+        font-size: 48px;
     }
 
     &.bolder {

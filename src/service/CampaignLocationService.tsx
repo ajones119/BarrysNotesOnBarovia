@@ -94,30 +94,10 @@ export function SetCampaignLocation(campaignLocation?: CampaignLocation, onSucce
 
 // ADD NESTED DELETION SO THAT NESTED DATA GET'S DELETED!!!!
 
-export const useDeleteCampaignLocationButton = (campaignLocation?: CampaignLocation, onClick = () => {}, disabled = false) => {
+export const useDeleteCampaignLocation = (campaignLocationDocId: string) => {
     const col = collection(firestore, "campaignLocations");
-    const ref = doc(col, campaignLocation?.docId || "0");
-    const mutation = useFirestoreDocumentDeletion(ref);
-    const [buttonStatus, setButtonStatus] = useState<ButtonStatuses>(ButtonStatuses.Idle);
-    
-    const handleClick = () => {
-      !!location && mutation.mutate();
+    const ref = doc(col, campaignLocationDocId);
+    const mutation = useFirestoreDocumentDeletion(ref);    
   
-        if (!mutation.error){
-          onClick();
-        }
-  
-      setButtonStatus(mutation.status as ButtonStatuses)
-    }
-  
-    useEffect(() => {
-      const timer = setTimeout(() => setButtonStatus(ButtonStatuses.Idle), 2000)
-      return () => {
-        clearTimeout(timer)
-      }
-    }, [buttonStatus])
-  
-    return (
-      <LoadingButton color="error" isLoading={mutation.isLoading} status={buttonStatus} onClick={handleClick} disabled={disabled}><FontAwesomeIcon icon={faTrash} /></LoadingButton>
-    );
-  }
+    return mutation;
+}

@@ -10,6 +10,16 @@ import { faFaceAngry, faFaceMehBlank, faFaceSurprise, faMinus, faMugHot, faPlus,
 import ConditionSelect from "@components/ConditionsSelect/ConditionsSelect";
 import { Spacer } from "@components/Spacer/Spacer";
 import { PlayerCharacter } from "@model/PlayerCharacter";
+import {
+    useFloating,
+    useClick,
+    useInteractions,
+    offset,
+    flip,
+    shift,
+    autoUpdate,
+    useDismiss,
+  } from "@floating-ui/react";
 
 type SelectedPlayerProps = {
     character: PlayerCharacter,
@@ -18,11 +28,12 @@ type SelectedPlayerProps = {
 }
 
 const SelectedPlayer = ({character, combat, update}: SelectedPlayerProps) => {
-    const [currentHealthIncrement, setCurrentHealthIncrement] = useState<number | null>(1);
+    const [healthIncrement, setHealthIncrement] = useState<number>(1);
+    const [isHealthCounterOpen, setIsHealthCounterOpen] = useState(false);
 
     const {combatCharacterArray = [], currentTurnIndex = 0} = combat;
-    const index = combat.combatCharacterArray.findIndex(combatCharacter => combatCharacter.playerDocId === character?.docId)
-    const {health = 0, maxHealth = 0, conditions = []} = combatCharacterArray[index] || {health: 0, maxHealth: 0, conditions: []};
+    const index = combat?.combatCharacterArray?.findIndex(combatCharacter => combatCharacter.playerDocId === character?.docId)
+    const {health = 0, maxHealth = 0, conditions = [], armorClass = 0, initiative} = combatCharacterArray[index] || {health: 0, maxHealth: 0, conditions: [], armorClass: 0, initiative: 0};
 
     const updateCharacter = (key: string, value: any) => {
         const newCombat = { ...combat }
@@ -36,28 +47,129 @@ const SelectedPlayer = ({character, combat, update}: SelectedPlayerProps) => {
     };
 
     const endTurn = () => {
-        const {combatCharacterArray = [], currentTurnIndex = 0} = combat;
+        const {currentTurnIndex = 0} = combat;
 
         const nextTurn = currentTurnIndex >= combat.combatCharacterArray.length - 1 ? 0 : currentTurnIndex + 1
 
         update({ ...combat, currentTurnIndex: nextTurn })
     }
 
-    let yourTurnDisplay = <><FontAwesomeIcon icon={faFaceMehBlank} /><Typography size="xtraLarge">Not Your Turn</Typography></>;
+    let youreTurn = "not_next";
 
-    if (character?.docId === combat.combatCharacterArray[currentTurnIndex]?.playerDocId) {
-        yourTurnDisplay = <><FontAwesomeIcon icon={faFaceAngry} /><Typography size="xtraLarge">Your Turn</Typography></>;
+    if (character?.docId === combat?.combatCharacterArray[currentTurnIndex]?.playerDocId) {
+        youreTurn = "active";
     } else if (
-        character?.docId === combat.combatCharacterArray[currentTurnIndex + 1]?.playerDocId
-        || ((combat.currentTurnIndex === combat.combatCharacterArray?.length - 1) && character?.docId === combat.combatCharacterArray[0].playerDocId)
+        character?.docId === combat?.combatCharacterArray[currentTurnIndex + 1]?.playerDocId
+        || ((combat?.currentTurnIndex === combat?.combatCharacterArray?.length - 1) && character?.docId === combat?.combatCharacterArray[0].playerDocId)
         ) {
-        yourTurnDisplay = <><FontAwesomeIcon icon={faFaceSurprise} /><Typography size="xtraLarge">You're Next!</Typography></>;
+            youreTurn = "next";
     }
+
+    
+  const { refs, floatingStyles, context } = useFloating({
+    open: isHealthCounterOpen,
+    onOpenChange: setIsHealthCounterOpen,
+    middleware: [offset(10), flip(), shift()],
+    whileElementsMounted: autoUpdate,
+  });
+
+  const click = useClick(context);
+  const dismiss = useDismiss(context);
+
+  const { getReferenceProps, getFloatingProps } = useInteractions([click]);
 
 
     return (
-        <div>
-            <div className={css.characterContainer}>
+        <div className={css.selectedPlayerContainer}>
+            <div className={css.imageContainer}>
+                <img
+                    src={character.characterImageURL}
+                    className={css.image}
+                    onError={({ currentTarget }) => {
+                        currentTarget.onerror = null; // prevents looping
+                        currentTarget.src=STICK;
+                    }}
+                    alt="boo"
+                />
+            </div>
+            <div className={css.characterInfoContainer}>
+                <div className={css.titleContainer}>
+                    <Typography color={ youreTurn === "next" ? "tertiary" : youreTurn === "active" ? "success" : "light"} size="xtraLarge" fontStyle="secondary">{character.name}</Typography>
+                    { youreTurn === "active" &&
+                        <Button animatedHover onClick={endTurn}>End My Turn</Button>
+                    }
+                </div>
+                <div className={css.inputSection}>
+                    <Typography color="light" size="default" fontStyle="secondary">Initiative</Typography>
+                    <div className={css.input}>
+                        <TextInput number value={initiative} onChange={(value) => updateCharacter("initiative", Number(value))} />
+                    </div>
+                </div>
+                <div className={css.inputSection}>
+                    <Typography color="light" size="default" fontStyle="secondary">Armor Class</Typography>
+                    <div className={css.input}>
+                        <TextInput number value={armorClass} onChange={(value) => updateCharacter("armorClass", Number(value))} />
+                    </div>
+                </div>
+                <div className={css.inputSection}>
+                    <Typography color="light" size="default" fontStyle="secondary">Max Health</Typography>
+                    <div className={css.input}>
+                        <TextInput number value={maxHealth} onChange={(value) => updateCharacter("maxHealth", Number(value))} />
+                    </div>
+                </div>
+                <div className={css.inputSection}>
+                    <Typography color="light" size="large" fontStyle="secondary">Health</Typography>
+                    <div className={css.input} ref={refs.setReference} {...getReferenceProps()}>
+                        <TextInput number value={health} onChange={(value) => updateCharacter("health", Number(value))} />
+                    </div>
+                </div>
+                <div className={css.inputSection}>
+                    <Typography color="light" size="default" fontStyle="secondary">Conditions</Typography>
+                    <div className={css.input} ref={refs.setReference}>
+                        <ConditionSelect outlined selectedValue={conditions} onChange={(conditions) => updateCharacter("conditions", conditions)}/>
+                    </div>
+                </div>
+                
+
+
+            </div>
+            <div className={css.buttonContainer}>
+
+            </div>
+            {isHealthCounterOpen && (
+                <div
+                    ref={refs.setFloating}
+                    style={floatingStyles}
+                    {...getFloatingProps()}
+                >
+                    <div className={css.healthCounterContainer}>
+                        <div className={css.incrementText}>
+                            <TextInput
+                                number
+                                value={healthIncrement || 0}
+                                onChange={(value) => setHealthIncrement(Number(value))}
+                                placeholder="increment"
+                            />
+                        </div>
+                        <div className={css.counterButtons}>
+                            <div className={css.minus} onClick={() => updateCharacter("health", health - healthIncrement || 0)}>
+                                <FontAwesomeIcon icon={faMinus} />
+                            </div>
+                            <div className={css.plus} onClick={() => updateCharacter("health", health + healthIncrement || 0)}>
+                                <FontAwesomeIcon icon={faPlus} />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            )}
+        </div>
+    )
+};
+
+export default SelectedPlayer;
+
+/*
+ <div className={css.characterContainer}>
                 <img
                     src={character.characterImageURL}
                     className={css.imageContainer}
@@ -109,9 +221,4 @@ const SelectedPlayer = ({character, combat, update}: SelectedPlayerProps) => {
             { character?.docId === combat.combatCharacterArray[currentTurnIndex]?.playerDocId && <div>
                 <Button onClick={endTurn}>End My Turn</Button>
             </div>}
-        </div>
-        </div>
-    )
-};
-
-export default SelectedPlayer;
+        </div>*/

@@ -18,7 +18,6 @@ import SavingThrowSelect from "@components/Selects/SavingThrowSelect";
 import SkillsSelect from "@components/Selects/SkillsSelect";
 import { Button } from "@components/Button/Button";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { LoadingButton } from "@components/Button/LoadingButton";
 import { calculateAbilityScoreModifier } from "./utils";
 import { faXmarkCircle } from "@fortawesome/free-regular-svg-icons";
 
@@ -61,21 +60,21 @@ const BaseCharacterDrawer = ({
       <div className={css.characterDrawer}>
         <Grid container justifyContent="end" spacing={2}>
           <Grid item>
-            <LoadingButton
+            <Button
               color="success"
               isLoading={isLoading}
               onClick={() => {
                 editCharacter ? edit(character) : create(character);
               }}
             >
-              <Typography size="large" color="dark">
+              <Typography size="default" color="light">
                 Submit
               </Typography>
-            </LoadingButton>
+            </Button>
           </Grid>
           <Grid item>
-            <Button color="dark" borderColor="light" onClick={onClose}>
-              <Typography color="light" size="large">
+            <Button color="dark" onClick={onClose}>
+              <Typography color="light" size="default">
                 <FontAwesomeIcon icon={faXmarkCircle} />
               </Typography>
             </Button>

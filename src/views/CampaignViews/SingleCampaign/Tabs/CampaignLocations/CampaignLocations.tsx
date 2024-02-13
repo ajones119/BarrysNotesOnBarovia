@@ -32,7 +32,7 @@ const CampaignLocations = () => {
         <div className={css.locationsTreePage}>
             <div className={css.locationsTree}>
                 <div>
-                    <Button animatedHover={false} color="dark" borderColor="primary" onClick={() => setIsModalOpen(true)}>Add Base Location</Button>
+                    <Button animatedHover={false} color="dark" onClick={() => setIsModalOpen(true)}>Add Base Location</Button>
                     <CreateCampaignLocationModal campaignId={CampaignId || ""} isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />
                     <Grid container>
                         <Grid item xs={12}>

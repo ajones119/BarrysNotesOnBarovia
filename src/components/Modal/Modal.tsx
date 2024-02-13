@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import "./Modal.css";
 import { Button } from '../Button/Button';
-import { Grid } from "@mui/material"
+import { Grid, Typography } from "@mui/material"
 import { createPortal } from 'react-dom';
 import { animated, useTransition } from '@react-spring/web'
 
@@ -19,7 +19,7 @@ const ModalComponent = ({children, onClose, extraButtons = []}: ModalProps) => {
         <div className="modal-content-inner">{children}</div>
         <Grid container spacing={2}>
             <Grid item xs={extraButtons.length === 0 ? 12 : 12/(extraButtons.length + 1)}>
-                <Button size="large" onClick={onClose}>Close</Button>
+                <Button size="large" onClick={onClose}><Typography>Close</Typography></Button>
             </Grid>
             { extraButtons.map((button) => (
                 <Grid item xs={12/(extraButtons.length + 1)}>

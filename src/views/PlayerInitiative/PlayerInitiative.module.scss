@@ -1,22 +1,7 @@
+@import "src/sass_utils";
+
 .playerInitiativeContainer {
     color: white;
-    padding-top: 96px;
-
-    .characterContainer {
-        padding-top: 16px;
-        .imageContainer {
-            border-radius: 100px;
-        }
-
-        .turnIndicator {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding-top: 16px;
-            column-gap: 16px;
-            font-size: xx-large;
-        }
-    }
 
     .editCharacter {
         .healthInput {
@@ -72,6 +57,58 @@
     }
 }
 
+.selectedPlayerContainer {
+    display: flex;
+    justify-content: center;
+    column-gap: 24px;
+    padding-top: 24px;
+
+    @media (max-width: 800px) {
+        flex-direction: column;
+    }
+
+    .titleContainer {
+        margin: 0 auto;
+        display: flex;
+        column-gap: 8px;
+        align-items: center;
+        justify-content: flex-start;
+        @media (max-width: 800px) {
+            max-width: 300px;
+            flex-wrap: wrap;
+            justify-content: center;
+     }
+    }
+
+    .imageContainer {
+        flex-shrink: 1;
+        .image {
+            max-height: 300px;
+            border-radius: 16px;
+        }
+    }
+
+    .characterInfoContainer {
+        display: flex;
+        flex-direction: column;
+       
+        .inputSection {
+            margin: 0 auto;
+            display: flex;
+            column-gap: 16px;
+            .input {
+                width: 52px;
+            }
+        }
+    }
+}
+
+.toggleButtonsContainer {
+    display: flex;
+    column-gap: 16px;
+    align-items: end;
+}
+
 .conditionsSelector {
     width: 70%;
     min-width: 375px;
@@ -83,8 +120,13 @@
     opacity: 0.9;
     border-radius: 16px;
     text-align: center;
-    padding: 16px;
+    padding: 0 8px;
     margin: 0 auto;
+    width: 80px;
+   
+    .incrementText{
+        padding-bottom: 12px;
+    }
 
     .counterButtons {
         display: flex;
@@ -92,19 +134,17 @@
         align-items: center;
         padding-top: 8px;
 
-        .incrementInput{
-            width: 50px;
-        }
+        
         
         .plus {
-            color: green;
+            color: $success;
             &:hover {
                 opacity: 0.8;
                 cursor: pointer;
             }
         }
         .minus {
-            color: red;
+            color: $error;
             &:hover {
                 opacity: 0.8;
                 cursor: pointer;

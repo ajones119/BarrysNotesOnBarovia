@@ -22,7 +22,12 @@ const HomeCard = ({
     <div className={css.imageCard} onClick={() => navigate(href)} >
         <img className={css.imageBottom} src={backImage} alt="castle" />
         <img className={css.imageTop} src={frontImage} alt="barry" />
-        <Typography color="primary" size="xtraLarge" weight="bolder" className={css.label} >{title}</Typography>
+        <Typography
+            color="light"
+            size="xtraLarge"
+            fontStyle="secondary"
+            className={css.label}
+        >{title}</Typography>
 
       </div>
     );

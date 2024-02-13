@@ -17,6 +17,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faMinus, faPlus } from "@fortawesome/free-solid-svg-icons";
 import { useCombatMap, useUpdateCombatMap } from "@services/CombatMapService";
 import { FullScreen, useFullScreenHandle } from "react-full-screen";
+import FloatingButtonContainer from "@components/FloatingButtonContainer";
 
 type DroppableToken = {
   id: string,
@@ -155,8 +156,7 @@ const CombatMap = ({combatIdOverride = "", isPlayer = false}) => {
     return (
       <div>
         <div>
-          <Typography>{combat?.name}</Typography>
-          <Spacer height={24} />
+          <Spacer height={8} />
         </div>
         <FullScreen handle={mapContainer}>
           <div className={`${css.CombatMapContainer} ${mapContainer.active ? css.fullscreen : null}`} ref={mapRef} id="CombatMap">
@@ -207,15 +207,35 @@ const CombatMap = ({combatIdOverride = "", isPlayer = false}) => {
               </Map>
             </DndContext>
           </div>
-          <div className={css.buttonsContainer}>
-            {!mapContainer.active && <Button onClick={() => setIsSettingsDrawerOpen(true)}><Typography color="dark">Settings</Typography></Button>}
-            <Button onClick={() => mapContainer.active ? mapContainer.exit() : mapContainer.enter()}><Typography color="dark">FullScreen</Typography></Button>
-            <div style={{display: "flex", justifyContent: "center", alignItems: "center", columnGap: 4}}>
-              <Button onClick={() => setSearchParams({scale: String((scale - 0.1).toFixed(2))})}><FontAwesomeIcon icon={faMinus} /></Button>
-                <Typography weight="bold" color="primary">Zoom</Typography>
-              <Button onClick={() => setSearchParams({scale: String((scale + 0.1).toFixed(2))})}><FontAwesomeIcon icon={faPlus} /></Button>
+          <FloatingButtonContainer>
+            <div className={css.buttonsContainer}>
+              {!mapContainer.active && <Button onClick={() => setIsSettingsDrawerOpen(true)} color="secondary" animatedHover><Typography color="light">Settings</Typography></Button>}
+              <Button animatedHover onClick={() => mapContainer.active ? mapContainer.exit() : mapContainer.enter()}><Typography color="light">FullScreen</Typography></Button>
+              <div style={{display: "flex", justifyContent: "center", alignItems: "center", columnGap: 4}}>
+                <Button onClick={
+                    () => setSearchParams(searchParams => {
+                      searchParams.set("scale", String((scale - 0.1).toFixed(2)));
+                      return searchParams;
+                    })
+                  }><FontAwesomeIcon icon={faMinus} /></Button>
+                  <Typography weight="bold" color="light">Zoom</Typography>
+                <Button onClick={
+                    () => setSearchParams(searchParams => {
+                      searchParams.set("scale", String((scale + 0.1).toFixed(2)));
+                      return searchParams;
+                    })
+                  }><FontAwesomeIcon icon={faPlus} /></Button>
+              </div>
+              { isPlayer && 
+                <div>
+                  <Button animatedHover onClick={() => setSearchParams(searchParams => {
+                    searchParams.set("tab", "initiative");
+                    return searchParams
+                  })}><Typography>Health</Typography></Button>
+                </div>
+              }
             </div>
-          </div>
+          </FloatingButtonContainer>
             <SettingsDrawer
               isOpen={isSettingsDrawerOpen}
               onClose={() => setIsSettingsDrawerOpen(false)}

@@ -1,7 +1,7 @@
 import React, {useState} from "react"
 import CharacterPicker from "@components/CharacterPicker/CharacterPicker";
 import { useCampaignCharacters } from "@services/CharacterService";
-import { useParams } from "react-router-dom";
+import { useParams, useSearchParams } from "react-router-dom";
 import css from "./PlayerInitiative.module.scss"
 import { useCampaign } from "@services/CampaignService";
 import { Typography } from "@components/Typography/Typography";
@@ -9,19 +9,22 @@ import { useCombat, useUpdateInitiative } from "@services/CombatService";
 import { Spacer } from "@components/Spacer/Spacer";
 import SelectedPlayer from "./components/SelectedPlayer";
 import CharacterRow from "./components/CharacterRow";
-import { PlayerCharacter } from "@model/PlayerCharacter";
 import { CombatCharacter } from "@model/CombatCharacter";
 import Tabs, { Tab } from "@components/Tabs/Tabs";
 import CombatMap from "@views/CombatMap";
+import Spinner from "@components/Spinner";
+import FloatingButtonContainer from "@components/FloatingButtonContainer";
+import { Button } from "@components/Button/Button";
 
 const PlayerInitiative = () => {
-    const [character, setCharacter] = useState<PlayerCharacter | null>()
-    const [tab, setTab] = useState("initiative");
     const {CampaignId: campaignId} = useParams();
+    const [searchParams, setSearchParams] = useSearchParams()
     const {characters} = useCampaignCharacters(campaignId || "")
     const {data: campaign} = useCampaign(campaignId || "")
-    const {combat} = useCombat(campaign?.currentCombatDocId || "1")
+    const {combat, isLoading: isCombatLoading} = useCombat(campaign?.currentCombatDocId || "1")
     const {currentTurnIndex = 0, combatCharacterArray = [] } = combat;
+
+    const character = searchParams.get("characterId") && characters?.find(char => char.docId === searchParams.get("characterId")) || null
 
     const update = useUpdateInitiative(combat);
 
@@ -41,20 +44,41 @@ const PlayerInitiative = () => {
 
     const initiativeTab = (
         <div>
-             <CharacterPicker onChange={(value) => {
+            <FloatingButtonContainer>
+                <div className={css.toggleButtonsContainer}>
+                    <CharacterPicker width={200} value={character?.docId} onChange={(value) => {
                 if (value === "__none__") {
-                    setCharacter(null)
+                    setSearchParams(searchParams => {
+                        searchParams.set("characterId", "");
+                        return searchParams;
+                    })
                 } else {
                     const getCharacter = characters ? characters.find((char) => char.docId === value) : null;
-                    setCharacter(getCharacter)
+                    setSearchParams(searchParams => {
+                        searchParams.set("characterId", getCharacter?.docId || "");
+                        return searchParams;
+                    })
                 }
             }} characters={characters || []}/>
+                <div>
+                    <Button animatedHover onClick={() => setSearchParams(searchParams => {
+                        searchParams.set("tab", "map");
+                        return searchParams;
+                    })
+
+                    }>
+                        <Typography>Map</Typography>
+                    </Button>
+                </div>
+                </div>
+            </FloatingButtonContainer>
+            
             {(character) && 
                 <SelectedPlayer update={update} combat={combat} character={character} />
             }
             <Spacer height={24} />
             <div className={css.healthBars}>
-                    <Typography size="xtraLarge" weight="bolder">Players</Typography>
+                    <Typography size="xtraLarge" weight="bold" fontStyle="secondary">Players</Typography>
                 {
                     PCs?.map((character : CombatCharacter) => {
                         const {playerDocId, maxHealth = 0, health = 0} = character;
@@ -74,7 +98,7 @@ const PlayerInitiative = () => {
             </div>
             { allies?.length > 0 && 
                 <div className={css.healthBars}>
-                    <Typography size="xtraLarge" weight="bolder">Allies</Typography>
+                    <Typography size="xtraLarge" weight="bold" fontStyle="secondary">Allies</Typography>
                     {
                         allies?.map((character: CombatCharacter) => {
                             const { maxHealth = 0, health = 0} = character
@@ -89,21 +113,23 @@ const PlayerInitiative = () => {
                     }
                 </div>
             }
-            <div className={css.healthBars}>
-                <Typography size="xtraLarge" weight="bolder">Enemies</Typography>
-                {
-                    enemies?.map((character: CombatCharacter) => {
-                        const { maxHealth = 0, health = 0} = character
-                    const healthBarAmount = (health/maxHealth)*100;
-                    return(
-                        <CharacterRow
-                            rowImageURL={character?.imageURL}
-                            healthBarAmount={healthBarAmount}
-                            combatCharacter={character}
-                        />
-                    )})
-                }
-            </div>
+            { enemies?.length > 0 &&
+                <div className={css.healthBars}>
+                    <Typography size="xtraLarge" weight="bold" fontStyle="secondary">Enemies</Typography>
+                    {
+                        enemies?.map((character: CombatCharacter) => {
+                            const { maxHealth = 0, health = 0} = character
+                        const healthBarAmount = (health/maxHealth)*100;
+                        return(
+                            <CharacterRow
+                                rowImageURL={character?.imageURL}
+                                healthBarAmount={healthBarAmount}
+                                combatCharacter={character}
+                            />
+                        )})
+                    }
+                </div>
+            }
         </div>
     );
 
@@ -124,12 +150,16 @@ const PlayerInitiative = () => {
         }
     ];
 
+    if (isCombatLoading) {
+        return <Spinner />
+    }
+
     return (
         <div className={css.playerInitiativeContainer}>
             <Tabs
-                currentTab={tab}
-                onChange={(tab) => setTab(tab)}
+                currentTab={searchParams.get("tab") || "initiative"}
                 tabs={pageTabs}
+                disableTabMenu
             />
             <Spacer height={24} />
 

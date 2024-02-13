@@ -2,72 +2,115 @@
 
 .button {
     color: $dark;
-    background-color: $primary;
+    background: rgb(108,34,195);
+    background: linear-gradient(246deg, $neutral 0%, $primary 100%);
     border-style: solid;
     border-radius: 8px;
+    border-color: $dark;
     padding: 4px 8px;
-    min-height: fit-content;
+    position: relative;
+    color: $light;
+    overflow: hidden;
 
-    &:active {
-        opacity: 90%;
+    &.hollow {
+        background: none;
+        background-color: none;
+        border-color: $primary;
+
+        &:hover {
+            background: linear-gradient(246deg, $neutral 0%, $primary 100%);
+        }
     }
 
-    &.round {
-        border-radius: 16px;
+    &:hover {
+        //background: linear-gradient(246deg, rgba(108,34,195,1) 0%, rgba(20,5,61,1) 100%);
+        filter: brightness(120%);
+        border-color: $primary;
+        &.error {
+            border-color: $error;
+        }
+        &.success {
+            border-color: $success;
+        }
+        &.secondary {
+            border-color: $secondary;
+        }
+        &.tertiary {
+            border-color: $tertiary;
+        }
+    }
+
+    &.animatedHover {
+        &:hover {
+            transition: all 0.2s ease-in;
+        }
     }
 
     &.secondary {
-        background-color: $neutral;
+        background: linear-gradient(246deg, $neutral 0%, $secondary 100%);
     }
-
-    &.success {
-        background-color: $success;
+    &.tertiary {
+        background: linear-gradient(246deg, $neutral 0%, $tertiary 100%);
     }
 
     &.error {
+        background: none;
         background-color: $error;
-        color: $light;
+
+        &.hollow {
+            background: none;
+            background-color: none;
+            border-color: $error;
+
+            &:hover {
+                opacity: 90%;
+            }
+        }
     }
 
-    &.light {
-        background-color: $light;
-    }
-
-    &.dark {
-        background-color: $dark;
-        color: $primary;
-    }
-
-    &.borderColor-primary {
-        border-color: $primary;
-    }
-
-    &.borderColor-secondary {
-        border-color: $neutral;
-    }
-
-    &.borderColor-success {
-        border-color: $success;
-    }
-
-    &.borderColor-error {
-        border-color: $error;
-        color: $light;
-    }
-
-    &.borderColor-light {
-        border-color: $light;
-    }
-
-    &.borderColor-dark {
-        border-color: $dark;
+    &.success {
+        background: none;
+        background-color: $success;
     }
 
     &.large {
         width: 100%;
         font-size: larger;
     }
+
+    span {
+        &.ripple {
+            width: 20px;
+            height: 20px;
+            position: absolute;
+            background: white;
+            display: block;
+            content: "";
+            border-radius: 9999px;
+            opacity: 0.1;
+            animation: 0.5s ease 1 forwards ripple-effect;
+        }
+    }
+
+    .spinnerContainer {
+        height: 30px;
+    }
 }
+
+@keyframes ripple-effect {
+    0% {
+      transform: scale(1);
+      opacity: 0.25;
+    }
+    50% {
+      transform: scale(10);
+      opacity: 0.1;
+    }
+    100% {
+      transform: scale(35);
+      opacity: 0;
+    }
+  }
 
 @keyframes bounceAndSpin {
     0% {

@@ -31,18 +31,20 @@ const Combats = () => {
         health: character?.maxHealth || 0,
         shouldShow: true,
         shouldShowHealthBar: true,
-        imageURL: character?.characterImageURL,
+        imageURL: character?.characterImageURL || "",
       }) as CombatCharacter,
   );
 
   return (
     <div className={css.initiativeTrackerContainer}>
       <Button
+        animatedHover
+        color="tertiary"
         onClick={() => {
           setCreateModalOpen(true);
         }}
       >
-        Create Encounter
+        <Typography size="large">Create Encounter</Typography>
       </Button>
       <TableContainer style={{ width: "500px", margin: "0 auto" }}>
         <TableHead>

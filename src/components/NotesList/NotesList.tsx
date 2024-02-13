@@ -8,6 +8,7 @@ import { Button } from '../Button/Button';
 import CreateNoteModal from '../Modal/CreateNoteModal/CreateNoteModal';
 import { NotesListItem } from './NoteListItem';
 import { PlayerCharacter } from '@model/PlayerCharacter';
+import FloatingButtonContainer from '@components/FloatingButtonContainer';
 const getCharacterFromNote = (note: Note, characters: PlayerCharacter[]) => {
     const notedCharacter = characters.find(character => note.characterDocId === character.docId)
 
@@ -25,18 +26,16 @@ const NotesList = ({characters, notes, campaignId}: NotesListProps) => {
 
     return (
         <>
-        <div className={css.addNoteButton}>
-            <Button size='large' color="secondary" onClick={() => setIsCreatemodalOpen(true)}>Add Note{" "}<FontAwesomeIcon icon={faPlusCircle} /></Button>
-        </div>
+        <FloatingButtonContainer>
+            <Button animatedHover size='large' color="secondary" onClick={() => setIsCreatemodalOpen(true)}>Add Note{" "}<FontAwesomeIcon icon={faPlusCircle} /></Button>
+        </FloatingButtonContainer>
         <Grid container justifyContent="space-around" alignItems="center">
             <Grid item xs={12}>
             
             <div className={css.notesList}>
                 {
                     notes?.map((note: Note) => { 
-
                         const character = getCharacterFromNote(note, characters);
-                        
                         return(
                         <NotesListItem characterImageURL={character?.characterImageURL} characterName={character?.name} note={note} />
                     )})

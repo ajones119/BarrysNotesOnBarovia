@@ -1,6 +1,7 @@
 import { Chip, MenuItem, Select, styled } from "@mui/material";
 import React from "react";
 import css from "../DMInitiative.module.scss"
+import useSetTheme from "@hooks/useSetTheme";
 
 type ShowSelectorProps = {
     onChange: (value: any) => void,
@@ -29,6 +30,7 @@ const options = [
 ]
 
 const ShowSelector = ({onChange, value, width}: ShowSelectorProps) => {
+    const {theme} = useSetTheme();
     return (<CustomizedSelect
         value={value}
         onChange={(event) => {
@@ -46,6 +48,7 @@ const ShowSelector = ({onChange, value, width}: ShowSelectorProps) => {
                     color="primary"
                     key={value}
                     label={label}
+                    style={{color: theme.primary, borderColor: theme.primary}}
                 />
           )}}
         >

@@ -34,7 +34,7 @@ export const LoadingButton = ({ onClick, children, disabled = false, neon = fals
         const timer = setTimeout(() => setButtonStatus(ButtonStatuses.Idle), 2000);
         setButtonStatus(status)
         return () => {
-          clearTimeout(timer);
+            clearTimeout(timer);
         };
       }, [status]);
 

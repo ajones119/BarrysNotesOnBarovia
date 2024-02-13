@@ -10,7 +10,7 @@
     background: none;
     outline: none;
     font-size: medium;
-    color: $primary;
+    color: $light;
     margin-top: -20px;
     width: 100%;
 
@@ -37,13 +37,15 @@
     font-size: medium;
     color: $neutral;
     z-index: 10;
+    color: $primary;
+    opacity: 0.5;
 }
 
 .error {
-    color: red;
+    color: $error;
 }
 
 .errorTextInput {
-    color: red;
-    border-color: red;
+    color: $error;
+    border-color: $error;
 }
