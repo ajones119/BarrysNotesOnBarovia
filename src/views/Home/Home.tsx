@@ -15,7 +15,7 @@ export const Home = () => {
 
   return(
     <div className={css.homePage}>
-      <Typography color="tertiary" size="xx-large" fontStyle="rough" inderline>BARRY'S NOTES ON BAROVIA</Typography>
+      <Typography color="tertiary" size="xx-large" fontStyle="rough" underline>BARRY'S NOTES ON BAROVIA</Typography>
 
       <div className={css.homePageCards}>
           <HomeCard

@@ -20,7 +20,7 @@ export type NavBarLink = {
 
 type NavBarProps = {
   additionalLinks?: NavBarLink[]
-  sectionHomeLink?: NavBarLink
+  sectionHomeLink?: NavBarLink | null
 };
 
 export const NavBar = ({additionalLinks = [], sectionHomeLink}: NavBarProps) => {
