@@ -38,6 +38,8 @@ const Combats = () => {
   return (
     <div className={css.initiativeTrackerContainer}>
       <Button
+        animatedHover
+        color="tertiary"
         onClick={() => {
           setCreateModalOpen(true);
         }}

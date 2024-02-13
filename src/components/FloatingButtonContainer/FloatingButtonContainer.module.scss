@@ -1,3 +1,4 @@
+@import "src/sass_utils";
 
 .container {
     position: fixed;
@@ -6,6 +7,6 @@
     z-index: 20;
     padding: 8px;
     padding-right: 16px;
-    background-color: #0e003cdf;
+    background-color: var(--floating-container-color);
     border-radius: 16px;
 }

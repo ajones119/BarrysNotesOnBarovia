@@ -3,9 +3,11 @@ import React from "react";
 import css from "./ConditionsSelect.module.scss"
 import CancelIcon from "@mui/icons-material/Cancel";
 import CheckIcon from "@mui/icons-material/Check";
-import { faBed, faBrain, faChildCombatant, faEarDeaf, faFaceFlushed, faFaceGrinHearts, faFaceTired, faFeather, faFire, faGem, faHandsHoldingChild, faMoon, faPersonFallingBurst, faPersonShelter, faPersonWalkingWithCane, faSkullCrossbones, faUserSecret, faWheelchair } from "@fortawesome/free-solid-svg-icons";
+import { faBed, faBrain, faChildCombatant, faEarDeaf, faFaceFlushed, faFaceGrinHearts, faFaceTired, faFeather, faFire, faGem, faHandsHoldingChild, faMoon, faPersonFallingBurst, faPersonShelter, faPersonWalkingWithCane, faSkullCrossbones, faUserSecret, faWheelchair, faXmark } from "@fortawesome/free-solid-svg-icons";
 import { IconDefinition } from "@fortawesome/fontawesome-svg-core";
-import { faFaceAngry } from "@fortawesome/free-regular-svg-icons";
+import { faCircleXmark, faFaceAngry } from "@fortawesome/free-regular-svg-icons";
+import useSetTheme from "@hooks/useSetTheme";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 type ConditionSelectProps = {
     onChange: (value: string[] | null) => void,
@@ -19,14 +21,6 @@ export type Condition = {
     value: string,
     icon: IconDefinition
 }
-
-const CustomizedSelect = styled(Select)`
-  color: #20b2aa;
-
-  :hover {
-    color: #2e8b57;
-  }
-`;
 
 export const CONDITION_OPTIONS: Condition[] = [
     {
@@ -127,7 +121,8 @@ export const CONDITION_OPTIONS: Condition[] = [
 ]
 
 const ConditionSelect = ({onChange, selectedValue, width = "200px", outlined = false}: ConditionSelectProps) => {
-    return (<CustomizedSelect
+    const {theme} = useSetTheme();
+    return (<Select
         label="Conditions"
         multiple
         multiline
@@ -147,7 +142,7 @@ const ConditionSelect = ({onChange, selectedValue, width = "200px", outlined = f
                 return(
                     <Chip
                         variant="outlined"
-                        color="primary"
+                        style={{color: theme.primary, borderColor: theme.primary}}
                         key={value}
                         label={label}
                         onDelete={() =>
@@ -156,7 +151,9 @@ const ConditionSelect = ({onChange, selectedValue, width = "200px", outlined = f
                             )
                         }
                         deleteIcon={
-                            <CancelIcon
+                            <FontAwesomeIcon
+                                icon={faXmark}
+                                style={{color: theme.primary}}
                                 onMouseDown={(event) => event.stopPropagation()}
                             />
                         }
@@ -172,7 +169,7 @@ const ConditionSelect = ({onChange, selectedValue, width = "200px", outlined = f
             </MenuItem>
             ))
         }
-    </CustomizedSelect>);
+    </Select>);
 }
 
 export default ConditionSelect;

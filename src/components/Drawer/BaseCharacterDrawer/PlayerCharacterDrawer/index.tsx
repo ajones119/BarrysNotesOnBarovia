@@ -97,7 +97,7 @@ const PlayerCharacterDrawer = ({
             </Button>
           </Grid>
           <Grid item>
-            <Button color="dark" borderColor="light" onClick={onClose}>
+            <Button color="dark" onClick={onClose}>
               <Typography color="light">
                 <FontAwesomeIcon icon={faXmarkCircle} />
               </Typography>

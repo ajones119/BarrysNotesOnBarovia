@@ -73,7 +73,7 @@ const BaseCharacterDrawer = ({
             </Button>
           </Grid>
           <Grid item>
-            <Button color="dark" borderColor="light" onClick={onClose}>
+            <Button color="dark" onClick={onClose}>
               <Typography color="light" size="default">
                 <FontAwesomeIcon icon={faXmarkCircle} />
               </Typography>

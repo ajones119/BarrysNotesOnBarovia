@@ -11,6 +11,7 @@ import { Spacer } from "@components/Spacer/Spacer";
 import { useSpring, animated } from "@react-spring/web";
 import { CharacterTypeLowercase } from "@model/BaseCharacter";
 import { BASE_CHARACTER_IMAGE_MAP } from "utils/getBaseCharacterGenericImage";
+import useSetTheme from "@hooks/useSetTheme";
 
 const BootstrapTooltip = styled(({ className, ...props }: TooltipProps) => (
     <Tooltip {...props} arrow classes={{ popper: className }} />
@@ -47,6 +48,8 @@ const CharacterRow = ({
         delay: 5000,
     });
 
+    const {theme} = useSetTheme();
+
     /*const point = useSpring({ 
         loop: { reverse: true}, 
         from: { x: -10 }, 
@@ -78,7 +81,7 @@ const CharacterRow = ({
                         alt="boo"
                         sx={{width: 32, height: 32}}
                     />}
-                    <Typography style={{color: combatCharacter.color || "white"}}>{combatCharacter?.name || "Unknown"}</Typography>
+                    <Typography style={{color: combatCharacter.color || theme.light}}>{combatCharacter?.name || "Unknown"}</Typography>
                     <FontAwesomeIcon icon={getHealthIcon(healthBarAmount || 0)} />
                     { getIconList(combatCharacter).map(value => <BootstrapTooltip placement="top" arrow title={value?.label}><FontAwesomeIcon icon={value?.icon} /></BootstrapTooltip>) }
                 </div>

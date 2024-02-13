@@ -3,7 +3,7 @@
 .button {
     color: $dark;
     background: rgb(108,34,195);
-    background: linear-gradient(246deg, rgba(108,34,195,1) 0%, rgba(20,5,61,1) 80%);
+    background: linear-gradient(246deg, $neutral 0%, $primary 100%);
     border-style: solid;
     border-radius: 8px;
     border-color: $dark;
@@ -18,15 +18,25 @@
         border-color: $primary;
 
         &:hover {
-            opacity: 90%;
+            background: linear-gradient(246deg, $neutral 0%, $primary 100%);
         }
     }
 
     &:hover {
-        background: linear-gradient(246deg, rgba(108,34,195,1) 0%, rgba(20,5,61,1) 100%);
+        //background: linear-gradient(246deg, rgba(108,34,195,1) 0%, rgba(20,5,61,1) 100%);
+        filter: brightness(120%);
         border-color: $primary;
         &.error {
             border-color: $error;
+        }
+        &.success {
+            border-color: $success;
+        }
+        &.secondary {
+            border-color: $secondary;
+        }
+        &.tertiary {
+            border-color: $tertiary;
         }
     }
 
@@ -34,6 +44,13 @@
         &:hover {
             transition: all 0.2s ease-in;
         }
+    }
+
+    &.secondary {
+        background: linear-gradient(246deg, $neutral 0%, $secondary 100%);
+    }
+    &.tertiary {
+        background: linear-gradient(246deg, $neutral 0%, $tertiary 100%);
     }
 
     &.error {

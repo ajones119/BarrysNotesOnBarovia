@@ -76,8 +76,7 @@
                     z-index: 1;
                     width: 100%;
                     top: 50%;
-                    opacity: 1;
-                    background-color: #24252690;
+                    background-color: var(--floating-container-color);
 
                     .overviewCardText {
                         opacity: 100;

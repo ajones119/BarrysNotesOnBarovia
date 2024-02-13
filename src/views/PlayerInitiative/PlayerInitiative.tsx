@@ -61,7 +61,7 @@ const PlayerInitiative = () => {
                 }
             }} characters={characters || []}/>
                 <div>
-                    <Button onClick={() => setSearchParams(searchParams => {
+                    <Button animatedHover onClick={() => setSearchParams(searchParams => {
                         searchParams.set("tab", "map");
                         return searchParams;
                     })

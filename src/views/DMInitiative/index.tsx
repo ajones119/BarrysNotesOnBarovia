@@ -160,6 +160,22 @@ const DMInitiative = () => {
 
     return newId + 1;
   }
+
+  const autoInitiative = () => {
+    let tempCombatCharacters = [...combatCharacterArray];
+
+    tempCombatCharacters = tempCombatCharacters.map(character => {
+      if (!character?.playerDocId && !character?.initiative) {
+        const roll = Math.floor(
+          Math.random() * 20 + (1 + (character.initiativeBonus || 0)),
+        );
+        return {...character, initiative: roll};
+      }
+      return character;
+    })
+
+    handleUpdate(combat, tempCombatCharacters)
+  }
   
 
   return (
@@ -199,6 +215,7 @@ const DMInitiative = () => {
 
               handleUpdate(combat, newCombatCharacterArray)
             }} color="dark">Show All</Button>
+            <Button onClick={() => autoInitiative()} color="dark">Auto Init</Button>
           </div>
         </div>
         <Typography size={"xtraLarge"} fontStyle="secondary">{combat.name}</Typography>

@@ -152,7 +152,7 @@ const SettingsDrawer = ({
                                 }
                             </div>
                             <div className={css.tokenButtons}>
-                            <Button borderColor="primary" color='dark' onClick={() => {
+                            <Button color='dark' onClick={() => {
                                     const tokenIndex = localMapSettings?.extraTokens?.findIndex(token => token.id === id) || 0;
                                     const newToken = {id, data: {...token}, disabled: !disabled}
                                     const newTokens = [...localMapSettings.extraTokens || []]
@@ -161,10 +161,10 @@ const SettingsDrawer = ({
                                 }}>
                                     <FontAwesomeIcon icon={disabled ? faLock : faLockOpen} />
                                 </Button>
-                                <Button borderColor="error" color='dark' onClick={() => handleDeleteToken(id)}>
+                                <Button color='dark' onClick={() => handleDeleteToken(id)}>
                                     <FontAwesomeIcon icon={faMinus} />
                                 </Button>
-                                <Button borderColor="success" color='dark' onClick={() => handleAddToken({...token, height: token?.length})}>
+                                <Button color='dark' onClick={() => handleAddToken({...token, height: token?.length})}>
                                     <FontAwesomeIcon icon={faCopy} />
                                 </Button>
                             </div>

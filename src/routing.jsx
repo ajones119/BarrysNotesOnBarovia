@@ -10,6 +10,7 @@ import CustomMonsters from "@views/CustomMonsters";
 import CombatMap from "@views/CombatMap";
 import { faBook, faCircleUser, faCrosshairs, faEarthAmericas, faMagic, faMagnifyingGlassLocation, faSkullCrossbones } from "@fortawesome/free-solid-svg-icons";
 import { getCombatMapRoute } from "@views/DMInitiative/utils";
+import useSetTheme from "@hooks/useSetTheme";
 
 const CampaignAdditionalLinks = {
   topLink: ({CampaignId}) => (
@@ -53,6 +54,7 @@ const CampaignAdditionalLinks = {
 }
 
 export const Routing = () => {
+  useSetTheme();
   return (
     <Routes>
       <Route path="/" element={<Home />} />

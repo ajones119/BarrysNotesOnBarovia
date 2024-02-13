@@ -32,6 +32,7 @@ import WoodWall3x1 from "@images/MapTokens/woodwall3x1.png"
 import WoodWallCross from "@images/MapTokens/woodwallcross.png"
 import WoodWallT from "@images/MapTokens/woodwallt.png"
 import SewerEntrance from "@images/MapTokens/sewerEntrance.png"
+import Ripple from "@images/MapTokens/ripple.gif"
 
 
 import { COLORS_MAP } from "@components/ColorPicker/ColorPicker"
@@ -435,6 +436,70 @@ const INTERNAL_TOKENS: Array<{
                 image: RotatingSpell,
                 height: 24,
                 width: 24,
+                color: COLORS_MAP.Black,
+                opacity: 0.9
+            },
+            {
+                name: "Animated Circle Ripple 1x1",
+                image: Ripple,
+                height: 1,
+                width: 1,
+                color: COLORS_MAP.Black,
+                opacity: 0.9
+            },
+            {
+                name: "Animated Circle Ripple (5ft radius) 2x2",
+                image: Ripple,
+                height: 2,
+                width: 2,
+                color: COLORS_MAP.Black,
+                opacity: 0.9
+            },
+            {
+                name: "Animated Circle Ripple (10ft radius) 4x4",
+                image: Ripple,
+                height: 4,
+                width: 4,
+                color: COLORS_MAP.Black,
+                opacity: 0.9
+            },
+            {
+                name: "Animated Circle Ripple (15ft radius) 6x6",
+                image: Ripple,
+                height: 6.5,
+                width: 6.5,
+                color: COLORS_MAP.Black,
+                opacity: 0.9
+            },
+            {
+                name: "Animated Circle Ripple (20ft radius) 8x8",
+                image: Ripple,
+                height: 9,
+                width: 9,
+                color: COLORS_MAP.Black,
+                opacity: 0.9
+            },
+            {
+                name: "Animated Circle Ripple (30ft radius) 12x12",
+                image: Ripple,
+                height: 14,
+                width: 14,
+                color: COLORS_MAP.Black,
+                opacity: 0.9
+            },
+            {
+                name: "Animated Circle Ripple (50ft radius) 20x20",
+                image: Ripple,
+                height: 22,
+                width: 22,
+                color: COLORS_MAP.Black,
+                opacity: 0.9
+            },
+            {
+                name: "Animated Circle Ripple (60ft radius) 24x24",
+                image: Ripple,
+                height: 26,
+                width: 26,
                 color: COLORS_MAP.Black,
                 opacity: 0.9
             },

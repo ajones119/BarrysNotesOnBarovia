@@ -7,8 +7,7 @@ export declare interface ButtonProps {
     children: React.ReactNode;
     disabled?: boolean;
     animatedHover?: boolean;
-    color?: "success" | "light" | "dark" | "error" | "primary" | "default" | "secondary";
-    borderColor?: "success" | "light" | "dark" | "error" | "primary" | "default" | "secondary";
+    color?: "success" | "light" | "dark" | "error" | "primary" | "default" | "secondary" | "tertiary";
     size?: "small" | "default" | "large";
     hollow?: boolean;
     round?: boolean;
@@ -20,7 +19,6 @@ export const Button = ({
     children,
     disabled = false,
     animatedHover = false,
-    borderColor = "default",
     hollow = false,
     color = "default",
     size = "default",
@@ -53,7 +51,6 @@ export const Button = ({
                 ${css.button}
                 ${animatedHover && css.animatedHover}
                 ${css[color]}
-                ${css[`borderColor-${borderColor}`]}
                 ${css[size]}
                 ${hollow && css.hollow}
             `}

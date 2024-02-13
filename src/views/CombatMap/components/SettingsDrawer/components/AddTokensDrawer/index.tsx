@@ -68,7 +68,7 @@ const AddTokenDrawer = ({
                                             <div className={css.addTokenInfo}>
                                                 <Typography>{token.name}</Typography>
                                             </div>
-                                            <Button borderColor="dark" color='dark' onClick={() => onAddToken(token)}>
+                                            <Button color='dark' onClick={() => onAddToken(token)}>
                                                 <FontAwesomeIcon icon={faPlus} />
                                             </Button>
                                         </div>
@@ -84,16 +84,3 @@ const AddTokenDrawer = ({
 }
 
 export default AddTokenDrawer;
-
-/*
- {options.map(token => (
-                        <div className={css.addTokenEntry} key={token.name}>
-                            <div className={css.addTokenInfo}>
-                                <Typography>{token.name}</Typography>
-                            </div>
-                            <Button borderColor="dark" color='dark' onClick={() => onAddToken(token)}>
-                                <FontAwesomeIcon icon={faPlus} />
-                            </Button>
-                        </div>
-                    ))}
-*/

@@ -156,8 +156,7 @@ const CombatMap = ({combatIdOverride = "", isPlayer = false}) => {
     return (
       <div>
         <div>
-          <Typography>{combat?.name}</Typography>
-          <Spacer height={24} />
+          <Spacer height={8} />
         </div>
         <FullScreen handle={mapContainer}>
           <div className={`${css.CombatMapContainer} ${mapContainer.active ? css.fullscreen : null}`} ref={mapRef} id="CombatMap">
@@ -210,8 +209,8 @@ const CombatMap = ({combatIdOverride = "", isPlayer = false}) => {
           </div>
           <FloatingButtonContainer>
             <div className={css.buttonsContainer}>
-              {!mapContainer.active && <Button onClick={() => setIsSettingsDrawerOpen(true)}><Typography color="light">Settings</Typography></Button>}
-              <Button onClick={() => mapContainer.active ? mapContainer.exit() : mapContainer.enter()}><Typography color="light">FullScreen</Typography></Button>
+              {!mapContainer.active && <Button onClick={() => setIsSettingsDrawerOpen(true)} color="secondary" animatedHover><Typography color="light">Settings</Typography></Button>}
+              <Button animatedHover onClick={() => mapContainer.active ? mapContainer.exit() : mapContainer.enter()}><Typography color="light">FullScreen</Typography></Button>
               <div style={{display: "flex", justifyContent: "center", alignItems: "center", columnGap: 4}}>
                 <Button onClick={
                     () => setSearchParams(searchParams => {
@@ -229,7 +228,7 @@ const CombatMap = ({combatIdOverride = "", isPlayer = false}) => {
               </div>
               { isPlayer && 
                 <div>
-                  <Button onClick={() => setSearchParams(searchParams => {
+                  <Button animatedHover onClick={() => setSearchParams(searchParams => {
                     searchParams.set("tab", "initiative");
                     return searchParams
                   })}><Typography>Health</Typography></Button>

@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import css from "./NavBar.module.scss"
 import Barry from "@images/barry-cartoon.png"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -9,8 +9,8 @@ import { useWindowWidth } from "@react-hook/window-size";
 import Drawer from "@components/Drawer";
 import { Button } from "@components/Button/Button";
 import { Icon } from "@fortawesome/fontawesome-svg-core";
-import { Divider } from "@mui/material";
 import { Spacer } from "@components/Spacer/Spacer";
+import ThemePicker from "./components/ThemePicker";
 
 export type NavBarLink = {
   name: string;
@@ -23,12 +23,12 @@ type NavBarProps = {
   sectionHomeLink?: NavBarLink
 };
 
-export const NavBar = ({additionalLinks = [], sectionHomeLink = null}: NavBarProps) => {
+export const NavBar = ({additionalLinks = [], sectionHomeLink}: NavBarProps) => {
   const [scrolled, setScrolled] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
   const navigate = useNavigate();
   const { pathname } = useLocation();
-  const width = useWindowWidth();;
+  const width = useWindowWidth();
 
   const handleScroll=() => {
       const offset=window.scrollY;
@@ -44,11 +44,6 @@ export const NavBar = ({additionalLinks = [], sectionHomeLink = null}: NavBarPro
     window.addEventListener('scroll',handleScroll)
   })
 
-  const handleNavigate = (url: string) => {
-    setIsOpen(false);
-    navigate(url);
-  }
-
   const desktopNavBar = (
     <div className={`${css.navbarContainer} ${scrolled ?  css.scrolled : ""}`}>
       <Link to="/" className={css.logoContainer}>
@@ -56,48 +51,50 @@ export const NavBar = ({additionalLinks = [], sectionHomeLink = null}: NavBarPro
       </Link>
         <div className={css.linkContainer}>
           <Link className={`${css.navBarLink} ${pathname === "/Campaigns/" ? css.activeLink : ""}`} to="/Campaigns/">
-            <FontAwesomeIcon icon={faDungeon} />
-            <Typography className={`${css.navBarLink} ${pathname === "/Campaigns/" ? css.activeLink : ""}`}>Campaigns</Typography>
+            <Typography className={`${css.navBarLink} ${pathname === "/Campaigns/" ? css.activeLink : ""}`}><FontAwesomeIcon icon={faDungeon} />Campaigns</Typography>
           </Link>
           <Link className={`${css.navBarLink} ${pathname === "/Characters/" ? css.activeLink : ""}`} to="/Characters/">
-            <FontAwesomeIcon icon={faHatWizard} />
-            <Typography className={`${css.navBarLink} ${pathname === "/Characters/" ? css.activeLink : ""}`}>Characters</Typography>
+            <Typography className={`${css.navBarLink} ${pathname === "/Characters/" ? css.activeLink : ""}`}><FontAwesomeIcon icon={faHatWizard} />Characters</Typography>
           </Link>
           <Link className={`${css.navBarLink} ${pathname === "/Monsters/" ? css.activeLink : ""}`} to="/Monsters/">
-            <FontAwesomeIcon icon={faSpaghettiMonsterFlying} />
-            <Typography className={`${css.navBarLink} ${pathname === "/Monsters/" ? css.activeLink : ""}`}>Monsters</Typography>
+            <Typography className={`${css.navBarLink} ${pathname === "/Monsters/" ? css.activeLink : ""}`}><FontAwesomeIcon icon={faSpaghettiMonsterFlying} />Monsters</Typography>
           </Link>
-          { additionalLinks.length > 0 && 
             <div className={css.menuButtons}>
               {sectionHomeLink && <Button hollow onClick={() => navigate(sectionHomeLink.url)}><FontAwesomeIcon icon={faHomeAlt} /></Button>}
               <Button hollow onClick={() => setIsOpen(true)}><FontAwesomeIcon icon={faGripHorizontal} /></Button>
-              
             </div>
-          }
+          
         </div>
         <Drawer isOpen={isOpen} onClose={() => setIsOpen(false)}>
-          <div className={css.mobileLinkContainer}>
-            <div className={`${css.navBarLink}`} onClick={() => setIsOpen(false)}>
-              <Typography size="large" className={`${css.navBarLink}`}><FontAwesomeIcon icon={faXmark} />{" "}Close</Typography>
+            <div className={css.close} onClick={() => {
+              setIsOpen(false)}}>
+              <Typography size="large" className={`${css.navBarLink}`}><FontAwesomeIcon icon={faXmark} /></Typography>
             </div>
-            <Link className={`${css.navBarLink} ${pathname === "/Campaigns/" ? css.activeLink : ""}`} to="/Campaigns/" onClick={() => setIsOpen(false)}>
-              <Typography size="large" className={`${css.navBarLink} ${pathname === "/Campaigns/" ? css.activeLink : ""}`}><FontAwesomeIcon icon={faDungeon} />{" "}Campaigns</Typography>
-            </Link>
-            <Link className={`${css.navBarLink} ${pathname === "/Characters/" ? css.activeLink : ""}`} to="/Characters/" onClick={() => setIsOpen(false)}>
-              <Typography size="large" className={`${css.navBarLink} ${pathname === "/Characters/" ? css.activeLink : ""}`}><FontAwesomeIcon icon={faHatWizard} />{" "}Characters</Typography>
-            </Link>
-            <Link className={`${css.navBarLink} ${pathname === "/Monsters/" ? css.activeLink : ""}`} to="/Monsters/" onClick={() => setIsOpen(false)}>
-              <Typography size="large" className={`${css.navBarLink} ${pathname === "/Monsters/" ? css.activeLink : ""}`}><FontAwesomeIcon icon={faSpaghettiMonsterFlying} />{" "}Monsters</Typography>
-            </Link>
-            <Spacer height={24} />
             { additionalLinks.length > 0 &&
-              additionalLinks.map(link => (
-                  <Link className={`${css.navBarLink} ${pathname === link.url ? css.activeLink : ""}`} to={link.url} onClick={() => setIsOpen(false)}>
-                    <Typography size="default" className={`${css.navBarLink} ${pathname === link.url ? css.activeLink : ""}`}><FontAwesomeIcon icon={link.icon} />{" "}{link.name}</Typography>
-                  </Link>
-                ))
-            }
-          </div>
+              <div className={css.mobileLinkContainer}> 
+                <Link className={`${css.navBarLink} ${pathname === "/Campaigns/" ? css.activeLink : ""}`} to="/Campaigns/" onClick={() => setIsOpen(false)}>
+                  <Typography size="large" className={`${css.navBarLink} ${pathname === "/Campaigns/" ? css.activeLink : ""}`}><FontAwesomeIcon icon={faDungeon} />{" "}Campaigns</Typography>
+                </Link>
+                <Link className={`${css.navBarLink} ${pathname === "/Characters/" ? css.activeLink : ""}`} to="/Characters/" onClick={() => setIsOpen(false)}>
+                  <Typography size="large" className={`${css.navBarLink} ${pathname === "/Characters/" ? css.activeLink : ""}`}><FontAwesomeIcon icon={faHatWizard} />{" "}Characters</Typography>
+                </Link>
+                <Link className={`${css.navBarLink} ${pathname === "/Monsters/" ? css.activeLink : ""}`} to="/Monsters/" onClick={() => setIsOpen(false)}>
+                  <Typography size="large" className={`${css.navBarLink} ${pathname === "/Monsters/" ? css.activeLink : ""}`}><FontAwesomeIcon icon={faSpaghettiMonsterFlying} />{" "}Monsters</Typography>
+                </Link>
+                <Spacer height={24} />
+                { additionalLinks.length > 0 &&
+                  additionalLinks.map(link => (
+                      <Link className={`${css.navBarLink} ${pathname === link.url ? css.activeLink : ""}`} to={link.url} onClick={() => setIsOpen(false)}>
+                        <Typography size="default" className={`${css.navBarLink} ${pathname === link.url ? css.activeLink : ""}`}><FontAwesomeIcon icon={link.icon} />{" "}{link.name}</Typography>
+                      </Link>
+                    ))
+                }
+                
+                
+              </div>
+          }
+          <Spacer height={24} />
+          <ThemePicker />
        </Drawer>
     </div>
   )
@@ -131,6 +128,8 @@ export const NavBar = ({additionalLinks = [], sectionHomeLink = null}: NavBarPro
                   </Link>
                 ))
             }
+            <Spacer height={24} />
+            <ThemePicker />
           </div>
        </Drawer>
     </div>
