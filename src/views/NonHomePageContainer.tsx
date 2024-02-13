@@ -7,7 +7,7 @@ import { useParams } from "react-router-dom";
 declare interface NonHomePageContainerProps {
     page?: React.ReactNode,
     meta: {
-        topLink: (params: any) => NavBarLink | null,0
+        topLink: (params: any) => NavBarLink | null,
         getAdditionalLinks: (params: any) => NavBarLink[]
     };
 }

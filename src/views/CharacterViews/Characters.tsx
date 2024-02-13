@@ -3,7 +3,7 @@ import "../../App.css";
 import css from "./Characters.module.scss"
 
 import { CharacterThumbCard } from "@components/CharacterThumbCard/CharacterThumbCard";
-import { Grid, Typography } from "@mui/material"
+import { Grid } from "@mui/material"
 import { useCharacters } from "@services/CharacterService";
 import CampaignPicker from "@components/CampaignPicker/CampaignPicker";
 import { Campaign } from "@model/Campaign";
@@ -12,6 +12,7 @@ import { TextInput } from "@components/TextInput/TextInput";
 import { Button } from "@components/Button/Button";
 import { PlayerCharacter } from "@model/PlayerCharacter";
 import PlayerCharacterDrawer from "@components/Drawer/BaseCharacterDrawer/PlayerCharacterDrawer";
+import { Typography } from "@components/Typography/Typography";
 
 //add loading state
 //double check spacing of header/search bar on smaller screens

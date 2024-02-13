@@ -16,8 +16,17 @@ declare interface CreateCampaignLocationModalProps {
     editLocation?: CampaignLocation
 };
 
+
+
 const CreateCampaignLocationModal = ({isOpen, onClose, campaignId, parentLocationIdOverride = "", editLocation}: CreateCampaignLocationModalProps) => {
-    const [newCampaignLocation, setNewCampaignLocation] = useState(editLocation || { campaignDocId: campaignId, parentLocationId: parentLocationIdOverride });
+    const defaultLocation = { 
+        campaignDocId: campaignId,
+        parentLocationId: parentLocationIdOverride,
+        name: "",
+        description: "",
+        locationImageURL: ""
+    }
+    const [newCampaignLocation, setNewCampaignLocation] = useState(editLocation || defaultLocation);
     const [validator, setValidator] = useState<any>();
 
     const {
@@ -28,11 +37,11 @@ const CreateCampaignLocationModal = ({isOpen, onClose, campaignId, parentLocatio
 
     const handleOnClose = () => {
         onClose();
-        setNewCampaignLocation(editLocation ? editLocation : { campaignDocId: campaignId, parentLocationId: parentLocationIdOverride })
+        setNewCampaignLocation(editLocation ? editLocation : defaultLocation)
     }
 
     useEffect(() => {
-        setNewCampaignLocation(editLocation || { campaignDocId: campaignId, parentLocationId: parentLocationIdOverride })
+        setNewCampaignLocation(editLocation || defaultLocation)
     }, [editLocation?.docId])
 
     const mutate = editLocation ? SetCampaignLocation(newCampaignLocation, handleOnClose) : useCreateCampaignLocation(handleOnClose)
