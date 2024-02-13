@@ -126,7 +126,7 @@ const SelectedPlayer = ({character, combat, update}: SelectedPlayerProps) => {
                 <div className={css.inputSection}>
                     <Typography color="light" size="default" fontStyle="secondary">Conditions</Typography>
                     <div className={css.input} ref={refs.setReference}>
-                        <ConditionSelect outlined selectedValue={conditions} onChange={(conditions) => updateCharacter("conditions", conditions)}/>
+                        <ConditionSelect width={"150px"} outlined selectedValue={conditions} onChange={(conditions) => updateCharacter("conditions", conditions)}/>
                     </div>
                 </div>
                 
