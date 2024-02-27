@@ -63,12 +63,14 @@ const CreateNoteModal = ({isOpen, onClose, campaignId, characters, seedNotes = [
                         }
                     </div>
                     <CharacterPicker characters={characters} value={newNote.characterDocId} onChange={value => setNewNote({ ...newNote, characterDocId: value})} />
-                    <div className={css.properties}>
-                        <TextInput value={prompt || ""} onChange={(value) => setPrompt(String(value))} placeholder='Prompt' className={css.promptEditor} />
-                        <div className={css.generateButton}>
-                            <Button onClick={() => generate({seedNotes, prompt, campaignName: campaign?.title})}><Typography>Generate</Typography></Button>
+                    { campaign?.aiApiKey && 
+                        <div className={css.properties}>
+                            <TextInput value={prompt || ""} onChange={(value) => setPrompt(String(value))} placeholder='Prompt' className={css.promptEditor} />
+                            <div className={css.generateButton}>
+                                <Button onClick={() => generate({seedNotes, prompt, campaign: campaign})}><Typography>Generate</Typography></Button>
+                            </div>
                         </div>
-                    </div>
+                    }
                 </div>
             </Modal>
         </div>

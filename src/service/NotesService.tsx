@@ -5,6 +5,7 @@ import { useFirestoreCollectionMutation, useFirestoreDocumentDeletion, useFirest
 import { Note } from '@model/Note';
 import { useMutation } from 'react-query';
 import OpenAI from "openai";
+import { Campaign } from '@model/Campaign';
 
 export function useCampaignNotes(campaignDocId: string): {notes: Note[], isLoading: boolean, refetch: () => void} {
     const ref = query(
@@ -36,7 +37,7 @@ export const useGenerateSummaryNote = (onSuccess = (_message: any) => {}) => {
   return useMutation({
     mutationKey: ["generateAINote"],
     onSuccess,
-    mutationFn: async (notes: Note[]) => {
+    mutationFn: async ({notes = [], campaign}: {notes: Note[], campaign: Campaign}) => {
       
       let message = `Make me a D&D summary based on the following notes.
       Each note has a date attached to when it was taken and the note itself is formatted in markdown.
@@ -51,7 +52,7 @@ export const useGenerateSummaryNote = (onSuccess = (_message: any) => {}) => {
       message += parsedNotes?.join("//--//")
 
       const openai = new OpenAI({
-        apiKey: "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",
+        apiKey: campaign?.aiApiKey,
         dangerouslyAllowBrowser: true
       });
 
@@ -70,13 +71,13 @@ export const useGenerateAssistedNoteNote = (onSuccess = (_message: any) => {}) =
   return useMutation({
     mutationKey: ["generateAINote"],
     onSuccess,
-    mutationFn: async ({seedNotes = [], prompt = "", campaignName = ""}: {seedNotes: Note[], prompt: string, campaignName: string}) => {
+    mutationFn: async ({seedNotes = [], prompt = "", campaign}: {seedNotes: Note[], prompt: string, campaign: Campaign}) => {
       console.log(seedNotes)
       
       let message = `
         Given a prompt and some recent notes for context, generate a single note for my dnd campaign, make it readable and fun, and utilize markdown to make it more interesting.
         The note just needs to be anywhere from a sentance to a paragraph or two. it does not need any real world date info, or headers. 
-        The prompt is "${prompt}" and the campaign is called ${campaignName}.
+        The prompt is "${prompt}" and the campaign is called ${campaign?.title}.
         The previous notes for context are seperated with the deliminator //--// and have a date attached to them. they are:
       `;
 
@@ -85,7 +86,7 @@ export const useGenerateAssistedNoteNote = (onSuccess = (_message: any) => {}) =
       message += parsedNotes?.join("//--//")
 
       const openai = new OpenAI({
-        apiKey: "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",
+        apiKey: campaign?.aiApiKey,
         dangerouslyAllowBrowser: true
       });
 

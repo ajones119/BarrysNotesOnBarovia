@@ -12,6 +12,7 @@ import FloatingButtonContainer from '@components/FloatingButtonContainer';
 import GenerateSummaryNoteModal from '@components/Modal/GenerateSummaryNoteModal';
 import { format, isSameDay, parseISO } from 'date-fns';
 import { Typography } from '@components/Typography/Typography';
+import { useCampaign } from '@services/CampaignService';
 const getCharacterFromNote = (note: Note, characters: PlayerCharacter[]) => {
     const notedCharacter = characters.find(character => note.characterDocId === character.docId)
 
@@ -27,6 +28,7 @@ declare interface NotesListProps {
 const NotesList = ({characters, notes = [], campaignId}: NotesListProps) => {
     const [isCreateModalOpen, setIsCreatemodalOpen] = useState(false);
     const [isGenerateSummaryModalOpen, setIsGenerateSummaryModalOpen] = useState(false);
+    const {data: campaign} = useCampaign(campaignId);
 
     let notesByDate: any = {};
 
@@ -62,7 +64,7 @@ const NotesList = ({characters, notes = [], campaignId}: NotesListProps) => {
         <>
         <FloatingButtonContainer>
             <Button animatedHover size='large' color="secondary" onClick={() => setIsCreatemodalOpen(true)}><Typography size="large">Add Note{" "}<FontAwesomeIcon icon={faPlusCircle} /></Typography></Button>
-            <Button animatedHover size='large' color="secondary" onClick={() => setIsGenerateSummaryModalOpen(true)}><Typography>Generate Recap{" "}<FontAwesomeIcon icon={faList} /></Typography></Button>
+            {campaign?.aiApiKey && <Button animatedHover size='large' color="secondary" onClick={() => setIsGenerateSummaryModalOpen(true)}><Typography>Generate Recap{" "}<FontAwesomeIcon icon={faList} /></Typography></Button>}
 
         </FloatingButtonContainer>
             <div className={css.notesList}>

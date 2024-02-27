@@ -9,6 +9,7 @@ import { PlayerCharacter } from '@model/PlayerCharacter';
 import { Button } from '@components/Button/Button';
 import DatePicker from "react-datepicker";
 import Spinner from '@components/Spinner';
+import { useCampaign } from '@services/CampaignService';
 
 
 declare interface GenerateSummaryNoteModalProps {
@@ -24,6 +25,7 @@ const DEFAULT_NOTE = {date: new Date(), isGeneratedNoteSummary: true}
 const GenerateSummaryNoteModal = ({isOpen, onClose, campaignId, characters, notes}: GenerateSummaryNoteModalProps) => {
     const date = new Date()
     const defaultNote: Note = {...DEFAULT_NOTE, campaignDocId: campaignId, date}
+    const {data: campaign} = useCampaign(campaignId);
     const [newNote, setNewNote] = useState<Note>(defaultNote);
     const {mutate: generate, isLoading: isGenerating} = useGenerateSummaryNote((note: string) => setNewNote({ ...newNote, content: note}));
 
@@ -64,7 +66,7 @@ const GenerateSummaryNoteModal = ({isOpen, onClose, campaignId, characters, note
                 }
 
                 </div>    
-                <Button onClick={() => generate(notes)}><Typography>Generate</Typography></Button>
+                <Button onClick={() => generate({notes, campaign})}><Typography>Generate</Typography></Button>
                 </div>
             </Modal>
         </div>

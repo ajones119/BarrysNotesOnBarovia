@@ -6,7 +6,8 @@ export type Campaign =  {
     campaignImageURL?: string,
     dungeonMaster?: string,
     description?: string,
-    currentCombatDocId?: string
+    currentCombatDocId?: string,
+    aiApiKey?: string,
 };
 
 export const validateCampaign = (campaign: Campaign) => {
