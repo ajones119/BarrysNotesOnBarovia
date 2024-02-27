@@ -1,4 +1,33 @@
 
 .CreateNoteModal {
     max-width: 900px;
+    display: flex;
+    flex-direction: column;
+    row-gap: 16px;
+    justify-content: center;
+    align-items: center;
+    
+
+    .editor {
+        width: 80vw;
+        max-width: 100%;
+    }
+
+    .properties {
+        min-width: 100%;
+        display: grid;
+        grid-template-columns: 1fr 100px;
+        column-gap: 8px;
+        align-items: center;
+        flex-basis: content;
+
+        .promptEditor {
+            flex-shrink: 0;
+            width: 100%;
+        }
+
+        .generateButton {
+            flex-shrink: 1;
+        }
+    }
 }
