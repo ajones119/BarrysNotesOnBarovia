@@ -1,0 +1,14 @@
+
+.GenerateSummaryNoteModal {
+    max-width: 900px;
+    display: flex;
+    flex-direction: column;
+    row-gap: 16px;
+    justify-content: center;
+    align-items: center;
+
+    .editor {
+        width: 80vw;
+        max-width: 100%;
+    }
+}

@@ -14,9 +14,8 @@ declare interface TextEditorProps {
 
 const TextEditor = ({value, onChange, placeholder = "Please enter Markdown text", preview = "live", height = 200}: TextEditorProps) => {
     return (
-      <div className={`${css.editor}`}>
         <MDEditor
-            data-color-mode='dark'
+          data-color-mode='dark'
           value={value}
           onChange={(value) => value ? onChange(value) : onChange("")}
           previewOptions={{
@@ -27,8 +26,9 @@ const TextEditor = ({value, onChange, placeholder = "Please enter Markdown text"
           }}
           preview={preview}
           height={height}
+          className={css.editor}
+          
         />
-      </div>
     );
 }
 

@@ -6,6 +6,7 @@ export type Note = {
     campaignDocId?: string,
     date?: Date;
     content?: string;
+    isGeneratedSummary?: boolean;
 }
 
 export const validateNote = (note: Note) => {
