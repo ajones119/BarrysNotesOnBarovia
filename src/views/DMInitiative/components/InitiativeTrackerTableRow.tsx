@@ -1,5 +1,5 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { Avatar, Checkbox, TableCell, TableRow } from "@mui/material";
+import { Checkbox, TableCell, TableRow } from "@mui/material";
 import React, { useState } from "react";
 import css from "../DMInitiative.module.scss";
 import { faDiceD20, faMinus, faPlus } from "@fortawesome/free-solid-svg-icons";
@@ -24,6 +24,7 @@ import ConditionSelect from "@components/ConditionsSelect/ConditionsSelect";
 import { BASE_CHARACTER_IMAGE_MAP } from "utils/getBaseCharacterGenericImage";
 import { CharacterTypeLowercase } from "@model/BaseCharacter";
 import { PlayerCharacter } from "@model/PlayerCharacter";
+import Avatar from "@components/Avatar";
 
 type InitiativeTrackerTableRowProps = {
   item: CombatCharacter;
@@ -90,9 +91,9 @@ const InitiativeTrackerTableRow = ({
     <div className={css.identifier}>
       <Avatar
         className={css.avatar}
-        src={image || BACKUP}
+        src={String(image || BACKUP)}
         alt="boo"
-        sx={{ width: 32, height: 32 }}
+        size={32}
       />
       <ColorPicker
         width={0}

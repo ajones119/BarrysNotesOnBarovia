@@ -133,9 +133,7 @@ const CharacterTokenContent = ({ character, tokenSize = 16, isCurrentTurn = fals
                                         ${conditions?.includes("blinded") ? " blur(1px)" : ""}
                                         ${conditions?.includes("deafened") ? " grayscale(1)" : ""}
                                     `,
-                                    
-
-                             }}
+                                 }}
                             />
                         </Badge>
                     </Badge>

@@ -1,9 +1,8 @@
 import React, { useState } from 'react'
 import css from "./NotesList.module.scss";
 import { Note } from '@model/Note';
-import { Grid } from "@mui/material"
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faList, faNoteSticky, faPlusCircle } from '@fortawesome/free-solid-svg-icons';
+import { faList, faPlusCircle } from '@fortawesome/free-solid-svg-icons';
 import { Button } from '../Button/Button';
 import CreateNoteModal from '../Modal/CreateNoteModal/CreateNoteModal';
 import { NotesListItem } from './NoteListItem';
@@ -82,7 +81,7 @@ const NotesList = ({characters, notes = [], campaignId}: NotesListProps) => {
                                     notesByDate[key]?.map((note: Note) => { 
                                         const character = getCharacterFromNote(note, characters);
                                         return(
-                                            <NotesListItem characterImageURL={character?.characterImageURL} characterName={character?.name} note={note} />
+                                            <NotesListItem characterImageURL={String(character?.characterImageURL)} characterName={character?.name} note={note} />
                                         )})
                                 }
                             </div>

@@ -16,7 +16,6 @@ import OverviewCard from './components/OverviewCard';
 const Overview = () => {
     const { CampaignId } = useParams();
     const { data: campaign } = useCampaign(CampaignId as string);
-    const navigate = useNavigate();
 
     return (
         <div className={css.overview}>
