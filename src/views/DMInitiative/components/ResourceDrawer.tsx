@@ -116,7 +116,7 @@ const ResourceDrawer = ({ isOpen = false, onAdd, campaignDocId, onClose }: Resou
         initiativeBonus:
           Math.floor(((monster?.abilityScores || BASE_ABILITY_SCORES).dexterity - 10) / 2) || 0,
         type: monster.type || null,
-        imageURL: monster?.characterImageURL || "",
+        imageURL: String(monster?.characterImageURL) || "",
         xp: monster.xp ?? 0,
         size: monster.size?.toLocaleLowerCase() || "medium",
       }));
@@ -130,7 +130,7 @@ const ResourceDrawer = ({ isOpen = false, onAdd, campaignDocId, onClose }: Resou
         initiativeBonus:
           Math.floor(((npc?.abilityScores || BASE_ABILITY_SCORES).dexterity - 10) / 2) || 0,
         type: npc.type || null,
-        imageURL: npc?.characterImageURL || "",
+        imageURL: String(npc?.characterImageURL) || "",
         xp: npc.xp ?? 0,
         size: npc.size?.toLocaleLowerCase() || "medium",
       }));

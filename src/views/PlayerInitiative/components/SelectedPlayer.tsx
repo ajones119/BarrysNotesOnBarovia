@@ -83,7 +83,7 @@ const SelectedPlayer = ({character, combat, update}: SelectedPlayerProps) => {
         <div className={css.selectedPlayerContainer}>
             <div className={css.imageContainer}>
                 <img
-                    src={character.characterImageURL}
+                    src={String(character.characterImageURL)}
                     className={css.image}
                     onError={({ currentTarget }) => {
                         currentTarget.onerror = null; // prevents looping
