@@ -23,7 +23,7 @@ type CombatMapSettings = {
     rows?: number,
     columns?: number,
     tokenSize?: number,
-    mapImage?: string,
+    mapImage?: string | File,
     hideGrid?: boolean,
     gridColor?: string,
     mapColor?: string,

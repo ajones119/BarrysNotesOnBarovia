@@ -1,35 +1,37 @@
-import { useState, useEffect } from 'react';
-import { collection, doc, query, where } from "firebase/firestore";
-import { firestore } from "./firebase";
+import { useEffect } from 'react';
+import { addDoc, collection, deleteDoc, doc, query, setDoc, where } from "firebase/firestore";
+import { firestore, storage } from "./firebase";
 import { useFirestoreCollectionMutation, useFirestoreDocumentDeletion, useFirestoreDocumentMutation, useFirestoreQuery } from "@react-query-firebase/firestore";
-import { ButtonStatuses, LoadingButton } from "@components/Button/LoadingButton";
 import { CampaignLocation } from '@model/Location';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faTrash } from '@fortawesome/free-solid-svg-icons';
+import { uploadBytes, ref as storageRef, getDownloadURL, deleteObject } from "firebase/storage";
+import { useMutation } from 'react-query';
 
 export const useCreateCampaignLocation = (onSuccess: () => void) => {
-    const ref = collection(firestore, "campaignLocations");
-    const mutation = useFirestoreCollectionMutation(ref);
+    return useMutation({
+        mutationKey: ["add-location"],
+        onSuccess,
+        mutationFn: async (newLocation: CampaignLocation) => {
+            const ref = collection(firestore, "campaignLocations");
+            const response = await addDoc(ref, {...newLocation, locationImageURL: ""});
+            const id = response.id;
+            let imageURL = ""
 
-    useEffect(() => onSuccess(), [mutation.isSuccess])
+            if (newLocation?.locationImageURL instanceof File) {
+                const imageRef = storageRef(storage, `images/campaignLocations/${id}`);
+                await uploadBytes(imageRef, newLocation?.locationImageURL);
+                imageURL = await getDownloadURL(imageRef);
+            } else {
+                imageURL = newLocation?.locationImageURL || "";
+            }
 
-    return ({
-        campaignDocId,
-        parentLocationId = "",
-        name,
-        description = "",
-        npcs = [],
-        locationImageURL = ""
-    }: CampaignLocation) => {
-        mutation.mutate({
-            campaignDocId,
-            parentLocationId,
-            name,
-            description,
-            npcs,
-            locationImageURL
-        });
-    }
+            if (imageURL) {
+                const locationRef = doc(firestore, "campaignLocations", id);
+                await setDoc(locationRef, {
+                    locationImageURL: imageURL
+            }, {merge: true})
+            }
+        }
+    })
 }
 
 export function useCampaignLocations(campaignId = "") {
@@ -92,12 +94,44 @@ export function SetCampaignLocation(campaignLocation?: CampaignLocation, onSucce
     }
 }
 
-// ADD NESTED DELETION SO THAT NESTED DATA GET'S DELETED!!!!
+export function useEditLocation(onSuccess = () => {}) {
+    return useMutation({
+        mutationKey: ["edit-location"],
+        onSuccess,
+        mutationFn: async (location: CampaignLocation) => {
+            const docId = location?.docId;
+            if (!docId) return;
+        
+            let imageURL = ""
+        
+            if (location?.locationImageURL instanceof File) {
+                const imageRef = storageRef(storage, `images/campaignLocations/${docId}`);
+                await uploadBytes(imageRef, location?.locationImageURL);
+                imageURL = await getDownloadURL(imageRef);
+            } else {
+                imageURL = location?.locationImageURL || "";
+            }
+        
+            delete(location.docId);
+            const locationRef = doc(firestore, "campaignLocations", docId)
+            await setDoc(locationRef, {
+                ...location,
+                locationImageURL: imageURL
+            })
+        }
+    })
+}
 
-export const useDeleteCampaignLocation = (campaignLocationDocId: string) => {
-    const col = collection(firestore, "campaignLocations");
-    const ref = doc(col, campaignLocationDocId);
-    const mutation = useFirestoreDocumentDeletion(ref);    
-  
-    return mutation;
+// make sure we only delete locations with no children
+export const useDeleteCampaignLocation = (onSuccess = () => {}) => {
+    return useMutation({
+        mutationKey: ["delete-location"],
+        onSuccess,
+        mutationFn: async (docid: string) => {
+            const imageRef = storageRef(storage,  `images/campaignLocations/${docid}`);
+            const docRef = doc(firestore, "campaignLocations", docid)
+            await deleteDoc(docRef);
+            await deleteObject(imageRef)
+        }
+    })
 }

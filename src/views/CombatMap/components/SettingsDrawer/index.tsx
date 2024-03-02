@@ -14,6 +14,7 @@ import { useAutoAnimate } from '@formkit/auto-animate/react'
 import ColorPicker, { COLORS_MAP } from "@components/ColorPicker/ColorPicker";
 import { Checkbox } from "@mui/material";
 import useCombatMapStore from "@views/CombatMap/CombatMapStore";
+import FileInput from "@components/FileInput";
 
 declare interface SettingsDrawerProps extends DrawerProps {
     map: CombatMap,
@@ -104,7 +105,7 @@ const SettingsDrawer = ({
                         <TextInput value={localMapSettings?.tokenSize} placeholder="base token size" number onChange={(value) => setLocalMapSettings({...localMapSettings, tokenSize: Number(value)})} />
                         <Spacer height={24} />
 
-                        <TextInput value={localMapSettings?.mapImage} placeholder="Map Image" onChange={(value) => setLocalMapSettings({...localMapSettings, mapImage: String(value)})} />
+                        <FileInput value={typeof localMapSettings?.mapImage === "string" ? localMapSettings?.mapImage : localMapSettings?.mapImage?.name} title="Map Image" onChange={(value) => setLocalMapSettings({...localMapSettings, mapImage: value || ""})} />
                         <Spacer height={24} />
 
                         <div className={css.settingsRow}>

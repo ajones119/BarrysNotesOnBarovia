@@ -14,6 +14,8 @@ import FloatingButtonContainer from "@components/FloatingButtonContainer";
 import useDeviceSizeHook from "@hooks/useDeviceSizeHook";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
+import { ref, uploadBytes } from "firebase/storage";
+import { storage } from "@services/firebase";
 
 const getCardWidth = (width: number) => {
   if (width > 1300) {

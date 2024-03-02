@@ -1,8 +1,10 @@
-import { collection, doc, query, where } from "firebase/firestore";
-import { firestore } from "./firebase";
-import { useFirestoreDocumentMutation, useFirestoreCollectionMutation, useFirestoreDocumentDeletion, useFirestoreQuery } from "@react-query-firebase/firestore";
+import { addDoc, collection, deleteDoc, doc, query, setDoc, where } from "firebase/firestore";
+import { firestore, storage } from "./firebase";
+import { useFirestoreQuery } from "@react-query-firebase/firestore";
+import { uploadBytes, ref as storageRef, getDownloadURL, deleteObject } from "firebase/storage";
 
 import { BaseCharacter } from '@model/BaseCharacter';
+import { useMutation } from "react-query";
 
 export function useCampaignNPCs(campaignDocId: string) {
   const ref = query(collection(firestore, "npcs"), where("campaignDocId", "==", campaignDocId));
@@ -21,39 +23,70 @@ export function useCampaignNPCs(campaignDocId: string) {
 }
 
 export const useCreateNPC = (onSuccess: () => void) => {
-  const ref = collection(firestore, "npcs");
-  const mutation = useFirestoreCollectionMutation(ref, {onSuccess: onSuccess});
+  return useMutation({
+    mutationKey: ["addNPC"],
+    onSuccess,
+    mutationFn: async (newNPC: BaseCharacter) => {
+      const ref = collection(firestore, "npcs");
+      const response = await addDoc(ref, {...newNPC, characterImageURL: ""});
+      const id = response.id;
+      let imageURL = ""
 
-  return {
-      mutate: (newNPC: BaseCharacter) => mutation.mutate(newNPC),
-      isLoading: mutation.isLoading
-  }
+      if (newNPC?.characterImageURL instanceof File) {
+        const imageRef = storageRef(storage, `images/npcs/${id}`);
+        await uploadBytes(imageRef, newNPC?.characterImageURL);
+        imageURL = await getDownloadURL(imageRef);
+      } else {
+        imageURL = newNPC?.characterImageURL || "";
+      }
+
+      if (imageURL) {
+          const npcRef = doc(firestore, "npcs", id);
+          await setDoc(npcRef, {
+            characterImageURL: imageURL
+        }, {merge: true})
+      }
+    }
+  })
 }
 
-export const useEditNPC = (npc: BaseCharacter | null = null, onSuccess: () => void) => {
-  const docId = npc?.docId || "bad value";
-  const npcs = collection(firestore, "npcs");
-  const ref = doc(npcs, docId) ;
-  const mutation = useFirestoreDocumentMutation(ref,{}, {onSettled: onSuccess});
-  
+export const useEditNPC = (onSuccess: () => void) => {
+  return useMutation({
+    mutationKey: ["edit-NPC"],
+    onSuccess,
+    mutationFn: async (npc: BaseCharacter) => {
+      const docId = npc?.docId;
+      if (!docId) return;
 
-  return {
-      mutate: (newNPC: BaseCharacter) => {
-          delete newNPC?.docId
-          mutation.mutate(newNPC)
-      },
-      isLoading: mutation.isLoading
-  }
+      let imageURL = ""
+
+      if (npc?.characterImageURL instanceof File) {
+        const imageRef = storageRef(storage, `images/npcs/${docId}`);
+        await uploadBytes(imageRef, npc?.characterImageURL);
+        imageURL = await getDownloadURL(imageRef);
+      } else {
+        imageURL = npc?.characterImageURL || "";
+      }
+
+      delete(npc.docId);
+      const npcRef = doc(firestore, "npcs", docId)
+      await setDoc(npcRef, {
+        ...npc,
+        characterImageURL: imageURL
+      })
+    }
+  })
 }
 
-export const useDeleteNPC = (npc: BaseCharacter, onSuccess?: () => void) => {
-  const npcs = collection(firestore, "npcs");
-  const ref = doc(npcs, npc?.docId || "a");
-  const mutation = useFirestoreDocumentDeletion(ref, {onSettled: onSuccess});
-
-  return {
-      mutate: () => mutation.mutate(),
-      isLoading: mutation.isLoading,
-      error: mutation.error
-  }
+export const useDeleteNPC = (onSuccess?: () => void) => {
+  return useMutation({
+    mutationKey: ["delete-npc"],
+    onSuccess,
+    mutationFn: async (docid: string) => {
+      const imageRef = storageRef(storage,  `images/npcs/${docid}`);
+      const docRef = doc(firestore, "npcs", docid)
+      await deleteDoc(docRef);
+      await deleteObject(imageRef)
+    }
+  })
 }

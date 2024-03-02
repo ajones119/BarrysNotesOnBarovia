@@ -13,7 +13,7 @@ const MonsterDrawer = ({
 }: MonsterDrawerProps) => {
 
     const { mutate: create, isLoading: createLoading } = useCreateCustomMonster(onClose);
-    const { mutate: edit, isLoading: editLoading } = useEditCustomMonster(editMonster, onClose);
+    const { mutate: edit, isLoading: editLoading } = useEditCustomMonster(onClose);
 
     return (
         <CreateOrEditBaseCharacterDrawer editCharacter={editMonster} isOpen={isOpen} onClose={onClose} edit={edit} create={create} isLoading={createLoading || editLoading} />

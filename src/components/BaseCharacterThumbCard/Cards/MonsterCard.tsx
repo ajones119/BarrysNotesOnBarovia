@@ -4,13 +4,13 @@ import { useDeleteCustomMonster } from "@services/CustomMonstersService";
 
 const MonsterCard = ({ baseCharacter, onClickEdit = () => {} }: BaseCharacterThumbCardProps) => {
 
-    const {mutate: remove, isLoading: isDeleting} = useDeleteCustomMonster(baseCharacter)
+    const {mutate: remove, isLoading: isDeleting} = useDeleteCustomMonster()
 
     return (
         <BaseCharacterThumbCard
             baseCharacter={baseCharacter}
             onClickEdit={onClickEdit}
-            onClickDelete={remove}
+            onClickDelete={() => remove(baseCharacter?.docId || "")}
             isDeleting={isDeleting}
         />
     )

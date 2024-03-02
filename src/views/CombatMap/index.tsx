@@ -241,6 +241,7 @@ const CombatMap = ({combatIdOverride = "", isPlayer = false}) => {
               onClose={() => setIsSettingsDrawerOpen(false)}
               map={map || {extraTokens: []}}
               setMap={(newMap) => {
+                console.log(newMap)
                 update({...combatMap, map: {...newMap}});
               }}
               isPlayer={isPlayer}

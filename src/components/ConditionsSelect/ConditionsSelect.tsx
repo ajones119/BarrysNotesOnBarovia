@@ -3,7 +3,7 @@ import React from "react";
 import css from "./ConditionsSelect.module.scss"
 import CancelIcon from "@mui/icons-material/Cancel";
 import CheckIcon from "@mui/icons-material/Check";
-import { faBed, faBrain, faChildCombatant, faEarDeaf, faFaceFlushed, faFaceGrinHearts, faFaceTired, faFeather, faFire, faGem, faHandsHoldingChild, faMoon, faPersonFallingBurst, faPersonShelter, faPersonWalkingWithCane, faSkullCrossbones, faUserSecret, faWheelchair, faXmark } from "@fortawesome/free-solid-svg-icons";
+import { faBed, faBrain, faChildCombatant, faEarDeaf, faFaceFlushed, faFaceGrinHearts, faFaceTired, faFeather, faFire, faFireFlameCurved, faGem, faHandsHoldingChild, faMoon, faPersonFallingBurst, faPersonShelter, faPersonWalkingWithCane, faShoePrints, faSkullCrossbones, faUserSecret, faWheelchair, faXmark } from "@fortawesome/free-solid-svg-icons";
 import { IconDefinition } from "@fortawesome/fontawesome-svg-core";
 import { faCircleXmark, faFaceAngry } from "@fortawesome/free-regular-svg-icons";
 import useSetTheme from "@hooks/useSetTheme";
@@ -47,6 +47,11 @@ export const CONDITION_OPTIONS: Condition[] = [
         label: "Deafened",
         value: "deafened",
         icon: faEarDeaf
+    },
+    {
+        label: "Faerie Fired",
+        value: "faerieFired",
+        icon: faFireFlameCurved
     },
     {
         label: "Frightened",
@@ -102,6 +107,11 @@ export const CONDITION_OPTIONS: Condition[] = [
         label: "Restrained",
         value: "restrained",
         icon: faPersonShelter
+    },
+    {
+        label: "Slowed",
+        value: "slowed",
+        icon: faShoePrints
     },
     {
         label: "Stunned",
@@ -160,8 +170,7 @@ const ConditionSelect = ({onChange, selectedValue, width = "200px", outlined = f
                     />
                 )})}
             </Stack>
-          )}
-        >
+        )}>
         { CONDITION_OPTIONS?.map((option) => (
             <MenuItem key={`picker-${option.label}`} value={option.value}>
                 {option.label}

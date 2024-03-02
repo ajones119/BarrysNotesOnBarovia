@@ -16,7 +16,7 @@ const NPCDrawer = ({
   campaignDocId,
 }: NPCDrawerProps) => {
   const { mutate: create, isLoading: createLoading } = useCreateNPC(onClose);
-  const { mutate: edit, isLoading: editLoading } = useEditNPC(editNPC, onClose);
+  const { mutate: edit, isLoading: editLoading } = useEditNPC(onClose);
 
   return (
     <CreateOrEditBaseCharacterDrawer

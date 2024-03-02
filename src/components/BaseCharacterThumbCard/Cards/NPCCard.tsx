@@ -3,18 +3,18 @@ import BaseCharacterThumbCard, { BaseCharacterThumbCardProps } from "../BaseChar
 import { useDeleteNPC } from "@services/NPCService";
 
 declare interface NPCCardProps extends BaseCharacterThumbCardProps {
-    removeOverride?: () => void
+    removeOverride?: (docId: string) => void
 }
 
 const NPCCard = ({ baseCharacter, onClickEdit, removeOverride }: NPCCardProps) => {
 
-    const {mutate: remove, isLoading: isDeleting} = useDeleteNPC(baseCharacter)
+    const {mutate: remove, isLoading: isDeleting} = useDeleteNPC()
 
     return (
         <BaseCharacterThumbCard
             baseCharacter={baseCharacter}
             onClickEdit={onClickEdit}
-            onClickDelete={removeOverride || remove}
+            onClickDelete={() => removeOverride ? removeOverride(baseCharacter?.docId || "") : remove(baseCharacter?.docId || "")}
             isDeleting={isDeleting}
         />
     )

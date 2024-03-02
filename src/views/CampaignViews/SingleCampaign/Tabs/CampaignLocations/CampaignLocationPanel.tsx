@@ -1,9 +1,8 @@
 import { CampaignLocation } from "@model/Location";
 import css from "./CampaignLocations.module.scss"
 import { Typography } from "@components/Typography/Typography";
-import { SetCampaignLocation, useDeleteCampaignLocation } from "@services/CampaignLocationService";
+import { useDeleteCampaignLocation, useEditLocation } from "@services/CampaignLocationService";
 import BACKUP from "@images/hauntedCastleBackground.jpg"
-import TextEditorDisplay from "@components/TextEditor/TextEditDisplay";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faFeather, faTrash } from "@fortawesome/free-solid-svg-icons";
 import { Button } from "@components/Button/Button";
@@ -27,18 +26,18 @@ const CampaignLocationPanel = ({ location, npcs = [], subLocations = [] }: Campa
     const [currentNPC, setCurrentNPC] = useState<string>("");
     const [isEditModalOpen, setIsEditModalOpen] = useState<boolean>(false);
 
-    const {mutate, isLoading} = useDeleteCampaignLocation(location?.docId || "1")
-    const saveCampaignLocation = SetCampaignLocation(location)
+    const {mutate: remove, isLoading} = useDeleteCampaignLocation()
+    const {mutate: saveCampaignLocation} = useEditLocation()
     let selectedNPCs = npcs.filter(npc => location?.npcs?.includes(npc?.docId || "") )
     selectedNPCs = selectedNPCs?.sort(function (a, b) {
         if (a.name.toLowerCase() < b.name.toLowerCase()) {
-          return -1;
+            return -1;
         }
         if (a.name.toLowerCase() > b.name.toLowerCase()) {
-          return 1;
+            return 1;
         }
         return 0;
-      });
+    });
 
     if (!location) {
         return (
@@ -61,7 +60,7 @@ const CampaignLocationPanel = ({ location, npcs = [], subLocations = [] }: Campa
                     </div>
                 </div>
                 {subLocations.length === 0 && (
-                    <Button color="error" isLoading={isLoading} onClick={mutate} disabled={subLocations.length !== 0}><FontAwesomeIcon icon={faTrash} /></Button>
+                    <Button color="error" isLoading={isLoading} onClick={() => remove(location?.docId || "")} disabled={subLocations?.length !== 0}><FontAwesomeIcon icon={faTrash} /></Button>
                 )}
             </div>
             <div className={css.description}>
@@ -69,7 +68,7 @@ const CampaignLocationPanel = ({ location, npcs = [], subLocations = [] }: Campa
             </div>
             <div className={css.imageContainer}>
                 <img
-                    src={location.locationImageURL}
+                    src={location.locationImageURL as any}
                     onError={({ currentTarget }) => {
                         currentTarget.onerror = null; // prevents looping
                         currentTarget.src=BACKUP;
