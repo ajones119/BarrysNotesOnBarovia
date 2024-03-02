@@ -27,7 +27,7 @@ const BaseCharacterThumbCard = ({ baseCharacter, onClickEdit, onClickDelete, onC
         let image = STICK;
 
         if (baseCharacter?.characterImageURL) {
-            image = baseCharacter.characterImageURL;
+            image = String(baseCharacter.characterImageURL);
         } else if (baseCharacter?.type) {
             const type = baseCharacter.type.toLowerCase() as CharacterTypeLowercase
             image = BASE_CHARACTER_IMAGE_MAP[type || "unknown"]
@@ -74,7 +74,7 @@ const BaseCharacterThumbCard = ({ baseCharacter, onClickEdit, onClickDelete, onC
                                 <CopyButton
                                     animatedHover={false}
                                     color="dark"
-                                    copiedText={baseCharacter.characterImageURL}
+                                    copiedText={String(baseCharacter.characterImageURL)}
                                     onClick={() => setIsImageModalOpen(true)}
                                 >
                                     View Image
@@ -94,7 +94,7 @@ const BaseCharacterThumbCard = ({ baseCharacter, onClickEdit, onClickDelete, onC
                 onClose={() => {
                     setIsImageModalOpen(false);
                 }}
-                imageURL={baseCharacter.characterImageURL}
+                imageURL={String(baseCharacter.characterImageURL)}
             />
         </div>
     )

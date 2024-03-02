@@ -17,7 +17,7 @@ export const CharacterThumbCard = ({ character, onClick = (_character: PlayerCha
             <div className={css.CharacterThumbCard} onClick={() => onClick(character)}>
                 <img
                     className={css.imageContainer}
-                    src={character?.characterImageURL}
+                    src={String(character?.characterImageURL)}
                     onError={({ currentTarget }) => {
                         currentTarget.onerror = null; // prevents looping
                         currentTarget.src=STICK;

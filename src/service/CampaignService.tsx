@@ -18,7 +18,7 @@ export function useCampaign(campaignDocId: string = "") {
   const ref = doc(firestore, "campaigns", campaignDocId);
   const campaignQuery = useFirestoreDocument(["singleCampaign", campaignDocId], ref, {subscribe: true});
   const { data } = campaignQuery;
-  const campaignData = data?.data();
+  const campaignData = data?.data() as Campaign;
   const campaign = {docId: campaignDocId, ...campaignData}
 
   return {...campaignQuery, data: campaign};
