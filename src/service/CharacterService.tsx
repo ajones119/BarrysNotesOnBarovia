@@ -1,5 +1,5 @@
-import { collection, doc, query, where } from "firebase/firestore";
-import { firestore } from "./firebase";
+import { addDoc, collection, deleteDoc, doc, query, setDoc, where } from "firebase/firestore";
+import { firestore, storage } from "./firebase";
 import {
   useFirestoreCollectionMutation,
   useFirestoreDocument,
@@ -9,6 +9,8 @@ import {
 } from "@react-query-firebase/firestore";
 
 import { PlayerCharacter } from "@model/PlayerCharacter";
+import { useMutation } from "react-query";
+import { uploadBytes, ref as storageRef, getDownloadURL, deleteObject } from "firebase/storage";
 
 export function useCharacter(characterDocId = "") {
   const ref = doc(firestore, "characters", characterDocId);
@@ -81,33 +83,71 @@ export function useCampaignCharacters(campaignDocId: string): {characters: Playe
 }
 
 export const useCreatePlayerCharacter = (onSuccess: () => void) => {
-  const ref = collection(firestore, "characters");
-  const mutation = useFirestoreCollectionMutation(ref, {onSuccess: onSuccess});
+  return useMutation({
+    mutationKey: ["addPC"],
+    onSuccess,
+    mutationFn: async (newPC: PlayerCharacter) => {
+      const ref = collection(firestore, "characters");
+      const response = await addDoc(ref, {...newPC, characterImageURL: ""});
+      const id = response.id;
+      let imageURL = ""
 
-  return {
-    ...mutation,
-      mutate: (newPC: PlayerCharacter) => mutation.mutate(newPC),
-  }
+      if (newPC?.characterImageURL instanceof File) {
+        const imageRef = storageRef(storage, `images/characters/${id}`);
+        await uploadBytes(imageRef, newPC?.characterImageURL);
+        imageURL = await getDownloadURL(imageRef);
+      } else {
+        imageURL = newPC?.characterImageURL || "";
+      }
+
+      if (imageURL) {
+          const npcRef = doc(firestore, "characters", id);
+          await setDoc(npcRef, {
+            characterImageURL: imageURL
+        }, {merge: true})
+      }
+    }
+  })
 }
 
-export const useEditPlayerCharacter = (pc: PlayerCharacter | null = null, onSuccess: () => void) => {
-  const docId = pc?.docId || "bad value";
-  const pcs = collection(firestore, "characters");
-  const ref = doc(pcs, docId) ;
-  const mutation = useFirestoreDocumentMutation(ref,{}, {onSettled: onSuccess});
-  
-  return {...mutation,
-      mutate: (newPC: PlayerCharacter) => {
-          delete newPC?.docId
-          mutation.mutate(newPC)
-      },
-  }
+export const useEditPlayerCharacter = (onSuccess: () => void) => {
+  return useMutation({
+    mutationKey: ["edit-PC"],
+    onSuccess,
+    mutationFn: async (pc: PlayerCharacter) => {
+      const docId = pc?.docId;
+      if (!docId) return;
+
+      let imageURL = ""
+
+      if (pc?.characterImageURL instanceof File) {
+        const imageRef = storageRef(storage, `images/characters/${docId}`);
+        await uploadBytes(imageRef, pc?.characterImageURL);
+        imageURL = await getDownloadURL(imageRef);
+      } else {
+        imageURL = pc?.characterImageURL || "";
+      }
+
+      delete(pc.docId);
+      const pcRef = doc(firestore, "characters", docId)
+      await setDoc(pcRef, {
+        ...pc,
+        characterImageURL: imageURL
+      })
+
+    }
+  })
 }
 
-export const useDeletePlayerCharacter = (characterDocId: string) => {
-  const col = collection(firestore, "characters");
-  const ref = doc(col, characterDocId);
-  const mutation = useFirestoreDocumentDeletion(ref);    
-
-  return mutation;
+export const useDeletePlayerCharacter = (onSuccess?: () => void) => {
+  return useMutation({
+    mutationKey: ["delete-pc"],
+    onSuccess,
+    mutationFn: async (docid: string) => {
+      const imageRef = storageRef(storage,  `images/characters/${docid}`);
+      const docRef = doc(firestore, "characters", docid)
+      await deleteDoc(docRef);
+      await deleteObject(imageRef)
+    }
+  })
 }

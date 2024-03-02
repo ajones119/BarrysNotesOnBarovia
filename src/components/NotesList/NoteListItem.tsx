@@ -21,7 +21,7 @@ export const NotesListItem = ({ note, characterImageURL, characterName }: NotesL
     const {mutate, isLoading} = useDeleteNote(note?.docId || "")
 
     return (
-        <div className={css.note}>
+        <div className={css.note} key={note?.docId}>
             <div className={css.noteColumnContainer}>
                 <div className={css.avatar}>
                 <Avatar

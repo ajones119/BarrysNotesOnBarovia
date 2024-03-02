@@ -3,10 +3,11 @@ import { Modal } from '../Modal';
 import { Grid } from '@mui/material';
 import { TextInput } from '../../TextInput/TextInput';
 import css from "./CreateCampaignLocationModal.module.scss"
-import { SetCampaignLocation, useCreateCampaignLocation } from '@services/CampaignLocationService';
+import { useCreateCampaignLocation, useEditLocation } from '@services/CampaignLocationService';
 import { CampaignLocation } from '@model/Location';
 import TextEditor from '../../TextEditor';
 import { Button } from '@components/Button/Button';
+import FileInput from '@components/FileInput';
 
 declare interface CreateCampaignLocationModalProps {
     isOpen: boolean;
@@ -15,8 +16,6 @@ declare interface CreateCampaignLocationModalProps {
     parentLocationIdOverride ?: string;
     editLocation?: CampaignLocation
 };
-
-
 
 const CreateCampaignLocationModal = ({isOpen, onClose, campaignId, parentLocationIdOverride = "", editLocation}: CreateCampaignLocationModalProps) => {
     const defaultLocation = { 
@@ -27,12 +26,10 @@ const CreateCampaignLocationModal = ({isOpen, onClose, campaignId, parentLocatio
         locationImageURL: ""
     }
     const [newCampaignLocation, setNewCampaignLocation] = useState(editLocation || defaultLocation);
-    const [validator, setValidator] = useState<any>();
 
     const {
         name = "",
         description = "",
-        locationImageURL = ""
     } = newCampaignLocation;
 
     const handleOnClose = () => {
@@ -44,7 +41,10 @@ const CreateCampaignLocationModal = ({isOpen, onClose, campaignId, parentLocatio
         setNewCampaignLocation(editLocation || defaultLocation)
     }, [editLocation?.docId])
 
-    const mutate = editLocation ? SetCampaignLocation(newCampaignLocation, handleOnClose) : useCreateCampaignLocation(handleOnClose)
+    const {mutate: create} = useCreateCampaignLocation(handleOnClose);
+    const {mutate: edit} = useEditLocation(handleOnClose);
+
+    const mutate = editLocation ? edit : create;
 
 
     if (!isOpen) {
@@ -58,10 +58,14 @@ const CreateCampaignLocationModal = ({isOpen, onClose, campaignId, parentLocatio
                 ]}>
                 <Grid container spacing={2} rowSpacing={3} className={css.CreateCampaignLocationModal}>
                     <Grid item lg={6} sm={12}>
-                        <TextInput error={validator?.name} value={name} onChange={value => setNewCampaignLocation({ ...newCampaignLocation, name: String(value),})} placeholder='Name' />
+                        <TextInput value={name} onChange={value => setNewCampaignLocation({ ...newCampaignLocation, name: String(value),})} placeholder='Name' />
                     </Grid>
                     <Grid item lg={6} sm={12}>
-                        <TextInput error={validator?.player} value={locationImageURL} onChange={value => setNewCampaignLocation({ ...newCampaignLocation, locationImageURL: String(value),})} placeholder='Image URL' />
+                        <FileInput
+                            value={typeof newCampaignLocation?.locationImageURL === "string" ? newCampaignLocation?.locationImageURL : newCampaignLocation?.locationImageURL?.name}
+                            onChange={value => setNewCampaignLocation({ ...newCampaignLocation, locationImageURL: value || "",})}
+                            title='Image URL'
+                        />
                     </Grid>
                     <Grid item sm={12}>
                         <TextEditor value={description} onChange={(value) => setNewCampaignLocation({ ...newCampaignLocation, description: value,})} preview="edit" height={250} />

@@ -20,6 +20,7 @@ import { Button } from "@components/Button/Button";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { calculateAbilityScoreModifier } from "./utils";
 import { faXmarkCircle } from "@fortawesome/free-regular-svg-icons";
+import FileInput from "@components/FileInput";
 
 declare interface BaseCharacterProps extends DrawerProps {
   editCharacter?: BaseCharacter | null;
@@ -107,12 +108,12 @@ const BaseCharacterDrawer = ({
             />
           </Grid>
           <Grid item xs={12} md={2}>
-            <TextInput
-              value={character?.characterImageURL}
+            <FileInput
+              value={typeof character?.characterImageURL === "string" ? character?.characterImageURL : character?.characterImageURL?.name}
               onChange={(value) =>
-                setCharacter({ ...character, characterImageURL: String(value) })
+                setCharacter({ ...character, characterImageURL: value || "" })
               }
-              placeholder="Image URL"
+              title="Portrait"
             />
           </Grid>
 

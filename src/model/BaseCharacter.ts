@@ -87,7 +87,7 @@ export interface BaseCharacter {
   backstory?: string;
   size?: CharacterSizes;
   type?: CharacterType;
-  characterImageURL?: string;
+  characterImageURL?: string | File;
   abilityScores?: AbilityScores;
   armorClass?: number;
   savingThrowProficiencies?: SavingThrow[];

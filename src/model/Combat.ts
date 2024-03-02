@@ -14,7 +14,7 @@ export type CombatMap = {
     rows?: number,
     columns?: number,
     tokenSize?: number,
-    mapImage?: string,
+    mapImage?: string | File,
     hideGrid?: boolean,
     gridColor?: string,
     mapColor?: string,

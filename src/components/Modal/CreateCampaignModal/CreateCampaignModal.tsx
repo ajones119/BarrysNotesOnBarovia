@@ -9,6 +9,7 @@ import { Campaign, validateCampaign } from '@model/Campaign';
 import { useAddCampaignButton } from '@services/CampaignService';
 import { Validator } from '@model/Validator';
 import { Button } from '@components/Button/Button';
+import FileInput from '@components/FileInput';
 
 declare interface CreateCampaignModalProps {
     isOpen: boolean;
@@ -19,6 +20,7 @@ const DEFAULT_EMPTY_CAMPAIGN: Campaign = {title: ""};
 
 const CreateCampaignModal = ({isOpen, onClose}: CreateCampaignModalProps) => {
     const [newCampaign, setNewCampaign] = useState<Campaign>(DEFAULT_EMPTY_CAMPAIGN);
+    const [image, setImage] = useState<File | null>(null)
     const [validator, setValidator] = useState<Validator>();
     
     const handleOnClose = () => {
@@ -48,8 +50,8 @@ const CreateCampaignModal = ({isOpen, onClose}: CreateCampaignModalProps) => {
                     isLoading={isLoading}
                     onClick={() => {
                         const valid = validate();
-                        if (valid) {
-                            mutate(newCampaign)
+                        if (valid && image) {
+                            mutate({newCampaign, image})
                         }
                     }}
                     >
@@ -61,7 +63,7 @@ const CreateCampaignModal = ({isOpen, onClose}: CreateCampaignModalProps) => {
                         <TextInput error={!!validator?.name} value={title} onChange={value => setNewCampaign({ ...newCampaign, title: String(value),})} placeholder='Title' />
                     </Grid>
                     <Grid item lg={6} sm={12}>
-                        <TextInput value={campaignImageURL} onChange={value => setNewCampaign({ ...newCampaign, campaignImageURL: String(value),})} placeholder='Campaign Image URL' />
+                        <FileInput value={image?.name} onChange={file => setImage(file)} title='Campaign Image' />
                     </Grid>
                     <Grid item lg={6} sm={12}>
                         <TextInput value={dungeonMaster} onChange={value => setNewCampaign({ ...newCampaign, dungeonMaster: String(value),})} placeholder='Dungeon Master' />

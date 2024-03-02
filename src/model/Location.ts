@@ -5,5 +5,5 @@ export type CampaignLocation = {
     name?: string;
     description?: string;
     npcs?: string[];
-    locationImageURL?: string;
+    locationImageURL?: string | File;
 }

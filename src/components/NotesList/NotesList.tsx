@@ -13,6 +13,7 @@ import GenerateSummaryNoteModal from '@components/Modal/GenerateSummaryNoteModal
 import { format, isSameDay, parseISO } from 'date-fns';
 import { Typography } from '@components/Typography/Typography';
 import { useCampaign } from '@services/CampaignService';
+import Spinner from '@components/Spinner';
 const getCharacterFromNote = (note: Note, characters: PlayerCharacter[]) => {
     const notedCharacter = characters.find(character => note.characterDocId === character.docId)
 
@@ -28,7 +29,7 @@ declare interface NotesListProps {
 const NotesList = ({characters, notes = [], campaignId}: NotesListProps) => {
     const [isCreateModalOpen, setIsCreatemodalOpen] = useState(false);
     const [isGenerateSummaryModalOpen, setIsGenerateSummaryModalOpen] = useState(false);
-    const {data: campaign} = useCampaign(campaignId);
+    const {data: campaign, isLoading} = useCampaign(campaignId);
 
     let notesByDate: any = {};
 
@@ -44,8 +45,6 @@ const NotesList = ({characters, notes = [], campaignId}: NotesListProps) => {
 
     let seedNotes = notes.filter(note => note?.date && isSameDay(note?.date, new Date()));
 
-    console.log(seedNotes)
-
     if (seedNotes.length < 1 && notes.length > 1) {
         const mostRecentNote = notes?.toSorted(function (a, b) {
             if ((a?.date || 0) < (b?.date || 0)) {
@@ -60,6 +59,10 @@ const NotesList = ({characters, notes = [], campaignId}: NotesListProps) => {
         seedNotes.push(mostRecentNote[0])
     }
 
+    if (isLoading) {
+        return <Spinner />
+    }
+
     return (
         <>
         <FloatingButtonContainer>
@@ -71,7 +74,7 @@ const NotesList = ({characters, notes = [], campaignId}: NotesListProps) => {
                 {
                     Object.keys(notesByDate).map(key => {
                         return (
-                            <div>
+                            <div key={key}>
                                 <div>
                                     <Typography size="large">{format(parseISO(key), "MMM, dd, yyyy")}</Typography>
                                 </div>

@@ -19,6 +19,7 @@ import { calculateAbilityScoreModifier } from "../utils";
 import ClassPicker from "@components/ClassPicker/ClassPicker";
 import { useCreatePlayerCharacter, useDeletePlayerCharacter, useEditPlayerCharacter } from "@services/CharacterService";
 import CampaignPicker from "@components/CampaignPicker/CampaignPicker";
+import FileInput from "@components/FileInput";
 
 declare interface PlayerCharacterDrawerProps extends DrawerProps {
   editCharacter?: PlayerCharacter | null;
@@ -39,8 +40,8 @@ const PlayerCharacterDrawer = ({
   });
 
     const { mutate: create, isLoading: createLoading } = useCreatePlayerCharacter(onClose);
-    const { mutate: edit, isLoading: editLoading } = useEditPlayerCharacter(editCharacter, onClose);
-    const {mutate: remove, isLoading: isDeleting } = useDeletePlayerCharacter(character?.docId || "1")
+    const { mutate: edit, isLoading: editLoading } = useEditPlayerCharacter(onClose);
+    const {mutate: remove, isLoading: isDeleting } = useDeletePlayerCharacter(onClose);
 
   const isLoading = createLoading || editLoading;
 
@@ -87,8 +88,7 @@ const PlayerCharacterDrawer = ({
               color="error"
               isLoading={isDeleting}
               onClick={() => {
-                remove();
-                onClose();
+                remove(character?.docId || "");
               }}
             >
               <Typography color="light">
@@ -127,12 +127,12 @@ const PlayerCharacterDrawer = ({
             />
           </Grid>
           <Grid item xs={12} md={4}>
-            <TextInput
-              value={character?.characterImageURL}
+            <FileInput
+              value={typeof character?.characterImageURL === "string" ? character?.characterImageURL : character?.characterImageURL?.name}
               onChange={(value) =>
-                setCharacter({ ...character, characterImageURL: String(value) })
+                setCharacter({ ...character, characterImageURL: value || "" })
               }
-              placeholder="Image URL"
+              title="Portrait"
             />
           </Grid>
 

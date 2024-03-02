@@ -1,7 +1,9 @@
-import { collection, doc, query } from "firebase/firestore";
-import { firestore } from "./firebase";
-import { useFirestoreCollectionMutation, useFirestoreDocument, useFirestoreDocumentMutation, useFirestoreQuery } from "@react-query-firebase/firestore";
+import { addDoc, collection, doc, query, setDoc} from "firebase/firestore";
+import { firestore, storage } from "./firebase";
+import { useFirestoreDocument, useFirestoreDocumentMutation, useFirestoreQuery } from "@react-query-firebase/firestore";
 import { Campaign } from "@model/Campaign";
+import { useMutation } from "react-query";
+import { uploadBytes, ref as storageRef, getDownloadURL } from "firebase/storage";
 
 export function useCampaigns(): {campaigns: Campaign[], isLoading: boolean} {
   const ref = query(collection(firestore, "campaigns"));
@@ -16,16 +18,30 @@ export function useCampaign(campaignDocId: string = "") {
   const ref = doc(firestore, "campaigns", campaignDocId);
   const campaignQuery = useFirestoreDocument(["singleCampaign", campaignDocId], ref, {subscribe: true});
   const { data } = campaignQuery;
-  const campaignData = data?.data() || {};
-  const campaign: Campaign = {docId: campaignDocId, title: campaignData?.title, ...campaignData}
+  const campaignData = data?.data();
+  const campaign = {docId: campaignDocId, ...campaignData}
 
   return {...campaignQuery, data: campaign};
 }
 
 export const useAddCampaignButton = (onSuccess?: () => void) => {
   const ref = collection(firestore, "campaigns");
-  const mutation = useFirestoreCollectionMutation(ref, {onSuccess});
-  return {...mutation, mutate: (newCampaign: Campaign) => mutation.mutate(newCampaign)}
+  return useMutation({
+    mutationKey: ["addCampaign"],
+    mutationFn: async ({newCampaign, image}: {newCampaign: Campaign, image: File}) => {
+      const response = await addDoc(ref, {...newCampaign});
+      const id = response.id;
+
+      const imageRef = storageRef(storage, `images/campaigns/${id}`);
+      await uploadBytes(imageRef, image);
+      const downloadURL = await getDownloadURL(imageRef)
+      const campaignDocRef = doc(firestore, 'campaigns', id)
+      await setDoc(campaignDocRef, {
+        campaignImageURL: downloadURL
+      }, {merge: true})
+    },
+    onSuccess
+  })
 }
 
 export const useUpdateCampaign = (campaignID: string) => {
