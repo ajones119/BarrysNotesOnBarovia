@@ -162,7 +162,7 @@ const CombatMap = ({combatIdOverride = "", isPlayer = false}) => {
           <div className={`${css.CombatMapContainer} ${mapContainer.active ? css.fullscreen : null}`} ref={mapRef} id="CombatMap">
             <DndContext onDragEnd={handleDragEnd} onDragStart={handleDragStart}>
               <Map
-                mapImage={map?.mapImage}
+                mapImage={String(map?.mapImage)}
                 cols={map?.columns}
                 rows={map?.rows}
                 tokenSize={(map?.tokenSize || 32) * (scale || 1)}
