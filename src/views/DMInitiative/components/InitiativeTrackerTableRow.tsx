@@ -166,6 +166,12 @@ const InitiativeTrackerTableRow = ({
             value={item?.maxHealth}
             onChange={(value) => updateCharacter({ maxHealth: Number(value || 1) })}
           />
+          <Typography>|</Typography>
+          <TextInput
+            number
+            value={item?.tempHealth || 0}
+            onChange={(value) => updateCharacter({ tempHealth: Number(value || 0) })}
+          />
         </div>
       </TableCell>
       <TableCell style={{ width: "5%" }}>
@@ -183,7 +189,7 @@ const InitiativeTrackerTableRow = ({
         />
       </TableCell>
       <TableCell style={{ width: "2%" }}>
-       <Checkbox checked={item?.isAlly} disabled={!!item?.playerDocId} onChange={() => updateCharacter({ isAlly: !item?.isAlly})} />
+      <Checkbox checked={item?.isAlly} disabled={!!item?.playerDocId} onChange={() => updateCharacter({ isAlly: !item?.isAlly})} />
       </TableCell>
       <TableCell style={{ width: "2%" }}>
         {!item?.playerDocId && (

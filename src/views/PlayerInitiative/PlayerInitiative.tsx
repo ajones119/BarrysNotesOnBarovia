@@ -15,10 +15,12 @@ import CombatMap from "@views/CombatMap";
 import Spinner from "@components/Spinner";
 import FloatingButtonContainer from "@components/FloatingButtonContainer";
 import { Button } from "@components/Button/Button";
+import useLocalCharacter from "@hooks/useLocalCharacter";
 
 const PlayerInitiative = () => {
-    const {CampaignId: campaignId} = useParams();
-    const [searchParams, setSearchParams] = useSearchParams()
+    const {CampaignId: campaignId = ""} = useParams();
+    const [searchParams, setSearchParams] = useSearchParams();
+    const {selectedCharacter: localCharacterId} = useLocalCharacter(campaignId)
     const {characters} = useCampaignCharacters(campaignId || "")
     const {data: campaign} = useCampaign(campaignId || "")
     const {combat, isLoading: isCombatLoading} = useCombat(campaign?.currentCombatDocId || "1")
@@ -26,7 +28,12 @@ const PlayerInitiative = () => {
 
     const {currentTurnIndex = 0 } = combat;
 
-    const character = searchParams.get("characterId") && characters?.find(char => char.docId === searchParams.get("characterId")) || null
+    let character = searchParams.get("characterId") && characters?.find(char => char.docId === searchParams.get("characterId")) || null;
+    if (!character) {
+        console.log(character, localCharacterId)
+        character = localCharacterId && characters?.find(char => char.docId === localCharacterId) || null;
+        console.log(character)
+    }
 
     let nextPlayerDocId: string | null = null;
 

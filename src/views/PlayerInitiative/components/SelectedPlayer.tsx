@@ -26,13 +26,15 @@ import { mutateCombatCharacter, useCombat, useCombatCharacters, useEditCombat } 
 import { CombatCharacter } from "@model/CombatCharacter";
 import Spinner from "@components/Spinner";
 import { getNextTurnIndex } from "@views/DMInitiative/utils";
+import useLocalCharacter from "@hooks/useLocalCharacter";
 
 const SelectedPlayer = () => {
     const [healthIncrement, setHealthIncrement] = useState<number>(1);
     const [isHealthCounterOpen, setIsHealthCounterOpen] = useState(false);
-    const {CampaignId: campaignId} = useParams();
+    const {CampaignId: campaignId = ""} = useParams();
     const [searchParams] = useSearchParams();
-    const selectedCharacterId = searchParams.get("characterId") || "";
+    const {selectedCharacter: localCharacterId} = useLocalCharacter(campaignId)
+    const selectedCharacterId = searchParams.get("characterId") || localCharacterId || "";
     const {characters} = useCampaignCharacters(campaignId || "")
     const {data: campaign} = useCampaign(campaignId || "")
     const {combat, isLoading: isCombatLoading} = useCombat(campaign?.currentCombatDocId || "1")
@@ -41,7 +43,7 @@ const SelectedPlayer = () => {
 
     const { currentTurnIndex = 0, colorFilter = []} = combat;
     const index = combatCharacters?.findIndex(combatCharacter => combatCharacter.playerDocId === selectedCharacterId)
-    const {health = 0, maxHealth = 0, conditions = [], armorClass = 0, initiative} = combatCharacters[index] || {health: 0, maxHealth: 0, conditions: [], armorClass: 0, initiative: 0};
+    const {tempHealth = 0, health = 0, maxHealth = 0, conditions = [], armorClass = 0, initiative} = combatCharacters[index] || {health: 0, maxHealth: 0, conditions: [], armorClass: 0, initiative: 0};
     const character = characters.findLast(character => character.docId === selectedCharacterId)
     const combatCharacter = combatCharacters.findLast(character => character?.playerDocId === selectedCharacterId);
     const updateCharacter = (value: Partial<CombatCharacter>) => {
@@ -128,9 +130,15 @@ const SelectedPlayer = () => {
                     </div>
                 </div>
                 <div className={css.inputSection}>
+                    <Typography color="light" size="large" fontStyle="secondary">Temp Health</Typography>
+                    <div className={css.input}>
+                        <TextInput number value={tempHealth} onChange={(value) => updateCharacter({tempHealth: Number(value)})} />
+                    </div>
+                </div>
+                <div className={css.inputSection}>
                     <Typography color="light" size="default" fontStyle="secondary">Conditions</Typography>
                     <div className={css.input} ref={refs.setReference}>
-                        <ConditionSelect width={"150px"} outlined selectedValue={conditions} onChange={(conditions) => updateCharacter({conditions: conditions || []})}/>
+                        <ConditionSelect icons width={"150px"} outlined selectedValue={conditions} onChange={(conditions) => updateCharacter({conditions: conditions || []})}/>
                     </div>
                 </div>
                 
