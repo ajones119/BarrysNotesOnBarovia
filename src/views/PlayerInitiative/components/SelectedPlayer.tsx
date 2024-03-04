@@ -100,7 +100,7 @@ const SelectedPlayer = () => {
             </div>
             <div className={css.characterInfoContainer}>
                 <div className={css.titleContainer}>
-                    <Typography color={ youreTurn === "next" ? "tertiary" : youreTurn === "active" ? "success" : "light"} size="xtraLarge" fontStyle="secondary">{character.name}</Typography>
+                    <Typography color={ youreTurn === "next" ? "tertiary" : youreTurn === "active" ? "success" : "light"} size="xtraLarge" fontStyle="secondary">{character?.name || ""}</Typography>
                     { youreTurn === "active" &&
                         <Button animatedHover onClick={endTurn}>End My Turn</Button>
                     }
