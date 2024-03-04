@@ -5,6 +5,7 @@ type HealthBarProps = {
     health?: number,
     maxHealth?: number,
     tempHealth?: number,
+    height?: number
 };
 
 export const getHealthBarColor = (percent: number) => {
@@ -16,10 +17,10 @@ export const getHealthBarColor = (percent: number) => {
     else return "red"
 }
 
-const HealthBar = ({health = 0, maxHealth = 1, tempHealth = 0}: HealthBarProps) => {
+const HealthBar = ({health = 0, maxHealth = 1, tempHealth = 0, height = 12}: HealthBarProps) => {
     return(
         <div className={css.healthBarWrapper}>
-            <div className={css.healthBar}>
+            <div className={css.healthBar} style={{height}}>
                 <div
                     className={css.healthFill}
                     style={{backgroundColor: getHealthBarColor((health/maxHealth)*100), width: `${(health/maxHealth)*100}%`}}    
