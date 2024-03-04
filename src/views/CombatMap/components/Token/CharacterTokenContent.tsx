@@ -1,5 +1,5 @@
 import { CombatCharacter } from "@model/CombatCharacter";
-import { Avatar, Badge, LinearProgress, Tooltip } from "@mui/material";
+import { Avatar, Badge, LinearProgress } from "@mui/material";
 import BACKUP from "@images/barry-cartoon.png"
 import React, { useState } from "react";
 import { BASE_CHARACTER_IMAGE_MAP } from "utils/getBaseCharacterGenericImage";
@@ -7,11 +7,12 @@ import { CharacterTypeLowercase } from "@model/BaseCharacter";
 import css from "../../CombatMap.module.scss"
 import { FloatingPortal, autoUpdate, flip, offset, shift, useDismiss, useFloating, useFocus, useHover, useInteractions, useRole } from "@floating-ui/react";
 import { Typography } from "@components/Typography/Typography";
-import { getHealthBarColor, getHealthIcon, getIconList } from "@views/PlayerInitiative/utils";
+import { getHealthIcon, getIconList } from "@views/PlayerInitiative/utils";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faStar } from "@fortawesome/free-solid-svg-icons";
-import { faBed, faFaceAngry, faBrain, faChildCombatant, faEarDeaf, faFaceFlushed, faFaceGrinHearts, faFaceTired, faFire, faGem, faHandsHoldingChild, faMoon, faPersonFallingBurst, faPersonShelter, faPersonWalkingWithCane, faSkullCrossbones, faUserSecret, faWheelchair } from "@fortawesome/free-solid-svg-icons";
+import { faFaceAngry, faBrain,} from "@fortawesome/free-solid-svg-icons";
 import { ConditionsOverlayMap, PreConditions, WrapperConditions } from "./utils";
+import { getHealthBarColor } from "@components/HealthBar";
 
 type CharacterTokenContentProps = {
     character: CombatCharacter;
@@ -133,7 +134,7 @@ const CharacterTokenContent = ({ character, tokenSize = 16, isCurrentTurn = fals
                                         ${conditions?.includes("blinded") ? " blur(1px)" : ""}
                                         ${conditions?.includes("deafened") ? " grayscale(1)" : ""}
                                     `,
-                                 }}
+                                }}
                             />
                         </Badge>
                     </Badge>
