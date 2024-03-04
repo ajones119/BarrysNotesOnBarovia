@@ -1,11 +1,10 @@
-import { Transaction, addDoc, collection, deleteDoc, doc, getDocs, onSnapshot, query, runTransaction, where, writeBatch } from "firebase/firestore";
+import { addDoc, collection, deleteDoc, doc, getDoc, getDocs, query, runTransaction, setDoc, where, writeBatch } from "firebase/firestore";
 import { firestore, storage } from "./firebase";
-import { useFirestoreCollectionMutation, useFirestoreDocument, useFirestoreDocumentDeletion, useFirestoreDocumentMutation, useFirestoreQuery } from "@react-query-firebase/firestore";
+import { useFirestoreDocument, useFirestoreDocumentMutation, useFirestoreQuery } from "@react-query-firebase/firestore";
 import { Combat } from '@model/Combat';
-import { useAddCombatMap } from './CombatMapService';
 import { useMutation } from "react-query";
-import { uploadBytes, ref as storageRef, getDownloadURL, deleteObject } from "firebase/storage";
-
+import { ref as storageRef, deleteObject } from "firebase/storage";
+import { CombatCharacter } from "@model/CombatCharacter";
 
 export function useCampaignCombats(campaignDocId: string): {combats: Combat[], isLoading: boolean, refetch: () => void} {
   const ref = query(collection(firestore, "combats"), where("campaignDocId", "==", campaignDocId));
@@ -31,81 +30,138 @@ export const useCombat = (combatDocId = ""): {combat: Combat, isLoading: boolean
 
   const combat: Combat = {
     ...data?.data(),
-    combatCharacterArray: data?.data()?.combatCharacterArray,
     docId: combatDocId,
   };
 
   return { combat, isLoading, isRefetching, isFetching };
 }
 
-export const useAddCombatButton = (onSuccess: () => void) => {
-    const ref = collection(firestore, "combats");
-    const mutation = useFirestoreCollectionMutation(ref, {onSuccess});
-    const mapMutation = useAddCombatMap();
+export function useCombatCharacters(combatDocId: string, sorted = false) {
+  const {combat, isLoading: isCombatLoading} = useCombat(combatDocId)
+  const ref = query(collection(firestore, "combatCharacters"), where("combatDocId", "==", combatDocId));
 
-    const handleMutate = async(newCombat: Combat) => {
-      const { 
-        campaignDocId,
-        name = "",
-        combatCharacterArray = [],
-    } = newCombat;
-      const response = await mutation.mutateAsync({
-          campaignDocId,
-          name,
-          combatCharacterArray
-      })
-
-      await mapMutation.mutateAsync({
-        combatDocId: response?.id,
-        campaignDocId: newCombat?.campaignDocId,
-        combatMapCharacterArray: combatCharacterArray?.map((character) => ({
-          playerDocId: character?.playerDocId || "",
-          enemyId: character?.enemyId || "",
-          npcDocId: character?.npcDocId || "",
-          position: {
-            x: 100,
-            y: 100
-          },
-          uniqueId: character?.uniqueId
-        })),
-      })
-    }
+  const CombatQuery = useFirestoreQuery([`${combatDocId}-combatCharacterst`], ref, { subscribe: true });
   
-    return {
-      ...mutation,
-      mutate: handleMutate
-    }
+  const { data, isLoading, refetch } = CombatQuery;
+
+  let charactersData = data?.docs.map(character => ({
+      ...character?.data(),
+      docId: character.id,
+    }) as CombatCharacter) || [];
+
+  if (sorted) {
+    charactersData = charactersData?.sort((a, b) => {
+      let aInititative = Number(a["initiative"] || -100);
+      let bInitiative = Number(b["initiative"] || -100);
+      if (aInititative === bInitiative) {
+        aInititative += Number(a["initiativeBonus"] || -100)
+        bInitiative += Number(a["initiativeBonus"] || -100)
+      }
+
+      return aInititative <= bInitiative ? 1 : -1;
+    })
+  } else if (!isCombatLoading) {
+    charactersData = combat?.combatCharacterIds ? combat?.combatCharacterIds?.map(id => charactersData.find(character => id === character?.docId) || charactersData[0]) : [];
   }
+
+  return { combatCharacters: charactersData, isLoading, refetch };
+}
+
+export const useAddCombatCharacter = (combatDocId: string) => {
+  return useMutation({
+    mutationKey: ["add-combat-character", combatDocId],
+    mutationFn: async (newCharacter: CombatCharacter) => {
+      const combatCharactersRef = collection(firestore, "combatCharacters");
+      const response = await addDoc(combatCharactersRef, {
+        ...newCharacter,
+        combatDocId,
+        position: {
+          x: 100,
+          y: 100
+        } 
+      })
+      const docId = response.id;
+      const combatRef = doc(firestore, "combats", combatDocId)
+      const combatData = await getDoc(combatRef);
+      const { combatCharacterIds } = combatData.data() as Combat;
+      combatCharacterIds?.push(docId)
+      await setDoc(combatRef,{ combatCharacterIds } ,{ merge: true})
+    }
+  })
+}
+
+export const useDeleteCombatCharacter = (combatDocId: string) => {
+  return useMutation({
+    mutationKey: ["delete-combat-character", combatDocId],
+    mutationFn: async (docId: string) => {      
+      await runTransaction(firestore, async() => {
+        const combatRef = doc(firestore, "combats", combatDocId)
+        const combatData = await getDoc(combatRef)
+        const { combatCharacterIds } = combatData.data() as Combat;
+        const newIds = combatCharacterIds?.filter(id => id !== docId)
+        await setDoc(combatRef,{ combatCharacterIds: newIds } ,{ merge: true})
+
+        const combatCharactersRef = doc(firestore, "combatCharacters", docId);
+        await deleteDoc(combatCharactersRef);
+      })
+    }
+  })
+}
+// should I add batch mutation here?
+export const mutateCombatCharacter = async (docId: string, newCombatCharacter: Partial<CombatCharacter>) => {
+  if (docId) {
+    const ref = doc(firestore, "combatCharacters", docId);
+    await setDoc(ref, {...newCombatCharacter}, {merge: true})
+  }
+}
+
+export const useEditCombatCharacter = (docId: string) => {
+  return useMutation({
+    mutationKey: ["edit-combat-character", docId],
+    mutationFn : async (newCombatCharacter: Partial<CombatCharacter>) => {
+      await mutateCombatCharacter(docId, newCombatCharacter)
+    }
+  })
+}
 
 export const useAddCombat = (onSuccess = () => {}) => {
   return useMutation({
     mutationKey: ["add-combat"],
     onSuccess,
-    mutationFn: async (newCombat: Combat) => {
+    mutationFn: async ({combat, characters}: {combat: Combat, characters: CombatCharacter[]}) => {
       runTransaction(firestore, async () => {
         const combatsRef = collection(firestore, "combats");
         const combatMapsRef = collection(firestore, "combatMaps");
+        const combatCharactersRef = collection(firestore, "combatCharacters");
 
-        const response = await addDoc(combatsRef, newCombat)
+        // add combat
+        const response = await addDoc(combatsRef, combat)
         const docId = response?.id;
 
-        const {combatCharacterArray = []} = newCombat;
         const mapData = {
-          combatDocId: response?.id,
-          campaignDocId: newCombat?.campaignDocId,
-          combatMapCharacterArray: combatCharacterArray?.map((character) => ({
-            playerDocId: character?.playerDocId || "",
-            enemyId: character?.enemyId || "",
-            npcDocId: character?.npcDocId || "",
-            position: {
-              x: 100,
-              y: 100
-            },
-            uniqueId: character?.uniqueId
-          })),
+          combatDocId: docId,
+          campaignDocId: combat?.campaignDocId,
         };
 
+        // add combat map
         addDoc(combatMapsRef, mapData);
+
+        const combatCharacterIds: string[] = [];
+        for(let index = 0; index < characters.length; index++) {
+          const character = characters[index];
+          const charResponse = await addDoc(combatCharactersRef, {
+            position: {
+              x: 100,
+              y: 100,
+            },
+            combatDocId: docId,
+            ...character
+          })
+          combatCharacterIds.push(charResponse.id)
+        }
+
+        const newCombatRef = doc(firestore, "combats", docId)
+        await setDoc(newCombatRef,{ combatCharacterIds } ,{ merge: true})
       });
     }
   })
@@ -147,10 +203,31 @@ export const useUpdateInitiative = (combat: Combat) => {
             })
             await batch.commit();
           }
+
+          const combatCharactersQuery = await query(collection(firestore, "combatCharacters"), where("combatDocId", "==", combatId));
+          const combatCharactersSnapshot = await getDocs(combatCharactersQuery);
+          if (combatCharactersSnapshot.size > 0) {
+            const batch = writeBatch(firestore);
+            combatCharactersSnapshot.docs.forEach(async (doc) => {
+              batch.delete(doc.ref);
+            })
+            await batch.commit();
+          }
+
           const combatRef = doc(firestore, "combats", combatId)
           await deleteDoc(combatRef)
       })
     }
   });
+}
+
+export const useEditCombat = (combatDocId: string) => {
+  return useMutation({
+    mutationKey: ["edit-combat", combatDocId],
+    mutationFn: async(combat: Partial<Combat>) => {
+      const ref = doc(firestore, "combats", combatDocId);
+      await setDoc(ref, {...combat}, {merge: true});
+    }
+  })
 }
 

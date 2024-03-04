@@ -1,12 +1,14 @@
 import { CharacterType } from "./BaseCharacter";
 
 export type CombatCharacter = {
+    docId?: string;
     uniqueId?: number;
     initiative?: number;
     initiativeBonus?: number;
     name?: string;
     armorClass?: number;
     health?: number;
+    tempHealth?: number;
     maxHealth?: number;
     playerDocId?: string;
     npcDocId?: string;
@@ -25,4 +27,5 @@ export type CombatCharacter = {
         x?: number;
         y?: number;
     }
+    xp?: number;
 }

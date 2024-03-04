@@ -1,11 +1,11 @@
-import React, {useState} from "react"
+import React from "react"
 import CharacterPicker from "@components/CharacterPicker/CharacterPicker";
 import { useCampaignCharacters } from "@services/CharacterService";
 import { useParams, useSearchParams } from "react-router-dom";
 import css from "./PlayerInitiative.module.scss"
 import { useCampaign } from "@services/CampaignService";
 import { Typography } from "@components/Typography/Typography";
-import { useCombat, useUpdateInitiative } from "@services/CombatService";
+import { useCombat, useCombatCharacters } from "@services/CombatService";
 import { Spacer } from "@components/Spacer/Spacer";
 import SelectedPlayer from "./components/SelectedPlayer";
 import CharacterRow from "./components/CharacterRow";
@@ -22,18 +22,18 @@ const PlayerInitiative = () => {
     const {characters} = useCampaignCharacters(campaignId || "")
     const {data: campaign} = useCampaign(campaignId || "")
     const {combat, isLoading: isCombatLoading} = useCombat(campaign?.currentCombatDocId || "1")
-    const {currentTurnIndex = 0, combatCharacterArray = [] } = combat;
+    const {combatCharacters = [], isLoading: isCharactersLoading} = useCombatCharacters(combat?.docId || "");
+
+    const {currentTurnIndex = 0 } = combat;
 
     const character = searchParams.get("characterId") && characters?.find(char => char.docId === searchParams.get("characterId")) || null
 
-    const update = useUpdateInitiative(combat);
-
     let nextPlayerDocId: string | null = null;
 
-    nextPlayerDocId = combatCharacterArray.find((char: CombatCharacter, index: number) => char?.playerDocId && index > currentTurnIndex)?.playerDocId || null;
-    nextPlayerDocId = nextPlayerDocId || combatCharacterArray.find((char: CombatCharacter) => char?.playerDocId)?.playerDocId || null;
+    nextPlayerDocId = combatCharacters.find((char: CombatCharacter, index: number) => char?.playerDocId && index > currentTurnIndex)?.playerDocId || null;
+    nextPlayerDocId = nextPlayerDocId || combatCharacters.find((char: CombatCharacter) => char?.playerDocId)?.playerDocId || null;
 
-    const canShowCombatCharacterArray = combat?.combatCharacterArray?.filter((character: CombatCharacter) => character?.shouldShow)
+    const canShowCombatCharacterArray = combatCharacters?.filter((character: CombatCharacter) => character?.shouldShow)
     const PCs = canShowCombatCharacterArray?.filter((character: CombatCharacter) => character?.playerDocId);
     const allies = canShowCombatCharacterArray?.filter((character: CombatCharacter) => !character?.playerDocId && character?.isAlly);
     const enemies = canShowCombatCharacterArray?.filter((character: CombatCharacter) => !character?.playerDocId && !character?.isAlly).sort((a: CombatCharacter, b: CombatCharacter) => {
@@ -74,7 +74,7 @@ const PlayerInitiative = () => {
             </FloatingButtonContainer>
             
             {(character) && 
-                <SelectedPlayer update={update} combat={combat} character={character} />
+                <SelectedPlayer />
             }
             <Spacer height={24} />
             <div className={css.healthBars}>
@@ -89,7 +89,7 @@ const PlayerInitiative = () => {
                             healthBarAmount={healthBarAmount}
                             rowImageURL={String(playerCharacterImageUrl)}
                             combatCharacter={character}
-                            isCurrentTurn={combat?.combatCharacterArray[currentTurnIndex].playerDocId === playerDocId}
+                            isCurrentTurn={combatCharacters[currentTurnIndex].playerDocId === playerDocId}
                             isNextTurn={character.playerDocId === nextPlayerDocId}
                             
                         />
@@ -150,7 +150,7 @@ const PlayerInitiative = () => {
         }
     ];
 
-    if (isCombatLoading) {
+    if (isCombatLoading || isCharactersLoading) {
         return <Spinner />
     }
 

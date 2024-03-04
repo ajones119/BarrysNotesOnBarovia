@@ -1,5 +1,6 @@
 import { BaseCharacter } from "@model/BaseCharacter";
 import { PlayerCharacter } from "./PlayerCharacter";
+import { CombatCharacter } from "./CombatCharacter";
 
 // Credit to stack overflow - https://stackoverflow.com/a/71700658
 type Tuple<
@@ -122,7 +123,7 @@ export const getEncounterMultiplier = (
 };
 
 export const getEncounterDifficulty = (
-  monsters: BaseCharacter[],
+  monsters: CombatCharacter[],
   players: PlayerCharacter[],
 ): ENCOUNTER_DIFFICULTY => {
   // TODO (churt): get better at typescript.

@@ -58,7 +58,7 @@ const  Map = ({
     <div style={{width: width * 1.5}}>
     <div
       ref={ref}
-      style={{...CustomStyle, backgroundColor: mapColor, height, width, ...styles, ...backgroundImageStyles, marginLeft: 250}}
+      style={{...CustomStyle, backgroundColor: mapColor, height, width, ...styles, ...backgroundImageStyles, marginLeft: "20%"}}
     >
       <div style={{position: "relative", width, height}}>
         <div className={css.gridOverlay}>

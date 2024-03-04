@@ -15,42 +15,38 @@ import ColorPicker, { COLORS_MAP } from "@components/ColorPicker/ColorPicker";
 import { Checkbox } from "@mui/material";
 import useCombatMapStore from "@views/CombatMap/CombatMapStore";
 import FileInput from "@components/FileInput";
+import { mutateCombatToken, useAddCombatToken, useCombatMap, useCombatMapTokens, useDeleteCombatToken, useUpdateCombatMap } from "@services/CombatMapService";
 
 declare interface SettingsDrawerProps extends DrawerProps {
-    map: CombatMap,
-    setMap: (_newMap: CombatMap) => void,
+    combatId: string,
     isPlayer?: boolean
 };
 
 const SettingsDrawer = ({
     isOpen,
     onClose,
-    map,
-    setMap,
+    combatId,
     isPlayer = false
 }: SettingsDrawerProps) => {
-    const [localMapSettings, setLocalMapSettings] = useState<CombatMap>(map || {extraTokens: []})
+    const { combatMap, isLoading: isMapLoading, isRefetching: isMapRefetching } = useCombatMap(combatId);
+    const [localMapSettings, setLocalMapSettings] = useState<CombatMap>(combatMap)
     const [isAddTokensDrawerOpen, setIsAddTokensDrawerOpen] = useState(false)
     const [showLocked, setShowLocked] = useState(true);
     const [animateRef] = useAutoAnimate();
     const currentMapCoordinates = useCombatMapStore(state => state.currentMapCoordinates);
+    const {mutate: setMap} = useUpdateCombatMap(combatMap?.docId || "");
+    const {mutate: addCombatToken} = useAddCombatToken(combatMap?.docId || "")
+    const {tokens: combatTokens} = useCombatMapTokens(combatMap?.docId || "")
+    const {mutate: deleteToken} = useDeleteCombatToken();
 
     useEffect(() => {
         if (isOpen) {
-            setLocalMapSettings(map)
+            setLocalMapSettings({...combatMap})
         }
     }, [isOpen])
 
-    const handleDeleteToken = (id: string) => {
-        const updatedTokens = localMapSettings?.extraTokens?.filter((token) => token.id !== id) || [];
-        setLocalMapSettings({...localMapSettings, extraTokens: updatedTokens})
-    }
-
     const handleAddToken = (newToken: InternalToken) => {
-        const extraTokens = localMapSettings?.extraTokens || [];
-        const uniqueID = Date.now() + Math.random()
         const token = {
-            id: `${uniqueID}`,
             disabled: false,
             data: {
                 position: {
@@ -78,14 +74,17 @@ const SettingsDrawer = ({
             token.data = {...token.data, rotation: newToken.rotation || 0}
         }
 
-        extraTokens.push(token)
+        addCombatToken(token);
 
-        setLocalMapSettings({...localMapSettings, extraTokens: extraTokens})
         setIsAddTokensDrawerOpen(false);
     }
 
-    let extraTokensToDisplay = isPlayer ? localMapSettings?.extraTokens?.filter(token => token?.data?.playerAdded) || [] : localMapSettings?.extraTokens;
+    let extraTokensToDisplay = isPlayer ? combatTokens.filter(token => token?.data?.playerAdded) || [] : combatTokens;
     extraTokensToDisplay = showLocked ? extraTokensToDisplay : extraTokensToDisplay?.filter(token => !token?.disabled)
+
+    let overMaxRows = (localMapSettings?.rows || 0) > 200;
+    let overMaxColumns = (localMapSettings?.columns || 0) > 200;
+    let overMaxTokenSize = (localMapSettings?.tokenSize || 0) > 200;
 
     return (
         <Drawer
@@ -96,13 +95,13 @@ const SettingsDrawer = ({
             <div className={css.settingsDrawerContainer}>
                 { !isPlayer &&
                     <div>
-                        <TextInput value={localMapSettings?.columns} placeholder="cols" number onChange={(value) => setLocalMapSettings({...localMapSettings, columns: Number(value)})} />
+                        <TextInput error={overMaxColumns} value={localMapSettings?.columns} placeholder="cols" max={200} number onChange={(value) => setLocalMapSettings({...localMapSettings, columns: Number(value)})} />
                         <Spacer height={24} />
 
-                        <TextInput value={localMapSettings?.rows} placeholder="rows" number onChange={(value) => setLocalMapSettings({...localMapSettings, rows: Number(value)})} />
+                        <TextInput error={overMaxRows} value={localMapSettings?.rows} placeholder="rows" max={200} number onChange={(value) => setLocalMapSettings({...localMapSettings, rows: Number(value)})} />
                         <Spacer height={24} />
 
-                        <TextInput value={localMapSettings?.tokenSize} placeholder="base token size" number onChange={(value) => setLocalMapSettings({...localMapSettings, tokenSize: Number(value)})} />
+                        <TextInput error={overMaxTokenSize} value={localMapSettings?.tokenSize} placeholder="base token size" number onChange={(value) => setLocalMapSettings({...localMapSettings, tokenSize: Number(value)})} />
                         <Spacer height={24} />
 
                         <FileInput value={typeof localMapSettings?.mapImage === "string" ? localMapSettings?.mapImage : localMapSettings?.mapImage?.name} title="Map Image" onChange={(value) => setLocalMapSettings({...localMapSettings, mapImage: value || ""})} />
@@ -129,14 +128,21 @@ const SettingsDrawer = ({
                         <Spacer height={24} />
                     </div>
                 }
+                <Button onClick={() => {
+                    if (!overMaxColumns && !overMaxRows && !overMaxTokenSize) {
+                        setMap(localMapSettings);
+                        onClose && onClose();
+                    }
+                }}>SUBMIT</Button>
+                <Spacer height={24} />
 
                 <Button onClick={() => setIsAddTokensDrawerOpen(true)} size="large" color="success"><Typography>ADD Token</Typography></Button>
                 <Spacer height={8} />
                 <Button onClick={() => setShowLocked(!showLocked)}>{showLocked ? "Hide" : "Show"} Locked</Button>
                 <div ref={animateRef}>
                 {
-                    (extraTokensToDisplay || []).map(({id, data: token, disabled}, index) => (
-                        <div className={css.addTokenEntry} key={id}>
+                    (extraTokensToDisplay || []).map(({docId = "", data: token, disabled}, index) => (
+                        <div className={css.addTokenEntry} key={docId}>
                             <div className={css.addTokenInfo}>
                                 
                                 <Typography>{token.name}</Typography>
@@ -144,25 +150,17 @@ const SettingsDrawer = ({
                                 {
                                     token?.color && 
                                         <ColorPicker outlined width={48} value={token?.color} onChange={value => {
-                                            const tokenIndex = localMapSettings?.extraTokens?.findIndex(token => token.id === id) || 0;
-                                            const newToken = {id, data: {...token, color: value}}
-                                            const newTokens = [...localMapSettings.extraTokens || []]
-                                            newTokens[tokenIndex] = newToken
-                                            setLocalMapSettings({...localMapSettings, extraTokens: newTokens})
+                                            mutateCombatToken(docId, {data: {...token, color: value}})
                                         }} />
                                 }
                             </div>
                             <div className={css.tokenButtons}>
                             <Button color='dark' onClick={() => {
-                                    const tokenIndex = localMapSettings?.extraTokens?.findIndex(token => token.id === id) || 0;
-                                    const newToken = {id, data: {...token}, disabled: !disabled}
-                                    const newTokens = [...localMapSettings.extraTokens || []]
-                                    newTokens[tokenIndex] = newToken
-                                    setLocalMapSettings({...localMapSettings, extraTokens: newTokens})
+                                    mutateCombatToken(docId, {disabled: !disabled})
                                 }}>
                                     <FontAwesomeIcon icon={disabled ? faLock : faLockOpen} />
                                 </Button>
-                                <Button color='dark' onClick={() => handleDeleteToken(id)}>
+                                <Button color='dark' onClick={() => deleteToken(docId)}>
                                     <FontAwesomeIcon icon={faMinus} />
                                 </Button>
                                 <Button color='dark' onClick={() => handleAddToken({...token, height: token?.length})}>
@@ -173,11 +171,6 @@ const SettingsDrawer = ({
                     ))
                 }
                 </div>
-                <Spacer height={24} />
-                <Button onClick={() => {
-                    setMap(localMapSettings);
-                    onClose && onClose();
-                }}>SUBMIT</Button>
                 <AddTokenDrawer
                     isOpen={isAddTokensDrawerOpen}
                     onClose={() => setIsAddTokensDrawerOpen(false)}

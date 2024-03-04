@@ -156,7 +156,7 @@ const CharacterTokenContent = ({ character, tokenSize = 16, isCurrentTurn = fals
                     style={floatingStyles}
                     {...getFloatingProps()}
                 >
-                    <Typography>{isPlayer ? "" : `${character?.uniqueId} - `}{character?.name}</Typography>
+                    <Typography>{isPlayer ? "" : `${character?.uniqueId || ""} - `}{character?.name}</Typography>
                     {
                         character?.shouldShowHealthBar && 
                         <div><LinearProgress variant={healthBarAmount || 0 < 101 ? "determinate" : "indeterminate"} value={healthBarAmount} color={getHealthBarColor(healthBarAmount || 0)} /></div>
