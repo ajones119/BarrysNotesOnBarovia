@@ -25,26 +25,28 @@ import { BASE_CHARACTER_IMAGE_MAP } from "utils/getBaseCharacterGenericImage";
 import { CharacterTypeLowercase } from "@model/BaseCharacter";
 import { PlayerCharacter } from "@model/PlayerCharacter";
 import Avatar from "@components/Avatar";
+import { useDeleteCombatCharacter, useEditCombatCharacter } from "@services/CombatService";
+import { useParams } from "react-router-dom";
 
 type InitiativeTrackerTableRowProps = {
   item: CombatCharacter;
-  onChange: (newCopy: any) => void;
-  onRemove: () => void;
   active?: boolean;
-  tableKey: number;
+  tableKey: number | string;
   characters: PlayerCharacter[];
 };
 
 const InitiativeTrackerTableRow = ({
   active = false,
   item,
-  onChange,
-  onRemove,
   tableKey,
   characters,
 }: InitiativeTrackerTableRowProps) => {
+  const { combatId = "", CampaignId: campaignId = "" } = useParams();
+
   const [isHealthCounterOpen, setIsHealthCounterOpen] = useState(false);
   const [healthIncrement, setHealthIncrement] = useState<number>(1);
+  const {mutate: updateCharacter, isLoading: isEditing} = useEditCombatCharacter(item?.docId || "")
+  const {mutate: deleteCharacter, isLoading: isDeleting} = useDeleteCombatCharacter(combatId || "")
 
   const { refs, floatingStyles, context } = useFloating({
     open: isHealthCounterOpen,
@@ -56,15 +58,15 @@ const InitiativeTrackerTableRow = ({
   const click = useClick(context);
   const dismiss = useDismiss(context);
 
-  const { getReferenceProps, getFloatingProps } = useInteractions([click]);
+  const { getReferenceProps, getFloatingProps } = useInteractions([click]); 
 
   const handleShowChange = (value: string) => {
     if (value === "all") {
-      onChange({ ...item, shouldShowHealthBar: true, shouldShow: true });
+      updateCharacter({ shouldShowHealthBar: true, shouldShow: true });
     } else if (value === "hideHP") {
-      onChange({ ...item, shouldShowHealthBar: false, shouldShow: true });
+      updateCharacter({ shouldShowHealthBar: false, shouldShow: true });
     } else {
-      onChange({ ...item, shouldShowHealthBar: false, shouldShow: false });
+      updateCharacter({ shouldShowHealthBar: false, shouldShow: false });
     }
   };
 
@@ -98,7 +100,7 @@ const InitiativeTrackerTableRow = ({
       <ColorPicker
         width={0}
         value={item?.color}
-        onChange={(value) => onChange({ ...item, color: value })}
+        onChange={(value) => updateCharacter({ color: value })}
       />
     </div>)
 
@@ -123,8 +125,7 @@ const InitiativeTrackerTableRow = ({
             <FontAwesomeIcon
               icon={faDiceD20}
               onClick={() =>
-                onChange({
-                  ...item,
+                updateCharacter({
                   initiative: Math.floor(
                     Math.random() * 20 + (1 + (item.initiativeBonus || 0)),
                   ),
@@ -136,7 +137,7 @@ const InitiativeTrackerTableRow = ({
           <TextInput
             number
             value={item?.initiative}
-            onChange={(value) => onChange({ ...item, initiative: value })}
+            onChange={(value) => updateCharacter({ initiative: Number(value || 0) })}
           />
           <Typography color="primary">+{item?.initiativeBonus || 0}</Typography>
         </div>
@@ -146,7 +147,7 @@ const InitiativeTrackerTableRow = ({
           <TextInput
             disabled={!!item?.playerDocId}
             value={item?.name}
-            onChange={(value) => onChange({ ...item, name: value })}
+            onChange={(value) => updateCharacter({ name: String(value)})}
           />
         </div>
       </TableCell>
@@ -156,14 +157,20 @@ const InitiativeTrackerTableRow = ({
             <TextInput
               number
               value={item?.health}
-              onChange={(value) => onChange({ ...item, health: value })}
+              onChange={(value) => updateCharacter({ health: Number(value || 0) })}
             />
           </div>
           <Typography>/</Typography>
           <TextInput
             number
             value={item?.maxHealth}
-            onChange={(value) => onChange({ ...item, maxHealth: value })}
+            onChange={(value) => updateCharacter({ maxHealth: Number(value || 1) })}
+          />
+          <Typography>|</Typography>
+          <TextInput
+            number
+            value={item?.tempHealth || 0}
+            onChange={(value) => updateCharacter({ tempHealth: Number(value || 0) })}
           />
         </div>
       </TableCell>
@@ -171,22 +178,22 @@ const InitiativeTrackerTableRow = ({
         <TextInput
           number
           value={item?.armorClass}
-          onChange={(value) => onChange({ ...item, armorClass: value })}
+          onChange={(value) => updateCharacter({ armorClass: Number(value || 0) })}
         />
       </TableCell>
       <TableCell style={{ width: "10%" }}>
         <ConditionSelect
           width="100%"
           selectedValue={item?.conditions}
-          onChange={(value) => onChange({ ...item, conditions: value })}
+          onChange={(value) => updateCharacter({ conditions: value || [] })}
         />
       </TableCell>
       <TableCell style={{ width: "2%" }}>
-       <Checkbox checked={item?.isAlly} disabled={!!item?.playerDocId} onChange={() => onChange({...item, isAlly: !item?.isAlly})} />
+      <Checkbox checked={item?.isAlly} disabled={!!item?.playerDocId} onChange={() => updateCharacter({ isAlly: !item?.isAlly})} />
       </TableCell>
       <TableCell style={{ width: "2%" }}>
         {!item?.playerDocId && (
-          <Button onClick={onRemove} color="error">
+          <Button onClick={() => deleteCharacter(item?.docId || "")} color="error">
             Delete
           </Button>
         )}
@@ -208,8 +215,7 @@ const InitiativeTrackerTableRow = ({
                 <div
                   className={css.minus}
                   onClick={() =>
-                    onChange({
-                      ...item,
+                    updateCharacter({
                       health:
                         Number(item?.health || 0) -
                         Number(healthIncrement || 0),
@@ -222,8 +228,7 @@ const InitiativeTrackerTableRow = ({
                 <div
                   className={css.plus}
                   onClick={() =>
-                    onChange({
-                      ...item,
+                    updateCharacter({
                       health:
                         Number(item?.health || 0) +
                         Number(healthIncrement || 0),

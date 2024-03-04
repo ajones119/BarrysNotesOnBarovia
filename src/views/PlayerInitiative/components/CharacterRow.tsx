@@ -6,12 +6,13 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowRight, faExclamationCircle } from "@fortawesome/free-solid-svg-icons";
 import BACKUP from "@images/barry-cartoon.png"
 import { Typography } from "@components/Typography/Typography";
-import { getHealthBarColor, getHealthIcon, getIconList } from "../utils";
+import { getHealthIcon, getIconList } from "../utils";
 import { Spacer } from "@components/Spacer/Spacer";
 import { useSpring, animated } from "@react-spring/web";
 import { CharacterTypeLowercase } from "@model/BaseCharacter";
 import { BASE_CHARACTER_IMAGE_MAP } from "utils/getBaseCharacterGenericImage";
 import useSetTheme from "@hooks/useSetTheme";
+import HealthBar from "@components/HealthBar";
 
 const BootstrapTooltip = styled(({ className, ...props }: TooltipProps) => (
     <Tooltip {...props} arrow classes={{ popper: className }} />
@@ -86,7 +87,7 @@ const CharacterRow = ({
                     { getIconList(combatCharacter).map(value => <BootstrapTooltip placement="top" arrow title={value?.label}><FontAwesomeIcon icon={value?.icon} /></BootstrapTooltip>) }
                 </div>
             </div>
-        {combatCharacter?.shouldShowHealthBar && <LinearProgress variant={healthBarAmount || 0 < 101 ? "determinate" : "indeterminate"} value={healthBarAmount} color={getHealthBarColor(healthBarAmount || 0)} />}
+        {combatCharacter?.shouldShowHealthBar && <HealthBar health={combatCharacter?.health} maxHealth={combatCharacter?.maxHealth} tempHealth={combatCharacter?.tempHealth} />}
         <Spacer height={8} />
     </div>
     )

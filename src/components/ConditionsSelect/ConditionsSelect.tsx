@@ -14,6 +14,7 @@ type ConditionSelectProps = {
     selectedValue?: string[] | null,
     width?: string,
     outlined?: boolean,
+    icons?: boolean,
 }
 
 export type Condition = {
@@ -130,12 +131,11 @@ export const CONDITION_OPTIONS: Condition[] = [
     },
 ]
 
-const ConditionSelect = ({onChange, selectedValue, width = "200px", outlined = false}: ConditionSelectProps) => {
+const ConditionSelect = ({onChange, selectedValue, width = "200px", outlined = false, icons = false}: ConditionSelectProps) => {
     const {theme} = useSetTheme();
     return (<Select
         label="Conditions"
         multiple
-        multiline
         value={selectedValue || []}
         onChange={({target: {value = []}}) => {
             const chosen = value;
@@ -148,13 +148,15 @@ const ConditionSelect = ({onChange, selectedValue, width = "200px", outlined = f
         renderValue={(selected: any) => (
             <Stack gap={1} direction="row" flexWrap="wrap">
               {selected.map((value: string) => {
-                const label = CONDITION_OPTIONS.find(option => option.value === value)?.label || "";
+                const condition = CONDITION_OPTIONS.find(option => option.value === value);
+                const label = condition?.label || "";
+                const icon = <FontAwesomeIcon icon={condition?.icon || faXmark} style={{color: theme.primary}} />
                 return(
                     <Chip
                         variant="outlined"
                         style={{color: theme.primary, borderColor: theme.primary}}
                         key={value}
-                        label={label}
+                        label={icons ? icon : label}
                         onDelete={() =>
                             onChange(
                                 selectedValue?.filter((item) => item !== value) || []

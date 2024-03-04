@@ -3,7 +3,7 @@ import css from "./NavBar.module.scss"
 import Barry from "@images/barry-cartoon.png"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faDungeon, faGripHorizontal, faHatWizard, faHomeAlt, faSpaghettiMonsterFlying, faXmark } from "@fortawesome/free-solid-svg-icons";
-import { Link, useLocation, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate, useParams, useSearchParams } from "react-router-dom";
 import { Typography } from "../Typography/Typography";
 import { useWindowWidth } from "@react-hook/window-size";
 import Drawer from "@components/Drawer";
@@ -11,6 +11,9 @@ import { Button } from "@components/Button/Button";
 import { Icon } from "@fortawesome/fontawesome-svg-core";
 import { Spacer } from "@components/Spacer/Spacer";
 import ThemePicker from "./components/ThemePicker";
+import CharacterPicker from "@components/CharacterPicker/CharacterPicker";
+import { useCampaignCharacters } from "@services/CharacterService";
+import useLocalCharacter from "@hooks/useLocalCharacter";
 
 export type NavBarLink = {
   name: string;
@@ -29,6 +32,9 @@ export const NavBar = ({additionalLinks = [], sectionHomeLink}: NavBarProps) => 
   const navigate = useNavigate();
   const { pathname } = useLocation();
   const width = useWindowWidth();
+  const {CampaignId = ""} = useParams()
+  const {selectedCharacter, setSelectedCharacter} = useLocalCharacter(CampaignId)
+  const {characters, isLoading} = useCampaignCharacters(CampaignId);
 
   const handleScroll=() => {
       const offset=window.scrollY;
@@ -60,6 +66,21 @@ export const NavBar = ({additionalLinks = [], sectionHomeLink}: NavBarProps) => 
             <Typography className={`${css.navBarLink} ${pathname === "/Monsters/" ? css.activeLink : ""}`}><FontAwesomeIcon icon={faSpaghettiMonsterFlying} />Monsters</Typography>
           </Link>
             <div className={css.menuButtons}>
+              {(CampaignId && !isLoading ) &&
+              <CharacterPicker
+                avatars
+                width={60}
+                characters={characters}
+                value={selectedCharacter}
+                onChange={(value) => {
+                  if (value === "__none__") {
+                    setSelectedCharacter("")
+                } else {
+                    const getCharacter = characters ? characters.find((char) => char.docId === value) : null;
+                    setSelectedCharacter(getCharacter?.docId || "")
+                }
+                }}
+              />}
               {sectionHomeLink && <Button hollow onClick={() => navigate(sectionHomeLink.url)}><FontAwesomeIcon icon={faHomeAlt} /></Button>}
               <Button hollow onClick={() => setIsOpen(true)}><FontAwesomeIcon icon={faGripHorizontal} /></Button>
             </div>

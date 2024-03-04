@@ -3,9 +3,8 @@ import { Modal } from '../Modal';
 import { Grid } from '@mui/material';
 import css from "./CreateCombatModal.module.scss"
 import { Combat } from '@model/Combat';
-import { useAddCombatButton } from '@services/CombatService';
+import { useAddCombat } from '@services/CombatService';
 import { TextInput } from '../../TextInput/TextInput';
-import useDeepCompareEffect from 'use-deep-compare-effect';
 import { CombatCharacter } from '@model/CombatCharacter';
 import { Button } from '@components/Button/Button';
 
@@ -17,20 +16,15 @@ declare interface CreateNPCModalProps {
 };
 
 const CreateCombatModal = ({isOpen, onClose, campaignId, characters = [] }: CreateNPCModalProps) => {
-    const [combat, setCombat] = useState<Combat>({campaignDocId: campaignId, combatCharacterArray: characters});
+    const [combat, setCombat] = useState<Combat>({campaignDocId: campaignId});
     const [validator, setValidator] = useState<any>();
 
     const handleOnClose = () => {
-        setCombat({campaignDocId: campaignId, combatCharacterArray: characters.map((character, index) => ({...character, uniqueId: index}))})
+        setCombat({campaignDocId: campaignId})
         onClose();
     }
 
-const {mutate, isLoading} = useAddCombatButton(handleOnClose);
-
-
-    useDeepCompareEffect(() => {
-        setCombat({campaignDocId: campaignId, combatCharacterArray: characters.map((character, index) => ({...character, uniqueId: index}))})
-    }, [characters])
+const {mutate, isLoading} = useAddCombat(handleOnClose);
 
     return (
         <div>
@@ -41,7 +35,7 @@ const {mutate, isLoading} = useAddCombatButton(handleOnClose);
                         isLoading={isLoading}
                         onClick={() => {
                             if (combat?.name) {
-                                mutate(combat)
+                                mutate({combat, characters})
                             } else {
                                 setValidator({name: "required"})
                             }

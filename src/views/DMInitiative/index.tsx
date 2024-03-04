@@ -1,7 +1,6 @@
-import React, { useState, useEffect } from "react";
-import { useCombat, useUpdateInitiative } from "@services/CombatService";
+import React, { useState } from "react";
+import { mutateCombatCharacter, useAddCombatCharacter, useCombat, useCombatCharacters, useEditCombat, useUpdateInitiative } from "@services/CombatService";
 import { useParams } from "react-router-dom";
-import { useList } from "@hooks/useList";
 import useDeepCompareEffect from "use-deep-compare-effect";
 import css from "./DMInitiative.module.scss";
 import { TableCell, TableContainer, TableHead, TableRow } from "@mui/material";
@@ -11,7 +10,7 @@ import { Combat } from "@model/Combat";
 import { useCampaign, useUpdateCampaign } from "@services/CampaignService";
 import { Button } from "@components/Button/Button";
 import { useCampaignCharacters } from "@services/CharacterService";
-import { getCombatMapURL, getCombatURL } from "./utils";
+import { getCombatMapURL, getFilteredList, getLastTurnIndex, getNextTurnIndex, sortCombatOnInitiatives } from "./utils";
 import ResourceDrawer from "@views/DMInitiative/components/ResourceDrawer";
 import LinearProgress from "@mui/material/LinearProgress";
 import {
@@ -22,9 +21,9 @@ import Box from "@mui/material/Box";
 import { Spacer } from "@components/Spacer/Spacer";
 import ColorPicker from "@components/ColorPicker/ColorPicker";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faArrowRightRotate, faCircleXmark } from "@fortawesome/free-solid-svg-icons";
-import { useCombatMap, useUpdateCombatMap } from "@services/CombatMapService";
+import { faCircleXmark } from "@fortawesome/free-solid-svg-icons";
 import FloatingButtonContainer from "@components/FloatingButtonContainer";
+import Spinner from "@components/Spinner";
 
 type EncounterDiffultyProgressProps = {
   difficulty: ENCOUNTER_DIFFICULTY;
@@ -71,86 +70,33 @@ const EncounterDiffultyProgress = ({
 };
 
 const DMInitiative = () => {
-  const { combatId, CampaignId: campaignId = "" } = useParams();
+  const { combatId = "", CampaignId: campaignId = "" } = useParams();
   const { combat, isLoading, isRefetching, isFetching } = useCombat(combatId);
-  const { combatMap, isLoading: isMapLoading, isRefetching: isMapRefetching } = useCombatMap(combatId || "");
-  const { currentTurnIndex = null, combatCharacterArray = [], campaignDocId = "" } = combat;
+  const { currentTurnIndex = null, campaignDocId = "" } = combat;
   const { data: campaign } = useCampaign(campaignId);
   const { characters = [] } = useCampaignCharacters(campaignId);
-  const { insert, removeAt, replaceAt, replaceList, listWithIds, list } =
-    useList([]);
-  const [colorFilter, setColorFilter] = useState<string[]>([])
-  const updateInitiative = useUpdateInitiative(combat);
+  const {mutate: editCombat} = useEditCombat(combatId)
   const updateCampaign = useUpdateCampaign(campaignId);
-  const {mutate: updateCombatMap} = useUpdateCombatMap(combatMap);
+  const {combatCharacters = [], isLoading: isCharactersLoading} = useCombatCharacters(combatId);
+  const {mutate: addCombatCharacter} = useAddCombatCharacter(combatId)
   const [isAddDrawerOpen, setIsAddDrawerOpen] = useState(false);
-
-  useDeepCompareEffect(() => {
-    if (!isLoading && !isRefetching) {
-      replaceList(combatCharacterArray || [{}]);
-    }
-  }, [isRefetching, isLoading, combat]);
-
-  //autosaving not needed rn, currently breaks delete
-  useDeepCompareEffect(() => {
-    if (!isRefetching && !isLoading) {
-      const timeout = setTimeout(() => handleUpdate({...combat}), 500)
-
-      return () => clearTimeout(timeout)
-    }
-  }, [isFetching, list]);
-
-  const handleUpdate = (combat: Combat, overrideCharacterArray = list) => { 
-    updateInitiative({
-      ...combat,
-      combatCharacterArray: overrideCharacterArray,
-    });
-
-      const { combatMapCharacterArray = [] } = combatMap;
-      const combinedCharacterArrays = overrideCharacterArray.map((characterFromCombat) => {
-        const characterFromMap = combatMapCharacterArray.find(item => item?.uniqueId === characterFromCombat?.uniqueId);
-        return {
-          ...characterFromMap,
-          ...characterFromCombat,
-          position: {
-            x: characterFromMap?.position?.x || 100,
-            y: characterFromMap?.position?.y || 100,
-          },
-          uniqueId: characterFromCombat?.uniqueId !== undefined ? characterFromCombat?.uniqueId : getNewUniqueId()
-        };
-      })
-
-
-      updateCombatMap({...combatMap, combatMapCharacterArray: combinedCharacterArrays})
-  };
 
   const handleStart = () => {
     updateCampaign({ ...campaign, currentCombatDocId: combatId });
   };
 
-  const handleDelete = (index: number) => {
-    const removedList = removeAt(index);
-    let newNextTurn = currentTurnIndex;
-
-    if (newNextTurn !== null && newNextTurn >= index) {
-      newNextTurn -= 1;
-    }
-
-    handleUpdate({ ...combat, currentTurnIndex: newNextTurn || 0 }, removedList);
-  };
-
   // TODO: do this properly using types for safety. Maybe a better signifier? What about npcs?
   const encounterDiffulty = getEncounterDifficulty(
-    list.filter((character) => !character?.playerDocId && !character?.isAlly),
+    combatCharacters.filter((character) => !character?.playerDocId && !character?.isAlly),
     characters,
   );
-
-  const filteredList = colorFilter.length > 0 ? listWithIds.filter(item => colorFilter.includes(item?.data?.color) || item?.data?.playerDocId || item?.data?.isAlly) : listWithIds;
+  const {colorFilter = []} = combat;
+  const filteredList = getFilteredList(colorFilter, combatCharacters);
 
   const getNewUniqueId = () => {
     let newId = 0;
 
-    list.forEach(character => {
+    combatCharacters.forEach(character => {
       const testId = character?.uniqueId || 0;
 
       if (testId > newId) {
@@ -162,21 +108,21 @@ const DMInitiative = () => {
   }
 
   const autoInitiative = () => {
-    let tempCombatCharacters = [...combatCharacterArray];
 
-    tempCombatCharacters = tempCombatCharacters.map(character => {
+    combatCharacters.forEach(character => {
       if (!character?.playerDocId && !character?.initiative) {
         const roll = Math.floor(
           Math.random() * 20 + (1 + (character.initiativeBonus || 0)),
         );
-        return {...character, initiative: roll};
+        mutateCombatCharacter(character?.docId || "", {initiative: roll});
       }
-      return character;
     })
 
-    handleUpdate(combat, tempCombatCharacters)
   }
   
+  if (isLoading || isCharactersLoading) {
+    return <Spinner />
+  }
 
   return (
     <div className={css.initiativeTrackerContainer}>
@@ -190,30 +136,25 @@ const DMInitiative = () => {
               width={96}
               outlined
               value={colorFilter}
-              onChange={(value: string[]) => setColorFilter(value)} />
-              <Button hollow color="error" onClick={() => {setColorFilter([])}} ><FontAwesomeIcon icon={faCircleXmark} color="red"  /></Button>
+              onChange={(value: string[]) => editCombat({colorFilter: value})} />
+              <Button hollow color="error" onClick={() => editCombat({colorFilter: []})} ><FontAwesomeIcon icon={faCircleXmark} color="red"  /></Button>
           </div>
           <Spacer height={8} />
           <div style={{display: "flex", alignItems: "center", columnGap: 4}}>
             <Button onClick={() => {
-              const newCombatCharacterArray = combatCharacterArray.map(item => {
+              combatCharacters.forEach(item => {
                 if ((colorFilter.includes(item?.color || "") || colorFilter.length < 1) && !item?.playerDocId) {
-                  return {...item, shouldShow: false, shouldShowHealthBar: false}
+                  mutateCombatCharacter(item?.docId || "", { shouldShow: false, shouldShowHealthBar: false})
                 }
-                return item
               })
-
-              handleUpdate(combat, newCombatCharacterArray)
             }} color="dark">Hide All</Button>
             <Button onClick={() => {
-              const newCombatCharacterArray = combatCharacterArray.map(item => {
+              combatCharacters.forEach(item => {
                 if ((colorFilter.includes(item?.color || "") || colorFilter.length < 1) && !item?.playerDocId) {
-                  return {...item, shouldShow: true, shouldShowHealthBar: true}
+                  mutateCombatCharacter(item?.docId || "", { shouldShow: true, shouldShowHealthBar: true})
                 }
-                return item
               })
 
-              handleUpdate(combat, newCombatCharacterArray)
             }} color="dark">Show All</Button>
             <Button onClick={() => autoInitiative()} color="dark">Auto Init</Button>
           </div>
@@ -271,20 +212,18 @@ const DMInitiative = () => {
             </TableCell>
           </TableRow>
         </TableHead>
-        {listWithIds.map((item, index) => filteredList.includes(item) && (
+        {combatCharacters.map((item, index) => filteredList.includes(item) && (
           <InitiativeTrackerTableRow
-            tableKey={item._id}
+            tableKey={item?.docId || index}
             active={index === combat.currentTurnIndex}
-            item={item.data}
-            onChange={(value) => replaceAt(index, { ...value })}
-            onRemove={() => handleDelete(index)}
+            item={item}
             characters={characters}
           />
         ))}
       </TableContainer>
       <ResourceDrawer
         isOpen={isAddDrawerOpen}
-        onAdd={(data) => insert({...data, uniqueId: getNewUniqueId()})}
+        onAdd={(data) => addCombatCharacter({...data, uniqueId: getNewUniqueId()})}
         campaignDocId={campaignId}
         onClose={() => setIsAddDrawerOpen(false)}
       />
@@ -303,9 +242,11 @@ const DMInitiative = () => {
           
           <div className={css.buttonsColumn}>
             <Button
-              onClick={() =>
-                insert({ shouldShow: true, shouldShowHealthBar: true, uniqueId: getNewUniqueId() })
-              }
+              onClick={() => {
+                addCombatCharacter({
+                  shouldShow: true, shouldShowHealthBar: true, uniqueId: getNewUniqueId()
+                })
+              }}
             >
               <Typography>Add Empty</Typography>
             </Button>
@@ -318,52 +259,19 @@ const DMInitiative = () => {
             </Button>
           </div>
 
-          <div className={css.buttonsColumn}>
             <Button
               onClick={() => {
-                const tempList = [...list];
-                const sortedList = tempList.sort((a, b) =>{
-                  let aInititative = Number(a["initiative"] || -100);
-                  let bInitiative = Number(b["initiative"] || -100);
-                    if (aInititative === bInitiative) {
-                      aInititative += Number(a["dexterity"] || -100)
-                      bInitiative += Number(a["dexterity"] || -100)
-                    }
-                  
-                    return aInititative <= bInitiative ? 1 : -1;
-                });
-                handleUpdate({ ...combat }, sortedList);
+                editCombat({combatCharacterIds: sortCombatOnInitiatives(combatCharacters)})
               }}
             >
               <Typography>Sort</Typography>
             </Button>
-            <Button
-              onClick={() => {
-                handleUpdate({ ...combat });
-              }}
-            >
-              <Typography>Save</Typography>
-            </Button>
-          </div>
 
           <Button
             color="error"
             onClick={() =>{
-              let nextTurn = 0;
-              if (currentTurnIndex !== null) {
-                nextTurn =
-                  currentTurnIndex - 1 < 0
-                    ? list.length-1
-                    : currentTurnIndex - 1;
-
-                  while (filteredList.filter(item => listWithIds[nextTurn].data.uniqueId === item.data.uniqueId).length < 1) {
-                    nextTurn =
-                      nextTurn - 1 <= 0
-                        ? 0
-                        : nextTurn - 1;
-                  }
-              }
-              handleUpdate({ ...combat, currentTurnIndex: nextTurn })
+              const nextTurn = getLastTurnIndex(currentTurnIndex, combatCharacters, colorFilter)
+              editCombat({ currentTurnIndex: nextTurn })
             }}
           >
             <Typography>Back</Typography>
@@ -371,21 +279,9 @@ const DMInitiative = () => {
           <Button
             color="success"
             onClick={() =>{
-              let nextTurn = 0;
-              if (currentTurnIndex !== null) {
-                nextTurn =
-                  currentTurnIndex + 1 >= list.length
-                    ? 0
-                    : currentTurnIndex + 1;
-
-                  while (filteredList.filter(item => listWithIds[nextTurn].data.uniqueId === item.data.uniqueId).length < 1) {
-                    nextTurn =
-                      nextTurn + 1 >= list.length
-                        ? 0
-                        : nextTurn + 1;
-                  }
-              }
-              handleUpdate({ ...combat, currentTurnIndex: nextTurn })
+              const nextTurn = getNextTurnIndex(currentTurnIndex, combatCharacters, colorFilter)
+              editCombat({ currentTurnIndex: nextTurn })
+              
             }}
           >
             <Typography>Next</Typography>

@@ -11,6 +11,8 @@ import { Button } from '@components/Button/Button';
 import { TextInput } from '@components/TextInput/TextInput';
 import Spinner from '@components/Spinner';
 import { useCampaign } from '@services/CampaignService';
+import { useSearchParams } from 'react-router-dom';
+import useLocalCharacter from '@hooks/useLocalCharacter';
 
 declare interface CreateNoteModalProps {
     isOpen: boolean;
@@ -23,8 +25,9 @@ declare interface CreateNoteModalProps {
 const DEFAULT_NOTE = {date: new Date()}
 
 const CreateNoteModal = ({isOpen, onClose, campaignId, characters, seedNotes = []}: CreateNoteModalProps) => {
+    const {selectedCharacter} = useLocalCharacter(campaignId)
     const date = new Date()
-    const defaultNote: Note = {...DEFAULT_NOTE, campaignDocId: campaignId, date}
+    const defaultNote: Note = {...DEFAULT_NOTE, campaignDocId: campaignId, date, characterDocId: selectedCharacter || undefined}
     const {data: campaign} = useCampaign(campaignId);
     const [newNote, setNewNote] = useState<Note>(defaultNote);
     const [prompt, setPrompt] = useState("");
@@ -41,7 +44,7 @@ const CreateNoteModal = ({isOpen, onClose, campaignId, characters, seedNotes = [
     } = newNote;
 
     useEffect(() => {
-        setNewNote({...newNote, date: new Date(), content: ""})
+        setNewNote({...newNote, date: new Date(), content: "", characterDocId: selectedCharacter || undefined})
     }, [isOpen])
 
     return (

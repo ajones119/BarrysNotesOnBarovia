@@ -1,5 +1,5 @@
 import { CombatCharacter } from "@model/CombatCharacter";
-import { Avatar, Badge, LinearProgress, Tooltip } from "@mui/material";
+import { Avatar, Badge, LinearProgress } from "@mui/material";
 import BACKUP from "@images/barry-cartoon.png"
 import React, { useState } from "react";
 import { BASE_CHARACTER_IMAGE_MAP } from "utils/getBaseCharacterGenericImage";
@@ -7,11 +7,12 @@ import { CharacterTypeLowercase } from "@model/BaseCharacter";
 import css from "../../CombatMap.module.scss"
 import { FloatingPortal, autoUpdate, flip, offset, shift, useDismiss, useFloating, useFocus, useHover, useInteractions, useRole } from "@floating-ui/react";
 import { Typography } from "@components/Typography/Typography";
-import { getHealthBarColor, getHealthIcon, getIconList } from "@views/PlayerInitiative/utils";
+import { getHealthIcon, getIconList } from "@views/PlayerInitiative/utils";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faStar } from "@fortawesome/free-solid-svg-icons";
-import { faBed, faFaceAngry, faBrain, faChildCombatant, faEarDeaf, faFaceFlushed, faFaceGrinHearts, faFaceTired, faFire, faGem, faHandsHoldingChild, faMoon, faPersonFallingBurst, faPersonShelter, faPersonWalkingWithCane, faSkullCrossbones, faUserSecret, faWheelchair } from "@fortawesome/free-solid-svg-icons";
+import { faFaceAngry, faBrain,} from "@fortawesome/free-solid-svg-icons";
 import { ConditionsOverlayMap, PreConditions, WrapperConditions } from "./utils";
+import HealthBar, { getHealthBarColor } from "@components/HealthBar";
 
 type CharacterTokenContentProps = {
     character: CombatCharacter;
@@ -68,7 +69,7 @@ const CharacterTokenContent = ({ character, tokenSize = 16, isCurrentTurn = fals
         role
     ]);
 
-    const {health = 0, maxHealth = 0} = character
+    const {health = 0, maxHealth = 1, tempHealth = 0} = character
     const healthBarAmount = (health/maxHealth)*100;
     const { conditions } = character;
 
@@ -133,7 +134,7 @@ const CharacterTokenContent = ({ character, tokenSize = 16, isCurrentTurn = fals
                                         ${conditions?.includes("blinded") ? " blur(1px)" : ""}
                                         ${conditions?.includes("deafened") ? " grayscale(1)" : ""}
                                     `,
-                                 }}
+                                }}
                             />
                         </Badge>
                     </Badge>
@@ -156,10 +157,10 @@ const CharacterTokenContent = ({ character, tokenSize = 16, isCurrentTurn = fals
                     style={floatingStyles}
                     {...getFloatingProps()}
                 >
-                    <Typography>{isPlayer ? "" : `${character?.uniqueId} - `}{character?.name}</Typography>
+                    <Typography>{isPlayer ? "" : `${character?.uniqueId || ""} - `}{character?.name}</Typography>
                     {
                         character?.shouldShowHealthBar && 
-                        <div><LinearProgress variant={healthBarAmount || 0 < 101 ? "determinate" : "indeterminate"} value={healthBarAmount} color={getHealthBarColor(healthBarAmount || 0)} /></div>
+                        <div><HealthBar height={6} health={health} maxHealth={maxHealth} tempHealth={tempHealth}/></div>
                     }
                     { getIconList(character).map(value => <FontAwesomeIcon className={css.tooltipCondIcon} icon={value?.icon} />) }
                 </div>

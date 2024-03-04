@@ -6,9 +6,8 @@ import { TextInput } from "@components/TextInput/TextInput";
 import { Button } from "@components/Button/Button";
 import { Combat } from "@model/Combat";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faFaceAngry, faFaceMehBlank, faFaceSurprise, faMinus, faMugHot, faPlus, faSkullCrossbones } from "@fortawesome/free-solid-svg-icons";
+import {  faMinus, faPlus } from "@fortawesome/free-solid-svg-icons";
 import ConditionSelect from "@components/ConditionsSelect/ConditionsSelect";
-import { Spacer } from "@components/Spacer/Spacer";
 import { PlayerCharacter } from "@model/PlayerCharacter";
 import {
     useFloating,
@@ -20,47 +19,51 @@ import {
     autoUpdate,
     useDismiss,
   } from "@floating-ui/react";
+import { useParams, useSearchParams } from "react-router-dom";
+import { useCampaignCharacters } from "@services/CharacterService";
+import { useCampaign } from "@services/CampaignService";
+import { mutateCombatCharacter, useCombat, useCombatCharacters, useEditCombat } from "@services/CombatService";
+import { CombatCharacter } from "@model/CombatCharacter";
+import Spinner from "@components/Spinner";
+import { getNextTurnIndex } from "@views/DMInitiative/utils";
+import useLocalCharacter from "@hooks/useLocalCharacter";
 
-type SelectedPlayerProps = {
-    character: PlayerCharacter,
-    combat: Combat,
-    update: (combat: Combat) => void
-}
-
-const SelectedPlayer = ({character, combat, update}: SelectedPlayerProps) => {
+const SelectedPlayer = () => {
     const [healthIncrement, setHealthIncrement] = useState<number>(1);
     const [isHealthCounterOpen, setIsHealthCounterOpen] = useState(false);
+    const {CampaignId: campaignId = ""} = useParams();
+    const [searchParams] = useSearchParams();
+    const {selectedCharacter: localCharacterId} = useLocalCharacter(campaignId)
+    const selectedCharacterId = searchParams.get("characterId") || localCharacterId || "";
+    const {characters} = useCampaignCharacters(campaignId || "")
+    const {data: campaign} = useCampaign(campaignId || "")
+    const {combat, isLoading: isCombatLoading} = useCombat(campaign?.currentCombatDocId || "1")
+    const {combatCharacters = [], isLoading: isCharactersLoading} = useCombatCharacters(combat?.docId || "");
+    const {mutate: editCombat} = useEditCombat(combat?.docId || "");
 
-    const {combatCharacterArray = [], currentTurnIndex = 0} = combat;
-    const index = combat?.combatCharacterArray?.findIndex(combatCharacter => combatCharacter.playerDocId === character?.docId)
-    const {health = 0, maxHealth = 0, conditions = [], armorClass = 0, initiative} = combatCharacterArray[index] || {health: 0, maxHealth: 0, conditions: [], armorClass: 0, initiative: 0};
-
-    const updateCharacter = (key: string, value: any) => {
-        const newCombat = { ...combat }
-
-        if (index !== null) {
-            const newCharacter = {...newCombat.combatCharacterArray[index], [key]: value}
-            newCombat.combatCharacterArray[index] = newCharacter;
+    const { currentTurnIndex = 0, colorFilter = []} = combat;
+    const index = combatCharacters?.findIndex(combatCharacter => combatCharacter.playerDocId === selectedCharacterId)
+    const {tempHealth = 0, health = 0, maxHealth = 0, conditions = [], armorClass = 0, initiative} = combatCharacters[index] || {health: 0, maxHealth: 0, conditions: [], armorClass: 0, initiative: 0};
+    const character = characters.findLast(character => character.docId === selectedCharacterId)
+    const combatCharacter = combatCharacters.findLast(character => character?.playerDocId === selectedCharacterId);
+    const updateCharacter = (value: Partial<CombatCharacter>) => {
+        if (combatCharacter) {
+            mutateCombatCharacter(combatCharacter?.docId || "", value)
         }
-
-        update(newCombat)
     };
 
     const endTurn = () => {
-        const {currentTurnIndex = 0} = combat;
-
-        const nextTurn = currentTurnIndex >= combat.combatCharacterArray.length - 1 ? 0 : currentTurnIndex + 1
-
-        update({ ...combat, currentTurnIndex: nextTurn })
+        const nextTurn = getNextTurnIndex(currentTurnIndex, combatCharacters, colorFilter)
+            editCombat({ currentTurnIndex: nextTurn })
     }
 
     let youreTurn = "not_next";
 
-    if (character?.docId === combat?.combatCharacterArray[currentTurnIndex]?.playerDocId) {
+    if (selectedCharacterId === combatCharacters[currentTurnIndex]?.playerDocId) {
         youreTurn = "active";
     } else if (
-        character?.docId === combat?.combatCharacterArray[currentTurnIndex + 1]?.playerDocId
-        || ((combat?.currentTurnIndex === combat?.combatCharacterArray?.length - 1) && character?.docId === combat?.combatCharacterArray[0].playerDocId)
+        selectedCharacterId === combatCharacters[currentTurnIndex + 1]?.playerDocId
+        || ((combat?.currentTurnIndex === combatCharacters?.length - 1) && selectedCharacterId === combatCharacters[0].playerDocId)
         ) {
             youreTurn = "next";
     }
@@ -78,12 +81,15 @@ const SelectedPlayer = ({character, combat, update}: SelectedPlayerProps) => {
 
   const { getReferenceProps, getFloatingProps } = useInteractions([click]);
 
+  if (isCharactersLoading || isCombatLoading) {
+    return <Spinner />
+  }
 
     return (
         <div className={css.selectedPlayerContainer}>
             <div className={css.imageContainer}>
                 <img
-                    src={String(character.characterImageURL)}
+                    src={String(character?.characterImageURL)}
                     className={css.image}
                     onError={({ currentTarget }) => {
                         currentTarget.onerror = null; // prevents looping
@@ -102,31 +108,37 @@ const SelectedPlayer = ({character, combat, update}: SelectedPlayerProps) => {
                 <div className={css.inputSection}>
                     <Typography color="light" size="default" fontStyle="secondary">Initiative</Typography>
                     <div className={css.input}>
-                        <TextInput number value={initiative} onChange={(value) => updateCharacter("initiative", Number(value))} />
+                        <TextInput number value={initiative} onChange={(value) => updateCharacter({initiative: Number(value)})} />
                     </div>
                 </div>
                 <div className={css.inputSection}>
                     <Typography color="light" size="default" fontStyle="secondary">Armor Class</Typography>
                     <div className={css.input}>
-                        <TextInput number value={armorClass} onChange={(value) => updateCharacter("armorClass", Number(value))} />
+                        <TextInput number value={armorClass} onChange={(value) => updateCharacter({armorClass: Number(value)})} />
                     </div>
                 </div>
                 <div className={css.inputSection}>
                     <Typography color="light" size="default" fontStyle="secondary">Max Health</Typography>
                     <div className={css.input}>
-                        <TextInput number value={maxHealth} onChange={(value) => updateCharacter("maxHealth", Number(value))} />
+                        <TextInput number value={maxHealth} onChange={(value) => updateCharacter({maxHealth: Number(value)})} />
                     </div>
                 </div>
                 <div className={css.inputSection}>
                     <Typography color="light" size="large" fontStyle="secondary">Health</Typography>
                     <div className={css.input} ref={refs.setReference} {...getReferenceProps()}>
-                        <TextInput number value={health} onChange={(value) => updateCharacter("health", Number(value))} />
+                        <TextInput number value={health} onChange={(value) => updateCharacter({health: Number(value)})} />
+                    </div>
+                </div>
+                <div className={css.inputSection}>
+                    <Typography color="light" size="large" fontStyle="secondary">Temp Health</Typography>
+                    <div className={css.input}>
+                        <TextInput number value={tempHealth} onChange={(value) => updateCharacter({tempHealth: Number(value)})} />
                     </div>
                 </div>
                 <div className={css.inputSection}>
                     <Typography color="light" size="default" fontStyle="secondary">Conditions</Typography>
                     <div className={css.input} ref={refs.setReference}>
-                        <ConditionSelect width={"150px"} outlined selectedValue={conditions} onChange={(conditions) => updateCharacter("conditions", conditions)}/>
+                        <ConditionSelect icons width={"150px"} outlined selectedValue={conditions} onChange={(conditions) => updateCharacter({conditions: conditions || []})}/>
                     </div>
                 </div>
                 
@@ -152,10 +164,10 @@ const SelectedPlayer = ({character, combat, update}: SelectedPlayerProps) => {
                             />
                         </div>
                         <div className={css.counterButtons}>
-                            <div className={css.minus} onClick={() => updateCharacter("health", health - healthIncrement || 0)}>
+                            <div className={css.minus} onClick={() => updateCharacter({health: health - healthIncrement || 0})}>
                                 <FontAwesomeIcon icon={faMinus} />
                             </div>
-                            <div className={css.plus} onClick={() => updateCharacter("health", health + healthIncrement || 0)}>
+                            <div className={css.plus} onClick={() => updateCharacter({health: health + healthIncrement || 0})}>
                                 <FontAwesomeIcon icon={faPlus} />
                             </div>
                         </div>
@@ -167,58 +179,3 @@ const SelectedPlayer = ({character, combat, update}: SelectedPlayerProps) => {
 };
 
 export default SelectedPlayer;
-
-/*
- <div className={css.characterContainer}>
-                <img
-                    src={character.characterImageURL}
-                    className={css.imageContainer}
-                    onError={({ currentTarget }) => {
-                        currentTarget.onerror = null; // prevents looping
-                        currentTarget.src=STICK;
-                    }}
-                    width={360}
-                    alt="boo"
-                />
-                <div>
-                    <div className={css.turnIndicator}>{yourTurnDisplay}</div>
-                </div>
-                <Typography color="light" size="xtraLarge">{character.name}</Typography>
-                <div className={css.editCharacter}>
-                    <div className={css.healthInput}>
-                        <Typography color="light" size="default">Health: {health}/{maxHealth}</Typography>
-                                
-                        <div>
-                            <div className={css.healthCounterContainer}>
-                                <div className={css.counterButtons}>
-                                    <div className={css.minus} onClick={() => {
-                                        updateCharacter("health", 0);
-                                        }}> <FontAwesomeIcon icon={faSkullCrossbones} /></div>
-                                    <div className={css.minus} onClick={() => {
-                                        const newHealth = Number(health || 0) - Number(currentHealthIncrement || 0);
-                                        updateCharacter("health", newHealth);
-                                    }}> <FontAwesomeIcon icon={faMinus} /></div>
-                                    <div className={css.incrementInput}>
-                                        <TextInput number value={currentHealthIncrement || 0} onChange={(value) => setCurrentHealthIncrement(Number(value))} />
-                                    </div>
-                                    <div className={css.plus} onClick={() => {
-                                        const newHealth = Number(health || 0) + Number(currentHealthIncrement || 0);
-                                        updateCharacter("health", newHealth);
-                                    }}><FontAwesomeIcon icon={faPlus} /></div>
-                                    <div className={css.plus} onClick={() => {
-                                        updateCharacter("health", maxHealth);
-                                    }}><FontAwesomeIcon icon={faMugHot} /></div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            <div className={css.conditionsSelector}>
-                <Typography size="default" >Status Effects</Typography>
-                <ConditionSelect outlined width="50%" selectedValue={conditions} onChange={(conditions) => updateCharacter("conditions", conditions)}/>
-            </div>
-            <Spacer height={16} />
-            { character?.docId === combat.combatCharacterArray[currentTurnIndex]?.playerDocId && <div>
-                <Button onClick={endTurn}>End My Turn</Button>
-            </div>}
-        </div>*/

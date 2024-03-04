@@ -10,10 +10,11 @@ declare interface TextInputProps {
     value?: string | number,
     onChange?: (input: string | number) => void
     placeholder?: string
-    error?: boolean,
+    error?: string | boolean,
     className?: string,
     number?: boolean
     disabled?: boolean;
+    max?: number
 }
 
 export const TextInput = ({
@@ -24,6 +25,7 @@ export const TextInput = ({
     className,
     number = false,
     disabled = false,
+    max
 }: TextInputProps) => {
     const inputRef = useRef<HTMLInputElement>(null);
     const hasNoValue = (value: string | number | null) => (value === "" || value === null)
@@ -48,6 +50,7 @@ export const TextInput = ({
                 style={{width: '100%'}}
                 disabled={disabled}
                 onScroll={(e) => e.preventDefault()}
+                max={max}
             />
             <animated.div style={{...spring}} className={`${css.placeholder}`}>
                 {placeholder}

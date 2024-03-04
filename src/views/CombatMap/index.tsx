@@ -1,4 +1,4 @@
-import { useCombat, useUpdateInitiative } from "@services/CombatService";
+import { mutateCombatCharacter, useCombat, useCombatCharacters, useEditCombatCharacter, useUpdateInitiative } from "@services/CombatService";
 import React, { useEffect, useRef, useState } from "react";
 import { useParams, useSearchParams } from "react-router-dom";
 import css from "./CombatMap.module.scss"
@@ -15,9 +15,10 @@ import CharacterTokenContent from "./components/Token/CharacterTokenContent";
 import useCombatMapStore from "./CombatMapStore";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faMinus, faPlus } from "@fortawesome/free-solid-svg-icons";
-import { useCombatMap, useUpdateCombatMap } from "@services/CombatMapService";
+import { mutateCombatToken, useCombatMap, useCombatMapTokens, useUpdateCombatMap } from "@services/CombatMapService";
 import { FullScreen, useFullScreenHandle } from "react-full-screen";
 import FloatingButtonContainer from "@components/FloatingButtonContainer";
+import Spinner from "@components/Spinner";
 
 type DroppableToken = {
   id: string,
@@ -27,7 +28,8 @@ type DroppableToken = {
 
 const CombatMap = ({combatIdOverride = "", isPlayer = false}) => {
     const mapContainer = useFullScreenHandle();
-    const { combatId } = useParams();
+    console.log(combatIdOverride)
+    const { combatId = combatIdOverride } = useParams();
     const [searchParams, setSearchParams] = useSearchParams();
     const scale = Number(searchParams.get("scale")) || 1;
 
@@ -35,15 +37,15 @@ const CombatMap = ({combatIdOverride = "", isPlayer = false}) => {
 
     const [tokens, setTokens] = useState<DroppableToken[]>([]);
     const [extraTokens, setExtraTokens] = useState<DroppableToken[]>([]);
-    const [selectedToken, setSelectedToken] = useState<DroppableToken| null>()
+    const [selectedToken, setSelectedToken] = useState<DroppableToken| null>();
+    const [cachedCoords, setCachedCoords] = useState<{x: number, y: number}| null>()
     const {currentMapCoordinates, setCurrentMapCoordinates} = useCombatMapStore();
 
-    const { combat, isLoading, isRefetching } = useCombat(combatId || combatIdOverride);
+    const { combat, isLoading, isRefetching } = useCombat(combatId);
     const { combatMap, isLoading: isMapLoading, isRefetching: isMapRefetching } = useCombatMap(combatId || combatIdOverride);
-
-    const { combatCharacterArray = [], currentTurnIndex } = combat;
-    const { map, combatMapCharacterArray } = combatMap || {map: {extraTokens: []}, combatMapCharacterArray: []  };
-    const {mutate: update} = useUpdateCombatMap(combatMap);
+    const {combatCharacters = [], isLoading: isCharactersLoading} = useCombatCharacters(combatId);
+    const {tokens: combatTokens, isLoading: isTokensLoading} = useCombatMapTokens(combatMap?.docId || "")
+    const { currentTurnIndex } = combat;
 
     const mapRef = useRef<HTMLDivElement>(null); 
 
@@ -67,15 +69,7 @@ const CombatMap = ({combatIdOverride = "", isPlayer = false}) => {
         let newToken = { ...selectedToken }
         newToken.data.rotation += rotate;
 
-        const newTokens = extraTokens?.map(token => {
-          if (token?.id === newToken?.id) {
-            return newToken
-          } else {
-            return token
-          }
-        })
-
-        update({...combatMap, map: {...map, extraTokens: newTokens}});
+        mutateCombatToken(newToken.id, {data: {...newToken.data}})
       }
     }
 
@@ -93,21 +87,25 @@ const CombatMap = ({combatIdOverride = "", isPlayer = false}) => {
     // set local data from remote
     useDeepCompareEffectNoCheck(() => {
       if (!isMapLoading && !isMapRefetching && !isLoading && !isRefetching) {
-        const tokensFromCombat = combatMapCharacterArray?.map((character, index) => ({
-          id: `${index}-${character.turnIndex}`,
+        const tokensFromCombat = combatCharacters?.map((character, index) => ({
+          id: character?.docId || "",
           data: {
-            ...combatCharacterArray[index],
+            ...combatCharacters[index],
             ...character
           }
         }))
-        setExtraTokens(map?.extraTokens || [])
+
+        const extraTokensFromCombatTokens = combatTokens?.map((token) => ({
+          id: token?.docId || "",
+          ...token
+        }))
+        setExtraTokens(extraTokensFromCombatTokens || [])
         setTokens(tokensFromCombat);
     }
-    }, [combatMap, combat]);
+    }, [combatMap, combat, combatCharacters, combatTokens]);
 
     function handleDragEnd(ev: any) {
       let token = tokens.find((x: DroppableToken) => x.id === ev.active.id);
-      let extraToken = extraTokens.find((x: DroppableToken) => x.id === ev.active.id);
       if (token) {
         token["data"]["position"] = {
           x: (token?.data?.position?.x + ev.delta.x / scale),
@@ -118,29 +116,28 @@ const CombatMap = ({combatIdOverride = "", isPlayer = false}) => {
           if (x.id === token?.id) return token;
           return x;
         });
-
-        const newCombatMap = {...combatMap}
-        const updatedCharacterIndex = newCombatMap?.combatMapCharacterArray?.findIndex((character, index) => `${index}-${character.turnIndex}` === token?.id)
-        newCombatMap.combatMapCharacterArray[updatedCharacterIndex] = { ...newCombatMap?.combatMapCharacterArray[updatedCharacterIndex], position: { x: token.data.position.x, y: token.data.position.y } }
-        update({...newCombatMap})
-        
-        setTokens(_tokens);
-      } else if (extraToken) {
-        if (ev.delta.x === 0 && ev.delta.y === 0) {
-          extraToken["data"]["rotation"] += 45;
-        } else {
-          extraToken["data"]["position"] = {
-            x: (extraToken?.data?.position?.x + ev.delta.x / scale),
-            y:( extraToken?.data?.position?.y + ev.delta.y / scale)
+        //character tokens
+        try {
+          const {x, y} = token.data.position;
+          mutateCombatCharacter(token.id, {position: {x, y}})
+          setTokens(_tokens);
+        } catch (e) {
+          console.log(e)
+        }
+      } else {
+        let extraToken = extraTokens.find((x: DroppableToken) => x.id === ev.active.id);
+        if (extraToken) {
+          if (ev.delta.x === 0 && ev.delta.y === 0) {
+            extraToken["data"]["rotation"] += 45;
+          } else {
+            extraToken["data"]["position"] = {
+              x: (extraToken?.data?.position?.x + ev.delta.x / scale),
+              y:( extraToken?.data?.position?.y + ev.delta.y / scale)
+            }
           }
+          mutateCombatToken(extraToken.id, {data: {...extraToken.data}})
         }
 
-        const updatedTokenIndex = map?.extraTokens?.findIndex((token) => token.id === extraToken?.id) || 0;
-        const { extraTokens = [] } = map || {extraTokens: []};
-        extraTokens[updatedTokenIndex] = {...extraToken}
-        update({...combatMap, map: {...map, extraTokens}})
-
-        setExtraTokens(extraTokens);
       }
 
       setSelectedToken(null);
@@ -149,7 +146,62 @@ const CombatMap = ({combatIdOverride = "", isPlayer = false}) => {
     const handleDragStart = (ev: any) => {
       let extraToken = extraTokens.find((x: DroppableToken) => x.id === ev.active.id);
       if (extraToken) {
-        setSelectedToken(extraToken);
+        console.log("SELECTED TOKEN", extraToken)
+        setSelectedToken({...extraToken});
+        setCachedCoords({x: extraToken?.data?.position.x, y: extraToken?.data?.position.y})
+      }
+    }
+
+    if (isLoading || isMapLoading || isCharactersLoading || isTokensLoading) {
+      return <Spinner />
+    }
+
+    //work on this further, may need to implement something else for live movement info since db writes get crazy
+    const handleDragMove = (ev: any) => {
+      let token = tokens.find((x: DroppableToken) => x.id === ev.active.id);
+      const { activatorEvent } = ev;
+      if (token) {
+        token["data"]["position"] = {
+          x: (token?.data?.position?.x + ev.delta.x / scale),
+          y: (token?.data?.position?.y + ev.delta.y / scale)
+        }
+        
+        const _tokens = tokens.map((x) => {
+          if (x.id === token?.id) return token;
+          return x;
+        });
+        //character tokens
+        try {
+          const {x, y} = token.data.position;
+          mutateCombatCharacter(token.id, {position: {x, y}})
+          setTokens(_tokens);
+        } catch (e) {
+          console.log(e)
+        }
+      } else {
+        console.log(ev)
+
+        let extraToken = extraTokens.find((x: DroppableToken) => x.id === ev.active.id);
+        console.log(ev.delta.x)
+        console.log("===", {
+          x: ((cachedCoords?.x || 0) + ev.delta.x / scale),
+              y:( (cachedCoords?.y || 0) + ev.delta.y / scale)
+      })
+
+        if (extraToken) {
+          if (ev.delta.x === 0 && ev.delta.y === 0) {
+            extraToken["data"]["rotation"] += 45;
+          } else {
+            console.log("SELECTED POS", cachedCoords)
+            const position = {
+              x: ((cachedCoords?.x || 0) + ev.delta.x / scale),
+              y:((cachedCoords?.y || 0) + ev.delta.y / scale)
+            }
+          }
+          //set to position
+          mutateCombatToken(extraToken.id, {data: {...extraToken.data, cachedCoords}})
+        }
+
       }
     }
 
@@ -160,15 +212,19 @@ const CombatMap = ({combatIdOverride = "", isPlayer = false}) => {
         </div>
         <FullScreen handle={mapContainer}>
           <div className={`${css.CombatMapContainer} ${mapContainer.active ? css.fullscreen : null}`} ref={mapRef} id="CombatMap">
-            <DndContext onDragEnd={handleDragEnd} onDragStart={handleDragStart}>
+            <DndContext
+              onDragEnd={handleDragEnd}
+              onDragStart={handleDragStart}
+              //onDragMove={handleDragMove}
+            >
               <Map
-                mapImage={String(map?.mapImage)}
-                cols={map?.columns}
-                rows={map?.rows}
-                tokenSize={(map?.tokenSize || 32) * (scale || 1)}
-                hideGrid={map?.hideGrid}
-                mapColor={map?.mapColor}
-                gridColor={map?.gridColor}
+                mapImage={String(combatMap?.mapImage)}
+                cols={combatMap?.columns}
+                rows={combatMap?.rows}
+                tokenSize={(combatMap?.tokenSize || 32) * (scale || 1)}
+                hideGrid={combatMap?.hideGrid}
+                mapColor={combatMap?.mapColor}
+                gridColor={combatMap?.gridColor}
               >
                 {extraTokens.map((token) => (
                   <Token
@@ -182,7 +238,7 @@ const CombatMap = ({combatIdOverride = "", isPlayer = false}) => {
                     content={
                     <ExtraTokenContent
                       image={token.data.image}
-                      tokenSize={(map?.tokenSize || 32) * (scale || 1)}
+                      tokenSize={(combatMap?.tokenSize || 32) * (scale || 1)}
                       height={token.data.length}
                       width={token.data.width}
                       color={token.data?.color || null}
@@ -201,7 +257,7 @@ const CombatMap = ({combatIdOverride = "", isPlayer = false}) => {
                       top: `${data?.position?.y * scale}px`
                     }}
                     id={token.id}
-                    content={<CharacterTokenContent isPlayer={isPlayer} character={data} tokenSize={(map?.tokenSize || 32) * (scale || 1)} isCurrentTurn={currentTurnIndex === index && data?.playerDocId} />}
+                    content={<CharacterTokenContent isPlayer={isPlayer} character={data} tokenSize={(combatMap?.tokenSize || 32) * (scale || 1)} isCurrentTurn={currentTurnIndex === index && data?.playerDocId} />}
                   />
                 )})}
               </Map>
@@ -239,11 +295,7 @@ const CombatMap = ({combatIdOverride = "", isPlayer = false}) => {
             <SettingsDrawer
               isOpen={isSettingsDrawerOpen}
               onClose={() => setIsSettingsDrawerOpen(false)}
-              map={map || {extraTokens: []}}
-              setMap={(newMap) => {
-                console.log(newMap)
-                update({...combatMap, map: {...newMap}});
-              }}
+              combatId={combatId}
               isPlayer={isPlayer}
             />
         </FullScreen>

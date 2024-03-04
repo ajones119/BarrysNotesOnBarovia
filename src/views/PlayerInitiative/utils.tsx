@@ -11,14 +11,6 @@ export const getIconList = (character: CombatCharacter): Condition[] => {
     return icons;
 }
 
-
-export const getHealthBarColor = (percent: number) => {
-    if (percent > 100) return "secondary"
-    else if (percent > 50) return "success"
-    else if (percent <= 20) return "error"
-    else return "warning"
-}
-
 export const getHealthIcon = (percent: number) => {
     if (percent > 90) return faFaceLaughBeam
     else if (percent > 80) return faFaceGrin

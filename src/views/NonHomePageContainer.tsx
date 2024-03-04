@@ -1,4 +1,4 @@
-import React from "react";
+import React, { ReactNode } from "react";
 import "../App.css";
 import { NavBar, NavBarLink } from "@components/NavBar/NavBar";
 import { Spacer } from "@components/Spacer/Spacer";
@@ -8,7 +8,7 @@ declare interface NonHomePageContainerProps {
     page?: React.ReactNode,
     meta: {
         topLink: (params: any) => NavBarLink | null,
-        getAdditionalLinks: (params: any) => NavBarLink[]
+        getAdditionalLinks: (params: any) => NavBarLink[],
     };
 }
 
