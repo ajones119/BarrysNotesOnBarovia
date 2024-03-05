@@ -53,6 +53,7 @@ export const Button = ({
                 ${css[color]}
                 ${css[size]}
                 ${hollow && css.hollow}
+                ${disabled && css.disabled}
             `}
             disabled={disabled}
         >

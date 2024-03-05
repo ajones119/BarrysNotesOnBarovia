@@ -14,7 +14,8 @@ declare interface TextInputProps {
     className?: string,
     number?: boolean
     disabled?: boolean;
-    max?: number
+    max?: number,
+    step?: string,
 }
 
 export const TextInput = ({
@@ -25,7 +26,8 @@ export const TextInput = ({
     className,
     number = false,
     disabled = false,
-    max
+    max,
+    step
 }: TextInputProps) => {
     const inputRef = useRef<HTMLInputElement>(null);
     const hasNoValue = (value: string | number | null) => (value === "" || value === null)
@@ -51,6 +53,7 @@ export const TextInput = ({
                 disabled={disabled}
                 onScroll={(e) => e.preventDefault()}
                 max={max}
+                step={step}
             />
             <animated.div style={{...spring}} className={`${css.placeholder}`}>
                 {placeholder}
