@@ -3,14 +3,13 @@ import Drawer, { DrawerProps } from "@components/Drawer";
 import { Typography } from "@components/Typography/Typography";
 import INTERNAL_TOKENS, { InternalToken } from "@views/CombatMap/TokensConfig";
 import React, { useState } from "react"
-import css from "../../SettingsDrawer.module.scss"
+import css from "../../TokenDrawer.module.scss"
 import { faChevronUp, faPlus } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useDebounce } from "usehooks-ts";
 import { TextInput } from "@components/TextInput/TextInput";
 import { Spacer } from "@components/Spacer/Spacer";
 import { Accordion, AccordionDetails, AccordionSummary } from "@mui/material";
-import { faArrowAltCircleDown } from "@fortawesome/free-regular-svg-icons";
 
 declare interface AddTokensDrawerProps extends DrawerProps {
     onAddToken: (_newToken: InternalToken) => void

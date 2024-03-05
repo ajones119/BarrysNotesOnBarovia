@@ -19,6 +19,7 @@ import { mutateCombatToken, useCombatMap, useCombatMapTokens, useUpdateCombatMap
 import { FullScreen, useFullScreenHandle } from "react-full-screen";
 import FloatingButtonContainer from "@components/FloatingButtonContainer";
 import Spinner from "@components/Spinner";
+import TokensDrawer from "./components/TokensDrawer";
 
 type DroppableToken = {
   id: string,
@@ -28,12 +29,12 @@ type DroppableToken = {
 
 const CombatMap = ({combatIdOverride = "", isPlayer = false}) => {
     const mapContainer = useFullScreenHandle();
-    console.log(combatIdOverride)
     const { combatId = combatIdOverride } = useParams();
     const [searchParams, setSearchParams] = useSearchParams();
     const scale = Number(searchParams.get("scale")) || 1;
 
     const [isSettingsDrawerOpen, setIsSettingsDrawerOpen] = useState(false);
+    const [isTokenDrawerOpen, setIsTokenDrawerOpen] = useState(false);
 
     const [tokens, setTokens] = useState<DroppableToken[]>([]);
     const [extraTokens, setExtraTokens] = useState<DroppableToken[]>([]);
@@ -146,7 +147,6 @@ const CombatMap = ({combatIdOverride = "", isPlayer = false}) => {
     const handleDragStart = (ev: any) => {
       let extraToken = extraTokens.find((x: DroppableToken) => x.id === ev.active.id);
       if (extraToken) {
-        console.log("SELECTED TOKEN", extraToken)
         setSelectedToken({...extraToken});
         setCachedCoords({x: extraToken?.data?.position.x, y: extraToken?.data?.position.y})
       }
@@ -157,53 +157,7 @@ const CombatMap = ({combatIdOverride = "", isPlayer = false}) => {
     }
 
     //work on this further, may need to implement something else for live movement info since db writes get crazy
-    const handleDragMove = (ev: any) => {
-      let token = tokens.find((x: DroppableToken) => x.id === ev.active.id);
-      const { activatorEvent } = ev;
-      if (token) {
-        token["data"]["position"] = {
-          x: (token?.data?.position?.x + ev.delta.x / scale),
-          y: (token?.data?.position?.y + ev.delta.y / scale)
-        }
-        
-        const _tokens = tokens.map((x) => {
-          if (x.id === token?.id) return token;
-          return x;
-        });
-        //character tokens
-        try {
-          const {x, y} = token.data.position;
-          mutateCombatCharacter(token.id, {position: {x, y}})
-          setTokens(_tokens);
-        } catch (e) {
-          console.log(e)
-        }
-      } else {
-        console.log(ev)
-
-        let extraToken = extraTokens.find((x: DroppableToken) => x.id === ev.active.id);
-        console.log(ev.delta.x)
-        console.log("===", {
-          x: ((cachedCoords?.x || 0) + ev.delta.x / scale),
-              y:( (cachedCoords?.y || 0) + ev.delta.y / scale)
-      })
-
-        if (extraToken) {
-          if (ev.delta.x === 0 && ev.delta.y === 0) {
-            extraToken["data"]["rotation"] += 45;
-          } else {
-            console.log("SELECTED POS", cachedCoords)
-            const position = {
-              x: ((cachedCoords?.x || 0) + ev.delta.x / scale),
-              y:((cachedCoords?.y || 0) + ev.delta.y / scale)
-            }
-          }
-          //set to position
-          mutateCombatToken(extraToken.id, {data: {...extraToken.data, cachedCoords}})
-        }
-
-      }
-    }
+    const handleDragMove = (ev: any) => {}
 
     return (
       <div>
@@ -218,13 +172,8 @@ const CombatMap = ({combatIdOverride = "", isPlayer = false}) => {
               //onDragMove={handleDragMove}
             >
               <Map
-                mapImage={String(combatMap?.mapImage)}
-                cols={combatMap?.columns}
-                rows={combatMap?.rows}
-                tokenSize={(combatMap?.tokenSize || 32) * (scale || 1)}
-                hideGrid={combatMap?.hideGrid}
-                mapColor={combatMap?.mapColor}
-                gridColor={combatMap?.gridColor}
+                map={combatMap}
+                scale={scale}
               >
                 {extraTokens.map((token) => (
                   <Token
@@ -265,7 +214,9 @@ const CombatMap = ({combatIdOverride = "", isPlayer = false}) => {
           </div>
           <FloatingButtonContainer>
             <div className={css.buttonsContainer}>
-              {!mapContainer.active && <Button onClick={() => setIsSettingsDrawerOpen(true)} color="secondary" animatedHover><Typography color="light">Settings</Typography></Button>}
+              {!mapContainer.active && !isPlayer && <Button onClick={() => setIsSettingsDrawerOpen(true)} color="secondary" animatedHover><Typography color="light">Settings</Typography></Button>}
+              {!mapContainer.active && <Button onClick={() => setIsTokenDrawerOpen(true)} color="secondary" animatedHover><Typography color="light">Tokens</Typography></Button>}
+
               <Button animatedHover onClick={() => mapContainer.active ? mapContainer.exit() : mapContainer.enter()}><Typography color="light">FullScreen</Typography></Button>
               <div style={{display: "flex", justifyContent: "center", alignItems: "center", columnGap: 4}}>
                 <Button onClick={
@@ -295,6 +246,12 @@ const CombatMap = ({combatIdOverride = "", isPlayer = false}) => {
             <SettingsDrawer
               isOpen={isSettingsDrawerOpen}
               onClose={() => setIsSettingsDrawerOpen(false)}
+              combatId={combatId}
+              isPlayer={isPlayer}
+            />
+            <TokensDrawer
+              isOpen={isTokenDrawerOpen}
+              onClose={() => setIsTokenDrawerOpen(false)}
               combatId={combatId}
               isPlayer={isPlayer}
             />

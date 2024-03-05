@@ -11,6 +11,10 @@ export type CombatMap = {
     gridColor?: string,
     mapColor?: string,
     extraTokens?: Array<CombatToken>
+    cover?: boolean;
+    gridOffsetX?: number;
+    gridOffsetY?: number;
+    mapScale?: number
 }
 
 export type CombatToken = {

@@ -12,6 +12,14 @@
     color: $light;
     overflow: hidden;
 
+    &.disabled {
+        opacity: 0.8;
+        &:hover {
+            filter: brightness(100%);
+            border-color: none;
+        }
+    }
+
     &.hollow {
         background: none;
         background-color: none;

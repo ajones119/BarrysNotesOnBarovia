@@ -1,4 +1,4 @@
-import { CombatToken } from "./CombatMap";
+import { CombatMap, CombatToken } from "./CombatMap";
 
 export type Combat = {
     docId?: string;
@@ -8,16 +8,4 @@ export type Combat = {
     currentTurnIndex?: number;
     map?: CombatMap;
     colorFilter?: string[],
-}
-
-export type CombatMap = {
-    docId?: string;
-    rows?: number,
-    columns?: number,
-    tokenSize?: number,
-    mapImage?: string | File,
-    hideGrid?: boolean,
-    gridColor?: string,
-    mapColor?: string,
-    extraTokens?: Array<CombatToken>
 }
