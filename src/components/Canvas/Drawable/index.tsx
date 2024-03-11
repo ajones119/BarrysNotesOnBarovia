@@ -36,7 +36,6 @@ function DrawableCanvas({ width, height, onDrawEnd, loadData, disabled = false, 
                 context.strokeStyle = pointColor;
                 context.lineWidth = pointSize;
                 if (loadData) {
-                    console.log(loadData)
                     const image = new Image();
                     image.onload = () => {
                         context.drawImage(image, 0, 0)
@@ -54,7 +53,6 @@ function DrawableCanvas({ width, height, onDrawEnd, loadData, disabled = false, 
     }, [isErasing])
 
     const startDrawing = ({nativeEvent}: BaseSyntheticEvent<MouseEvent>) => {
-        console.log("START DRAWING")
         if (disabled) return;
 
         const offsetX = nativeEvent.offsetX;
@@ -65,13 +63,11 @@ function DrawableCanvas({ width, height, onDrawEnd, loadData, disabled = false, 
     };
 
     const finishDrawing = () => {
-        console.log("END DRAWING")
         if (!isDrawing) return;
 
         contextRef.current.closePath();
         setIsDrawing(false);
         const imageData = canvasRef.current?.toDataURL();
-        console.log(imageData)
         onDrawEnd(imageData || "");
     }
 

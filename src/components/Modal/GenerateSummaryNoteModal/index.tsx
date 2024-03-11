@@ -10,6 +10,7 @@ import { Button } from '@components/Button/Button';
 import DatePicker from "react-datepicker";
 import Spinner from '@components/Spinner';
 import { useCampaign } from '@services/CampaignService';
+import { isSameDay } from 'date-fns';
 
 
 declare interface GenerateSummaryNoteModalProps {
@@ -66,7 +67,12 @@ const GenerateSummaryNoteModal = ({isOpen, onClose, campaignId, characters, note
                 }
 
                 </div>    
-                <Button onClick={() => generate({notes, campaign})}><Typography>Generate</Typography></Button>
+                <Button onClick={() => {
+                    const lastDate = notes[0]?.date || new Date();
+                    const sendNotes = notes.filter(note => isSameDay(note?.date || new Date(), lastDate));
+                    // do more research here
+                    generate({notes: sendNotes, campaign})}
+                }><Typography>Generate</Typography></Button>
                 </div>
             </Modal>
         </div>
