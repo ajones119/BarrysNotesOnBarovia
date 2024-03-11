@@ -37,7 +37,6 @@ const  GridCanvas = ({ lineWidth = 1, width = 0, height = 0, sideLength = 0, row
         }
     } else if (height) {
         for (let y = 0; y < height; y += sideLength) {
-            console.log("Y", y)
             ctx?.beginPath();
             ctx?.moveTo(0, y);
             ctx?.lineTo(width, y);

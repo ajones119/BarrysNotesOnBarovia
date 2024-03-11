@@ -39,8 +39,6 @@ const SettingsDrawer = ({
     let validateTokenSize = (localMapSettings?.tokenSize || 0) < 10 || (localMapSettings?.tokenSize || 0) > 100;
     let validateGridLineWidth = (localMapSettings?.gridLineWidth || 0) < 0;
 
-    console.log("GRID LINE", validateGridLineWidth)
-
     const isValid = !validateMaxColumns
     && !validateMaxRows
     && !validateTokenSize
@@ -151,7 +149,6 @@ const SettingsDrawer = ({
                 }
                 <Spacer height={24} />
                 <Button disabled={!isValid} onClick={() => {
-                    console.log("ISVALID", isValid)
                     if (isValid) {
                         setMap(localMapSettings);
                         onClose && onClose();
