@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { BaseSyntheticEvent, useEffect, useRef, useState } from "react";
 import css from "./CreateCustomTokenModal.module.scss"
 import { Modal } from '../Modal';
 import { TextInput } from '../../TextInput/TextInput';
@@ -60,23 +60,23 @@ const CreateTokenModal = ({isOpen, onClose, editToken }: CreateTokenModalProps) 
         }
     }, [token?.image])
 
-    const handleMouseDown = (event: MouseEvent) => {
+    const handleMouseDown = ({nativeEvent}: BaseSyntheticEvent<MouseEvent>) => {
         if (token?.image && canvasRef?.current) {
             setDragging(true);
             const canvas = canvasRef.current;
             const rect = canvas.getBoundingClientRect();
-            const offsetX = event.clientX - rect.left;
-            const offsetY = event.clientY - rect.top;
+            const offsetX = nativeEvent.clientX - rect.left;
+            const offsetY = nativeEvent.clientY - rect.top;
             setPosition({ x: offsetX, y: offsetY });
         }
     };
 
-    const handleMouseMove = (event: MouseEvent) => {
+    const handleMouseMove = ({ nativeEvent }: BaseSyntheticEvent<MouseEvent>) => {
         if (dragging && canvasRef.current) {
             const canvas = canvasRef.current;
             const rect = canvas.getBoundingClientRect();
-            const offsetX = event.clientX - rect.left;
-            const offsetY = event.clientY - rect.top;
+            const offsetX = nativeEvent.clientX - rect.left;
+            const offsetY = nativeEvent.clientY - rect.top;
             setPosition({ x: offsetX, y: offsetY });
         }
     };
@@ -184,7 +184,8 @@ const CreateTokenModal = ({isOpen, onClose, editToken }: CreateTokenModalProps) 
                                 pointerEvents: 'none',
                                 filter: token?.canChangeColor ? getExtraColorsFilterFromNewColor(COLORS_MAP.Gray) : undefined,
                                 transform: `rotate(${rotate}deg)`,
-                                opacity: token?.opacity
+                                opacity: token?.opacity,
+                                cursor: "grab"
                             }}
                             ref={imageRef}
                         />
