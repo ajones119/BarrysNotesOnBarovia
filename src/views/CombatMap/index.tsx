@@ -246,50 +246,51 @@ const CombatMap = ({combatIdOverride = "", isPlayer = false}) => {
             <div className={css.buttonsContainer}>
               {!mapContainer.active && !isPlayer && <Button onClick={() => setIsSettingsDrawerOpen(true)} color="secondary" animatedHover><Typography color="light">Settings</Typography></Button>}
               {!mapContainer.active && <Button onClick={() => setIsTokenDrawerOpen(true)} color="secondary" animatedHover><Typography color="light">Tokens</Typography></Button>}
-
-              <div onMouseEnter={() => setHovered(true)} onMouseLeave={() => setHovered(false)}>
-                  <div style={{position: "relative", marginBottom: -36, zIndex: 2, display: "flex"}}>
-                    <Button onClick={() => setSearchParams(searchParams => {
-                        const nextState = drawing === "drawing" ? "fogOfWar" : drawing === "fogOfWar" ? "" : "drawing";
-
-                        searchParams.set("drawing", nextState);
-                        return searchParams;
-                      })
-                    } color={drawing ? "tertiary" : "secondary"} animatedHover><Typography color="light">{getDrawingTitle()}</Typography></Button>
-                    <Button onClick={() => setSearchParams(searchParams => {
-
-                        searchParams.set("eraserOn", eraserOn ? "off" : "on");
-                        return searchParams;
-                      })
-                    } color={eraserOn ? "success" : "error"} animatedHover><Typography color="light">{<FontAwesomeIcon icon={faEraser} />}</Typography></Button>
-                  </div>
-                  <animated.div style={springs}>
-                    <div className={css.hoveredDrawButtons}>
-                      <ColorPicker width={50} value={color} onChange={(value) => {
-                        setSearchParams(searchParams => {
-                          searchParams.set("color", String(value));
-                          return searchParams;
-                        })
-                      }}/>
+              { !isPlayer && 
+                <div onMouseEnter={() => setHovered(true)} onMouseLeave={() => setHovered(false)}>
+                    <div style={{position: "relative", marginBottom: -36, zIndex: 2, display: "flex"}}>
                       <Button onClick={() => setSearchParams(searchParams => {
-                          let nextState = drawSize >= 100 ? 0 : drawSize;
-                          if (nextState < 5) {
-                            nextState ++;
-                          } else if (nextState < 20) {
-                            nextState += 5;
-                          } else {
-                            nextState += 10
-                          }
+                          const nextState = drawing === "drawing" ? "fogOfWar" : drawing === "fogOfWar" ? "" : "drawing";
 
-                          searchParams.set("drawSize", String(nextState));
+                          searchParams.set("drawing", nextState);
                           return searchParams;
                         })
-                      }>
-                        <Typography>{drawSize}px</Typography>
-                      </Button>
+                      } color={drawing ? "tertiary" : "secondary"} animatedHover><Typography color="light">{getDrawingTitle()}</Typography></Button>
+                      <Button onClick={() => setSearchParams(searchParams => {
+
+                          searchParams.set("eraserOn", eraserOn ? "off" : "on");
+                          return searchParams;
+                        })
+                      } color={eraserOn ? "success" : "error"} animatedHover><Typography color="light">{<FontAwesomeIcon icon={faEraser} />}</Typography></Button>
                     </div>
-                  </animated.div>
-              </div>
+                    <animated.div style={springs}>
+                      <div className={css.hoveredDrawButtons}>
+                        <ColorPicker width={50} value={color} onChange={(value) => {
+                          setSearchParams(searchParams => {
+                            searchParams.set("color", String(value));
+                            return searchParams;
+                          })
+                        }}/>
+                        <Button onClick={() => setSearchParams(searchParams => {
+                            let nextState = drawSize >= 100 ? 0 : drawSize;
+                            if (nextState < 5) {
+                              nextState ++;
+                            } else if (nextState < 20) {
+                              nextState += 5;
+                            } else {
+                              nextState += 10
+                            }
+
+                            searchParams.set("drawSize", String(nextState));
+                            return searchParams;
+                          })
+                        }>
+                          <Typography>{drawSize}px</Typography>
+                        </Button>
+                      </div>
+                    </animated.div>
+                </div>
+              }
 
 
               <Button animatedHover onClick={() => mapContainer.active ? mapContainer.exit() : mapContainer.enter()}><Typography color="light">FullScreen</Typography></Button>
