@@ -27,6 +27,7 @@ import { PlayerCharacter } from "@model/PlayerCharacter";
 import Avatar from "@components/Avatar";
 import { useDeleteCombatCharacter, useEditCombatCharacter } from "@services/CombatService";
 import { useParams } from "react-router-dom";
+import { useEditPlayerCharacter } from "@services/CharacterService";
 
 type InitiativeTrackerTableRowProps = {
   item: CombatCharacter;
@@ -45,8 +46,9 @@ const InitiativeTrackerTableRow = ({
 
   const [isHealthCounterOpen, setIsHealthCounterOpen] = useState(false);
   const [healthIncrement, setHealthIncrement] = useState<number>(1);
-  const {mutate: updateCharacter, isLoading: isEditing} = useEditCombatCharacter(item?.docId || "")
-  const {mutate: deleteCharacter, isLoading: isDeleting} = useDeleteCombatCharacter(combatId || "")
+  const {mutate: updateCharacter} = useEditCombatCharacter(item?.docId || "")
+  const {mutate: deleteCharacter} = useDeleteCombatCharacter(combatId || "")
+  const {mutate: updatePlayerCharacter} = useEditPlayerCharacter(() => {})
 
   const { refs, floatingStyles, context } = useFloating({
     open: isHealthCounterOpen,
@@ -80,14 +82,33 @@ const InitiativeTrackerTableRow = ({
     }
   };
 
-  const playerCharacterImageUrl = item?.playerDocId &&
-    characters.find((character) => character.docId === item?.playerDocId)
-      ?.characterImageURL;
+  const playerCharacter = item?.playerDocId &&
+    characters.find((character) => character.docId === item?.playerDocId) || null;
 
   const characterType: CharacterTypeLowercase = (item?.type?.toLowerCase() || "unknown") as CharacterTypeLowercase;
-  const enemyImageURL = item?.imageURL || BASE_CHARACTER_IMAGE_MAP[characterType]
+  const enemyImageURL = item?.imageURL || BASE_CHARACTER_IMAGE_MAP[characterType];
 
-  const image = playerCharacterImageUrl || enemyImageURL;
+  const image = playerCharacter?.characterImageURL || enemyImageURL;
+  let name = item?.name;
+  let maxHealth = item?.maxHealth;
+  let health = item?.health;
+  let armorClass = item?.armorClass;
+  let tempHealth = item?.tempHealth;
+  let conditions = item?.conditions;
+  let update: (value: any) => void = updateCharacter;
+
+  if (playerCharacter) {
+    name = playerCharacter?.name;
+    maxHealth = playerCharacter?.maxHealth;
+    health = playerCharacter?.health;
+    armorClass = playerCharacter?.armorClass;
+    tempHealth = playerCharacter?.tempHealth;
+    conditions = playerCharacter?.conditions;
+    update = (updateCharacter: Partial<PlayerCharacter>) => {
+      updatePlayerCharacter({...updateCharacter, docId: item?.playerDocId});
+    }
+  }
+  
 
   const identifier = (
     <div className={css.identifier}>
@@ -146,8 +167,8 @@ const InitiativeTrackerTableRow = ({
         <div className={css.nameCell}>
           <TextInput
             disabled={!!item?.playerDocId}
-            value={item?.name}
-            onChange={(value) => updateCharacter({ name: String(value)})}
+            value={name}
+            onChange={(value) => update({ name: String(value)})}
           />
         </div>
       </TableCell>
@@ -156,36 +177,36 @@ const InitiativeTrackerTableRow = ({
           <div ref={refs.setReference} {...getReferenceProps()}>
             <TextInput
               number
-              value={item?.health}
-              onChange={(value) => updateCharacter({ health: Number(value || 0) })}
+              value={health}
+              onChange={(value) => update({ health: Number(value || 0) })}
             />
           </div>
           <Typography>/</Typography>
           <TextInput
             number
-            value={item?.maxHealth}
-            onChange={(value) => updateCharacter({ maxHealth: Number(value || 1) })}
+            value={maxHealth}
+            onChange={(value) => update({ maxHealth: Number(value || 1) })}
           />
           <Typography>|</Typography>
           <TextInput
             number
-            value={item?.tempHealth || 0}
-            onChange={(value) => updateCharacter({ tempHealth: Number(value || 0) })}
+            value={tempHealth || 0}
+            onChange={(value) => update({ tempHealth: Number(value || 0) })}
           />
         </div>
       </TableCell>
       <TableCell style={{ width: "5%" }}>
         <TextInput
           number
-          value={item?.armorClass}
-          onChange={(value) => updateCharacter({ armorClass: Number(value || 0) })}
+          value={armorClass}
+          onChange={(value) => update({ armorClass: Number(value || 0) })}
         />
       </TableCell>
       <TableCell style={{ width: "10%" }}>
         <ConditionSelect
           width="100%"
-          selectedValue={item?.conditions}
-          onChange={(value) => updateCharacter({ conditions: value || [] })}
+          selectedValue={conditions}
+          onChange={(value) => update({ conditions: value || [] })}
         />
       </TableCell>
       <TableCell style={{ width: "2%" }}>

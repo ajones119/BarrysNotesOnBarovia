@@ -21,6 +21,7 @@ function Token({ id, content, styles, disabled = false }: TokenProps) {
   const style = transform
     ? {
         transform: `translate3d(${transform.x}px, ${transform.y}px, 0)`
+        //maybe add transition here?
       }
     : {};
 

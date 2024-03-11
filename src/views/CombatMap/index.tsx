@@ -1,4 +1,4 @@
-import { mutateCombatCharacter, useCombat, useCombatCharacters, useEditCombatCharacter, useUpdateInitiative } from "@services/CombatService";
+import { mutateCombatCharacter, useCombat, useCombatCharacters, useEditCombat, useEditCombatCharacter, useUpdateInitiative } from "@services/CombatService";
 import React, { useEffect, useRef, useState } from "react";
 import { useParams, useSearchParams } from "react-router-dom";
 import css from "./CombatMap.module.scss"
@@ -14,13 +14,15 @@ import SettingsDrawer from "./components/SettingsDrawer";
 import CharacterTokenContent from "./components/Token/CharacterTokenContent";
 import useCombatMapStore from "./CombatMapStore";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faMinus, faPlus } from "@fortawesome/free-solid-svg-icons";
+import { faEraser, faMinus, faPlus } from "@fortawesome/free-solid-svg-icons";
 import { mutateCombatToken, useCombatMap, useCombatMapTokens, useUpdateCombatMap } from "@services/CombatMapService";
 import { FullScreen, useFullScreenHandle } from "react-full-screen";
 import FloatingButtonContainer from "@components/FloatingButtonContainer";
 import Spinner from "@components/Spinner";
 import TokensDrawer from "./components/TokensDrawer";
-
+import { useHover } from 'usehooks-ts';
+import { useSpring, animated } from '@react-spring/web';
+import ColorPicker from "@components/ColorPicker/ColorPicker";
 type DroppableToken = {
   id: string,
   data: any,
@@ -32,6 +34,10 @@ const CombatMap = ({combatIdOverride = "", isPlayer = false}) => {
     const { combatId = combatIdOverride } = useParams();
     const [searchParams, setSearchParams] = useSearchParams();
     const scale = Number(searchParams.get("scale")) || 1;
+    const drawing = String(searchParams.get("drawing")) || "";
+    const color = String(searchParams.get("color")) || "black";
+    const drawSize = Number(searchParams.get("drawSize")) || 1;
+    const eraserOn = searchParams.get("eraserOn") === "on" || false;
 
     const [isSettingsDrawerOpen, setIsSettingsDrawerOpen] = useState(false);
     const [isTokenDrawerOpen, setIsTokenDrawerOpen] = useState(false);
@@ -44,8 +50,17 @@ const CombatMap = ({combatIdOverride = "", isPlayer = false}) => {
 
     const { combat, isLoading, isRefetching } = useCombat(combatId);
     const { combatMap, isLoading: isMapLoading, isRefetching: isMapRefetching } = useCombatMap(combatId || combatIdOverride);
+    const {mutate: editMap} = useUpdateCombatMap(combatMap?.docId || "")
     const {combatCharacters = [], isLoading: isCharactersLoading} = useCombatCharacters(combatId);
     const {tokens: combatTokens, isLoading: isTokensLoading} = useCombatMapTokens(combatMap?.docId || "")
+
+    const hoverRef = useRef(null);
+    const isHovered = useHover(hoverRef)
+
+    const springs = useSpring({
+        translateY: isHovered ? -40 : 0,
+        opacity: isHovered ? 1 : 0
+    })
     const { currentTurnIndex } = combat;
 
     const mapRef = useRef<HTMLDivElement>(null); 
@@ -159,6 +174,18 @@ const CombatMap = ({combatIdOverride = "", isPlayer = false}) => {
     //work on this further, may need to implement something else for live movement info since db writes get crazy
     const handleDragMove = (ev: any) => {}
 
+    const getDrawingTitle = () => {
+      let title = "Drawing Off";
+      if (drawing === "drawing") {
+        title = "Drawing";
+      }
+      if (drawing === "fogOfWar") {
+        title = "Fog Of War"
+      }
+
+      return title;
+    }
+
     return (
       <div>
         <div>
@@ -174,6 +201,11 @@ const CombatMap = ({combatIdOverride = "", isPlayer = false}) => {
               <Map
                 map={combatMap}
                 scale={scale}
+                onFogOfWarSaveDraw={(data) => editMap({fogOfWar: data})}
+                onSaveDraw={(data) => editMap({lines: data})}
+                lines={combatMap?.lines}
+                fogOfWar={combatMap?.fogOfWar}
+                isPlayer={isPlayer}
               >
                 {extraTokens.map((token) => (
                   <Token
@@ -216,6 +248,52 @@ const CombatMap = ({combatIdOverride = "", isPlayer = false}) => {
             <div className={css.buttonsContainer}>
               {!mapContainer.active && !isPlayer && <Button onClick={() => setIsSettingsDrawerOpen(true)} color="secondary" animatedHover><Typography color="light">Settings</Typography></Button>}
               {!mapContainer.active && <Button onClick={() => setIsTokenDrawerOpen(true)} color="secondary" animatedHover><Typography color="light">Tokens</Typography></Button>}
+              { !isPlayer && 
+                <div ref={hoverRef}>
+                    <div style={{position: "relative", marginBottom: -36, zIndex: 2, display: "flex"}}>
+                      <Button onClick={() => setSearchParams(searchParams => {
+                          const nextState = drawing === "drawing" ? "fogOfWar" : drawing === "fogOfWar" ? "" : "drawing";
+
+                          searchParams.set("drawing", nextState);
+                          return searchParams;
+                        })
+                      } color={drawing ? "tertiary" : "secondary"} animatedHover><Typography color="light">{getDrawingTitle()}</Typography></Button>
+                      <Button onClick={() => setSearchParams(searchParams => {
+
+                          searchParams.set("eraserOn", eraserOn ? "off" : "on");
+                          return searchParams;
+                        })
+                      } color={eraserOn ? "success" : "error"} animatedHover><Typography color="light">{<FontAwesomeIcon icon={faEraser} />}</Typography></Button>
+                    </div>
+                    <animated.div style={springs}>
+                      <div className={css.hoveredDrawButtons}>
+                        <ColorPicker width={50} value={color} onChange={(value) => {
+                          setSearchParams(searchParams => {
+                            searchParams.set("color", String(value));
+                            return searchParams;
+                          })
+                        }}/>
+                        <Button onClick={() => setSearchParams(searchParams => {
+                            let nextState = drawSize >= 100 ? 0 : drawSize;
+                            if (nextState < 5) {
+                              nextState ++;
+                            } else if (nextState < 20) {
+                              nextState += 5;
+                            } else {
+                              nextState += 10
+                            }
+
+                            searchParams.set("drawSize", String(nextState));
+                            return searchParams;
+                          })
+                        }>
+                          <Typography>{drawSize}px</Typography>
+                        </Button>
+                      </div>
+                    </animated.div>
+                </div>
+              }
+
 
               <Button animatedHover onClick={() => mapContainer.active ? mapContainer.exit() : mapContainer.enter()}><Typography color="light">FullScreen</Typography></Button>
               <div style={{display: "flex", justifyContent: "center", alignItems: "center", columnGap: 4}}>

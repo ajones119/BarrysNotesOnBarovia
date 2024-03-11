@@ -8,14 +8,14 @@ import { TextInput } from '../../TextInput/TextInput';
 import { CombatCharacter } from '@model/CombatCharacter';
 import { Button } from '@components/Button/Button';
 
-declare interface CreateNPCModalProps {
+declare interface CreateCombatModalProps {
     isOpen: boolean;
     onClose: () => void;
     campaignId: string,
     characters: Array<CombatCharacter>
 };
 
-const CreateCombatModal = ({isOpen, onClose, campaignId, characters = [] }: CreateNPCModalProps) => {
+const CreateCombatModal = ({isOpen, onClose, campaignId, characters = [] }: CreateCombatModalProps) => {
     const [combat, setCombat] = useState<Combat>({campaignDocId: campaignId});
     const [validator, setValidator] = useState<any>();
 

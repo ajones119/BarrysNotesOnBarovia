@@ -157,7 +157,11 @@ export const useAddCombat = (onSuccess = () => {}) => {
             combatDocId: docId,
             ...character
           })
-          combatCharacterIds.push(charResponse.id)
+          //consider how to move Character combat stats to their document
+          //should I attach to their current character document, ot make a persistanct combat character?
+
+          //seems like combat character can be used for map position, but maybe move health to character
+          combatCharacterIds.push(character.docId || charResponse.id)
         }
 
         const newCombatRef = doc(firestore, "combats", docId)
@@ -187,13 +191,19 @@ export const useUpdateInitiative = (combat: Combat) => {
       mutationKey: ["delete-combat"],
       mutationFn: async (combatId: string) => {
         runTransaction(firestore, async () => {
-          const combatMapQuery = await query(collection(firestore, "combatMaps"), where("combatDocId", "==", combatId));
+          const batch = writeBatch(firestore)
+          const combatMapQuery = query(collection(firestore, "combatMaps"), where("combatDocId", "==", combatId));
           const combatMapsSnapshot = await getDocs(combatMapQuery);
           if (combatMapsSnapshot.size > 0) {
-            const batch = writeBatch(firestore);
             combatMapsSnapshot.docs.forEach(async (doc) => {
               const docid = doc.id;
-              batch.delete(doc.ref);
+              const combatTokensQuery = query(collection(firestore, "combatTokens"), where("combatMapDocId", "==", docid));
+              const combatTokensSnapshot = await getDocs(combatTokensQuery);
+              if (combatTokensSnapshot.size > 0) {
+                combatTokensSnapshot.docs.forEach(async (doc) => {
+                  batch.delete(doc.ref);
+                })
+              }
               const imageRef = storageRef(storage,  `images/combats/${docid}`);
               try{
                 await deleteObject(imageRef)
@@ -201,15 +211,15 @@ export const useUpdateInitiative = (combat: Combat) => {
                 console.log(e)
               }
             })
-            await batch.commit();
           }
 
           const combatCharactersQuery = await query(collection(firestore, "combatCharacters"), where("combatDocId", "==", combatId));
           const combatCharactersSnapshot = await getDocs(combatCharactersQuery);
           if (combatCharactersSnapshot.size > 0) {
-            const batch = writeBatch(firestore);
             combatCharactersSnapshot.docs.forEach(async (doc) => {
-              batch.delete(doc.ref);
+              if (!doc.data().playerDocId) {
+                batch.delete(doc.ref);
+              }
             })
             await batch.commit();
           }

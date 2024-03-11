@@ -1,0 +1,11 @@
+@import "src/sass_utils";
+
+.listItem {
+    max-width: 200px;
+    max-height: 200px;
+    border-radius: 16px;
+    border-color: $primary;
+    border-width: 1px;
+    border-style: solid;
+    overflow: hidden;
+}

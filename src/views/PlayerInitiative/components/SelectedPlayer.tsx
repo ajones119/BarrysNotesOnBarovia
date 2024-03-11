@@ -20,7 +20,7 @@ import {
     useDismiss,
   } from "@floating-ui/react";
 import { useParams, useSearchParams } from "react-router-dom";
-import { useCampaignCharacters } from "@services/CharacterService";
+import { useCampaignCharacters, useEditPlayerCharacter } from "@services/CharacterService";
 import { useCampaign } from "@services/CampaignService";
 import { mutateCombatCharacter, useCombat, useCombatCharacters, useEditCombat } from "@services/CombatService";
 import { CombatCharacter } from "@model/CombatCharacter";
@@ -40,15 +40,23 @@ const SelectedPlayer = () => {
     const {combat, isLoading: isCombatLoading} = useCombat(campaign?.currentCombatDocId || "1")
     const {combatCharacters = [], isLoading: isCharactersLoading} = useCombatCharacters(combat?.docId || "");
     const {mutate: editCombat} = useEditCombat(combat?.docId || "");
+    const {mutate: editCharacter} = useEditPlayerCharacter(() => {})
 
     const { currentTurnIndex = 0, colorFilter = []} = combat;
     const index = combatCharacters?.findIndex(combatCharacter => combatCharacter.playerDocId === selectedCharacterId)
-    const {tempHealth = 0, health = 0, maxHealth = 0, conditions = [], armorClass = 0, initiative} = combatCharacters[index] || {health: 0, maxHealth: 0, conditions: [], armorClass: 0, initiative: 0};
+    const { initiative} = combatCharacters[index] || {initiative: 0};
     const character = characters.findLast(character => character.docId === selectedCharacterId)
+    const { tempHealth = 0, health = 0, maxHealth = 0, conditions = [], armorClass = 0, } = character || {health: 0, maxHealth: 0, conditions: [], armorClass: 0};
     const combatCharacter = combatCharacters.findLast(character => character?.playerDocId === selectedCharacterId);
-    const updateCharacter = (value: Partial<CombatCharacter>) => {
+    const updateCombatCharacter = (value: Partial<CombatCharacter>) => {
         if (combatCharacter) {
             mutateCombatCharacter(combatCharacter?.docId || "", value)
+        }
+    };
+
+    const updateCharacter = (value: Partial<PlayerCharacter>) => {
+        if (character) {
+            editCharacter({docId: selectedCharacterId, ...value})
         }
     };
 
@@ -69,21 +77,21 @@ const SelectedPlayer = () => {
     }
 
     
-  const { refs, floatingStyles, context } = useFloating({
-    open: isHealthCounterOpen,
-    onOpenChange: setIsHealthCounterOpen,
-    middleware: [offset(10), flip(), shift()],
-    whileElementsMounted: autoUpdate,
-  });
+    const { refs, floatingStyles, context } = useFloating({
+        open: isHealthCounterOpen,
+        onOpenChange: setIsHealthCounterOpen,
+        middleware: [offset(10), flip(), shift()],
+        whileElementsMounted: autoUpdate,
+    });
 
-  const click = useClick(context);
-  const dismiss = useDismiss(context);
+    const click = useClick(context);
+    const dismiss = useDismiss(context);
 
-  const { getReferenceProps, getFloatingProps } = useInteractions([click]);
+    const { getReferenceProps, getFloatingProps } = useInteractions([click]);
 
-  if (isCharactersLoading || isCombatLoading) {
-    return <Spinner />
-  }
+    if (isCharactersLoading || isCombatLoading) {
+        return <Spinner />
+    }
 
     return (
         <div className={css.selectedPlayerContainer}>
@@ -108,7 +116,7 @@ const SelectedPlayer = () => {
                 <div className={css.inputSection}>
                     <Typography color="light" size="default" fontStyle="secondary">Initiative</Typography>
                     <div className={css.input}>
-                        <TextInput number value={initiative} onChange={(value) => updateCharacter({initiative: Number(value)})} />
+                        <TextInput number value={initiative} onChange={(value) => updateCombatCharacter({initiative: Number(value)})} />
                     </div>
                 </div>
                 <div className={css.inputSection}>

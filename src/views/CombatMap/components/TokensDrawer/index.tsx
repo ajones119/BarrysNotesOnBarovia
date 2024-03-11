@@ -12,6 +12,7 @@ import ColorPicker from "@components/ColorPicker/ColorPicker";
 import useCombatMapStore from "@views/CombatMap/CombatMapStore";
 import { mutateCombatToken, useAddCombatToken, useCombatMap, useCombatMapTokens, useDeleteCombatToken } from "@services/CombatMapService";
 import AddTokenDrawer from "./components/AddTokensDrawer";
+import { CombatToken } from "@model/CombatMap";
 
 declare interface TokensDrawerProps extends DrawerProps {
     combatId: string,
@@ -34,7 +35,7 @@ const TokensDrawer = ({
     const {mutate: deleteToken} = useDeleteCombatToken();
 
     const handleAddToken = (newToken: InternalToken) => {
-        const token = {
+        let token: CombatToken = {
             disabled: false,
             data: {
                 position: {
@@ -62,6 +63,10 @@ const TokensDrawer = ({
             token.data = {...token.data, rotation: newToken.rotation || 0}
         }
 
+        if (newToken?.baseTokenId) {
+            token = {...token, baseTokenId: newToken?.baseTokenId}
+        }
+        console.log("NEW", newToken)
         addCombatToken(token);
 
         setIsAddTokensDrawerOpen(false);
@@ -104,7 +109,10 @@ const TokensDrawer = ({
                                 <Button color='dark' onClick={() => deleteToken(docId)}>
                                     <FontAwesomeIcon icon={faMinus} />
                                 </Button>
-                                <Button color='dark' onClick={() => handleAddToken({...token, height: token?.length})}>
+                                <Button color='dark' onClick={() => {
+                                    //@ts-ignore
+                                    handleAddToken({...token, height: token?.length})
+                                    ;}}>
                                     <FontAwesomeIcon icon={faCopy} />
                                 </Button>
                             </div>

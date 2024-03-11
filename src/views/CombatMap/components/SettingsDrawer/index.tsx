@@ -23,26 +23,30 @@ const SettingsDrawer = ({
     isPlayer = false
 }: SettingsDrawerProps) => {
     const { combatMap, isLoading: isMapLoading, isRefetching: isMapRefetching } = useCombatMap(combatId);
-    const [localMapSettings, setLocalMapSettings] = useState<CombatMap>(combatMap)
+    const [localMapSettings, setLocalMapSettings] = useState<CombatMap>({tokenSize: 30, gridLineWidth: 1, ...combatMap})
     const {mutate: setMap} = useUpdateCombatMap(combatMap?.docId || "");
 
     useEffect(() => {
         if (isOpen) {
-            setLocalMapSettings({...combatMap})
+            setLocalMapSettings({tokenSize: 30, gridLineWidth: 1, ...combatMap})
         }
     }, [isOpen])
 
-    let validateMaxRows = (localMapSettings?.rows || 0) > 200 || (localMapSettings?.rows || 0) < 0;
-    let validateMaxColumns = (localMapSettings?.columns || 0) > 200 || (localMapSettings?.columns || 0) < 0;
+    let validateMaxRows = (localMapSettings?.rows || 0) > 600 || (localMapSettings?.rows || 0) < 0;
+    let validateMaxColumns = (localMapSettings?.columns || 0) > 600 || (localMapSettings?.columns || 0) < 0;
     let validateGridOffsetX = Math.abs(localMapSettings?.gridOffsetX || 0) > 1;
     let validateGridOffsetY = Math.abs(localMapSettings?.gridOffsetY || 0) > 1;
     let validateTokenSize = (localMapSettings?.tokenSize || 0) < 10 || (localMapSettings?.tokenSize || 0) > 100;
+    let validateGridLineWidth = (localMapSettings?.gridLineWidth || 0) < 0;
+
+    console.log("GRID LINE", validateGridLineWidth)
 
     const isValid = !validateMaxColumns
     && !validateMaxRows
     && !validateTokenSize
     && !validateGridOffsetX
-    && !validateGridOffsetY;
+    && !validateGridOffsetY
+    && !validateGridLineWidth;
 
     return (
         <Drawer
@@ -51,8 +55,40 @@ const SettingsDrawer = ({
             side="left"
         >
             <div className={css.settingsDrawerContainer}>
-                { !isPlayer &&
+                { localMapSettings?.autoGrid ? (
                     <div>
+                        <Spacer height={24} />
+                        <TextInput error={validateTokenSize} value={localMapSettings?.tokenSize} placeholder="Base Token Size" number onChange={(value) => setLocalMapSettings({...localMapSettings, tokenSize: Number(value)})} />
+                        <Spacer height={24} />
+
+                        <TextInput error={validateGridLineWidth} value={localMapSettings?.gridLineWidth} placeholder="Grid Line Width" number onChange={(value) => setLocalMapSettings({...localMapSettings, gridLineWidth: Number(value)})} />
+                        <Spacer height={24} />
+                        <div className={css.settingsRow}>
+                            <FileInput value={typeof localMapSettings?.mapImage === "string" ? localMapSettings?.mapImage : localMapSettings?.mapImage?.name} title="Map Image" onChange={(value) => setLocalMapSettings({...localMapSettings, mapImage: value || ""})} />
+                            {localMapSettings?.mapImage && <div style={{marginTop: -24}}><Button color="error" onClick={() => setLocalMapSettings({...localMapSettings, mapImage: ""})}><Typography color="light" size="caption">Remove Map</Typography></Button></div>}
+                        </div>
+                        <Spacer height={24} />
+                        <div className={css.settingsRow}>
+                            <Typography color="primary">Background Color</Typography>
+                            <div>
+                                <ColorPicker outlined width={48} value={localMapSettings?.mapColor || COLORS_MAP.White} onChange={(value) => setLocalMapSettings({...localMapSettings, mapColor: String(value)})} />
+                            </div>
+                        </div>
+
+                        <div className={css.settingsRow}>
+                            <Typography color="primary">Grid Color</Typography>
+                            <div>
+                                <ColorPicker outlined width={48} value={localMapSettings?.gridColor || COLORS_MAP.Black} onChange={(value) => setLocalMapSettings({...localMapSettings, gridColor: String(value)})} />
+                            </div>
+                        </div>
+
+                        <div className={css.settingsRow}>
+                            <Typography color="primary">Hide Grid</Typography>
+                            <Checkbox checked={localMapSettings?.hideGrid} onChange={() => setLocalMapSettings({...localMapSettings, hideGrid: !localMapSettings.hideGrid})} />
+                        </div>
+                    </div>
+                )
+                    : (<div>
                         <Spacer height={24} />
                         <TextInput error={validateMaxColumns} value={localMapSettings?.columns} placeholder="Grid Column" max={200} number onChange={(value) => setLocalMapSettings({...localMapSettings, columns: Number(value)})} />
                         <Spacer height={24} />
@@ -66,7 +102,10 @@ const SettingsDrawer = ({
                         <Spacer height={24} />
                                 
 
-                        <TextInput error={validateTokenSize} value={localMapSettings?.tokenSize} placeholder="base token size" number onChange={(value) => setLocalMapSettings({...localMapSettings, tokenSize: Number(value)})} />
+                        <TextInput error={validateTokenSize} value={localMapSettings?.tokenSize} placeholder="Base Token Size" number onChange={(value) => setLocalMapSettings({...localMapSettings, tokenSize: Number(value)})} />
+                        <Spacer height={24} />
+
+                        <TextInput error={validateGridLineWidth} value={localMapSettings?.gridLineWidth} placeholder="Grid Line Width" number onChange={(value) => setLocalMapSettings({...localMapSettings, gridLineWidth: Number(value)})} />
                         <Spacer height={24} />
 
                         <div className={css.settingsRow}>
@@ -107,19 +146,39 @@ const SettingsDrawer = ({
                                 <Typography color="light">Map Image Contain</Typography>
                             </Button>
                         </div>
-                        <Spacer height={24} />
-                        <Button disabled={!isValid} onClick={() => {
+                        
+                    </div>)
+                }
+                <Spacer height={24} />
+                <Button disabled={!isValid} onClick={() => {
+                    console.log("ISVALID", isValid)
                     if (isValid) {
                         setMap(localMapSettings);
                         onClose && onClose();
                     }
                 }}>SUBMIT</Button>
-                    </div>
-                }
-               
             </div>
         </Drawer>
     );
 }
 
 export default SettingsDrawer;
+
+/*
+When ready for auto grid
+
+ <div className={css.settingsRow}>
+                    <Button
+                        onClick={() => setLocalMapSettings({...localMapSettings, autoGrid: true})}
+                        color={localMapSettings?.autoGrid ? "success" : "error"}
+                    >
+                        <Typography color="light">Auto Grid</Typography>
+                    </Button>
+                    <Button
+                        onClick={() => setLocalMapSettings({...localMapSettings, autoGrid: false})}
+                        color={!localMapSettings?.autoGrid ? "success" : "error"}
+                    >
+                        <Typography color="light">Manual Grid</Typography>
+                    </Button>
+                </div>
+*/

@@ -84,6 +84,7 @@ export const useCombatMapTokens = (combatMapDocId: string) => {
         ...token?.data(),
         docId: token.id,
     }) as CombatToken) || [];
+    console.log(tokens)
     return { tokens, isLoading, isRefetching, refetch };
 }
 

@@ -10,6 +10,8 @@ import { useDebounce } from "usehooks-ts";
 import { TextInput } from "@components/TextInput/TextInput";
 import { Spacer } from "@components/Spacer/Spacer";
 import { Accordion, AccordionDetails, AccordionSummary } from "@mui/material";
+import { useCustomTokens } from "@services/CustomTokensService";
+import { COLORS_MAP } from "@components/ColorPicker/ColorPicker";
 
 declare interface AddTokensDrawerProps extends DrawerProps {
     onAddToken: (_newToken: InternalToken) => void
@@ -20,10 +22,26 @@ const AddTokenDrawer = ({
     onClose,
     onAddToken
 }: AddTokensDrawerProps) => {
+    const {tokens = [], isLoading: tokensLoading} = useCustomTokens();
+
     const [search, setSearch] = useState("");
     const debouncedSearch = useDebounce(search, 250);
 
-    let categories = INTERNAL_TOKENS;
+    let categories = [ ...INTERNAL_TOKENS ];
+
+    if (tokens) {
+        const customCategory = {
+            name: "Custom",
+            id: "custom",
+            tokens: tokens?.map(token => ({
+                ...token,
+                color: token?.canChangeColor ? COLORS_MAP.Black : undefined,
+                baseTokenId: token?.docId
+            }))
+        }
+        // @ts-ignore
+        categories.push(customCategory);
+    }
 
     if (debouncedSearch) {
         categories = categories.map(category => ({

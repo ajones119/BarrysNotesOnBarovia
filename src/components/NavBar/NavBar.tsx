@@ -2,7 +2,7 @@ import React, {useEffect, useState} from "react";
 import css from "./NavBar.module.scss"
 import Barry from "@images/barry-cartoon.png"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faDungeon, faGripHorizontal, faHatWizard, faHomeAlt, faSpaghettiMonsterFlying, faXmark } from "@fortawesome/free-solid-svg-icons";
+import { faDungeon, faGripHorizontal, faHatWizard, faHomeAlt, faRoute, faSpaghettiMonsterFlying, faXmark } from "@fortawesome/free-solid-svg-icons";
 import { Link, useLocation, useNavigate, useParams, useSearchParams } from "react-router-dom";
 import { Typography } from "../Typography/Typography";
 import { useWindowWidth } from "@react-hook/window-size";
@@ -65,6 +65,9 @@ export const NavBar = ({additionalLinks = [], sectionHomeLink}: NavBarProps) => 
           <Link className={`${css.navBarLink} ${pathname === "/Monsters/" ? css.activeLink : ""}`} to="/Monsters/">
             <Typography className={`${css.navBarLink} ${pathname === "/Monsters/" ? css.activeLink : ""}`}><FontAwesomeIcon icon={faSpaghettiMonsterFlying} />Monsters</Typography>
           </Link>
+          <Link className={`${css.navBarLink} ${pathname === "/Tokens/" ? css.activeLink : ""}`} to="/Tokens/">
+            <Typography className={`${css.navBarLink} ${pathname === "/Tokens/" ? css.activeLink : ""}`}><FontAwesomeIcon icon={faRoute} />Tokens</Typography>
+          </Link>
             <div className={css.menuButtons}>
               {(CampaignId && !isLoading ) &&
               <CharacterPicker
@@ -101,6 +104,9 @@ export const NavBar = ({additionalLinks = [], sectionHomeLink}: NavBarProps) => 
                 </Link>
                 <Link className={`${css.navBarLink} ${pathname === "/Monsters/" ? css.activeLink : ""}`} to="/Monsters/" onClick={() => setIsOpen(false)}>
                   <Typography size="large" className={`${css.navBarLink} ${pathname === "/Monsters/" ? css.activeLink : ""}`}><FontAwesomeIcon icon={faSpaghettiMonsterFlying} />{" "}Monsters</Typography>
+                </Link>
+                <Link className={`${css.navBarLink} ${pathname === "/Tokens/" ? css.activeLink : ""}`} to="/Tokens/" onClick={() => setIsOpen(false)}>
+                  <Typography size="large" className={`${css.navBarLink} ${pathname === "/Tokens/" ? css.activeLink : ""}`}><FontAwesomeIcon icon={faRoute} />{" "}Tokens</Typography>
                 </Link>
                 <Spacer height={24} />
                 { additionalLinks.length > 0 &&
