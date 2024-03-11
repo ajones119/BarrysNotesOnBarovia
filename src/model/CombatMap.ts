@@ -14,15 +14,20 @@ export type CombatMap = {
     cover?: boolean;
     gridOffsetX?: number;
     gridOffsetY?: number;
-    mapScale?: number
+    mapScale?: number;
+    autoGrid?: boolean;
+    gridLineWidth?: number;
+    lines?: string;
+    fogOfWar: string
 }
 
 export type CombatToken = {
     docId?: string,
     combatMapDocId?: string,
+    baseTokenId?: string
     disabled?: boolean,
     data: {
-        image: string;
+        image: string | File;
         position: {
             x: number,
             y: number,
@@ -34,6 +39,16 @@ export type CombatToken = {
         opacity?: number,
         rotation?: number,
         canRotate?: boolean,
-        playerAdded?: boolean
-    }
+        playerAdded?: boolean,
+    },
+}
+
+export type CustomToken = {
+    docId?: string,
+    image?: string | File;
+    height: number,
+    width: number,
+    name: string,
+    canChangeColor?: boolean,
+    opacity?: number,
 }

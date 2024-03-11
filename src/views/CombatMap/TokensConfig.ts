@@ -48,6 +48,7 @@ export type InternalToken = {
     canRotate?: boolean;
     rotation?: number;
     conditions?: string[];
+    baseTokenId?: string;
 }
 
 const INTERNAL_TOKENS: Array<{

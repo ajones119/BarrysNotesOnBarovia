@@ -9,4 +9,7 @@ export interface PlayerCharacter extends BaseCharacter {
     initiativeBonus?: number;
     race?: string;
     disabled?: boolean;
+    health?: number;
+    tempHealth?: number;
+    conditions?: string[]
 }

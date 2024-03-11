@@ -24,7 +24,7 @@ const FileInput = ({value, onChange, title}: FileInputProps) => {
                 <Typography color="light" size="caption">{displayValue}</Typography>
             <input
                 type="file"
-                accept="image/png, image/jpeg, image/jpg, image/gif, image/webp"
+                accept="image/png, image/jpeg, image/jpg, image/gif, image/webp, .pdf"
                 onChange={(event) => event?.target?.files ? onChange(event?.target?.files[0]) : onChange(null)}
                 className={css.fileInput}
                 ref={inputRef}

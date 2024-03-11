@@ -71,7 +71,7 @@ const EncounterDiffultyProgress = ({
 
 const DMInitiative = () => {
   const { combatId = "", CampaignId: campaignId = "" } = useParams();
-  const { combat, isLoading, isRefetching, isFetching } = useCombat(combatId);
+  const { combat, isLoading } = useCombat(combatId);
   const { currentTurnIndex = null, campaignDocId = "" } = combat;
   const { data: campaign } = useCampaign(campaignId);
   const { characters = [] } = useCampaignCharacters(campaignId);
@@ -180,7 +180,7 @@ const DMInitiative = () => {
                 Initiative
               </Typography>
             </TableCell>
-            <TableCell style={{ width: "70%" }}>
+            <TableCell style={{ width: "60%" }}>
               <Typography color="light" size="large">
                 Name
               </Typography>

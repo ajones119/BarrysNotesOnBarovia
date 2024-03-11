@@ -7,6 +7,7 @@ import SingleCampaign from "@views/CampaignViews/SingleCampaign/SingleCampaign";
 import PlayerInitiative from "@views/PlayerInitiative/PlayerInitiative";
 import DMInitiative from "@views/DMInitiative";
 import CustomMonsters from "@views/CustomMonsters";
+import CustomTokens from "@views/CustomTokens";
 import CombatMap from "@views/CombatMap";
 import { faBook, faCircleUser, faCrosshairs, faEarthAmericas, faMagic, faMagnifyingGlassLocation, faSkullCrossbones } from "@fortawesome/free-solid-svg-icons";
 import { getCombatMapRoute } from "@views/DMInitiative/utils";
@@ -73,6 +74,8 @@ export const Routing = () => {
       <Route path="/Initiative/Map/:CampaignId/:combatId" element={<NonHomePageContainer page={<CombatMap />} meta={CampaignAdditionalLinks} />} />
       <Route path="/Characters/" element={<NonHomePageContainer page={<Characters />} />} />
       <Route path="/Monsters/" element={<NonHomePageContainer page={<CustomMonsters />} />} />
+      <Route path="/Tokens/" element={<NonHomePageContainer page={<CustomTokens />} />} />
+
       <Route path="/*" element={<Home />} />
     </Routes>
   );

@@ -90,12 +90,12 @@ const PlayerInitiative = () => {
                     PCs?.map((character : CombatCharacter) => {
                         const {playerDocId, maxHealth = 0, health = 0} = character;
                     const healthBarAmount = (health/maxHealth)*100;
-                    const playerCharacterImageUrl = characters.find(campaignCharacter => campaignCharacter.docId === playerDocId)?.characterImageURL;
+                    const playerCharacter = characters.find(campaignCharacter => campaignCharacter.docId === playerDocId);
                     return(
                         <CharacterRow
                             healthBarAmount={healthBarAmount}
-                            rowImageURL={String(playerCharacterImageUrl)}
-                            combatCharacter={character}
+                            rowImageURL={String(playerCharacter?.characterImageURL)}
+                            combatCharacter={{...character, health: playerCharacter?.health, maxHealth: playerCharacter?.maxHealth, tempHealth: playerCharacter?.tempHealth, conditions: playerCharacter?.conditions}}
                             isCurrentTurn={combatCharacters[currentTurnIndex].playerDocId === playerDocId}
                             isNextTurn={character.playerDocId === nextPlayerDocId}
                             

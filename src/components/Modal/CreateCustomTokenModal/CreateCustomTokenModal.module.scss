@@ -1,0 +1,30 @@
+
+.inputForm {
+    display: flex;
+    flex-direction: column;
+
+    .inputRow {
+        display: flex;
+        width: 100%;
+        column-gap: 16px;
+        justify-content: space-evenly;
+        flex-wrap: wrap;
+        .nameInput {
+            width: 80%;
+            flex-shrink: 0;
+        }
+    }
+}
+
+.example {
+    position: relative;
+    width: 100%;
+    min-height: 200px;
+    border-radius: 8px;
+
+    .tokenPreview {
+        position: absolute;
+        -webkit-tap-highlight-color: transparent;
+        outline: none;
+    }
+}

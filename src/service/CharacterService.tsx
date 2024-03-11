@@ -114,7 +114,7 @@ export const useEditPlayerCharacter = (onSuccess: () => void) => {
   return useMutation({
     mutationKey: ["edit-PC"],
     onSuccess,
-    mutationFn: async (pc: PlayerCharacter) => {
+    mutationFn: async (pc: Partial<PlayerCharacter>) => {
       const docId = pc?.docId;
       if (!docId) return;
 
@@ -124,16 +124,14 @@ export const useEditPlayerCharacter = (onSuccess: () => void) => {
         const imageRef = storageRef(storage, `images/characters/${docId}`);
         await uploadBytes(imageRef, pc?.characterImageURL);
         imageURL = await getDownloadURL(imageRef);
-      } else {
-        imageURL = pc?.characterImageURL || "";
+        pc.characterImageURL = imageURL
       }
 
       delete(pc.docId);
       const pcRef = doc(firestore, "characters", docId)
       await setDoc(pcRef, {
         ...pc,
-        characterImageURL: imageURL
-      })
+      }, {merge: true})
 
     }
   })

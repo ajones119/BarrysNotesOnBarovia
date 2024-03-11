@@ -1,8 +1,8 @@
 @import "src/sass_utils";
 
 .initiativeTrackerContainer {
-  margin: 0 auto;
-  max-width: 1096px;
+  margin: 0 40px;
+  //max-width: 1400px;
   flex-shrink: 0;
 
   .bottonsContainer {
@@ -38,6 +38,7 @@
     grid-template-columns: 1fr;
     column-gap: 8px;
     width: 100%;
+    min-width: 200px;
     align-items: center;
   }
 
@@ -58,6 +59,7 @@
 
   .healthCell {
     display: flex;
+    min-width: 100px;
   }
 
   .healthCounterContainer {
