@@ -9,9 +9,10 @@ type DrawableCanvasProps = {
     pointSize?: number,
     pointColor?: string,
     isErasing?: boolean,
+    scale?: number
 }
 
-function DrawableCanvas({ width, height, onDrawEnd, loadData, disabled = false, pointSize = 1, pointColor = "black", isErasing = false }: DrawableCanvasProps) {
+function DrawableCanvas({ width, height, onDrawEnd, loadData, disabled = false, pointSize = 1, pointColor = "black", isErasing = false, scale = 1 }: DrawableCanvasProps) {
     const canvasRef = useRef<HTMLCanvasElement>(null);
     const contextRef = useRef<any>(null);
     const [isDrawing, setIsDrawing] = useState(false);
@@ -30,7 +31,7 @@ function DrawableCanvas({ width, height, onDrawEnd, loadData, disabled = false, 
             if (context) {
                 context.clearRect(0,0,width,height);
 
-                //context?.scale(2,2);
+                context?.scale(scale,scale);
                 context.lineCap = "round"
                 contextRef.current = context;
                 context.strokeStyle = pointColor;

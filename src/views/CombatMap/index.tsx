@@ -20,9 +20,9 @@ import { FullScreen, useFullScreenHandle } from "react-full-screen";
 import FloatingButtonContainer from "@components/FloatingButtonContainer";
 import Spinner from "@components/Spinner";
 import TokensDrawer from "./components/TokensDrawer";
-import { useHover } from 'usehooks-ts';
 import { useSpring, animated } from '@react-spring/web';
 import ColorPicker from "@components/ColorPicker/ColorPicker";
+import { useCampaignCharacters } from "@services/CharacterService";
 type DroppableToken = {
   id: string,
   data: any,
@@ -50,9 +50,11 @@ const CombatMap = ({combatIdOverride = "", isPlayer = false}) => {
 
     const { combat, isLoading, isRefetching } = useCombat(combatId);
     const { combatMap, isLoading: isMapLoading, isRefetching: isMapRefetching } = useCombatMap(combatId || combatIdOverride);
-    const {mutate: editMap} = useUpdateCombatMap(combatMap?.docId || "")
+    const {mutate: editMap} = useUpdateCombatMap(combatMap?.docId || "");
     const {combatCharacters = [], isLoading: isCharactersLoading} = useCombatCharacters(combatId);
-    const {tokens: combatTokens, isLoading: isTokensLoading} = useCombatMapTokens(combatMap?.docId || "")
+    const {tokens: combatTokens, isLoading: isTokensLoading} = useCombatMapTokens(combatMap?.docId || "");
+    const { characters: campaignCharacters = [] } = useCampaignCharacters(combat?.campaignDocId || "");
+
     const [isHovered, setHovered] = useState(false);
 
     const springs = useSpring({
@@ -101,13 +103,22 @@ const CombatMap = ({combatIdOverride = "", isPlayer = false}) => {
     // set local data from remote
     useDeepCompareEffectNoCheck(() => {
       if (!isMapLoading && !isMapRefetching && !isLoading && !isRefetching) {
-        const tokensFromCombat = combatCharacters?.map((character, index) => ({
-          id: character?.docId || "",
-          data: {
-            ...combatCharacters[index],
-            ...character
+        const tokensFromCombat = combatCharacters?.map((character, index) => {
+          const isPC = character?.playerDocId;
+          let overrides: any = character;
+
+          if (isPC) {
+            overrides = campaignCharacters.find(c => c.docId === character?.playerDocId) || character;
           }
-        }))
+
+          return {
+            id: character?.docId || "",
+            data: {
+              ...combatCharacters[index],
+              ...overrides,
+              imageURL: overrides?.characterImageURL || overrides?.imageURL
+            }
+        }})
 
         const extraTokensFromCombatTokens = combatTokens?.map((token) => ({
           id: token?.docId || "",
@@ -116,7 +127,7 @@ const CombatMap = ({combatIdOverride = "", isPlayer = false}) => {
         setExtraTokens(extraTokensFromCombatTokens || [])
         setTokens(tokensFromCombat);
     }
-    }, [combatMap, combat, combatCharacters, combatTokens]);
+    }, [combatMap, combat, combatCharacters, combatTokens, campaignCharacters]);
 
     function handleDragEnd(ev: any) {
       let token = tokens.find((x: DroppableToken) => x.id === ev.active.id);
@@ -236,7 +247,13 @@ const CombatMap = ({combatIdOverride = "", isPlayer = false}) => {
                       top: `${data?.position?.y * scale}px`
                     }}
                     id={token.id}
-                    content={<CharacterTokenContent isPlayer={isPlayer} character={data} tokenSize={(combatMap?.tokenSize || 32) * (scale || 1)} isCurrentTurn={currentTurnIndex === index && data?.playerDocId} />}
+                    content={
+                      <CharacterTokenContent
+                        isPlayer={isPlayer}
+                        character={data}
+                        tokenSize={(combatMap?.tokenSize || 32) * (scale || 1)}
+                        isCurrentTurn={currentTurnIndex === index && data?.playerDocId}
+                      />}
                   />
                 )})}
               </Map>

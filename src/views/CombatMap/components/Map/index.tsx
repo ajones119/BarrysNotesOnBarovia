@@ -91,10 +91,10 @@ const  Map = ({
           </div>
         </div>
         <div style={{position: "absolute", width, height, pointerEvents: drawing !== "drawing" ? "none" : undefined}}>
-            <DrawableCanvas pointColor={color} pointSize={drawSize} isErasing={eraserOn} disabled={drawing !== "drawing"} width={width} height={height} onDrawEnd={(data) => onSaveDraw(data || "")} loadData={lines || ""} />
+            <DrawableCanvas scale={scale} pointColor={color} pointSize={drawSize} isErasing={eraserOn} disabled={drawing !== "drawing"} width={width} height={height} onDrawEnd={(data) => onSaveDraw(data || "")} loadData={lines || ""} />
         </div>
         <div style={{position: "absolute", opacity: isPlayer ? 1 : 0.5, width, height, zIndex: 10, pointerEvents: drawing !== "fogOfWar" ? "none" : undefined}}>
-            <DrawableCanvas pointColor={color} pointSize={drawSize}  isErasing={eraserOn} disabled={drawing !== "fogOfWar"} width={width} height={height} onDrawEnd={(data) => onFogOfWarSaveDraw(data || "")} loadData={fogOfWar || ""} />
+            <DrawableCanvas scale={scale} pointColor={color} pointSize={drawSize}  isErasing={eraserOn} disabled={drawing !== "fogOfWar"} width={width} height={height} onDrawEnd={(data) => onFogOfWarSaveDraw(data || "")} loadData={fogOfWar || ""} />
         </div>
         
         {children}
