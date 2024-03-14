@@ -9,9 +9,10 @@ type DrawableCanvasProps = {
     pointSize?: number,
     pointColor?: string,
     isErasing?: boolean,
+    scale?: number
 }
 
-function DrawableCanvas({ width, height, onDrawEnd, loadData, disabled = false, pointSize = 1, pointColor = "black", isErasing = false }: DrawableCanvasProps) {
+function DrawableCanvas({ width, height, onDrawEnd, loadData, disabled = false, pointSize = 1, pointColor = "black", isErasing = false, scale = 1 }: DrawableCanvasProps) {
     const canvasRef = useRef<HTMLCanvasElement>(null);
     const contextRef = useRef<any>(null);
     const [isDrawing, setIsDrawing] = useState(false);
@@ -21,16 +22,16 @@ function DrawableCanvas({ width, height, onDrawEnd, loadData, disabled = false, 
         if (canvas) {
             //do i really need to double pixel density?
 
-            canvas.width = width;
-            canvas.height = height;
+            canvas.width = width/scale;
+            canvas.height = height/scale;
             canvas.style.width = `${width}px`;
             canvas.style.height = `${height}px`;
 
             const context = canvas.getContext("2d");
             if (context) {
                 context.clearRect(0,0,width,height);
-
-                //context?.scale(2,2);
+                console.log("SCALEING", context.scale)
+                //context?.scale(scale,scale);
                 context.lineCap = "round"
                 contextRef.current = context;
                 context.strokeStyle = pointColor;
@@ -55,8 +56,8 @@ function DrawableCanvas({ width, height, onDrawEnd, loadData, disabled = false, 
     const startDrawing = ({nativeEvent}: BaseSyntheticEvent<MouseEvent>) => {
         if (disabled) return;
 
-        const offsetX = nativeEvent.offsetX;
-        const offsetY = nativeEvent.offsetY;
+        const offsetX = nativeEvent.offsetX/scale;
+        const offsetY = nativeEvent.offsetY/scale;
         contextRef.current.beginPath();
         contextRef.current.moveTo(offsetX, offsetY)
         setIsDrawing(true);
@@ -76,10 +77,10 @@ function DrawableCanvas({ width, height, onDrawEnd, loadData, disabled = false, 
 
         if (isErasing) {
             contextRef.current.globalCompositeOperation = "destination-out";
-         }
+        }
 
-        const offsetX = nativeEvent?.offsetX;
-        const offsetY = nativeEvent.offsetY;
+        const offsetX = nativeEvent?.offsetX/scale;
+        const offsetY = nativeEvent.offsetY/scale;
         contextRef.current.lineTo(offsetX, offsetY);
         contextRef.current.stroke();
 

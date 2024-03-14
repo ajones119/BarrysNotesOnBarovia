@@ -147,30 +147,30 @@ const ConditionSelect = ({onChange, selectedValue, width = "200px", outlined = f
         variant="standard"
         renderValue={(selected: any) => (
             <Stack gap={1} direction="row" flexWrap="wrap">
-              {selected.map((value: string) => {
-                const condition = CONDITION_OPTIONS.find(option => option.value === value);
-                const label = condition?.label || "";
-                const icon = <FontAwesomeIcon icon={condition?.icon || faXmark} style={{color: theme.primary}} />
-                return(
-                    <Chip
-                        variant="outlined"
-                        style={{color: theme.primary, borderColor: theme.primary}}
-                        key={value}
-                        label={icons ? icon : label}
-                        onDelete={() =>
-                            onChange(
-                                selectedValue?.filter((item) => item !== value) || []
-                            )
-                        }
-                        deleteIcon={
-                            <FontAwesomeIcon
-                                icon={faXmark}
-                                style={{color: theme.primary}}
-                                onMouseDown={(event) => event.stopPropagation()}
-                            />
-                        }
-                    />
-                )})}
+                {selected.map((value: string) => {
+                    const condition = CONDITION_OPTIONS.find(option => option.value === value);
+                    const label = condition?.label || "";
+                    const icon = <FontAwesomeIcon icon={condition?.icon || faXmark} style={{color: theme.primary}} />
+                    return(
+                        <Chip
+                            variant="outlined"
+                            style={{color: theme.primary, borderColor: theme.primary}}
+                            key={value}
+                            label={icons ? icon : label}
+                            onDelete={() =>
+                                onChange(
+                                    selectedValue?.filter((item) => item !== value) || []
+                                )
+                            }
+                            deleteIcon={
+                                <FontAwesomeIcon
+                                    icon={faXmark}
+                                    style={{color: theme.primary}}
+                                    onMouseDown={(event) => event.stopPropagation()}
+                                />
+                            }
+                        />
+                    )})}
             </Stack>
         )}>
         { CONDITION_OPTIONS?.map((option) => (

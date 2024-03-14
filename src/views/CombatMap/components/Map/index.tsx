@@ -1,11 +1,10 @@
-import React, { ReactNode, useEffect, useRef } from "react";
+import React, { MouseEvent, ReactNode, useEffect, useMemo, useRef, useState } from "react";
 import css from "./Map.module.scss";
 import { COLORS_MAP } from "@components/ColorPicker/ColorPicker";
 import { CombatMap } from "@model/CombatMap";
 import GridCanvas from "@components/Canvas/Grid";
 import DrawableCanvas from "@components/Canvas/Drawable";
 import { useSearchParams } from "react-router-dom";
-import { size } from "@floating-ui/react";
 
 const CustomStyle = {
   display: "flex",
@@ -61,6 +60,7 @@ const  Map = ({
   const color = String(searchParams.get("color")) || "black";
   const drawSize = Number(searchParams.get("drawSize")) || 1;
   const eraserOn = searchParams.get("eraserOn") === "on" || false;
+  const isDrawing = drawing === "drawing" || drawing === "fogOfWar"
 
   if (!hideGrid) {
     for (let i = 0; i < rows * cols; i++) {
@@ -75,10 +75,12 @@ const  Map = ({
     backgroundColor: cover || !mapImage ?  mapColor: "transparent",
   }
 
+
   return (
-    <div style={{width: width * 1.5}}>
+    <div style={{width: width * 1.5,}}>
       <div
         ref={ref}
+        className={`${isDrawing && css.hideCursor}`}
         style={{...CustomStyle, height, width, ...styles, ...backgroundImageStyles, marginLeft: "20%", marginTop: "20%"}}
       >
         
@@ -91,10 +93,10 @@ const  Map = ({
           </div>
         </div>
         <div style={{position: "absolute", width, height, pointerEvents: drawing !== "drawing" ? "none" : undefined}}>
-            <DrawableCanvas pointColor={color} pointSize={drawSize} isErasing={eraserOn} disabled={drawing !== "drawing"} width={width} height={height} onDrawEnd={(data) => onSaveDraw(data || "")} loadData={lines || ""} />
+            <DrawableCanvas scale={scale} pointColor={color} pointSize={drawSize} isErasing={eraserOn} disabled={drawing !== "drawing"} width={width} height={height} onDrawEnd={(data) => onSaveDraw(data || "")} loadData={lines || ""} />
         </div>
         <div style={{position: "absolute", opacity: isPlayer ? 1 : 0.5, width, height, zIndex: 10, pointerEvents: drawing !== "fogOfWar" ? "none" : undefined}}>
-            <DrawableCanvas pointColor={color} pointSize={drawSize}  isErasing={eraserOn} disabled={drawing !== "fogOfWar"} width={width} height={height} onDrawEnd={(data) => onFogOfWarSaveDraw(data || "")} loadData={fogOfWar || ""} />
+            <DrawableCanvas scale={scale} pointColor={color} pointSize={drawSize}  isErasing={eraserOn} disabled={drawing !== "fogOfWar"} width={width} height={height} onDrawEnd={(data) => onFogOfWarSaveDraw(data || "")} loadData={fogOfWar || ""} />
         </div>
         
         {children}

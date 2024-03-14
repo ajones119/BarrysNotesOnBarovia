@@ -38,7 +38,7 @@ export const NotesListItem = ({ note, characterImageURL, characterName }: NotesL
                 </div>
             </div>
             <div className={css.noteColumnContainer}>
-                <Button color="error" size="large" isLoading={isLoading} onClick={mutate}><FontAwesomeIcon icon={faTrash} /></Button>
+                <Button color="error" size="large" isLoading={isLoading} onClick={() => mutate()}><FontAwesomeIcon icon={faTrash} /></Button>
             </div>
         </div>
     )

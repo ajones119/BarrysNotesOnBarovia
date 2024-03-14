@@ -3,7 +3,7 @@ import css from "./Button.module.scss"
 import Spinner from '@components/Spinner';
 
 export declare interface ButtonProps {
-    onClick?: () => void
+    onClick?: (e?: Event) => void
     children: React.ReactNode;
     disabled?: boolean;
     animatedHover?: boolean;

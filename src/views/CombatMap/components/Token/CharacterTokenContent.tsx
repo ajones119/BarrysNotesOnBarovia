@@ -39,6 +39,7 @@ const CharacterTokenContent = ({ character, tokenSize = 16, isCurrentTurn = fals
     const size = TOKEN_SIZE_MULTIPLIERS[character?.size || "medium"] * tokenSize;
 
     const [isOpen, setIsOpen] = useState(false);
+    console.log("RENDER TOKEN")
 
     const { refs, floatingStyles, context } = useFloating({
         open: isOpen,
@@ -55,7 +56,7 @@ const CharacterTokenContent = ({ character, tokenSize = 16, isCurrentTurn = fals
     })
 
     // Event listeners to change the open state
-    const hover = useHover(context, { move: false });
+    const hover = useHover(context, { move: true });
     const focus = useFocus(context);
     const dismiss = useDismiss(context);
     // Role props for screen readers
@@ -162,7 +163,7 @@ const CharacterTokenContent = ({ character, tokenSize = 16, isCurrentTurn = fals
                         character?.shouldShowHealthBar && 
                         <div><HealthBar height={6} health={health} maxHealth={maxHealth} tempHealth={tempHealth}/></div>
                     }
-                    { getIconList(character).map(value => <FontAwesomeIcon className={css.tooltipCondIcon} icon={value?.icon} />) }
+                    { getIconList(character).map((value, index) => <FontAwesomeIcon key={`${index}-${character?.uniqueId || character?.playerDocId}`} className={css.tooltipCondIcon} icon={value?.icon} />) }
                 </div>
                 )}
             </FloatingPortal>

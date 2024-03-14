@@ -1,12 +1,10 @@
 import React, { useState } from "react";
 import { mutateCombatCharacter, useAddCombatCharacter, useCombat, useCombatCharacters, useEditCombat, useUpdateInitiative } from "@services/CombatService";
 import { useParams } from "react-router-dom";
-import useDeepCompareEffect from "use-deep-compare-effect";
 import css from "./DMInitiative.module.scss";
 import { TableCell, TableContainer, TableHead, TableRow } from "@mui/material";
 import { Typography } from "@components/Typography/Typography";
 import InitiativeTrackerTableRow from "./components/InitiativeTrackerTableRow";
-import { Combat } from "@model/Combat";
 import { useCampaign, useUpdateCampaign } from "@services/CampaignService";
 import { Button } from "@components/Button/Button";
 import { useCampaignCharacters } from "@services/CharacterService";

@@ -1,5 +1,5 @@
 import { mutateCombatCharacter, useCombat, useCombatCharacters, useEditCombat, useEditCombatCharacter, useUpdateInitiative } from "@services/CombatService";
-import React, { useEffect, useRef, useState } from "react";
+import React, { WheelEvent, WheelEventHandler, useEffect, useRef, useState } from "react";
 import { useParams, useSearchParams } from "react-router-dom";
 import css from "./CombatMap.module.scss"
 import {DndContext} from '@dnd-kit/core';
@@ -15,14 +15,15 @@ import CharacterTokenContent from "./components/Token/CharacterTokenContent";
 import useCombatMapStore from "./CombatMapStore";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEraser, faMinus, faPlus } from "@fortawesome/free-solid-svg-icons";
-import { mutateCombatToken, useCombatMap, useCombatMapTokens, useUpdateCombatMap } from "@services/CombatMapService";
+import { useCombatMap, useCombatMapTokens, useMutateCombatToken, useUpdateCombatMap } from "@services/CombatMapService";
 import { FullScreen, useFullScreenHandle } from "react-full-screen";
 import FloatingButtonContainer from "@components/FloatingButtonContainer";
 import Spinner from "@components/Spinner";
 import TokensDrawer from "./components/TokensDrawer";
-import { useHover } from 'usehooks-ts';
 import { useSpring, animated } from '@react-spring/web';
 import ColorPicker from "@components/ColorPicker/ColorPicker";
+import { useCampaignCharacters } from "@services/CharacterService";
+import { TextInput } from "@components/TextInput/TextInput";
 type DroppableToken = {
   id: string,
   data: any,
@@ -36,7 +37,7 @@ const CombatMap = ({combatIdOverride = "", isPlayer = false}) => {
     const scale = Number(searchParams.get("scale")) || 1;
     const drawing = String(searchParams.get("drawing")) || "";
     const color = String(searchParams.get("color")) || "black";
-    const drawSize = Number(searchParams.get("drawSize")) || 1;
+    const drawSize = Number(searchParams.get("drawSize")) || 0;
     const eraserOn = searchParams.get("eraserOn") === "on" || false;
 
     const [isSettingsDrawerOpen, setIsSettingsDrawerOpen] = useState(false);
@@ -47,12 +48,16 @@ const CombatMap = ({combatIdOverride = "", isPlayer = false}) => {
     const [selectedToken, setSelectedToken] = useState<DroppableToken| null>();
     const [cachedCoords, setCachedCoords] = useState<{x: number, y: number}| null>()
     const {currentMapCoordinates, setCurrentMapCoordinates} = useCombatMapStore();
+    const [altHeld, setAltHeld] = useState(false);
 
+    const {mutate: mutateCombatToken, isLoading: isMutating} = useMutateCombatToken()
     const { combat, isLoading, isRefetching } = useCombat(combatId);
     const { combatMap, isLoading: isMapLoading, isRefetching: isMapRefetching } = useCombatMap(combatId || combatIdOverride);
-    const {mutate: editMap} = useUpdateCombatMap(combatMap?.docId || "")
+    const {mutate: editMap} = useUpdateCombatMap(combatMap?.docId || "");
     const {combatCharacters = [], isLoading: isCharactersLoading} = useCombatCharacters(combatId);
-    const {tokens: combatTokens, isLoading: isTokensLoading} = useCombatMapTokens(combatMap?.docId || "")
+    const {tokens: combatTokens, isLoading: isTokensLoading} = useCombatMapTokens(combatMap?.docId || "", isMutating);
+    const { characters: campaignCharacters = [] } = useCampaignCharacters(combat?.campaignDocId || "");
+
     const [isHovered, setHovered] = useState(false);
 
     const springs = useSpring({
@@ -83,9 +88,97 @@ const CombatMap = ({combatIdOverride = "", isPlayer = false}) => {
         let newToken = { ...selectedToken }
         newToken.data.rotation += rotate;
 
-        mutateCombatToken(newToken.id, {data: {...newToken.data}})
+        mutateCombatToken({id: newToken.id, token: {data: {...newToken.data}}})
       }
     }
+
+    const handleKeyDown = (event: KeyboardEvent) => {      
+      if (event.altKey) {
+        if (event.repeat) return;
+        setAltHeld(true);
+      }
+
+      if (event.key === "ArrowUp" && altHeld) {
+        setSearchParams(searchParams => {
+          searchParams.set("scale", String((scale + 0.05).toFixed(2)));
+          return searchParams;
+        })
+      }
+
+      if (event.key === "ArrowDown" && altHeld) {
+        setSearchParams(searchParams => {
+          searchParams.set("scale", String((scale - 0.05).toFixed(2)));
+          return searchParams;
+        })
+      }
+
+      if (event.key === "l") {
+        if (event.repeat) return;
+
+        if (mapContainer.active){
+          mapContainer.exit();
+        } else {
+          mapContainer.enter();
+        }
+      }
+
+      if (!isPlayer) {
+        if (event.key === "d") {
+          setSearchParams(searchParams => {
+            searchParams.set("drawing", drawing === "drawing" ? "": "drawing");
+            return searchParams;
+          })
+        }
+
+        if (event.key === "f") {
+          setSearchParams(searchParams => {
+            searchParams.set("drawing", drawing === "fogOfWar" ? "": "fogOfWar");
+            return searchParams;
+          })
+        }
+
+        if (event.key === "e") {
+          setSearchParams(searchParams => {
+            searchParams.set("eraserOn", eraserOn ? "off": "on");
+            return searchParams;
+          })
+        }
+      }
+    };
+
+    const handleWheel = (event: WheelEvent<HTMLDivElement>) => {
+      if (altHeld) {
+        //look into type error here
+        mapRef?.current?.scrollBy({x: -event?.deltaX, y: -event?.deltaY} as any)
+        if (event.deltaY < 0) {
+          setSearchParams(searchParams => {
+            searchParams.set("scale", String((scale + 0.05).toFixed(2)));
+            return searchParams;
+          })
+        } else if (event.deltaY > 0) {
+          setSearchParams(searchParams => {
+            searchParams.set("scale", String((scale - 0.05).toFixed(2)));
+            return searchParams;
+          })
+        }
+      }
+    };
+
+    const handleKeyUp = (event: KeyboardEvent) => {
+      if (!event.altKey) {
+        setAltHeld(false);
+      }
+    };
+
+    useEffect(() => {
+      window.addEventListener('keydown', handleKeyDown);
+      window.addEventListener('keyup', handleKeyUp);
+  
+      return () => {
+        window.removeEventListener('keydown', handleKeyDown);
+        window.removeEventListener('keyup', handleKeyUp);
+      };
+    }, [scale, drawing, eraserOn, mapContainer.active])
 
     useEffect(() => {
       mapRef?.current?.scrollTo(currentMapCoordinates?.x || 0, currentMapCoordinates?.y || 0)
@@ -100,14 +193,23 @@ const CombatMap = ({combatIdOverride = "", isPlayer = false}) => {
 
     // set local data from remote
     useDeepCompareEffectNoCheck(() => {
-      if (!isMapLoading && !isMapRefetching && !isLoading && !isRefetching) {
-        const tokensFromCombat = combatCharacters?.map((character, index) => ({
-          id: character?.docId || "",
-          data: {
-            ...combatCharacters[index],
-            ...character
+      if (!isMapLoading && !isMapRefetching && !isLoading && !isRefetching && !isMutating) {
+        const tokensFromCombat = combatCharacters?.map((character, index) => {
+          const isPC = character?.playerDocId;
+          let overrides: any = character;
+
+          if (isPC) {
+            overrides = campaignCharacters.find(c => c.docId === character?.playerDocId) || character;
           }
-        }))
+
+          return {
+            id: character?.docId || "",
+            data: {
+              ...combatCharacters[index],
+              ...overrides,
+              imageURL: overrides?.characterImageURL || overrides?.imageURL
+            }
+        }})
 
         const extraTokensFromCombatTokens = combatTokens?.map((token) => ({
           id: token?.docId || "",
@@ -116,7 +218,7 @@ const CombatMap = ({combatIdOverride = "", isPlayer = false}) => {
         setExtraTokens(extraTokensFromCombatTokens || [])
         setTokens(tokensFromCombat);
     }
-    }, [combatMap, combat, combatCharacters, combatTokens]);
+    }, [combatMap, combat, combatCharacters, combatTokens, campaignCharacters]);
 
     function handleDragEnd(ev: any) {
       let token = tokens.find((x: DroppableToken) => x.id === ev.active.id);
@@ -149,7 +251,7 @@ const CombatMap = ({combatIdOverride = "", isPlayer = false}) => {
               y:( extraToken?.data?.position?.y + ev.delta.y / scale)
             }
           }
-          mutateCombatToken(extraToken.id, {data: {...extraToken.data}})
+          mutateCombatToken({id: extraToken.id, token: {data: {...extraToken.data}}})
         }
 
       }
@@ -186,11 +288,10 @@ const CombatMap = ({combatIdOverride = "", isPlayer = false}) => {
 
     return (
       <div>
-        <div>
-          <Spacer height={8} />
-        </div>
+        <Typography color="light" size="large">{combat?.name}</Typography>
+        <Spacer height={8} />
         <FullScreen handle={mapContainer}>
-          <div className={`${css.CombatMapContainer} ${mapContainer.active ? css.fullscreen : null}`} ref={mapRef} id="CombatMap">
+          <div className={`${css.CombatMapContainer} ${mapContainer.active ? css.fullscreen : null}`} ref={mapRef} id="CombatMap" onWheel={handleWheel}>
             <DndContext
               onDragEnd={handleDragEnd}
               onDragStart={handleDragStart}
@@ -206,25 +307,13 @@ const CombatMap = ({combatIdOverride = "", isPlayer = false}) => {
                 isPlayer={isPlayer}
               >
                 {extraTokens.map((token) => (
-                  <Token
-                    styles={{
-                      position: "absolute",
-                      left: `${token?.data?.position?.x * scale}px`,
-                      top: `${token?.data?.position?.y * scale}px`
-                    }}
-                    id={token.id}
-                    disabled={token?.disabled}
-                    content={
+                  
                     <ExtraTokenContent
-                      image={token.data.image}
-                      tokenSize={(combatMap?.tokenSize || 32) * (scale || 1)}
-                      height={token.data.length}
-                      width={token.data.width}
-                      color={token.data?.color || null}
-                      opacity={token.data?.opacity || null}
-                      rotate={token?.data?.rotation || null}
-                    />}
-                  />
+                      token={token}
+                      scale={scale}
+                      baseTokenSize={combatMap.tokenSize || 30}
+                      isPlayer={isPlayer}
+                    />
                 ))}
                 {tokens.map((token, index) => {
                   const { data } = token;
@@ -236,7 +325,13 @@ const CombatMap = ({combatIdOverride = "", isPlayer = false}) => {
                       top: `${data?.position?.y * scale}px`
                     }}
                     id={token.id}
-                    content={<CharacterTokenContent isPlayer={isPlayer} character={data} tokenSize={(combatMap?.tokenSize || 32) * (scale || 1)} isCurrentTurn={currentTurnIndex === index && data?.playerDocId} />}
+                    content={
+                      <CharacterTokenContent
+                        isPlayer={isPlayer}
+                        character={data}
+                        tokenSize={(combatMap?.tokenSize || 32) * (scale || 1)}
+                        isCurrentTurn={currentTurnIndex === index && data?.playerDocId}
+                      />}
                   />
                 )})}
               </Map>
@@ -248,7 +343,7 @@ const CombatMap = ({combatIdOverride = "", isPlayer = false}) => {
               {!mapContainer.active && <Button onClick={() => setIsTokenDrawerOpen(true)} color="secondary" animatedHover><Typography color="light">Tokens</Typography></Button>}
               { !isPlayer && 
                 <div onMouseEnter={() => setHovered(true)} onMouseLeave={() => setHovered(false)}>
-                    <div style={{position: "relative", marginBottom: -36, zIndex: 2, display: "flex"}}>
+                    <div style={{position: "relative", marginBottom: -50, zIndex: 2, display: "flex"}}>
                       <Button onClick={() => setSearchParams(searchParams => {
                           const nextState = drawing === "drawing" ? "fogOfWar" : drawing === "fogOfWar" ? "" : "drawing";
 
@@ -271,22 +366,11 @@ const CombatMap = ({combatIdOverride = "", isPlayer = false}) => {
                             return searchParams;
                           })
                         }}/>
-                        <Button onClick={() => setSearchParams(searchParams => {
-                            let nextState = drawSize >= 100 ? 0 : drawSize;
-                            if (nextState < 5) {
-                              nextState ++;
-                            } else if (nextState < 20) {
-                              nextState += 5;
-                            } else {
-                              nextState += 10
-                            }
-
-                            searchParams.set("drawSize", String(nextState));
+                        <TextInput className={css.drawSizeInput} number placeholder="Size" value={drawSize} onChange={(value) => setSearchParams(searchParams => {
+                            searchParams.set("drawSize", String(value));
                             return searchParams;
                           })
-                        }>
-                          <Typography>{drawSize}px</Typography>
-                        </Button>
+                        } />
                       </div>
                     </animated.div>
                 </div>
@@ -323,7 +407,6 @@ const CombatMap = ({combatIdOverride = "", isPlayer = false}) => {
               isOpen={isSettingsDrawerOpen}
               onClose={() => setIsSettingsDrawerOpen(false)}
               combatId={combatId}
-              isPlayer={isPlayer}
             />
             <TokensDrawer
               isOpen={isTokenDrawerOpen}
