@@ -1,4 +1,3 @@
-import { useEffect } from "react";
 import { useLocalStorage } from "usehooks-ts";
 
 const useLocalCharacter = (campaignId: string) => {

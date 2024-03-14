@@ -22,7 +22,7 @@ declare interface CreateNoteModalProps {
     seedNotes?: Note[],
 };
 
-const DEFAULT_NOTE = {date: new Date()}
+export const DEFAULT_NOTE = {date: new Date()}
 
 const CreateNoteModal = ({isOpen, onClose, campaignId, characters, seedNotes = []}: CreateNoteModalProps) => {
     const {selectedCharacter} = useLocalCharacter(campaignId)

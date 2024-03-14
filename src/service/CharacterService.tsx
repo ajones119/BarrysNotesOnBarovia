@@ -19,6 +19,7 @@ export function useCharacter(characterDocId = "") {
     ["singleCharacter", characterDocId],
     ref,
     { subscribe: true },
+    {enabled: true}
   );
 
   const { data, isLoading } = campaignQuery;

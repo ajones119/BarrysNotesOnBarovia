@@ -10,9 +10,10 @@ declare interface TextEditorProps {
     placeholder?: string;
     preview?: "edit" | "live" | "preview";
     height: number;
+    hideToolbar?: boolean
 }
 
-const TextEditor = ({value, onChange, placeholder = "Please enter Markdown text", preview = "live", height = 200}: TextEditorProps) => {
+const TextEditor = ({value, onChange, placeholder = "Please enter Markdown text", preview = "live", height = 200, hideToolbar = false}: TextEditorProps) => {
     return (
         <MDEditor
           data-color-mode='dark'
@@ -27,6 +28,8 @@ const TextEditor = ({value, onChange, placeholder = "Please enter Markdown text"
           preview={preview}
           height={height}
           className={css.editor}
+          hideToolbar={hideToolbar}
+          
           
         />
     );

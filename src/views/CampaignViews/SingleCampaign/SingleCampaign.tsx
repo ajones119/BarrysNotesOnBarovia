@@ -12,6 +12,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBook, faEarthAmericas, faMagnifyingGlassLocation, faSkullCrossbones } from '@fortawesome/free-solid-svg-icons';
 import { faCircleUser } from '@fortawesome/free-regular-svg-icons';
 import Combats from './Tabs/InitiativeTracker/Combats';
+import CharacterOverlayTray from '@components/Drawer/Tray/CharacterOverlayTray';
 
 const getTabs = () => [
     {
@@ -47,6 +48,7 @@ const SingleCampaign = () => {
 
     return (
         <div className={css.singleCampaign}>
+            <CharacterOverlayTray />
             <Tabs currentTab={tabKey} disableTabMenu tabs={getTabs()} onChange={(tabKey) => navigate(`/Campaigns/${CampaignId}/${tabKey}`)} />
         </div>
     );

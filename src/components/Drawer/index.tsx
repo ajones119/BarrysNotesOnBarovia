@@ -8,7 +8,7 @@ export declare interface DrawerProps {
     isOpen?: boolean;
     onClose?: () => void;
     children?: ReactNode
-    side?: "bottom" | "left";
+    side?: "bottom" | "left" | "right";
 }
 
 const Drawer = ({ onClose = () => { }, side = "left", children, isOpen }: DrawerProps) => {

@@ -13,16 +13,14 @@ import { useCombatMap, useUpdateCombatMap } from "@services/CombatMapService";
 
 declare interface SettingsDrawerProps extends DrawerProps {
     combatId: string,
-    isPlayer?: boolean
 };
 
 const SettingsDrawer = ({
     isOpen,
     onClose,
     combatId,
-    isPlayer = false
 }: SettingsDrawerProps) => {
-    const { combatMap, isLoading: isMapLoading, isRefetching: isMapRefetching } = useCombatMap(combatId);
+    const { combatMap } = useCombatMap(combatId);
     const [localMapSettings, setLocalMapSettings] = useState<CombatMap>({tokenSize: 30, gridLineWidth: 1, ...combatMap})
     const {mutate: setMap} = useUpdateCombatMap(combatMap?.docId || "");
 
@@ -50,7 +48,7 @@ const SettingsDrawer = ({
         <Drawer
             isOpen={isOpen}
             onClose={onClose}
-            side="left"
+            side="right"
         >
             <div className={css.settingsDrawerContainer}>
                 { localMapSettings?.autoGrid ? (

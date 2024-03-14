@@ -73,10 +73,15 @@ export const useDeleteCombatToken = () => {
     })
 }
 
-export const useCombatMapTokens = (combatMapDocId: string) => {
+export const useCombatMapTokens = (combatMapDocId: string, disabled = false) => {
     const ref = query(collection(firestore, "combatTokens"), where("combatMapDocId", "==", combatMapDocId));
 
-    const CombatTokensQuery = useFirestoreQuery([`${combatMapDocId}-campaignCombatTokensList`], ref, { subscribe: true });
+    const CombatTokensQuery = useFirestoreQuery(
+        [`${combatMapDocId}-campaignCombatTokensList`, "disabled"],
+        ref,
+        { subscribe: true },
+        {enabled: !disabled}
+        );
 
     const { data, isLoading, isRefetching, refetch } = CombatTokensQuery;
 
@@ -88,9 +93,17 @@ export const useCombatMapTokens = (combatMapDocId: string) => {
 }
 
 export const mutateCombatToken = async (docId: string, newCombatToken: Partial<CombatToken>) => {
+    console.log("SET TOKENS, SET")
     if (docId) {
         const ref = doc(firestore, "combatTokens", docId);
         await setDoc(ref, {...newCombatToken}, {merge: true})
     }
+}
+
+export const useMutateCombatToken = () => {
+    return useMutation({
+        mutationKey: ["combat-token"],
+        mutationFn: async ({id, token}: {id: string, token: Partial<CombatToken>}) => await mutateCombatToken(id, token)
+    });
 }
 
