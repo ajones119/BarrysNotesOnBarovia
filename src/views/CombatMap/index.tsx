@@ -57,6 +57,7 @@ const CombatMap = ({combatIdOverride = "", isPlayer = false}) => {
     const {tokens: combatTokens, isLoading: isTokensLoading} = useCombatMapTokens(combatMap?.docId || "", isMutating);
     const { characters: campaignCharacters = [] } = useCampaignCharacters(combat?.campaignDocId || "");
     const [isHovered, setHovered] = useState(false);
+    const [hasMovement, setHasMovement] = useState(false);
 
     const springs = useSpring({
         translateY: isHovered ? -40 : 0,
@@ -192,6 +193,7 @@ const CombatMap = ({combatIdOverride = "", isPlayer = false}) => {
     // set local data from remote
     useDeepCompareEffectNoCheck(() => {
       if (!isMapLoading && !isMapRefetching && !isLoading && !isRefetching && !isMutating) {
+        console.log("Update from DB")
         const tokensFromCombat = combatCharacters?.map((character, index) => {
           const isPC = character?.playerDocId;
           //clean up types here
@@ -217,31 +219,10 @@ const CombatMap = ({combatIdOverride = "", isPlayer = false}) => {
         setExtraTokens(extraTokensFromCombatTokens || [])
         setTokens(tokensFromCombat);
     }
-    }, [combatMap, combat, combatCharacters, combatTokens, campaignCharacters]);
-
-    const handleSocketTokenUpdate = (tokenId: string, x: number, y: number) => {
-      setTokens(tokens.map(token => {
-        if (token.id === tokenId) {
-          token.data.position = {x, y}
-          return token;
-        } else {
-          return token
-        }
-      }))
-
-      setExtraTokens(extraTokens.map(token => {
-        if (token.id === tokenId) {
-          token.data.position = {x, y}
-          return token;
-        } else {
-          return token
-        }
-      }))
-    }
-
-    const {updateTokenPosition} = useCombatMapSocketService(CampaignId, handleSocketTokenUpdate);
+    }, [combatMap, combat, combatCharacters, combatTokens, campaignCharacters, selectedToken  ]);
 
     function handleDragEnd(ev: any) {
+      console.log("HANDLE DRAG END")
       let token = tokens.find((x: DroppableToken) => x.id === ev.active.id);
       if (token) {
         token["data"]["position"] = {
@@ -280,6 +261,7 @@ const CombatMap = ({combatIdOverride = "", isPlayer = false}) => {
     }
 
     const handleDragStart = (ev: any) => {
+      console.log("HANDLE DRAG START")
       let extraToken = extraTokens.find((x: DroppableToken) => x.id === ev.active.id);
       let characterToken = tokens.find((x: DroppableToken) => x.id === ev.active.id);
 
@@ -290,12 +272,47 @@ const CombatMap = ({combatIdOverride = "", isPlayer = false}) => {
       }
     }
 
+    const handleSocketTokenUpdate = (tokenId: string, x: number, y: number) => {
+      console.log("UPDATE FROM SOCKET", tokens.length, extraTokens.length)
+      setTokens(tokens.map(token => {
+        if (token.id === tokenId) {
+          token.data.position = {x, y}
+          return token;
+        } else {
+          return token
+        }
+      }))
+
+      setExtraTokens(extraTokens.map(token => {
+        if (token.id === tokenId) {
+          token.data.position = {x, y}
+          return token;
+        } else {
+          return token
+        }
+      }))
+    }
+
+    const {updateTokenPosition, socket} = useCombatMapSocketService(CampaignId, handleSocketTokenUpdate, {tokens, extraTokens});
+
+    useEffect(() => {
+      if (socket) {
+          socket?.on("recieve_combat_token_position", (data) => {
+              console.log("HANDLE GET")
+              socket.id !== data?.senderId && handleSocketTokenUpdate(data?.tokenId, data?.x, data?.y)
+          })
+      }
+  }, [socket]);
+
     const handleDragMove = (event: any) => {      
+      console.log("HANDLE DRAG MOVE")
       const x = (selectedToken?.data?.position.x + event?.delta?.x/scale);
       const y = (selectedToken?.data?.position.y + event?.delta?.y/scale);
 
       updateTokenPosition(event.active.id, x, y)
     }
+
+
 
     if (isLoading || isMapLoading || isCharactersLoading || isTokensLoading) {
       return <Spinner />
@@ -338,7 +355,7 @@ const CombatMap = ({combatIdOverride = "", isPlayer = false}) => {
                     <ExtraTokenContent
                       token={token}
                       scale={scale}
-                      baseTokenSize={combatMap.tokenSize || 30}
+                      baseTokenSize={(combatMap.tokenSize || 30) * (scale || 1)}
                       isPlayer={isPlayer}
                     />
                 ))}

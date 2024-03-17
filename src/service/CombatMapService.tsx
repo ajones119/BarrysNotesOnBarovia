@@ -7,6 +7,7 @@ import { uploadBytes, ref as storageRef, getDownloadURL } from "firebase/storage
 import { Socket, connect } from "socket.io-client";
 import { API_URL, LOCAL_API_URL } from "./constants";
 import { useEffect, useRef } from "react";
+import useDeepCompareEffect from "use-deep-compare-effect";
 
 export const useUpdateCombatMap = (docId: string) => {
     return useMutation({
@@ -111,7 +112,7 @@ export const useMutateCombatToken = () => {
 
 
 //SOCKET SERVICES
-export const useCombatMapSocketService = (campaignDocId: string, onRecievedPositionUpdate: (tokenId: string, x: number, y: number) => void) => {
+export const useCombatMapSocketService = (campaignDocId: string, onRecievedPositionUpdate: (tokenId: string, x: number, y: number) => void, dependency: any) => {
     const socketRef = useRef<Socket|null>(null)
 
     const joinCombatSocketRoom = () => {
@@ -128,29 +129,32 @@ export const useCombatMapSocketService = (campaignDocId: string, onRecievedPosit
     }
 
     useEffect(() => {
-        socketRef.current = connect(API_URL);
+        socketRef.current = connect(LOCAL_API_URL);
     }, []);
 
     useEffect(() => {
         if (socketRef?.current?.connected) {
             joinCombatSocketRoom();
         } else {
-            socketRef.current = connect(API_URL);
+            socketRef.current = connect(LOCAL_API_URL);
         }
     }, [socketRef?.current?.connected])
 
     
 
-    useEffect(() => {
+    useDeepCompareEffect(() => {
         if (socketRef.current) {
             socketRef.current?.on("recieve_combat_token_position", (data) => {
+                console.log("HANDLE GET")
                 socketRef?.current?.id !== data?.senderId && onRecievedPositionUpdate(data?.tokenId, data?.x, data?.y)
             })
         }
-    }, [socketRef.current]);
+    }, [socketRef.current, dependency]);
 
     return {
-        updateTokenPosition
+        updateTokenPosition,
+        socket: socketRef.current,
+        isConnected: socketRef.current?.connected
     }
 
 }

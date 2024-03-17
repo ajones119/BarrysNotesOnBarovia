@@ -30,9 +30,8 @@ const PlayerInitiative = () => {
 
     let character = searchParams.get("characterId") && characters?.find(char => char.docId === searchParams.get("characterId")) || null;
     if (!character) {
-        console.log(character, localCharacterId)
         character = localCharacterId && characters?.find(char => char.docId === localCharacterId) || null;
-        console.log(character)
+
     }
 
     let nextPlayerDocId: string | null = null;
