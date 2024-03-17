@@ -22,14 +22,14 @@ import CampaignPicker from "@components/CampaignPicker/CampaignPicker";
 import FileInput from "@components/FileInput";
 
 declare interface PlayerCharacterDrawerProps extends DrawerProps {
-  editCharacter?: PlayerCharacter | null;
+  selectedCharacter?: PlayerCharacter | null;
   campaignId?: string
 }
 
 const PlayerCharacterDrawer = ({
   isOpen,
   onClose = () => {},
-  editCharacter,
+  selectedCharacter,
   campaignId
 }: PlayerCharacterDrawerProps) => {
   const [character, setCharacter] = useState<PlayerCharacter>({
@@ -47,7 +47,7 @@ const PlayerCharacterDrawer = ({
 
     useEffect(() => {
         setCharacter(
-            editCharacter || {
+            selectedCharacter || {
               name: "",
               abilityScores: BASE_ABILITY_SCORES,
               campaignDocId: campaignId || ""
@@ -75,7 +75,7 @@ const PlayerCharacterDrawer = ({
               color="success"
               isLoading={isLoading}
               onClick={() => {
-                editCharacter ? edit(character) : create(character);
+                selectedCharacter ? edit(character) : create(character);
               }}
             >
               <Typography color="light">
