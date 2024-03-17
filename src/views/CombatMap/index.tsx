@@ -1,5 +1,5 @@
-import { mutateCombatCharacter, useCombat, useCombatCharacters, useEditCombat, useEditCombatCharacter, useUpdateInitiative } from "@services/CombatService";
-import React, { WheelEvent, WheelEventHandler, useEffect, useRef, useState } from "react";
+import { mutateCombatCharacter, useCombat, useCombatCharacters } from "@services/CombatService";
+import React, { WheelEvent, useEffect, useRef, useState } from "react";
 import { useParams, useSearchParams } from "react-router-dom";
 import css from "./CombatMap.module.scss"
 import {DndContext} from '@dnd-kit/core';
@@ -15,7 +15,7 @@ import CharacterTokenContent from "./components/Token/CharacterTokenContent";
 import useCombatMapStore from "./CombatMapStore";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEraser, faMinus, faPlus } from "@fortawesome/free-solid-svg-icons";
-import { useCombatMap, useCombatMapTokens, useMutateCombatToken, useUpdateCombatMap } from "@services/CombatMapService";
+import { useCombatMap, useCombatMapSocketService, useCombatMapTokens, useMutateCombatToken, useUpdateCombatMap } from "@services/CombatMapService";
 import { FullScreen, useFullScreenHandle } from "react-full-screen";
 import FloatingButtonContainer from "@components/FloatingButtonContainer";
 import Spinner from "@components/Spinner";
@@ -32,7 +32,7 @@ type DroppableToken = {
 
 const CombatMap = ({combatIdOverride = "", isPlayer = false}) => {
     const mapContainer = useFullScreenHandle();
-    const { combatId = combatIdOverride } = useParams();
+    const { combatId = combatIdOverride, CampaignId = "" } = useParams();
     const [searchParams, setSearchParams] = useSearchParams();
     const scale = Number(searchParams.get("scale")) || 1;
     const drawing = String(searchParams.get("drawing")) || "";
@@ -46,7 +46,6 @@ const CombatMap = ({combatIdOverride = "", isPlayer = false}) => {
     const [tokens, setTokens] = useState<DroppableToken[]>([]);
     const [extraTokens, setExtraTokens] = useState<DroppableToken[]>([]);
     const [selectedToken, setSelectedToken] = useState<DroppableToken| null>();
-    const [cachedCoords, setCachedCoords] = useState<{x: number, y: number}| null>()
     const {currentMapCoordinates, setCurrentMapCoordinates} = useCombatMapStore();
     const [altHeld, setAltHeld] = useState(false);
 
@@ -57,7 +56,6 @@ const CombatMap = ({combatIdOverride = "", isPlayer = false}) => {
     const {combatCharacters = [], isLoading: isCharactersLoading} = useCombatCharacters(combatId);
     const {tokens: combatTokens, isLoading: isTokensLoading} = useCombatMapTokens(combatMap?.docId || "", isMutating);
     const { characters: campaignCharacters = [] } = useCampaignCharacters(combat?.campaignDocId || "");
-
     const [isHovered, setHovered] = useState(false);
 
     const springs = useSpring({
@@ -196,6 +194,7 @@ const CombatMap = ({combatIdOverride = "", isPlayer = false}) => {
       if (!isMapLoading && !isMapRefetching && !isLoading && !isRefetching && !isMutating) {
         const tokensFromCombat = combatCharacters?.map((character, index) => {
           const isPC = character?.playerDocId;
+          //clean up types here
           let overrides: any = character;
 
           if (isPC) {
@@ -219,6 +218,28 @@ const CombatMap = ({combatIdOverride = "", isPlayer = false}) => {
         setTokens(tokensFromCombat);
     }
     }, [combatMap, combat, combatCharacters, combatTokens, campaignCharacters]);
+
+    const handleSocketTokenUpdate = (tokenId: string, x: number, y: number) => {
+      setTokens(tokens.map(token => {
+        if (token.id === tokenId) {
+          token.data.position = {x, y}
+          return token;
+        } else {
+          return token
+        }
+      }))
+
+      setExtraTokens(extraTokens.map(token => {
+        if (token.id === tokenId) {
+          token.data.position = {x, y}
+          return token;
+        } else {
+          return token
+        }
+      }))
+    }
+
+    const {updateTokenPosition} = useCombatMapSocketService(CampaignId, handleSocketTokenUpdate);
 
     function handleDragEnd(ev: any) {
       let token = tokens.find((x: DroppableToken) => x.id === ev.active.id);
@@ -253,7 +274,6 @@ const CombatMap = ({combatIdOverride = "", isPlayer = false}) => {
           }
           mutateCombatToken({id: extraToken.id, token: {data: {...extraToken.data}}})
         }
-
       }
 
       setSelectedToken(null);
@@ -261,18 +281,25 @@ const CombatMap = ({combatIdOverride = "", isPlayer = false}) => {
 
     const handleDragStart = (ev: any) => {
       let extraToken = extraTokens.find((x: DroppableToken) => x.id === ev.active.id);
+      let characterToken = tokens.find((x: DroppableToken) => x.id === ev.active.id);
+
       if (extraToken) {
         setSelectedToken({...extraToken});
-        setCachedCoords({x: extraToken?.data?.position.x, y: extraToken?.data?.position.y})
+      } else if (characterToken) {
+        setSelectedToken(characterToken);
       }
+    }
+
+    const handleDragMove = (event: any) => {      
+      const x = (selectedToken?.data?.position.x + event?.delta?.x/scale);
+      const y = (selectedToken?.data?.position.y + event?.delta?.y/scale);
+
+      updateTokenPosition(event.active.id, x, y)
     }
 
     if (isLoading || isMapLoading || isCharactersLoading || isTokensLoading) {
       return <Spinner />
     }
-
-    //work on this further, may need to implement something else for live movement info since db writes get crazy
-    const handleDragMove = (ev: any) => {}
 
     const getDrawingTitle = () => {
       let title = "Drawing Off";
@@ -295,7 +322,7 @@ const CombatMap = ({combatIdOverride = "", isPlayer = false}) => {
             <DndContext
               onDragEnd={handleDragEnd}
               onDragStart={handleDragStart}
-              //onDragMove={handleDragMove}
+              onDragMove={handleDragMove}
             >
               <Map
                 map={combatMap}

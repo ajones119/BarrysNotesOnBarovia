@@ -39,7 +39,6 @@ const CharacterTokenContent = ({ character, tokenSize = 16, isCurrentTurn = fals
     const size = TOKEN_SIZE_MULTIPLIERS[character?.size || "medium"] * tokenSize;
 
     const [isOpen, setIsOpen] = useState(false);
-    console.log("RENDER TOKEN")
 
     const { refs, floatingStyles, context } = useFloating({
         open: isOpen,
