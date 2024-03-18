@@ -57,7 +57,6 @@ const CombatMap = ({combatIdOverride = "", isPlayer = false}) => {
     const {tokens: combatTokens, isLoading: isTokensLoading} = useCombatMapTokens(combatMap?.docId || "", isMutating);
     const { characters: campaignCharacters = [] } = useCampaignCharacters(combat?.campaignDocId || "");
     const [isHovered, setHovered] = useState(false);
-    const [hasMovement, setHasMovement] = useState(false);
 
     const springs = useSpring({
         translateY: isHovered ? -40 : 0,
