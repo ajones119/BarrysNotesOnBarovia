@@ -129,14 +129,14 @@ export const useCombatMapSocketService = (campaignDocId: string, onRecievedPosit
     }
 
     useEffect(() => {
-        socketRef.current = connect(LOCAL_API_URL);
+        socketRef.current = connect(process.env.SERVER_URL || "");
     }, []);
 
     useEffect(() => {
         if (socketRef?.current?.connected) {
             joinCombatSocketRoom();
         } else {
-            socketRef.current = connect(LOCAL_API_URL);
+            socketRef.current = connect(process.env.SERVER_URL || "");
         }
     }, [socketRef?.current?.connected])
 

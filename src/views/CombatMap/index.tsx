@@ -222,7 +222,6 @@ const CombatMap = ({combatIdOverride = "", isPlayer = false}) => {
     }, [combatMap, combat, combatCharacters, combatTokens, campaignCharacters, selectedToken  ]);
 
     function handleDragEnd(ev: any) {
-      console.log("HANDLE DRAG END")
       let token = tokens.find((x: DroppableToken) => x.id === ev.active.id);
       if (token) {
         token["data"]["position"] = {
@@ -261,7 +260,6 @@ const CombatMap = ({combatIdOverride = "", isPlayer = false}) => {
     }
 
     const handleDragStart = (ev: any) => {
-      console.log("HANDLE DRAG START")
       let extraToken = extraTokens.find((x: DroppableToken) => x.id === ev.active.id);
       let characterToken = tokens.find((x: DroppableToken) => x.id === ev.active.id);
 
@@ -273,7 +271,6 @@ const CombatMap = ({combatIdOverride = "", isPlayer = false}) => {
     }
 
     const handleSocketTokenUpdate = (tokenId: string, x: number, y: number) => {
-      console.log("UPDATE FROM SOCKET", tokens.length, extraTokens.length)
       setTokens(tokens.map(token => {
         if (token.id === tokenId) {
           token.data.position = {x, y}
@@ -293,19 +290,20 @@ const CombatMap = ({combatIdOverride = "", isPlayer = false}) => {
       }))
     }
 
-    const {updateTokenPosition, socket} = useCombatMapSocketService(CampaignId, handleSocketTokenUpdate, {tokens, extraTokens});
+    const {updateTokenPosition} = useCombatMapSocketService(
+      CampaignId,
+      handleSocketTokenUpdate,
+      { tokens: tokens.concat(extraTokens).map(token => ({
+        id: token.id,
+        x: token.data.position.x,
+        y: token.data.position.y,
+        rotation: token?.data?.rotation
+      }))}
+    );
 
-    useEffect(() => {
-      if (socket) {
-          socket?.on("recieve_combat_token_position", (data) => {
-              console.log("HANDLE GET")
-              socket.id !== data?.senderId && handleSocketTokenUpdate(data?.tokenId, data?.x, data?.y)
-          })
-      }
-  }, [socket]);
+    
 
     const handleDragMove = (event: any) => {      
-      console.log("HANDLE DRAG MOVE")
       const x = (selectedToken?.data?.position.x + event?.delta?.x/scale);
       const y = (selectedToken?.data?.position.y + event?.delta?.y/scale);
 
