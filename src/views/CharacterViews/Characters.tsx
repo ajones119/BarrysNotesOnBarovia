@@ -82,7 +82,7 @@ export const Characters = () => {
       </Grid>
       <PlayerCharacterDrawer
         isOpen={openCharacterDrawer}
-        editCharacter={selectedCharacter}
+        selectedCharacter={selectedCharacter}
         onClose={() => {
           setSelectedCharacter(null)
           setOpenCharacterDrawer(!openCharacterDrawer)

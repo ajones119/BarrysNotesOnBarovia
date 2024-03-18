@@ -2,7 +2,7 @@ import React from "react";
 import ReactDOM from "react-dom/client";
 import "./index.css";
 import reportWebVitals from "./reportWebVitals";
-import { HashRouter } from "react-router-dom";
+import { BrowserRouter, HashRouter } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
 import App from "./App";
 import { QueryClient, QueryClientProvider } from "react-query";
@@ -14,10 +14,10 @@ const root = ReactDOM.createRoot(document.getElementById("root")!);
 root.render(
   <div className="master">
     <QueryClientProvider client={queryClient}>
-      <HashRouter>
+      <BrowserRouter>
         <ScrollToTop />
         {App()}
-      </HashRouter>
+      </BrowserRouter>
     </QueryClientProvider>
   </div>,
 );

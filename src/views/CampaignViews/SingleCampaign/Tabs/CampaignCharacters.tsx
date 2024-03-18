@@ -123,7 +123,7 @@ const CampaignCharacters = () => {
             />
             <PlayerCharacterDrawer
                 isOpen={isAddCharacterOpen}
-                editCharacter={selectedCharacter}
+                selectedCharacter={selectedCharacter}
                 campaignId={CampaignId}
                 onClose={() => {
                     setSelectedCharacter(null)
