@@ -145,7 +145,6 @@ export const useCombatMapSocketService = (campaignDocId: string, onRecievedPosit
     useDeepCompareEffect(() => {
         if (socketRef.current) {
             socketRef.current?.on("recieve_combat_token_position", (data) => {
-                console.log("HANDLE GET")
                 socketRef?.current?.id !== data?.senderId && onRecievedPositionUpdate(data?.tokenId, data?.x, data?.y)
             })
         }

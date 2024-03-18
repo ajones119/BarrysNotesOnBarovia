@@ -11,13 +11,7 @@ export const getCombatURL = (campaignDocId: string) => {
 }
 
 export const getCombatMapURL = (campaignDocId: string, combatDocId: string) => {
-    let url = `https://ajones119.github.io/BarrysNotesOnBarovia#/Initiative/Map/${campaignDocId}/${combatDocId}`;
-
-    if (window.location.hostname === "localhost") {
-        url = `http://localhost:3000/BarrysNotesOnBarovia/#/Initiative/Map/${campaignDocId}/${combatDocId}`
-    }
-
-    return url;
+    return `/Initiative/Map/${campaignDocId}/${combatDocId}`;
 }
 
 export const getCombatMapRoute = (campaignDocId: string) => {
