@@ -5,7 +5,7 @@ import { resolve } from 'path'
 
 export default defineConfig({
     // depending on your application, base can also be "/"
-    base: '/BarrysNotesOnBarovia/',
+    base: '/',
     plugins: [react(), viteTsconfigPaths()],
     server: {
         // this ensures that the browser opens upon server start
