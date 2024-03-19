@@ -273,12 +273,7 @@ const CombatMap = ({combatIdOverride = "", isPlayer = false}) => {
     const {updateTokenPosition} = useCombatMapSocketService(
       CampaignId,
       handleSocketTokenUpdate,
-      { tokens: tokens.concat(extraTokens).map(token => ({
-        id: token.id,
-        x: token.data.position.x,
-        y: token.data.position.y,
-        rotation: token?.data?.rotation
-      }))}
+      { tokens: tokens.concat(extraTokens) }
     );
 
     const handleDragMove = (event: any) => {      
