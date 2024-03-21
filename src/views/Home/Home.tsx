@@ -11,8 +11,9 @@ import css from "./Home.module.scss"
 import HomeCard from "./components/HomeCard";
 import { Typography } from "@components/Typography/Typography";
 
-export const Home = () => {
 
+
+export const Home = () => {
   return(
     <div className={css.homePage}>
       <Typography color="tertiary" size="xx-large" fontStyle="rough" underline>BARRY'S NOTES ON BAROVIA</Typography>

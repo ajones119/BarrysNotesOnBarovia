@@ -61,12 +61,9 @@ export const useEditCustomToken = (onSuccess: () => void) => {
                 })
                 const combatTokensQuery = query(collection(firestore, "combatTokens"), where("baseTokenId", "==", docId));
                 const combatTokensSnapshot = await getDocs(combatTokensQuery);
-                console.log("combatTokensSnapshot", combatTokensSnapshot.size)
                 if (combatTokensSnapshot.size > 0) {
-                    console.log("FOUND TOKJENS")
                     combatTokensSnapshot.forEach(async (doc) => {
                         const data = doc.data() as CombatToken;
-                        console.log("DATA", data)
 
                         delete(data?.docId);
                         await setDoc(doc.ref, {
@@ -80,7 +77,6 @@ export const useEditCustomToken = (onSuccess: () => void) => {
                             },
                         }, {merge: true})
                     });
-                    console.log("COMMITTING")
                 }
             });
         }

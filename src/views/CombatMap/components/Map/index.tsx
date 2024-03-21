@@ -1,4 +1,4 @@
-import React, { MouseEvent, ReactNode, useEffect, useMemo, useRef, useState } from "react";
+import React, { ReactNode, useRef } from "react";
 import css from "./Map.module.scss";
 import { COLORS_MAP } from "@components/ColorPicker/ColorPicker";
 import { CombatMap } from "@model/CombatMap";
