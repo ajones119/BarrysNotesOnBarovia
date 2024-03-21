@@ -30,7 +30,6 @@ function DrawableCanvas({ width, height, onDrawEnd, loadData, disabled = false, 
             const context = canvas.getContext("2d");
             if (context) {
                 context.clearRect(0,0,width,height);
-                console.log("SCALEING", context.scale)
                 //context?.scale(scale,scale);
                 context.lineCap = "round"
                 contextRef.current = context;
@@ -48,10 +47,6 @@ function DrawableCanvas({ width, height, onDrawEnd, loadData, disabled = false, 
         }
 
     }, [width, height, loadData, isErasing, disabled, pointColor, pointSize]);
-
-    useEffect(() => {
-       
-    }, [isErasing])
 
     const startDrawing = ({nativeEvent}: BaseSyntheticEvent<MouseEvent>) => {
         if (disabled) return;

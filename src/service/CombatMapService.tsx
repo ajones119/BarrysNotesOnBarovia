@@ -4,6 +4,10 @@ import { useFirestoreCollectionMutation, useFirestoreQuery } from "@react-query-
 import { CombatMap, CombatToken } from '@model/CombatMap';
 import { useMutation } from 'react-query';
 import { uploadBytes, ref as storageRef, getDownloadURL } from "firebase/storage";
+import { Socket, connect } from "socket.io-client";
+import { API_URL, LOCAL_API_URL } from "./constants";
+import { useEffect, useRef } from "react";
+import useDeepCompareEffect from "use-deep-compare-effect";
 
 export const useUpdateCombatMap = (docId: string) => {
     return useMutation({
@@ -93,7 +97,6 @@ export const useCombatMapTokens = (combatMapDocId: string, disabled = false) => 
 }
 
 export const mutateCombatToken = async (docId: string, newCombatToken: Partial<CombatToken>) => {
-    console.log("SET TOKENS, SET")
     if (docId) {
         const ref = doc(firestore, "combatTokens", docId);
         await setDoc(ref, {...newCombatToken}, {merge: true})
@@ -106,4 +109,58 @@ export const useMutateCombatToken = () => {
         mutationFn: async ({id, token}: {id: string, token: Partial<CombatToken>}) => await mutateCombatToken(id, token)
     });
 }
+
+
+//SOCKET SERVICES
+export const useCombatMapSocketService = (campaignDocId: string, onRecievedPositionUpdate: (tokenId: string, x: number, y: number) => void, dependency: any) => {
+    const socketRef = useRef<Socket|null>(null)
+
+    const joinCombatSocketRoom = () => {
+        socketRef.current?.emit("join_room", campaignDocId);
+    }
+
+    const updateTokenPosition = (tokenId: string, x: number, y: number) => {
+        socketRef.current?.emit("update_combat_token_position", {
+            room: campaignDocId,
+            tokenId,
+            x,
+            y
+        })
+    }
+
+    useEffect(() => {
+        socketRef.current = connect(process.env.SERVER_URL || "");
+    }, []);
+
+    useEffect(() => {
+        if (socketRef?.current?.connected) {
+            joinCombatSocketRoom();
+        } else {
+            socketRef.current = connect(process.env.SERVER_URL || "");
+        }
+    }, [socketRef?.current?.connected])
+
+    
+
+    useEffect(() => {
+        if (socketRef.current) {
+            socketRef.current?.on("recieve_combat_token_position", (data) => {
+                socketRef?.current?.id !== data?.senderId && onRecievedPositionUpdate(data?.tokenId, data?.x, data?.y)
+            })
+        }
+        
+        return(() => {
+            socketRef.current?.off('recieve_combat_token_position')
+        })
+    }, [socketRef.current, JSON.stringify({...dependency})]);
+
+    return {
+        updateTokenPosition,
+        socket: socketRef.current,
+        isConnected: socketRef.current?.connected
+    }
+
+}
+
+
 

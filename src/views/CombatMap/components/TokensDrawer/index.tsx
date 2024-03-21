@@ -66,7 +66,6 @@ const TokensDrawer = ({
         if (newToken?.baseTokenId) {
             token = {...token, baseTokenId: newToken?.baseTokenId}
         }
-        console.log("NEW", newToken)
         addCombatToken(token);
 
         setIsAddTokensDrawerOpen(false);

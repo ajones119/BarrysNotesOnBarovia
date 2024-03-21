@@ -1,5 +1,5 @@
-import { mutateCombatCharacter, useCombat, useCombatCharacters, useEditCombat, useEditCombatCharacter, useUpdateInitiative } from "@services/CombatService";
-import React, { WheelEvent, WheelEventHandler, useEffect, useRef, useState } from "react";
+import { mutateCombatCharacter, useCombat, useCombatCharacters } from "@services/CombatService";
+import React, { WheelEvent, useEffect, useRef, useState } from "react";
 import { useParams, useSearchParams } from "react-router-dom";
 import css from "./CombatMap.module.scss"
 import {DndContext} from '@dnd-kit/core';
@@ -8,22 +8,14 @@ import Map from "./components/Map";
 import { Typography } from "@components/Typography/Typography";
 import { useDeepCompareEffectNoCheck } from "use-deep-compare-effect";
 import { Spacer } from "@components/Spacer/Spacer";
-import { Button } from "@components/Button/Button";
 import ExtraTokenContent from "./components/Token/ExtraTokenContent";
-import SettingsDrawer from "./components/SettingsDrawer";
 import CharacterTokenContent from "./components/Token/CharacterTokenContent";
 import useCombatMapStore from "./CombatMapStore";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faEraser, faMinus, faPlus } from "@fortawesome/free-solid-svg-icons";
-import { useCombatMap, useCombatMapTokens, useMutateCombatToken, useUpdateCombatMap } from "@services/CombatMapService";
+import { useCombatMap, useCombatMapSocketService, useCombatMapTokens, useMutateCombatToken, useUpdateCombatMap } from "@services/CombatMapService";
 import { FullScreen, useFullScreenHandle } from "react-full-screen";
-import FloatingButtonContainer from "@components/FloatingButtonContainer";
 import Spinner from "@components/Spinner";
-import TokensDrawer from "./components/TokensDrawer";
-import { useSpring, animated } from '@react-spring/web';
-import ColorPicker from "@components/ColorPicker/ColorPicker";
 import { useCampaignCharacters } from "@services/CharacterService";
-import { TextInput } from "@components/TextInput/TextInput";
+import UtilButtons from "./components/UtilButtons";
 type DroppableToken = {
   id: string,
   data: any,
@@ -32,38 +24,26 @@ type DroppableToken = {
 
 const CombatMap = ({combatIdOverride = "", isPlayer = false}) => {
     const mapContainer = useFullScreenHandle();
-    const { combatId = combatIdOverride } = useParams();
+    const { combatId = combatIdOverride, CampaignId = "" } = useParams();
     const [searchParams, setSearchParams] = useSearchParams();
     const scale = Number(searchParams.get("scale")) || 1;
     const drawing = String(searchParams.get("drawing")) || "";
-    const color = String(searchParams.get("color")) || "black";
-    const drawSize = Number(searchParams.get("drawSize")) || 0;
     const eraserOn = searchParams.get("eraserOn") === "on" || false;
-
-    const [isSettingsDrawerOpen, setIsSettingsDrawerOpen] = useState(false);
-    const [isTokenDrawerOpen, setIsTokenDrawerOpen] = useState(false);
 
     const [tokens, setTokens] = useState<DroppableToken[]>([]);
     const [extraTokens, setExtraTokens] = useState<DroppableToken[]>([]);
     const [selectedToken, setSelectedToken] = useState<DroppableToken| null>();
-    const [cachedCoords, setCachedCoords] = useState<{x: number, y: number}| null>()
     const {currentMapCoordinates, setCurrentMapCoordinates} = useCombatMapStore();
     const [altHeld, setAltHeld] = useState(false);
 
     const {mutate: mutateCombatToken, isLoading: isMutating} = useMutateCombatToken()
-    const { combat, isLoading, isRefetching } = useCombat(combatId);
-    const { combatMap, isLoading: isMapLoading, isRefetching: isMapRefetching } = useCombatMap(combatId || combatIdOverride);
+    const { combat, isLoading } = useCombat(combatId);
+    const { combatMap, isLoading: isMapLoading } = useCombatMap(combatId || combatIdOverride);
     const {mutate: editMap} = useUpdateCombatMap(combatMap?.docId || "");
     const {combatCharacters = [], isLoading: isCharactersLoading} = useCombatCharacters(combatId);
     const {tokens: combatTokens, isLoading: isTokensLoading} = useCombatMapTokens(combatMap?.docId || "", isMutating);
     const { characters: campaignCharacters = [] } = useCampaignCharacters(combat?.campaignDocId || "");
 
-    const [isHovered, setHovered] = useState(false);
-
-    const springs = useSpring({
-        translateY: isHovered ? -40 : 0,
-        opacity: isHovered ? 1 : 0
-    })
     const { currentTurnIndex } = combat;
 
     const mapRef = useRef<HTMLDivElement>(null); 
@@ -193,9 +173,10 @@ const CombatMap = ({combatIdOverride = "", isPlayer = false}) => {
 
     // set local data from remote
     useDeepCompareEffectNoCheck(() => {
-      if (!isMapLoading && !isMapRefetching && !isLoading && !isRefetching && !isMutating) {
+      if (!isMapLoading && !isLoading && !isMutating) {
         const tokensFromCombat = combatCharacters?.map((character, index) => {
           const isPC = character?.playerDocId;
+          //clean up types here
           let overrides: any = character;
 
           if (isPC) {
@@ -218,7 +199,7 @@ const CombatMap = ({combatIdOverride = "", isPlayer = false}) => {
         setExtraTokens(extraTokensFromCombatTokens || [])
         setTokens(tokensFromCombat);
     }
-    }, [combatMap, combat, combatCharacters, combatTokens, campaignCharacters]);
+    }, [combatMap, combat, combatCharacters, combatTokens, campaignCharacters, selectedToken  ]);
 
     function handleDragEnd(ev: any) {
       let token = tokens.find((x: DroppableToken) => x.id === ev.active.id);
@@ -253,7 +234,6 @@ const CombatMap = ({combatIdOverride = "", isPlayer = false}) => {
           }
           mutateCombatToken({id: extraToken.id, token: {data: {...extraToken.data}}})
         }
-
       }
 
       setSelectedToken(null);
@@ -261,29 +241,50 @@ const CombatMap = ({combatIdOverride = "", isPlayer = false}) => {
 
     const handleDragStart = (ev: any) => {
       let extraToken = extraTokens.find((x: DroppableToken) => x.id === ev.active.id);
+      let characterToken = tokens.find((x: DroppableToken) => x.id === ev.active.id);
+
       if (extraToken) {
         setSelectedToken({...extraToken});
-        setCachedCoords({x: extraToken?.data?.position.x, y: extraToken?.data?.position.y})
+      } else if (characterToken) {
+        setSelectedToken(characterToken);
       }
+    }
+
+    const handleSocketTokenUpdate = (tokenId: string, x: number, y: number) => {
+      setTokens(tokens.map(token => {
+        if (token.id === tokenId) {
+          token.data.position = {x, y}
+          return token;
+        } else {
+          return token
+        }
+      }))
+
+      setExtraTokens(extraTokens.map(token => {
+        if (token.id === tokenId) {
+          token.data.position = {x, y}
+          return token;
+        } else {
+          return token
+        }
+      }))
+    }
+
+    const {updateTokenPosition} = useCombatMapSocketService(
+      CampaignId,
+      handleSocketTokenUpdate,
+      { tokens: tokens.concat(extraTokens) }
+    );
+
+    const handleDragMove = (event: any) => {      
+      const x = (selectedToken?.data?.position.x + event?.delta?.x/scale);
+      const y = (selectedToken?.data?.position.y + event?.delta?.y/scale);
+
+      updateTokenPosition(event.active.id, x, y)
     }
 
     if (isLoading || isMapLoading || isCharactersLoading || isTokensLoading) {
       return <Spinner />
-    }
-
-    //work on this further, may need to implement something else for live movement info since db writes get crazy
-    const handleDragMove = (ev: any) => {}
-
-    const getDrawingTitle = () => {
-      let title = "Drawing Off";
-      if (drawing === "drawing") {
-        title = "Drawing";
-      }
-      if (drawing === "fogOfWar") {
-        title = "Fog Of War"
-      }
-
-      return title;
     }
 
     return (
@@ -295,7 +296,7 @@ const CombatMap = ({combatIdOverride = "", isPlayer = false}) => {
             <DndContext
               onDragEnd={handleDragEnd}
               onDragStart={handleDragStart}
-              //onDragMove={handleDragMove}
+              onDragMove={handleDragMove}
             >
               <Map
                 map={combatMap}
@@ -311,7 +312,7 @@ const CombatMap = ({combatIdOverride = "", isPlayer = false}) => {
                     <ExtraTokenContent
                       token={token}
                       scale={scale}
-                      baseTokenSize={combatMap.tokenSize || 30}
+                      baseTokenSize={(combatMap.tokenSize || 30) * (scale || 1)}
                       isPlayer={isPlayer}
                     />
                 ))}
@@ -337,83 +338,12 @@ const CombatMap = ({combatIdOverride = "", isPlayer = false}) => {
               </Map>
             </DndContext>
           </div>
-          <FloatingButtonContainer>
-            <div className={css.buttonsContainer}>
-              {!mapContainer.active && !isPlayer && <Button onClick={() => setIsSettingsDrawerOpen(true)} color="secondary" animatedHover><Typography color="light">Settings</Typography></Button>}
-              {!mapContainer.active && <Button onClick={() => setIsTokenDrawerOpen(true)} color="secondary" animatedHover><Typography color="light">Tokens</Typography></Button>}
-              { !isPlayer && 
-                <div onMouseEnter={() => setHovered(true)} onMouseLeave={() => setHovered(false)}>
-                    <div style={{position: "relative", marginBottom: -50, zIndex: 2, display: "flex"}}>
-                      <Button onClick={() => setSearchParams(searchParams => {
-                          const nextState = drawing === "drawing" ? "fogOfWar" : drawing === "fogOfWar" ? "" : "drawing";
-
-                          searchParams.set("drawing", nextState);
-                          return searchParams;
-                        })
-                      } color={drawing ? "tertiary" : "secondary"} animatedHover><Typography color="light">{getDrawingTitle()}</Typography></Button>
-                      <Button onClick={() => setSearchParams(searchParams => {
-
-                          searchParams.set("eraserOn", eraserOn ? "off" : "on");
-                          return searchParams;
-                        })
-                      } color={eraserOn ? "success" : "error"} animatedHover><Typography color="light">{<FontAwesomeIcon icon={faEraser} />}</Typography></Button>
-                    </div>
-                    <animated.div style={springs}>
-                      <div className={css.hoveredDrawButtons}>
-                        <ColorPicker width={50} value={color} onChange={(value) => {
-                          setSearchParams(searchParams => {
-                            searchParams.set("color", String(value));
-                            return searchParams;
-                          })
-                        }}/>
-                        <TextInput className={css.drawSizeInput} number placeholder="Size" value={drawSize} onChange={(value) => setSearchParams(searchParams => {
-                            searchParams.set("drawSize", String(value));
-                            return searchParams;
-                          })
-                        } />
-                      </div>
-                    </animated.div>
-                </div>
-              }
-
-
-              <Button animatedHover onClick={() => mapContainer.active ? mapContainer.exit() : mapContainer.enter()}><Typography color="light">FullScreen</Typography></Button>
-              <div style={{display: "flex", justifyContent: "center", alignItems: "center", columnGap: 4}}>
-                <Button onClick={
-                    () => setSearchParams(searchParams => {
-                      searchParams.set("scale", String((scale - 0.1).toFixed(2)));
-                      return searchParams;
-                    })
-                  }><FontAwesomeIcon icon={faMinus} /></Button>
-                  <Typography weight="bold" color="light">Zoom</Typography>
-                <Button onClick={
-                    () => setSearchParams(searchParams => {
-                      searchParams.set("scale", String((scale + 0.1).toFixed(2)));
-                      return searchParams;
-                    })
-                  }><FontAwesomeIcon icon={faPlus} /></Button>
-              </div>
-              { isPlayer && 
-                <div>
-                  <Button animatedHover onClick={() => setSearchParams(searchParams => {
-                    searchParams.set("tab", "initiative");
-                    return searchParams
-                  })}><Typography>Health</Typography></Button>
-                </div>
-              }
-            </div>
-          </FloatingButtonContainer>
-            <SettingsDrawer
-              isOpen={isSettingsDrawerOpen}
-              onClose={() => setIsSettingsDrawerOpen(false)}
-              combatId={combatId}
-            />
-            <TokensDrawer
-              isOpen={isTokenDrawerOpen}
-              onClose={() => setIsTokenDrawerOpen(false)}
-              combatId={combatId}
-              isPlayer={isPlayer}
-            />
+          
+          <UtilButtons
+            isPlayer={isPlayer}
+            combatId={combatId}
+            mapContainer={mapContainer}
+          />
         </FullScreen>
       </div>
     );

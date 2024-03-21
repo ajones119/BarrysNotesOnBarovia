@@ -70,7 +70,6 @@ export const useGenerateSummaryNote = (onSuccess = (_message: any) => {}) => {
         messages: [{"role": "user", "content": message}],
         
       });
-      console.log(chatCompletion.choices[0].message.content)
       return chatCompletion.choices[0].message.content
     }
   })
@@ -81,7 +80,6 @@ export const useGenerateAssistedNoteNote = (onSuccess = (_message: any) => {}) =
     mutationKey: ["generateAINote"],
     onSuccess,
     mutationFn: async ({seedNotes = [], prompt = "", campaign}: {seedNotes: Note[], prompt: string, campaign: Campaign}) => {
-      console.log(seedNotes)
       
       let message = `
         Given a prompt and some recent notes for context, generate a single note for my dnd campaign, make it readable and fun, and utilize markdown to make it more interesting.
@@ -104,7 +102,6 @@ export const useGenerateAssistedNoteNote = (onSuccess = (_message: any) => {}) =
         messages: [{"role": "user", "content": message}],
         
       });
-      console.log(chatCompletion.choices[0].message.content)
       return chatCompletion.choices[0].message.content
     }
   })
