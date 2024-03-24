@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import { useParams, useSearchParams } from "react-router-dom";
-import { CampaignLocation } from "@model/Location";
 import { Button } from "@components/Button/Button";
 import CreateCampaignLocationModal from "@components/Modal/CreateCampaignLocationModal/CreateCampaignLocationModal";
 import { TreeView } from "@mui/x-tree-view"; 
@@ -10,7 +9,6 @@ import { faArrowAltCircleDown, faArrowAltCircleRight } from "@fortawesome/free-s
 import CampaignTreeLocation from "./CampaignTreeLocation";
 import css from "./CampaignLocations.module.scss"
 import CampaignLocationPanel from "./CampaignLocationPanel";
-import { BaseCharacter } from "@model/BaseCharacter";
 import { useCampaignLocations } from "@services/CampaignLocationService";
 import { useCampaignNPCs } from "@services/NPCService";
 
