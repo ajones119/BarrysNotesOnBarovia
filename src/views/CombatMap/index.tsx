@@ -16,6 +16,7 @@ import { FullScreen, useFullScreenHandle } from "react-full-screen";
 import Spinner from "@components/Spinner";
 import { useCampaignCharacters } from "@services/CharacterService";
 import UtilButtons from "./components/UtilButtons";
+import { Button } from "@components/Button/Button";
 type DroppableToken = {
   id: string,
   data: any,
@@ -29,12 +30,12 @@ const CombatMap = ({combatIdOverride = "", isPlayer = false}) => {
     const scale = Number(searchParams.get("scale")) || 1;
     const drawing = String(searchParams.get("drawing")) || "";
     const eraserOn = searchParams.get("eraserOn") === "on" || false;
-
+    const drawSize = Number(searchParams.get("drawSize")) || 0;
+    const color = String(searchParams.get("color")) || "black";
     const [tokens, setTokens] = useState<DroppableToken[]>([]);
     const [extraTokens, setExtraTokens] = useState<DroppableToken[]>([]);
     const [selectedToken, setSelectedToken] = useState<DroppableToken| null>();
     const {currentMapCoordinates, setCurrentMapCoordinates} = useCombatMapStore();
-    const [altHeld, setAltHeld] = useState(false);
 
     const {mutate: mutateCombatToken, isLoading: isMutating} = useMutateCombatToken()
     const { combat, isLoading } = useCombat(combatId);
@@ -47,7 +48,8 @@ const CombatMap = ({combatIdOverride = "", isPlayer = false}) => {
     const { currentTurnIndex } = combat;
 
     const mapRef = useRef<HTMLDivElement>(null); 
-
+    const scaleRef = useRef<number>(scale); 
+    const ctrlHeld = useRef(false);
     const onScroll = (e: Event) => {
       setCurrentMapCoordinates({x: mapRef?.current?.scrollLeft || 0, y: mapRef?.current?.scrollTop || 0})
     }
@@ -72,24 +74,29 @@ const CombatMap = ({combatIdOverride = "", isPlayer = false}) => {
       }
     }
 
+    const handleWheel = (event: any) => {
+      if (ctrlHeld.current) {
+        event.preventDefault();
+        //look into type error here
+        mapRef?.current?.scrollBy({x: -event?.deltaX, y: -event?.deltaY} as any)
+        if (event.deltaY < 0) {
+          setSearchParams(searchParams => {
+            searchParams.set("scale", String((scaleRef.current + 0.05).toFixed(2)));
+            return searchParams;
+          })
+        } else if (event.deltaY > 0) {
+          setSearchParams(searchParams => {
+            searchParams.set("scale", String((scaleRef.current - 0.05).toFixed(2)));
+            return searchParams;
+          })
+        }
+      }
+    };
+
     const handleKeyDown = (event: KeyboardEvent) => {      
-      if (event.altKey) {
+      if (event.ctrlKey) {
         if (event.repeat) return;
-        setAltHeld(true);
-      }
-
-      if (event.key === "ArrowUp" && altHeld) {
-        setSearchParams(searchParams => {
-          searchParams.set("scale", String((scale + 0.05).toFixed(2)));
-          return searchParams;
-        })
-      }
-
-      if (event.key === "ArrowDown" && altHeld) {
-        setSearchParams(searchParams => {
-          searchParams.set("scale", String((scale - 0.05).toFixed(2)));
-          return searchParams;
-        })
+        ctrlHeld.current = true;
       }
 
       if (event.key === "l") {
@@ -126,42 +133,30 @@ const CombatMap = ({combatIdOverride = "", isPlayer = false}) => {
       }
     };
 
-    const handleWheel = (event: WheelEvent<HTMLDivElement>) => {
-      if (altHeld) {
-        //look into type error here
-        mapRef?.current?.scrollBy({x: -event?.deltaX, y: -event?.deltaY} as any)
-        if (event.deltaY < 0) {
-          setSearchParams(searchParams => {
-            searchParams.set("scale", String((scale + 0.05).toFixed(2)));
-            return searchParams;
-          })
-        } else if (event.deltaY > 0) {
-          setSearchParams(searchParams => {
-            searchParams.set("scale", String((scale - 0.05).toFixed(2)));
-            return searchParams;
-          })
-        }
+    const handleKeyUp = (event: KeyboardEvent) => {
+      if (event.key === "Control") {
+        ctrlHeld.current = false;
       }
     };
 
-    const handleKeyUp = (event: KeyboardEvent) => {
-      if (!event.altKey) {
-        setAltHeld(false);
-      }
-    };
+    useEffect(() => {
+      mapRef?.current?.scrollTo(currentMapCoordinates?.x || 0, currentMapCoordinates?.y || 0)
+    }, [])
 
     useEffect(() => {
       window.addEventListener('keydown', handleKeyDown);
       window.addEventListener('keyup', handleKeyUp);
+      window.addEventListener('wheel', handleWheel, { passive: false });
+      scaleRef.current = scale;
   
       return () => {
         window.removeEventListener('keydown', handleKeyDown);
         window.removeEventListener('keyup', handleKeyUp);
+        window.removeEventListener('wheel', handleWheel);
       };
-    }, [scale, drawing, eraserOn, mapContainer.active])
+    }, [scale, drawing, eraserOn, drawSize, color, mapContainer.active])
 
     useEffect(() => {
-      mapRef?.current?.scrollTo(currentMapCoordinates?.x || 0, currentMapCoordinates?.y || 0)
       mapRef?.current?.addEventListener('scroll', onScroll);
       mapRef?.current?.addEventListener('keydown', downHandler);
 
@@ -270,7 +265,7 @@ const CombatMap = ({combatIdOverride = "", isPlayer = false}) => {
       }))
     }
 
-    const {updateTokenPosition} = useCombatMapSocketService(
+    const {updateTokenPosition, isConnected, reconnect} = useCombatMapSocketService(
       CampaignId,
       handleSocketTokenUpdate,
       { tokens: tokens.concat(extraTokens) }
@@ -290,9 +285,12 @@ const CombatMap = ({combatIdOverride = "", isPlayer = false}) => {
     return (
       <div>
         <Typography color="light" size="large">{combat?.name}</Typography>
+        {
+          !isConnected && <Button color="error" onClick={reconnect}><Typography>Reconnect</Typography></Button>
+        }
         <Spacer height={8} />
         <FullScreen handle={mapContainer}>
-          <div className={`${css.CombatMapContainer} ${mapContainer.active ? css.fullscreen : null}`} ref={mapRef} id="CombatMap" onWheel={handleWheel}>
+          <div className={`${css.CombatMapContainer} ${mapContainer.active ? css.fullscreen : null}`} ref={mapRef} id="CombatMap">
             <DndContext
               onDragEnd={handleDragEnd}
               onDragStart={handleDragStart}

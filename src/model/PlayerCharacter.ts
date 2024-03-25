@@ -11,5 +11,6 @@ export interface PlayerCharacter extends BaseCharacter {
     disabled?: boolean;
     health?: number;
     tempHealth?: number;
-    conditions?: string[]
+    conditions?: string[];
+    favoriteTokens?: string[];
 }
