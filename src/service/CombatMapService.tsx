@@ -6,7 +6,7 @@ import { useMutation } from 'react-query';
 import { uploadBytes, ref as storageRef, getDownloadURL } from "firebase/storage";
 import { Socket, connect } from "socket.io-client";
 import { API_URL, LOCAL_API_URL } from "./constants";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 import useDeepCompareEffect from "use-deep-compare-effect";
 
 export const useUpdateCombatMap = (docId: string) => {
@@ -114,18 +114,9 @@ export const useMutateCombatToken = () => {
 //SOCKET SERVICES
 export const useCombatMapSocketService = (campaignDocId: string, onRecievedPositionUpdate: (tokenId: string, x: number, y: number) => void, dependency: any) => {
     const socketRef = useRef<Socket|null>(null)
-    const [isConnected ,setIsConnected] = useState(false);
 
     const joinCombatSocketRoom = () => {
         socketRef.current?.emit("join_room", campaignDocId);
-    }
-
-    const connectToSocket = () => {
-        if (!socketRef?.current?.connected) {
-            socketRef.current = connect(process.env.SERVER_URL || "");
-        }
-        joinCombatSocketRoom();
-        setIsConnected(socketRef?.current?.connected)
     }
 
     const updateTokenPosition = (tokenId: string, x: number, y: number) => {
@@ -142,8 +133,11 @@ export const useCombatMapSocketService = (campaignDocId: string, onRecievedPosit
     }, []);
 
     useEffect(() => {
-        !socketRef?.current?.connected && connectToSocket();
-
+        if (socketRef?.current?.connected) {
+            joinCombatSocketRoom();
+        } else {
+            socketRef.current = connect(process.env.SERVER_URL || "");
+        }
     }, [socketRef?.current?.connected])
 
     
@@ -163,8 +157,7 @@ export const useCombatMapSocketService = (campaignDocId: string, onRecievedPosit
     return {
         updateTokenPosition,
         socket: socketRef.current,
-        isConnected: socketRef.current?.connected,
-        reconnect: connectToSocket
+        isConnected: socketRef.current?.connected
     }
 
 }

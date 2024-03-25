@@ -66,7 +66,7 @@ const INTERNAL_TOKENS: Array<{
                 height: 1,
                 width: 1,
                 color: COLORS_MAP.Black,
-                opacity: 0.7,
+                opacity: 0.7
             },
             {
                 name: "Circle Solid (5ft radius) 2x2",
@@ -74,7 +74,7 @@ const INTERNAL_TOKENS: Array<{
                 height: 2,
                 width: 2,
                 color: COLORS_MAP.Black,
-                opacity: 0.7,
+                opacity: 0.7
             },
             {
                 name: "Circle Solid (10ft radius) 4x4",
@@ -90,7 +90,7 @@ const INTERNAL_TOKENS: Array<{
                 height: 6,
                 width: 6,
                 color: COLORS_MAP.Black,
-                opacity: 0.7,
+                opacity: 0.7
             },
             {
                 name: "Circle Solid (20ft radius) 8x8",
@@ -98,7 +98,7 @@ const INTERNAL_TOKENS: Array<{
                 height: 8,
                 width: 8,
                 color: COLORS_MAP.Black,
-                opacity: 0.7,
+                opacity: 0.7
             },
             {
                 name: "Circle Solid (30ft radius) 12x12",
@@ -106,7 +106,7 @@ const INTERNAL_TOKENS: Array<{
                 height: 12,
                 width: 12,
                 color: COLORS_MAP.Black,
-                opacity: 0.7,
+                opacity: 0.7
             },
             {
                 name: "Circle Solid (50ft radius) 20x20",
@@ -114,7 +114,7 @@ const INTERNAL_TOKENS: Array<{
                 height: 20,
                 width: 20,
                 color: COLORS_MAP.Black,
-                opacity: 0.7,
+                opacity: 0.7
             },
             {
                 name: "Circle Solid (60ft radius) 24x24",
@@ -122,7 +122,7 @@ const INTERNAL_TOKENS: Array<{
                 height: 24,
                 width: 24,
                 color: COLORS_MAP.Black,
-                opacity: 0.7,
+                opacity: 0.7
             },
             {
                 name: "Cone (10 ft)",
@@ -144,21 +144,21 @@ const INTERNAL_TOKENS: Array<{
                 image: BlueCone,
                 height: 4,
                 width: 4,
-                color: COLORS_MAP.Black,
+                color: COLORS_MAP.Black
             },
             {
                 name: "Cone (25 ft)",
                 image: BlueCone,
                 height: 5,
                 width: 5,
-                color: COLORS_MAP.Black,
+                color: COLORS_MAP.Black
             },
             {
                 name: "Cone (30 ft)",
                 image: BlueCone,
                 height: 6,
                 width: 6,
-                color: COLORS_MAP.Black,
+                color: COLORS_MAP.Black
             },
             {
                 name: "Square Solid 1x1",
@@ -166,6 +166,7 @@ const INTERNAL_TOKENS: Array<{
                 height: 1,
                 width: 1,
                 color: COLORS_MAP.Black,
+                
                 opacity: 0.9,
             },
             {
@@ -174,6 +175,7 @@ const INTERNAL_TOKENS: Array<{
                 height: 1,
                 width: 2,
                 color: COLORS_MAP.Black,
+                
                 opacity: 0.9,
             },
             {
@@ -182,6 +184,7 @@ const INTERNAL_TOKENS: Array<{
                 height: 2,
                 width: 1,
                 color: COLORS_MAP.Black,
+                
                 opacity: 0.9,
             },
             {
@@ -190,6 +193,7 @@ const INTERNAL_TOKENS: Array<{
                 height: 3,
                 width: 1,
                 color: COLORS_MAP.Black,
+                
                 opacity: 0.9,
             },
             {
@@ -198,6 +202,7 @@ const INTERNAL_TOKENS: Array<{
                 height: 4,
                 width: 1,
                 color: COLORS_MAP.Black,
+                
                 opacity: 0.9,
             },
             {
@@ -206,6 +211,7 @@ const INTERNAL_TOKENS: Array<{
                 height: 6,
                 width: 1,
                 color: COLORS_MAP.Black,
+                
                 opacity: 0.9,
             },
             {
@@ -222,15 +228,6 @@ const INTERNAL_TOKENS: Array<{
                 image: BlackSolidSquare,
                 height: 3,
                 width: 3,
-                color: COLORS_MAP.Black,
-                
-                opacity: 0.9,
-            },
-            {
-                name: "Square Solid 4x4",
-                image: BlackSolidSquare,
-                height: 4,
-                width: 4,
                 color: COLORS_MAP.Black,
                 
                 opacity: 0.9,
@@ -290,14 +287,6 @@ const INTERNAL_TOKENS: Array<{
                 image: BlackSquare,
                 height: 4.7,
                 width: 4.7,
-                color: COLORS_MAP.Black,
-                
-            },
-            {
-                name: "Square Hollow 4x4",
-                image: BlackSquare,
-                height: 6,
-                width: 6,
                 color: COLORS_MAP.Black,
                 
             },
