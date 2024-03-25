@@ -1,5 +1,5 @@
 import { CombatCharacter } from "@model/CombatCharacter";
-import { Avatar, Badge } from "@mui/material";
+import { Avatar, Badge, LinearProgress } from "@mui/material";
 import BACKUP from "@images/barry-cartoon.png"
 import React, { useState } from "react";
 import { BASE_CHARACTER_IMAGE_MAP } from "utils/getBaseCharacterGenericImage";
@@ -12,7 +12,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faStar } from "@fortawesome/free-solid-svg-icons";
 import { faFaceAngry, faBrain,} from "@fortawesome/free-solid-svg-icons";
 import { ConditionsOverlayMap, PreConditions, WrapperConditions } from "./utils";
-import HealthBar from "@components/HealthBar";
+import HealthBar, { getHealthBarColor } from "@components/HealthBar";
 
 type CharacterTokenContentProps = {
     character: CombatCharacter;
