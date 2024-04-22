@@ -3,6 +3,7 @@ import "../App.css";
 import { NavBar, NavBarLink } from "@components/NavBar/NavBar";
 import { Spacer } from "@components/Spacer/Spacer";
 import { useParams } from "react-router-dom";
+import { DigiDice } from "dice";
 
 declare interface NonHomePageContainerProps {
     page?: React.ReactNode,
@@ -21,6 +22,7 @@ export const NonHomePageContainer = ({ page, meta }: NonHomePageContainerProps) 
             <NavBar additionalLinks={additionalLinks} sectionHomeLink={sectionHomeLink} />
             <div className="nonHomePage">{ page }</div>
             <Spacer height={64}/>
+            <DigiDice />
         </div>
     );
 }
