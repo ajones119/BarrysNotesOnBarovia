@@ -3,6 +3,7 @@ import "../App.css";
 import { NavBar, NavBarLink } from "@components/NavBar/NavBar";
 import { Spacer } from "@components/Spacer/Spacer";
 import { useParams } from "react-router-dom";
+import { DigiDice } from "dice";
 
 declare interface NonHomePageContainerProps {
     page?: React.ReactNode,
@@ -18,6 +19,10 @@ export const NonHomePageContainer = ({ page, meta }: NonHomePageContainerProps) 
     const sectionHomeLink = meta?.topLink ? meta.topLink(params) : null;
     return (
         <div>
+            {/* Padding is necessarily temporary due to some cards overlapping any space the floating buttons need. */}
+            <div style={{paddingRight: '50px'}}>
+                <DigiDice />
+            </div>
             <NavBar additionalLinks={additionalLinks} sectionHomeLink={sectionHomeLink} />
             <div className="nonHomePage">{ page }</div>
             <Spacer height={64}/>
