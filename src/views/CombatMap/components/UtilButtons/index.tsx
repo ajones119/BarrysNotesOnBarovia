@@ -11,15 +11,13 @@ import TokensDrawer from "../TokensDrawer";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEraser, faMinus, faPlus } from "@fortawesome/free-solid-svg-icons";
 import { Typography } from "@components/Typography/Typography";
-import { FullScreenHandle } from "react-full-screen";
 
 type UtilButtons = {
     isPlayer?: boolean;
-    mapContainer: FullScreenHandle;
     combatId: string;
 }
 
-const UtilButtons = ({isPlayer = false, mapContainer, combatId}: UtilButtons) => {
+const UtilButtons = ({isPlayer = false, combatId}: UtilButtons) => {
     const [isHovered, setHovered] = useState(false);
     const [searchParams, setSearchParams] = useSearchParams();
     const scale = Number(searchParams.get("scale")) || 1;
@@ -52,8 +50,8 @@ const UtilButtons = ({isPlayer = false, mapContainer, combatId}: UtilButtons) =>
         <div>
             <FloatingButtonContainer>
                 <div className={css.buttonsContainer}>
-                    {!mapContainer.active && !isPlayer && <Button onClick={() => setIsSettingsDrawerOpen(true)} color="secondary" animatedHover><Typography color="light">Settings</Typography></Button>}
-                    {!mapContainer.active && <Button onClick={() => setIsTokenDrawerOpen(true)} color="secondary" animatedHover><Typography color="light">Tokens</Typography></Button>}
+                    {!isPlayer && <Button onClick={() => setIsSettingsDrawerOpen(true)} color="secondary" animatedHover><Typography color="light">Settings</Typography></Button>}
+                    <Button onClick={() => setIsTokenDrawerOpen(true)} color="secondary" animatedHover><Typography color="light">Tokens</Typography></Button>
                     { !isPlayer && 
                     <div onMouseEnter={() => setHovered(true)} onMouseLeave={() => setHovered(false)}>
                         <div style={{position: "relative", marginBottom: -50, zIndex: 2, display: "flex"}}>
@@ -90,7 +88,6 @@ const UtilButtons = ({isPlayer = false, mapContainer, combatId}: UtilButtons) =>
                 }
 
 
-                <Button animatedHover onClick={() => mapContainer.active ? mapContainer.exit() : mapContainer.enter()}><Typography color="light">FullScreen</Typography></Button>
                 <div style={{display: "flex", justifyContent: "center", alignItems: "center", columnGap: 4}}>
                     <Button onClick={
                         () => setSearchParams(searchParams => {

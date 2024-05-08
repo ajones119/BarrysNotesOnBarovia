@@ -9,13 +9,16 @@ const CustomStyle = {
 type TokenProps = {
   id: string;
   content: ReactNode;
-  styles: any;
+  styles?: React.CSSProperties;
   disabled?: boolean,
+  canResize?: boolean,
+  //need to add this to other tokens and reduce array searches
+  data?: any
 };
 
-function Token({ id, content, styles, disabled = false }: TokenProps) {
+function Token({ id, content, styles = {}, disabled = false, data = null }: TokenProps) {
   const { attributes, listeners, setNodeRef, transform } = useDraggable({
-    id, disabled
+    id, disabled, data
   });
 
   const style = transform
@@ -32,7 +35,7 @@ function Token({ id, content, styles, disabled = false }: TokenProps) {
       {...listeners}
       {...attributes}
       key={id || ""}
-      className={css.tokenWrapper}
+      className={`${css.tokenWrapper} `}
     >
       {content}
     </div>
@@ -40,3 +43,40 @@ function Token({ id, content, styles, disabled = false }: TokenProps) {
 }
 
 export default Token;
+
+/*
+    const {listeners, setNodeRef, setActivatorNodeRef, transform} = useDraggable({
+        id: `${token.id}-resize-bottom-right`,
+        data: {}
+    })
+    let calculatedWidth = baseTokenSize * width;
+    let calculatedHeight = baseTokenSize * length;
+    if (transform) {
+        calculatedWidth += transform.x;
+        calculatedHeight += transform.y;
+    }
+
+
+    ////
+
+
+     <div 
+            style={{
+                position: "absolute",
+                
+            }}
+            ref={setNodeRef}
+        >
+            <div ref={setActivatorNodeRef} {...listeners}>
+                <FontAwesomeIcon
+                    icon={faAnglesRight}
+                    style={{
+                        filter: color ? getExtraColorsFilterFromNewColor(color) : undefined,
+                        opacity: opacity || undefined,
+                        userSelect: "none",
+                    }}
+                />
+            </div>
+
+        </div>
+*/

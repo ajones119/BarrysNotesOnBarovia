@@ -3,11 +3,12 @@ import css from "./FloatingButtonContainer.module.scss"
 
 type FloatingButtonContainerProps = {
     children: ReactNode
+    bottom?: number
 }
 
-const FloatingButtonContainer = ({children}: FloatingButtonContainerProps) => {
+const FloatingButtonContainer = ({children, bottom = 16}: FloatingButtonContainerProps) => {
     return (
-        <div className={css.container}>
+        <div className={css.container} style={{bottom}}>
             {children}
         </div>
     )
