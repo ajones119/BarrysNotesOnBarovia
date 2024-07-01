@@ -30,7 +30,7 @@
     "@types/react-virtualized-auto-sizer": "^1.0.1",
     "@types/react-window": "^1.8.6",
     "@uiw/react-md-editor": "^3.23.6",
-    "dice": "file:./alpha_dice/digi-dice-0.0.3.tgz",
+    "dice": "file:./alpha_dice/digi-dice-0.0.4.tgz",
     "bootstrap": "^4.6.1",
     "date-fns": "^3.3.1",
     "deep-equal": "^2.2.2",
