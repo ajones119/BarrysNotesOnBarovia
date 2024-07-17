@@ -76,8 +76,8 @@ export const useAddCombatCharacter = (combatDocId: string) => {
         ...newCharacter,
         combatDocId,
         position: {
-          x: 100,
-          y: 100
+          x: 500,
+          y: 500
         } 
       })
       const docId = response.id;

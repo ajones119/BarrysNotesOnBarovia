@@ -94,9 +94,9 @@ const PlayerInitiative = () => {
                         <CharacterRow
                             healthBarAmount={healthBarAmount}
                             rowImageURL={String(playerCharacter?.characterImageURL)}
-                            combatCharacter={{...character, health: playerCharacter?.health, maxHealth: playerCharacter?.maxHealth, tempHealth: playerCharacter?.tempHealth, conditions: playerCharacter?.conditions}}
-                            isCurrentTurn={combatCharacters[currentTurnIndex].playerDocId === playerDocId}
-                            isNextTurn={character.playerDocId === nextPlayerDocId}
+                            combatCharacter={{...character, name: playerCharacter?.name, health: playerCharacter?.health, maxHealth: playerCharacter?.maxHealth, tempHealth: playerCharacter?.tempHealth, conditions: playerCharacter?.conditions}}
+                            isCurrentTurn={combatCharacters[currentTurnIndex] && combatCharacters[currentTurnIndex]?.playerDocId === playerDocId}
+                            isNextTurn={character?.playerDocId === nextPlayerDocId}
                             
                         />
                     )})

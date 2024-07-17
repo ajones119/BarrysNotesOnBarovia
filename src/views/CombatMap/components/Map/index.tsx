@@ -81,7 +81,7 @@ const  Map = ({
       <div
         ref={ref}
         className={`${isDrawing && css.hideCursor}`}
-        style={{...CustomStyle, height, width, ...styles, ...backgroundImageStyles, marginLeft: "20%", marginTop: "20%"}}
+        style={{...CustomStyle, height, width, ...styles, ...backgroundImageStyles, marginLeft: 500 * scale, marginTop: 500 * scale}}
       >
         
 

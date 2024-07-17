@@ -49,7 +49,7 @@ const TokensDrawer = ({
                 color: "",
                 opacity: 0,
                 rotation: 0,
-                canRotate: newToken?.canRotate || false,
+                canRotate: true,
                 playerAdded: isPlayer
             }
         }

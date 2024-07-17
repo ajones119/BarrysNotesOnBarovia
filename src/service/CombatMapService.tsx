@@ -112,7 +112,7 @@ export const useMutateCombatToken = () => {
 
 
 //SOCKET SERVICES
-export const useCombatMapSocketService = (campaignDocId: string, onRecievedPositionUpdate: (tokenId: string, x: number, y: number) => void, dependency: any) => {
+export const useCombatMapSocketService = (campaignDocId: string, onRecievedTokenUpdate: (tokenId: string, tokenData: CombatToken) => void, handleSocketCursorUpdate: (cursors: {color: string, x: number, y: number, id: string}) => void, dependency: any) => {
     const socketRef = useRef<Socket|null>(null)
     const [isConnected ,setIsConnected] = useState(false);
 
@@ -128,12 +128,19 @@ export const useCombatMapSocketService = (campaignDocId: string, onRecievedPosit
         setIsConnected(socketRef?.current?.connected)
     }
 
-    const updateTokenPosition = (tokenId: string, x: number, y: number) => {
-        socketRef.current?.emit("update_combat_token_position", {
+    const updateTokenPosition = (tokenId: string, tokenData: CombatToken) => {
+        socketRef.current?.emit("update_combat_token", {
             room: campaignDocId,
             tokenId,
-            x,
-            y
+            tokenData
+        })
+    }
+
+    const updatePingingCursor = (cursor: {color: string, x: number, y: number}) => {
+        socketRef.current?.emit("update_pinging_cursor", {
+            room: campaignDocId,
+            ...cursor,
+            id: socketRef.current.id
         })
     }
 
@@ -149,18 +156,23 @@ export const useCombatMapSocketService = (campaignDocId: string, onRecievedPosit
 
     useEffect(() => {
         if (socketRef.current) {
-            socketRef.current?.on("recieve_combat_token_position", (data) => {
-                socketRef?.current?.id !== data?.senderId && onRecievedPositionUpdate(data?.tokenId, data?.x, data?.y)
+            socketRef.current?.on("recieve_combat_token", (data) => {
+                socketRef?.current?.id !== data?.senderId && onRecievedTokenUpdate(data?.tokenId, data?.tokenData)
+            })
+            socketRef.current?.on("recieve_pinging_cursor", (data) => {
+                socketRef?.current?.id !== data?.senderId && handleSocketCursorUpdate(data)
             })
         }
         
         return(() => {
-            socketRef.current?.off('recieve_combat_token_position')
+            socketRef.current?.off('recieve_combat_token');
+            socketRef.current?.off('recieve_pinging_cursor');
         })
     }, [socketRef.current, JSON.stringify({...dependency})]);
 
     return {
         updateTokenPosition,
+        updatePingingCursor,
         socket: socketRef.current,
         isConnected: socketRef.current?.connected,
         reconnect: connectToSocket
