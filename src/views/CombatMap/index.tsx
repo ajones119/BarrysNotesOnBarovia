@@ -451,6 +451,7 @@ const CombatMap = ({combatIdOverride = "", isPlayer = false}) => {
               onDragEnd={handleDragEnd}
               onDragStart={handleDragStart}
               onDragMove={handleDragMove}
+              autoScroll={false}
             >
               <Map
                 map={combatMap}
